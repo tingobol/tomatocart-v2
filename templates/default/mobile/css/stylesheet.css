@@ -1,0 +1,94 @@
+.nav-glyphish .ui-btn .ui-btn-inner { padding-top: 40px !important; }
+.nav-glyphish .ui-btn .ui-icon { width: 30px!important; height: 30px!important; margin-left: -15px !important; box-shadow: none!important; -moz-box-shadow: none!important; -webkit-box-shadow: none!important; -webkit-border-radius: 0 !important; border-radius: 0 !important; }
+
+#tomatocart .ui-icon { background:  url(../images/icon-logo.png) 50% 50% no-repeat;}
+#home .ui-icon { background:  url(../images/icon_home.png) 50% 50% no-repeat;}
+#my-account .ui-icon { background:  url(../images/icon_user.png) 50% 50% no-repeat;}
+#login .ui-icon { background:  url(../images/icon_wifi.png) 50% 50% no-repeat;}
+#logoff .ui-icon { background:  url(../images/icon_wifi.png) 50% 50% no-repeat;}
+#item .ui-icon { background:  url(../images/icon_shopping_cart.png) 50% 50% no-repeat;}
+
+/*form*/
+.ui-field-contain > label {width: 220px; display: inline-block;}
+.ui-field-contain .ui-controlgroup-label {width: 185px;}
+.ui-field-contain div.hasDatepicker {margin-left: 225px}
+
+/*categories list*/
+.categories-list .ui-li-thumb,.products-list .ui-li-thumb,.shoppingcart-list .ui-li-thumb {border: 3px solid #aaa; height: 70px; width: 70px; margin: 3px 0 0 3px; border-radius: 5px 5px 5px 5px;box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);}
+
+/*categories list*/
+.products-list .ui-link-inherit {position: relative;}
+.products-list .price {position: absolute; top: 20px; right: 70px;}
+
+/*shoppingcart list*/
+.shoppingcart-list .ui-link-inherit {position: relative;}
+.shoppingcart-list .btn-delete {position: absolute; top: 20px; right: 20px; width: 30px;}
+.shoppingcart-list .name {}
+.shoppingcart-list .price {position: absolute; top: 20px; right: 70px;font-size: 16px; font-weight: 700px}
+.shoppingcart-list .quantity {position: absolute; top: 20px; right: 180px; width: 60px;}
+.shoppingcart-list .order-totals {text-align: right; margin-right: 20px}
+.shoppingcart-list .order-totals span.total {display: inline-block; font-size: 16px; width: 120px}
+
+/*product info*/
+#cart_quantity ul li {list-style: none outside none;}
+#cart_quantity ul li span.label{display: inline-block; font-weight: 700; width: 140px; margin: 3px;}
+#cart_quantity ul li.price {font-size: 24px; font-weight: 700; text-align: right;}
+ul.reviews .title {margin: 5px}
+ul.reviews .text {margin: 10px; font-weight: normal;}
+ul.reviews .ratings {margin: 10px}
+ul.reviews .ratings p {margin: 5px}
+ul.reviews .ratings span{margin-left: 10px; font-weight: 700;}
+
+.ui-footer {text-align: center}
+
+.box .content ul li{list-style-type:none;}
+
+/* message box */
+.messageStack {
+  border-width: 1px;
+  border-style: dotted;
+  border-color: #C8AD91;
+  background-color: #FFFCF5;
+  font-family: Tahoma, 'Trebuchet MS', Verdana, Arial, sans-serif;
+  color: #465584;
+  width:100%;
+  margin:10px auto;
+}
+
+.messageStack ul li {
+  list-style-position: inside;
+  padding: 2px 2px 2px 4px;
+}
+
+.messageBox {
+  font-family: Tahoma, 'Trebuchet MS', Verdana, Arial, sans-serif;
+  font-size: 10px;
+}
+
+.messageStackError, .messageStackWarning {
+  font-family: Tahoma, 'Trebuchet MS', Verdana, Arial, sans-serif;
+  font-size: 10px;
+  background-color: #ffb3b5;
+}
+
+.messageStackSuccess {
+  font-family: Tahoma, 'Trebuchet MS', Verdana, Arial, sans-serif;
+  font-size: 10px;
+  background-color: #99ff00;
+}
+
+.special {color: red}
+
+#product_slides .slides_container {
+	width: 480px;
+	height: 360px;
+	overflow: hidden;
+}
+
+#product_slides .slide {
+width: 480px;
+height: 360px;
+display: block;
+}
+
+.account-img {margin-right: 20px}
