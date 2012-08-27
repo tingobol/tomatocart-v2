@@ -1,0 +1,200 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+/**
+ * TomatoCart
+ *
+ * An open source application ecommerce framework
+ *
+ * @package   TomatoCart
+ * @author    TomatoCart Dev Team
+ * @copyright Copyright (c) 2011, TomatoCart, Inc.
+ * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @link    http://tomatocart.com
+ * @since   Version 0.5
+ * @filesource .system/modules/unit_classes/controllers/unit_classes.php
+ */
+
+class Unit_Classes extends TOC_Controller
+{
+  public function __construct()
+  {
+    parent::__construct();
+    
+    $this->load->model('unit_classes_model');
+  }
+  
+  public function show()
+  {
+    $this->load->view('main');
+    $this->load->view('unit_classes_grid');
+    $this->load->view('unit_classes_dialog');
+  }
+  
+  public function list_unit_classes()
+  {
+    $start = $this->input->get_post('start') ? $this->input->get_post('start') : 0;
+    $limit = $this->input->get_post('limit') ? $this->input->get_post('limit') : MAX_DISPLAY_SEARCH_RESULTS;
+    
+    $classes = $this->unit_classes_model->get_classes($start, $limit);
+    
+    $records = array();
+    if (!empty($classes))
+    {
+      foreach($classes as $class)
+      {
+        $unit_class_title = $class['quantity_unit_class_title'];
+        
+        if ($class['quantity_unit_class_id'] == DEFAULT_UNIT_CLASSES)
+        {
+          $unit_class_title  .=  ' (' . lang('default_entry') . ')';
+        }
+        
+        $records[] = array('unit_class_id' => $class['quantity_unit_class_id'],
+                           'unit_class_title' => $unit_class_title,
+                           'languange_id'=> lang_id());
+      }
+    }
+    
+    return array(EXT_JSON_READER_TOTAL => $this->unit_classes_model->get_total(),
+                 EXT_JSON_READER_ROOT => $records);
+  }
+  
+  public function delete_unit_class()
+  {
+    $error = FALSE;
+    $feedback = array();
+    
+    if ($this->input->post('unit_class_id') == DEFAULT_UNIT_CLASSES)
+    {
+      $error = TRUE;
+      $feedback[] = lang('delete_error_unit_class_prohibited');
+    }
+    else
+    {
+      $check_products = $this->unit_classes_model->get_total_products($this->input->post('unit_class_id'));
+      
+      if ($check_products > 0)
+      {
+        $error = TRUE;
+        $feedback[] = sprintf(lang('delete_error_unit_class_in_use'), $check_products);
+      }
+    }
+    
+    if ($error === FALSE)
+    {
+      if ($this->unit_classes_model->delete($this->input->post('unit_class_id')))
+      {
+        $response = array('success' => TRUE ,'feedback' => lang('ms_success_action_performed'));
+      }
+      else
+      {
+        $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed'));
+      }
+    }
+    else
+    {
+      $response = array('success' => FALSE, 'feedback' => implode('<br />', $feedback));
+    }
+    
+    return $response;
+  }
+  
+  public function delete_unit_classes()
+  {
+    $error = FALSE;
+    $feedback = array();
+    
+    $unit_classes_ids = json_decode($this->input->post('batch'));
+    
+    foreach($unit_classes_ids as $id)
+    {
+      if ($id == DEFAULT_UNIT_CLASSES)
+      {
+        $error = TRUE;
+        $feedback[] = lang('batch_delete_error_unit_class_prohibited');
+      }
+      else
+      {
+        $check_products = $this->unit_classes_model->get_total_products($id);
+        
+        if ($check_products > 0)
+        {
+          $error = TRUE;
+          $feedback[] = lang('batch_delete_error_unit_class_in_use');
+          break;
+        }
+      }
+    }
+    
+    if ($error === FALSE)
+    {
+      foreach($unit_classes_ids as $id)
+      {
+        if ($this->unit_classes_model->delete($id) === FALSE)
+        {
+          $error = TRUE;
+          break;
+        }
+      }
+      
+      if ($error === FALSE)
+      {
+        $response = array('success' => TRUE, 'feedback' => lang('ms_success_action_performed'));
+      }
+      else
+      {
+        $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed'));
+      }
+    }
+    else
+    {
+      $response = array('success' => FALSE, 'feedback' => implode('<br />', $feedback));
+    }
+    
+    return $response;
+  }
+  
+  public function save_unit_class()
+  {
+    $this->load->driver('cache', array('adapter' => 'file'));
+    
+    $data = array('unit_class_title' => $this->input->post('unit_class_title'));
+    
+    if ($this->unit_classes_model->save($this->input->post('unit_class_id'), $data, $this->input->post('default') == 'on' ? TRUE : FALSE))
+    {
+      $response = array('success' => TRUE, 'feedback' => lang('ms_success_action_performed'));
+    }
+    else
+    {
+      $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed'));
+    }
+    
+    return $response;
+  }
+  
+  public function load_unit_class()
+  {
+    $unit_class_id = $this->input->post('unit_class_id') ? $this->input->post('unit_class_id') : 0;
+    
+    $data = array();
+    if ( $unit_class_id == DEFAULT_UNIT_CLASSES ) 
+    {
+      $data['is_default'] = 1; 
+    }
+    
+    $classes_infos = $this->unit_classes_model->get_classes_infos($unit_class_id);
+    
+    if (!empty($classes_infos))
+    {
+      foreach($classes_infos as $classes_info)
+      {
+        $data['unit_class_title[' . $classes_info['language_id'] . ']'] =  $classes_info['quantity_unit_class_title'];
+      }
+    }
+    
+    return array('success' => TRUE, 'data' => $data);
+  }
+}
+
+
+/* End of file articles.php */
+/* Location: ./system/modules/unit_classes/controllers/unit_classes.php */

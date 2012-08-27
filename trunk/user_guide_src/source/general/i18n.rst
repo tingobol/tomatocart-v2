@@ -1,0 +1,91 @@
+##############################
+Tomatocart国际化
+##############################
+
+Tomatocart的国际化，采用数据库的方式存储多语言数据信息。
+Tomatocart重新继承了CI_Lang，开发人员无需知道国际化具体的细节，即可按照codeigniter的方式调用语言包数据。
+
+
+国际化数据库表
+========================
+
+- **toc_languages** ， 多语言格式定义表，在数据库中定义了不同语言的日期格式化，时间格式化，
+编码定义，货币信息，数字格式，locale描述定义。
+
+数据库创建脚本如下：
+
+::
+
+    CREATE TABLE `toc_languages` (
+      `languages_id` int(11) NOT NULL auto_increment,
+      `name` varchar(32) NOT NULL,
+      `code` char(5) NOT NULL,
+      `locale` varchar(255) NOT NULL,
+      `charset` varchar(32) NOT NULL,
+      `date_format_short` varchar(32) NOT NULL,
+      `date_format_long` varchar(32) NOT NULL,
+      `time_format` varchar(32) NOT NULL,
+      `text_direction` varchar(12) NOT NULL,
+      `currencies_id` int(11) NOT NULL,
+      `numeric_separator_decimal` varchar(12) NOT NULL,
+      `numeric_separator_thousands` varchar(12) NOT NULL,
+      `parent_id` int(11) default '0',
+      `sort_order` int(3) default NULL,
+      PRIMARY KEY  (`languages_id`)
+    ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+- **toc_languages_definitions** ，国际化信息定义表，定义视图层待国际化内容的标记键值和国际化的值。
+
+数据库创建脚本如下：
+
+::
+
+    CREATE TABLE `toc_languages_definitions` (
+      `id` int(11) NOT NULL auto_increment,
+      `languages_id` int(11) NOT NULL,
+      `content_group` varchar(32) NOT NULL,
+      `definition_key` varchar(255) NOT NULL,
+      `definition_value` text NOT NULL,
+      PRIMARY KEY  (`id`),
+      KEY `IDX_LANGUAGES_DEFINITIONS_LANGUAGES` (`languages_id`),
+      KEY `IDX_LANGUAGES_DEFINITIONS` (`languages_id`,`content_group`),
+      KEY `IDX_LANGUAGES_DEFINITIONS_GROUPS` (`content_group`)
+    ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+
+
+model层
+=====================================
+数据层Model类为./tomatocart/models/languages_model.php。
+从数据库中加载页面的国际化语言数据。languages_model直接被TOC_Lang类所调用。
+
+视图层语言数据的使用
+================================
+
+在视图层调用lang()函数，lang函数在 :doc:`General_Helper<../helper/toc_general_helper>` 定义。
+直接传入预定义的语言变量，获取对应的语言值。如：lang('title')，返回数据库中对应语言值。
+
+
+CI_Lang方法
+=====================================
+
+语言的初始化，initialize()
+---------------------
+
+初始化在TOC_Controller层完成，详细功能参见 :doc:`TOC的扩展 <core_extension>` 的TOC_Controller
+
+
+db_load()
+---------------
+
+数据库加载，根据设定的语言分组，加载不同模块及布局的语言信息。
+
+line()
+-------------------
+
+根据指定好的key值，获取对应的语言值。
+
+TODO,more
+-----------------------
+
+
