@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource modules/categories/views/categories_general_panel.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -20,7 +22,7 @@ Ext.define('Toc.categories.GeneralPanel', {
   constructor: function(config) {
     config = config || {};
     
-    config.title = '<?= lang('section_general'); ?>';
+    config.title = '<?php echo lang('section_general'); ?>';
     config.border = false;
     config.bodyPadding = 8;
     config.layout = 'anchor';
@@ -42,11 +44,7 @@ Ext.define('Toc.categories.GeneralPanel', {
       pageSize: Toc.CONF.GRID_PAGE_SIZE,
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
-        extraParams: {
-          module: 'categories',
-          action: 'list_parent_category'
-        },
+        url : '<?php echo site_url('categories/list_parent_category'); ?>',
         reader: {
           type: 'json',
           root: Toc.CONF.JSON_READER_ROOT,
@@ -61,7 +59,7 @@ Ext.define('Toc.categories.GeneralPanel', {
           return '<div style="margin-left: {margin}px">{text}</div>';
         }
       },
-      fieldLabel: '<?= lang("field_parent_category"); ?>',
+      fieldLabel: '<?php echo lang("field_parent_category"); ?>',
       store: this.dsParentCategories,
       queryMode: 'local',
       valueField: 'id',
@@ -81,7 +79,7 @@ Ext.define('Toc.categories.GeneralPanel', {
         var lang<?php echo $l['id']; ?> = Ext.create('Ext.form.TextField', {
           name: 'categories_name[<?php echo $l['id']; ?>]',
           fieldLabel: '<?php echo $i != 1 ? '&nbsp;' : lang('field_name'); ?>',
-          labelStyle: '<?= worldflag_url($l['country_iso']); ?>',
+          labelStyle: '<?php echo worldflag_url($l['country_iso']); ?>',
           allowBlank: false
         });
         
@@ -92,7 +90,7 @@ Ext.define('Toc.categories.GeneralPanel', {
       }
     ?>
     
-    items.push({xtype: 'filefield', fieldLabel: '<?= lang("field_image"); ?>', name: 'image'});
+    items.push({xtype: 'filefield', fieldLabel: '<?php echo lang("field_image"); ?>', name: 'image'});
     items.push({xtype: 'panel', name: 'categories_image', id: 'categories_image_panel', border: false});
     
     items.push({
@@ -102,19 +100,18 @@ Ext.define('Toc.categories.GeneralPanel', {
         id: 'status',
         border: false,
         style: "padding-right: 5px;",
-        items:[{fieldLabel: '<?= lang('field_status'); ?>', xtype:'radio', id: 'statusEnable', name: 'categories_status', boxLabel: '<?= lang('status_enabled'); ?>', inputValue: '1', checked: true}]
+        items:[{fieldLabel: '<?php echo lang('field_status'); ?>', xtype:'radio', id: 'statusEnable', name: 'categories_status', boxLabel: '<?php echo lang('status_enabled'); ?>', inputValue: '1', checked: true}]
       },{
         border: false,
-        items: [{fieldLabel: '<?= lang('status_disabled'); ?>', boxLabel: '<?= lang('status_disabled'); ?>', xtype:'radio', name: 'categories_status', hideLabel: true, inputValue: '0'}]
+        items: [{fieldLabel: '<?php echo lang('status_disabled'); ?>', boxLabel: '<?php echo lang('status_disabled'); ?>', xtype:'radio', name: 'categories_status', hideLabel: true, inputValue: '0'}]
       }]
     });
     
-    items.push({xtype: 'numberfield', fieldLabel: '<?= lang("field_sort_order"); ?>', name: 'sort_order'});
+    items.push({xtype: 'numberfield', fieldLabel: '<?php echo lang("field_sort_order"); ?>', name: 'sort_order'});
     
     return items;
   }
 });
 
 /* End of file categories_general_panel.php */
-/* Location: ./system/modules/categories/views/categories_general_panel.php */
-
+/* Location: ./templates/base/web/views/categories/categories_general_panel.php */

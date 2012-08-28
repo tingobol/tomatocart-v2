@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource modules/articles_categories/views/articles_categories_dialog.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -21,7 +23,7 @@ Ext.define('Toc.articles_categories.ArticlesCategoriesDialog', {
     config = config || {};
     
     config.id = 'articles_categories-dialog-win';
-    config.title = '<?= lang('action_heading_new_category'); ?>';
+    config.title = '<?php echo lang('action_heading_new_category'); ?>';
     config.layout = 'fit';
     config.width = 440;
     config.height = 380;
@@ -57,10 +59,7 @@ Ext.define('Toc.articles_categories.ArticlesCategoriesDialog', {
     
     if (categoriesId > 0) {
       this.frmArticlesCategory.load({
-        url: Toc.CONF.CONN_URL,
-        params:{
-          action: 'load_articles_categories'
-        },
+        url: '<?php echo site_url('articles_categories/load_articles_categories'); ?>',
         success: function(form, action) {
           Toc.articles_categories.ArticlesCategoriesDialog.superclass.show.call(this);
         },
@@ -92,19 +91,15 @@ Ext.define('Toc.articles_categories.ArticlesCategoriesDialog', {
     });
     
     this.frmArticlesCategory = Ext.create('Ext.form.Panel', {
+      url: '<?php echo site_url('articles_categories/save_articles_category'); ?>',
+      baseParams: {},
       layout: 'fit',
-      fileUpload: true,
       fieldDefaults: {
         labelWidth: 120,
         labelSeparator: '',
         anchor: '97%'
       },
       border: false,
-      url: Toc.CONF.CONN_URL,
-      baseParams: {  
-        module: 'articles_categories',
-        action: 'save_articles_category'
-      },
       items: tabArticlesCategories
     });
     
@@ -129,4 +124,4 @@ Ext.define('Toc.articles_categories.ArticlesCategoriesDialog', {
 });
 
 /* End of file articles_categories_dialog.php */
-/* Location: ./system/modules/articles_categories/aricles_categories_dialog.php */
+/* Location: ./templates/base/web/views/articles_categories/articles_categories_dialog.php */

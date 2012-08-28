@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource .system/modules/information/views/information_dialog.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -21,7 +23,7 @@ Ext.define('Toc.information.InformationDialog', {
     config = config || {};
     
     config.id = 'information-dialog-win';
-    config.title = '<?= lang('action_heading_new_information'); ?>';
+    config.title = '<?php echo lang('action_heading_new_information'); ?>';
     config.layout = 'fit';
     config.width = 850;
     config.height = 530;
@@ -55,16 +57,34 @@ Ext.define('Toc.information.InformationDialog', {
   show: function(id) {
     var articlesId = id || null;
     
-    this.frmArticle.form.baseParams['articles_id'] = articlesId;
-    
     if(articlesId > 0) {
+      this.frmArticle.form.baseParams['articles_id'] = articlesId;
+      
       this.frmArticle.load({
-        url: Toc.CONF.CONN_URL,
+        url: '<?php echo site_url('information/load_article'); ?>',
         params:{
-          action: 'load_article',
           articles_id: articlesId
         },
         success: function(form, action) {
+          var img = action.result.data.articles_image;
+          
+          if (img != null) {
+            var img = '<?php echo IMGHTTPPATH; ?>/articles/thumbnails/' + img;
+            var pnlImg = Ext.create('Ext.Panel', {
+              height: 90,
+              border: false,
+              html: '<img src="' + img + '" style="border: solid 1px #B5B8C8;" />'
+            });
+            
+            var checkboxDel = Ext.create('Ext.form.field.Checkbox', {
+              name: 'delimage',
+              boxLabel: '<?php echo lang('field_delete'); ?>'
+            });
+            
+            this.pnlImgUrl.add(pnlImg);
+            this.pnlImgUrl.add(checkboxDel);
+          }
+          
           Toc.information.InformationDialog.superclass.show.call(this);
         },
         failure: function(form, action) {
@@ -88,12 +108,9 @@ Ext.define('Toc.information.InformationDialog', {
         labelSeparator: '',
         anchor: '97%'
       },
-      title:'<?= lang('heading_title_data'); ?>',
-      url: Toc.CONF.CONN_URL,
-      baseParams: {  
-        module: 'information',
-        action: 'save_article'
-      },
+      title:'<?php echo lang('heading_title_data'); ?>',
+      url: '<?php echo site_url('information/save_article'); ?>',
+      baseParams: {},
       deferredRender: false,
       items: [this.getContentPanel(), this.getDataPanel()]
     });
@@ -102,6 +119,14 @@ Ext.define('Toc.information.InformationDialog', {
   },
   
   getDataPanel: function() {
+    var me = this;
+    
+    this.pnlImgUrl = Ext.create('Ext.Panel', {
+      name: 'img_url',
+      border: false,
+      width: 200
+    });
+    
     this.pnlData = Ext.create('Ext.Panel', {
       layout: 'column',
       region: 'north',
@@ -122,12 +147,12 @@ Ext.define('Toc.information.InformationDialog', {
                   width: 200,
                   items: [
                     {
-                      fieldLabel: '<?= lang('field_publish'); ?>', 
+                      fieldLabel: '<?php echo lang('field_publish'); ?>', 
                       xtype:'radio', 
                       name: 'articles_status',
                       inputValue: '1',
                       checked: true,
-                      boxLabel: '<?= lang('field_publish_yes'); ?>'
+                      boxLabel: '<?php echo lang('field_publish_yes'); ?>'
                     }
                   ]
                 },
@@ -140,13 +165,21 @@ Ext.define('Toc.information.InformationDialog', {
                       xtype:'radio', 
                       name: 'articles_status',
                       inputValue: '0',
-                      boxLabel: '<?= lang('field_publish_no'); ?>'
+                      boxLabel: '<?php echo lang('field_publish_no'); ?>'
                     }
                   ]
                 }
               ]
             },
-            {xtype:'numberfield', fieldLabel: '<?= lang('field_order'); ?>', name: 'articles_order', id: 'articles_order'}
+            {xtype:'numberfield', fieldLabel: '<?php echo lang('field_order'); ?>', name: 'articles_order', id: 'articles_order'},
+            {xtype:'fileuploadfield', fieldLabel: '<?php echo lang('field_image'); ?>', name: 'articles_image'}
+          ]
+        },
+        {
+          border: false,
+          columnWidth: .3,
+          items: [
+            me.pnlImgUrl
           ]
         }
       ]
@@ -194,4 +227,4 @@ Ext.define('Toc.information.InformationDialog', {
 });
 
 /* End of file information_dialog.php */
-/* Location: ./system/modules/information/views/information_dialog.php */
+/* Location: ./templates/base/web/views/information/information_dialog.php */

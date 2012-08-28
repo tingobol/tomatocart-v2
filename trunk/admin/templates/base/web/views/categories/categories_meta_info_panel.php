@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource modules/categories/views/categories_meta_info.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -20,7 +22,7 @@ Ext.define('Toc.categories.MetaInfoPanel', {
   constructor: function(config) {
     config = config || {};
     
-    config.title = '<?= lang('section_meta'); ?>';
+    config.title = '<?php echo lang('section_meta'); ?>';
     config.activeTab = 0;
     config.border = false;
     config.deferredRender = false;
@@ -58,5 +60,4 @@ Ext.define('Toc.categories.MetaInfoPanel', {
 });
 
 /* End of file categories_meta_info.php */
-/* Location: ./system/modules/categories/views/categories_meta_info.php */
-
+/* Location: ./templates/base/web/views/categories/categories_meta_info.php */

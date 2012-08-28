@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource modules/articles_categories/views/articles_categories_grid.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -20,9 +22,9 @@ Ext.define('Toc.articles_categories.ArticlesCategoriesGrid', {
   statics: {
     renderStatus : function(status) {
       if(status == 1) {
-        return '<img class="img-button" src="<?= icon_status_url('icon_status_green.gif'); ?>" />&nbsp;<img class="img-button btn-status-off" style="cursor: pointer" src="<?= icon_status_url('icon_status_red_light.gif'); ?>" />';
+        return '<img class="img-button" src="<?php echo icon_status_url('icon_status_green.gif'); ?>" />&nbsp;<img class="img-button btn-status-off" style="cursor: pointer" src="<?php echo icon_status_url('icon_status_red_light.gif'); ?>" />';
       }else {
-        return '<img class="img-button btn-status-on" style="cursor: pointer" src="<?= icon_status_url('icon_status_green_light.gif'); ?>" />&nbsp;<img class="img-button" src= "<?= icon_status_url('icon_status_red.gif'); ?>" />';
+        return '<img class="img-button btn-status-on" style="cursor: pointer" src="<?php echo icon_status_url('icon_status_green_light.gif'); ?>" />&nbsp;<img class="img-button" src= "<?php echo icon_status_url('icon_status_red.gif'); ?>" />';
       }
     }
   },
@@ -45,11 +47,7 @@ Ext.define('Toc.articles_categories.ArticlesCategoriesGrid', {
       pageSize: Toc.CONF.GRID_PAGE_SIZE,
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
-        extraParams: {
-          module: 'articles_categories',
-          action: 'list_articles_categories'
-        },
+        url : '<?php echo site_url('articles_categories/list_articles_categories'); ?>',
         reader: {
           type: 'json',
           root: Toc.CONF.JSON_READER_ROOT,
@@ -61,13 +59,13 @@ Ext.define('Toc.articles_categories.ArticlesCategoriesGrid', {
   
     config.selModel = Ext.create('Ext.selection.CheckboxModel');
     config.columns =[
-      {header: '<?= lang('table_heading_categories'); ?>', dataIndex: 'articles_categories_name', sortable: true, flex: 1},
-      {header: '<?= lang('table_heading_publish'); ?>', align: 'center', renderer: statics.renderStatus, dataIndex: 'articles_categories_status'},
-      {header: '<?= lang('table_heading_categories_order'); ?>', align: 'center', sortable: true, dataIndex: 'articles_categories_order'},
+      {header: '<?php echo lang('table_heading_categories'); ?>', dataIndex: 'articles_categories_name', sortable: true, flex: 1},
+      {header: '<?php echo lang('table_heading_publish'); ?>', align: 'center', renderer: statics.renderStatus, dataIndex: 'articles_categories_status'},
+      {header: '<?php echo lang('table_heading_categories_order'); ?>', align: 'center', sortable: true, dataIndex: 'articles_categories_order'},
       {
         xtype: 'actioncolumn', 
         width: 80,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           tooltip: TocLanguage.tipEdit,
           iconCls: 'icon-action icon-edit-record',
@@ -140,10 +138,8 @@ Ext.define('Toc.articles_categories.ArticlesCategoriesGrid', {
         if (btn == 'yes') {
           Ext.Ajax.request({
             waitMsg: TocLanguage.formSubmitWaitMsg,
-            url: Toc.CONF.CONN_URL,
+            url: '<?php echo site_url('articles_categories/delete_article_category'); ?>',
             params: {
-              module: 'articles_categories',
-              action: 'delete_article_category',
               articles_categories_id: categoriesId
             },
             callback: function (options, success, response) {
@@ -182,10 +178,8 @@ Ext.define('Toc.articles_categories.ArticlesCategoriesGrid', {
           if (btn == 'yes') {
             Ext.Ajax.request({
               waitMsg: TocLanguage.formSubmitWaitMsg,
-              url: Toc.CONF.CONN_URL,
+              url: '<?php echo site_url('articles_categories/delete_articles_categories'); ?>',
               params: {
-                module: 'articles_categories',
-                action: 'delete_articles_categories',
                 batch: batch
               },
               callback: function(options, success, response) {
@@ -235,10 +229,8 @@ Ext.define('Toc.articles_categories.ArticlesCategoriesGrid', {
   
   onAction: function(action, categoriesId, flag, index) {
     Ext.Ajax.request({
-      url: Toc.CONF.CONN_URL,
+      url: '<?php echo site_url('articles_categories'); ?>/' + action,
       params: {
-        module: 'articles_categories',
-        action: action,
         articles_categories_id: categoriesId,
         flag: flag
       },
@@ -266,4 +258,4 @@ Ext.define('Toc.articles_categories.ArticlesCategoriesGrid', {
 });
 
 /* End of file articles_categories_grid.php */
-/* Location: ./system/modules/articles_categories/views/articles_categories_grid.php */
+/* Location: ./templates/base/web/views/articles_categories/articles_categories_grid.php */

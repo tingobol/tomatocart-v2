@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource .system/modules/information/views/information_grid.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -20,9 +22,9 @@ Ext.define('Toc.information.InformationGrid', {
   statics: {
     renderStatus : function(status) {
       if(status == 1) {
-        return '<img class="img-button" src="<?= icon_status_url('icon_status_green.gif'); ?>" />&nbsp;<img class="img-button btn-status-off" style="cursor: pointer" src="<?= icon_status_url('icon_status_red_light.gif'); ?>" />';
+        return '<img class="img-button" src="<?php echo icon_status_url('icon_status_green.gif'); ?>" />&nbsp;<img class="img-button btn-status-off" style="cursor: pointer" src="<?php echo icon_status_url('icon_status_red_light.gif'); ?>" />';
       }else {
-        return '<img class="img-button btn-status-on" style="cursor: pointer" src="<?= icon_status_url('icon_status_green_light.gif'); ?>" />&nbsp;<img class="img-button" src= "<?= icon_status_url('icon_status_red.gif'); ?>" />';
+        return '<img class="img-button btn-status-on" style="cursor: pointer" src="<?php echo icon_status_url('icon_status_green_light.gif'); ?>" />&nbsp;<img class="img-button" src= "<?php echo icon_status_url('icon_status_red.gif'); ?>" />';
       }
     }
   },
@@ -46,11 +48,7 @@ Ext.define('Toc.information.InformationGrid', {
       pageSize: Toc.CONF.GRID_PAGE_SIZE,
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
-        extraParams: {
-          module: 'information',
-          action: 'list_articles'
-        },
+        url : '<?php echo site_url('information/list_articles'); ?>',
         reader: {
           type: 'json',
           root: Toc.CONF.JSON_READER_ROOT,
@@ -62,14 +60,14 @@ Ext.define('Toc.information.InformationGrid', {
     
     config.selModel = Ext.create('Ext.selection.CheckboxModel');
     config.columns =[
-      {header: '<?= lang('table_heading_articles'); ?>', dataIndex: 'articles_name', sortable: true, flex: 1},
-      {header: '<?= lang('table_heading_articles_categories'); ?>', align: 'center', dataIndex: 'articles_categories_name'},
-      {header: '<?= lang('table_heading_publish'); ?>', align: 'center', renderer: statics.renderStatus, dataIndex: 'articles_status'},
-      {header: '<?= lang('table_heading_sort_order'); ?>', align: 'center', dataIndex: 'articles_order', sortable: true},
+      {header: '<?php echo lang('table_heading_articles'); ?>', dataIndex: 'articles_name', sortable: true, flex: 1},
+      {header: '<?php echo lang('table_heading_articles_categories'); ?>', align: 'center', dataIndex: 'articles_categories_name'},
+      {header: '<?php echo lang('table_heading_publish'); ?>', align: 'center', renderer: statics.renderStatus, dataIndex: 'articles_status'},
+      {header: '<?php echo lang('table_heading_sort_order'); ?>', align: 'center', dataIndex: 'articles_order', sortable: true},
       {
         xtype: 'actioncolumn', 
         width: 80,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           tooltip: TocLanguage.tipEdit,
           iconCls: 'icon-action icon-edit-record',
@@ -142,10 +140,8 @@ Ext.define('Toc.information.InformationGrid', {
         if (btn == 'yes') {
           Ext.Ajax.request({
             waitMsg: TocLanguage.formSubmitWaitMsg,
-            url: Toc.CONF.CONN_URL,
+            url: '<?php echo site_url('information/delete_article'); ?>',
             params: {
-              module: 'information',
-              action: 'delete_article',
               articles_id: articlesId
             },
             callback: function (options, success, response) {
@@ -184,10 +180,8 @@ Ext.define('Toc.information.InformationGrid', {
           if (btn == 'yes') {
             Ext.Ajax.request({
               waitMsg: TocLanguage.formSubmitWaitMsg,
-              url: Toc.CONF.CONN_URL,
+              url: '<?php echo site_url('information/delete_articles'); ?>',
               params: {
-                module: 'information',
-                action: 'delete_articles',
                 batch: batch
               },
               callback: function(options, success, response) {
@@ -237,10 +231,8 @@ Ext.define('Toc.information.InformationGrid', {
   
   onAction: function(action, articlesId, flag, index) {
     Ext.Ajax.request({
-      url: Toc.CONF.CONN_URL,
+      url: '<?php echo site_url('information'); ?>/' + action,
       params: {
-        module: 'information',
-        action: action,
         aID: articlesId,
         flag: flag
       },
@@ -268,4 +260,4 @@ Ext.define('Toc.information.InformationGrid', {
 });
 
 /* End of file information_grid.php */
-/* Location: ./system/modules/information/views/information_grid.php */
+/* Location: ./templates/base/web/views/information/information_grid.php */
