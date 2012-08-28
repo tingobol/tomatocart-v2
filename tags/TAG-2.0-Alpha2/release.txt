@@ -1,0 +1,42 @@
+2012/08/27 TomatoCart v2.0 alpha2
+  TomatoCart v2.0 is in development, please do not use it in production enviroment. This release is an evaluation version 
+  for community developers and users who are participating in the development and are providing feedback.
+  
+  There will be no install routine for evaluation edition, please refer to readme.txt for installation guide.
+  
+  Features included in this release:
+  1. Developed as a flexible and solid ecommerce framework utilizing mvc pattern.
+  
+  2. Add and override core features without touching the core source code.
+  
+  3. Integrate the sencha touch into the admin panel to support the pad and mobile device.
+  
+  4. Improve the template engine as the engine in the wordpress.
+  
+  5. Perform modifications and override base views in a separate template for the specific device.
+  
+  6. Migrate the the sytem config file into the local directory so as to let the developers setup the system without touching the core config file.
+  
+  7. Share the system config file between Backend and Frontend
+  
+  8. Add the payment, shipping, order totals and service module into the admin panel.
+
+
+
+2012/04/9 TomatoCart v2.0 alpha1
+  TomatoCart v2.0 is in development, please do not use it in production enviroment. This release is an evaluation version 
+  for community developers and users who are participating in the development and are providing feedback.
+  
+  There will be no install routine for evaluation edition, please refer to readme.txt for installation guide.
+  
+  Features included in this release:
+  1. Core Complete Rewrite with CodeIgniter
+  2. New Template Enginee
+     -- Customized Settings for Templates
+     -- Template Modules Can Be Instaniated More Than Once and Each Instance Has Its Own Parameters
+     -- Template Module Layout Management through Drag & Drop 
+     -- Response Web Design for Store Front
+        Added Mobile View Support With jQuery Mobile
+        Added Mobile View Support For Template Module
+  3. Upgrade Extjs 2.0 to Extjs 4.0
+  
