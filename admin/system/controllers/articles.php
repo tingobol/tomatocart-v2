@@ -61,14 +61,14 @@ class Articles extends TOC_Controller {
         $records = array();
         if (!empty($articles))
         {
-          foreach($articles as $article)
-          {
-              $records[] = array('articles_id' => $article['articles_id'],
-                                 'articles_status' => $article['articles_status'],
-                                 'articles_order' => $article['articles_order'],
-                                 'articles_categories_name' => $article['articles_categories_name'],
-                                 'articles_name' => $article['articles_name']);
-          }
+            foreach($articles as $article)
+            {
+                $records[] = array('articles_id' => $article['articles_id'],
+                                   'articles_status' => $article['articles_status'],
+                                   'articles_order' => $article['articles_order'],
+                                   'articles_categories_name' => $article['articles_categories_name'],
+                                   'articles_name' => $article['articles_name']);
+            }
         }
         
         $this->output->set_output(json_encode(array(EXT_JSON_READER_TOTAL => $this->articles_model->get_total($current_category_id, $search), EXT_JSON_READER_ROOT => $records)));
@@ -173,36 +173,36 @@ class Articles extends TOC_Controller {
      */
     public function delete_articles()
     {
-      $error = FALSE;
-      
-      $articles_ids = json_decode($this->input->post('batch'));
-      
-      if (!empty($articles_ids))
-      {
-          foreach($articles_ids as $articles_id)
-          {
-              if ($this->articles_model->delete($articles_id) === FALSE)
-              {
-                  $error = TRUE;
-                  break;
-              }
-          }
-      }
-      else
-      {
-          $error = TRUE;
-      }
-      
-      if ($error === FALSE)
-      {
-          $response = array('success' => TRUE, 'feedback' => lang('ms_success_action_performed'));
-      }
-      else
-      {
-          $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed'));
-      }
-      
-      $this->output->set_output(json_encode($response));
+        $error = FALSE;
+        
+        $articles_ids = json_decode($this->input->post('batch'));
+        
+        if (!empty($articles_ids))
+        {
+            foreach($articles_ids as $articles_id)
+            {
+                if ($this->articles_model->delete($articles_id) === FALSE)
+                {
+                    $error = TRUE;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            $error = TRUE;
+        }
+        
+        if ($error === FALSE)
+        {
+            $response = array('success' => TRUE, 'feedback' => lang('ms_success_action_performed'));
+        }
+        else
+        {
+            $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed'));
+        }
+        
+        $this->output->set_output(json_encode($response));
     }
     
 // --------------------------------------------------------------------       
