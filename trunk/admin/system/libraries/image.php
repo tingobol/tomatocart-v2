@@ -1,118 +1,322 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * CodeIgniter
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application development framework for PHP 5.1.6 or newer
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
- * @package   CodeIgniter
- * @author    ExpressionEngine Dev Team
- * @copyright Copyright (c) 2006 - 2011, EllisLab, Inc.
- * @license   http://codeigniter.com/user_guide/license.html
- * @link    http://codeigniter.com
- * @since   Version 1.0
+ * @package   TomatoCart
+ * @author    TomatoCart Dev Team
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
+ * @link    http://tomatocart.com
+ * @since   Version 2.0
  * @filesource
  */
 
 // ------------------------------------------------------------------------
 
 /**
- * Image Class
+ * Image library
  *
- * @package   CodeIgniter
- * @subpackage  Libraries
- * @category  Shopping Cart
- * @author    ExpressionEngine Dev Team
- * @link    http://codeigniter.com/user_guide/libraries/cart.html
+ * @package   TomatoCart
+ * @subpackage  tomatocart
+ * @category  template-library
+ * @author    TomatoCart Dev Team
+ * @link    http://tomatocart.com/wiki/
  */
-
 Class TOC_Image {
-  protected $_groups;
-  protected $ci;
-  
-  public function __construct()
-  {
-    // Set the super object to a local variable for use later
-    $this->ci =& get_instance();
+    /**
+     * The image groups
+     *
+     * @access private
+     * @var array
+     */
+    private $_groups;
     
-    $this->ci->load->model('image_model');
-    $this->_groups = array();
+    /**
+     * Reference to CodeIgniter instance
+     *
+     * @access private
+     * @var object
+     */
+    private $ci;
     
-    $image_groups = $this->ci->image_model->get_groups();
+    /**
+     * The image group title
+     *
+     * @access private
+     * @var string
+     */
+    private $_title;
+  
+    /**
+     * Constructor
+     *
+     * @access public
+     * @return void
+     */
+    public function __construct()
+    {
+        // Set the super object to a local variable for use later
+        $this->ci =& get_instance();
+        
+        $this->ci->load->model('image_model');
+        $this->_groups = array();
+        
+        $image_groups = $this->ci->image_model->get_groups();
+        
+        if (!empty($image_groups))
+        {
+            foreach($image_groups as $image_group)
+            {
+                $this->_groups[$image_group['id']] = $image_group;
+            }
+        }
+    }
+  
+// ------------------------------------------------------------------------
+  
+    /**
+     * Get the image group id based on the code
+     *
+     * @access public
+     * @param $code
+     * @return int
+     */
+    public function get_id($code) 
+    {
+        foreach ($this->_groups as $group) 
+        {
+            if ($group['code'] == $code) 
+            {
+                return $group['id'];
+            }
+        }
     
-    if (!empty($image_groups))
-    {
-      foreach($image_groups as $image_group)
-      {
-        $this->_groups[$image_group['id']] = $image_group;
-      }
+        return 0;
     }
-  }
   
-  public function getID($code) 
-  {
-    foreach ($this->_groups as $group) 
+// ------------------------------------------------------------------------
+  
+    /**
+     * Get the image group code based on the id
+     *
+     * @access public
+     * @param $id
+     * @return string
+     */
+    public function get_code($id) 
     {
-      if ($group['code'] == $code) 
-      {
-        return $group['id'];
-      }
+        return $this->_groups[$id]['code'];
     }
-
-    return 0;
-  }
   
-  public function getCode($id) 
-  {
-    return $this->_groups[$id]['code'];
-  }
+// ------------------------------------------------------------------------
   
-  public  function getWidth($code) 
-  {
-    return $this->_groups[$this->getID($code)]['size_width'];
-  }
-  
-  public function getHeight($code) 
-  {
-    return $this->_groups[$this->getID($code)]['size_height'];
-  }
-  
-  public function exists($code) 
-  {
-    return isset($this->_groups[$this->getID($code)]);
-  }
-  
-  public function show($image, $title, $parameters = '', $group = '', $type = 'products') 
-  {
-    if (empty($group) || !$this->exists($group)) 
+    /**
+     * Get the image group width based on the code
+     *
+     * @access public
+     * @param $code
+     * @return int
+     */
+    public  function get_width($code) 
     {
-      $group = $this->getCode(DEFAULT_IMAGE_GROUP_ID);
+        return $this->_groups[$this->getID($code)]['size_width'];
     }
-
-    $group_id = $this->getID($group);
-
-    $width = $height = '';
-
-    if ( ($this->_groups[$group_id]['force_size'] == '1') || empty($image) ) 
+  
+// ------------------------------------------------------------------------
+  
+    /**
+     * Get the image group height based on the code
+     *
+     * @access public
+     * @param $code
+     * @return int
+     */
+    public function get_height($code) 
     {
-      $width = $this->_groups[$group_id]['size_width'];
-      $height = $this->_groups[$group_id]['size_height'];
+        return $this->_groups[$this->getID($code)]['size_height'];
     }
-
-    if (empty($image))
+  
+// ------------------------------------------------------------------------
+  
+    /**
+     * Check the image group based on the code
+     *
+     * @access public
+     * @param $code
+     * @return boolean
+     */
+    public function exists($code) 
     {
-      $image = 'no_image.png';
-    } else 
-    {
-      $image = $type . '/' . $this->_groups[$group_id]['code'] . '/' . $image;
+        return isset($this->_groups[$this->getID($code)]);
     }
-
-    if ($type == 'products')
+  
+// ------------------------------------------------------------------------
+  
+    /**
+     * Show the product image
+     *
+     * @access public
+     * @param $image
+     * @param $title
+     * @param $parameters
+     * @param $group
+     * @param $type
+     * @return string
+     */
+    public function show($image, $title, $parameters = '', $group = '', $type = 'products') 
     {
-      $parameters .= 'class="productImage"';
+        if (empty($group) || !$this->exists($group)) 
+        {
+            $group = $this->getCode(DEFAULT_IMAGE_GROUP_ID);
+        }
+    
+        $group_id = $this->getID($group);
+    
+        $width = $height = '';
+    
+        if ( ($this->_groups[$group_id]['force_size'] == '1') || empty($image) ) 
+        {
+            $width = $this->_groups[$group_id]['size_width'];
+            $height = $this->_groups[$group_id]['size_height'];
+        }
+    
+        if (empty($image))
+        {
+            $image = 'no_image.png';
+        } 
+        else 
+        {
+            $image = $type . '/' . $this->_groups[$group_id]['code'] . '/' . $image;
+        }
+    
+        if ($type == 'products')
+        {
+            $parameters .= 'class="productImage"';
+        }
+        
+        return image(IMGHTTPPATH . $image, $title, $width, $height, $parameters);
     }
-  }
+    
+// ------------------------------------------------------------------------
+
+    /**
+     * Get all the image groups
+     *
+     * @access public
+     * @return array
+     */
+    public function get_groups()
+    {
+        return $this->_groups;
+    }
+    
+// ------------------------------------------------------------------------
+
+    /**
+     * Resize the image
+     *
+     * @access public
+     * @param $image
+     * @param $group_id
+     * @param $type
+     * @return boolean
+     */
+    public function resize($image, $group_id, $type = 'products') 
+    {
+        if (!file_exists(ROOTPATH . 'images/' . $type . '/' . $this->_groups[$group_id]['code'])) 
+        {
+            mkdir(ROOTPATH . 'images/' . $type . '/' . $this->_groups[$group_id]['code'], 0777);
+        }
+        
+        $original_image = ROOTPATH . 'images/' . $type . '/' . $this->_groups[1]['code'] . '/' . $image;
+        $dest_image = ROOTPATH . 'images/' . $type . '/' . $this->_groups[$group_id]['code'] . '/' . $image;
+      
+        if (file_exists($original_image)) 
+        {
+            $config['image_library'] = 'gd2';
+            $config['source_image'] = $original_image;
+            $config['new_image'] = $dest_image;
+            $config['maintain_ratio'] = TRUE;
+            $config['width']   = $this->_groups[$group_id]['size_width'];
+            $config['height'] = $this->_groups[$group_id]['size_height'];
+            
+            $this->ci->load->library('image_lib');
+            
+            $this->ci->image_lib->initialize($config);
+            
+            return $this->ci->image_lib->resize();
+        }
+    }
+    
+// ------------------------------------------------------------------------
+
+    /**
+     * Set the default image
+     *
+     * @access public
+     * @param $id
+     * @return boolean
+     */
+    public function set_as_default($id)
+    {
+        return $this->ci->image_model->set_as_default($id);
+    }
+    
+// ------------------------------------------------------------------------
+    
+    /**
+     * Delete the image
+     *
+     * @access public
+     * @param $id
+     * @return boolean
+     */
+    public function delete($id)
+    {
+        $image = $this->ci->image_model->get_image_name($id);
+        
+        if (!empty($image) && is_array($image))
+        {
+            $image_name = $image['image'];
+            
+            foreach ($this->_groups as $group) 
+            {
+                @unlink(ROOTPATH. 'images/products/' . $group['code'] . '/' . $image_name);
+            }
+            
+           //remove watermark file
+            if (file_exists(ROOTPATH. 'images/products/' . $this->_groups[1]['code'] . '/watermark_' . $image_name)) 
+            {
+                @unlink(DROOTPATH . 'images/products/' . $this->_groups[1]['code'] . '/watermark_' . $image_name);
+            }
+            
+            return $this->ci->image_model->delete($id);
+        }
+    }
+    
+// ------------------------------------------------------------------------
+
+    /**
+     * Delete the image of an article
+     *
+     * @access public
+     * @param $id
+     * @return void
+     */
+    public function delete_articles_image($id)
+    {
+        $image = $this->ci->image_model->get_articles_image($id);
+        
+        foreach($this->_groups as $group)
+        {
+            @unlink(ROOTPATH . 'images/articles/' . $group['code'] . '/' . $image['articles_image']);
+        }
+    }
 }
-
 
 /* End of file image.php */
 /* Location: ./system/libraries/image.php */
