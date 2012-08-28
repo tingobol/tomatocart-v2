@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource .system/modules/customers_groups/views/customers_groups_dialog.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -21,7 +23,7 @@ Ext.define('Toc.customers_groups.CustomersGroupsDialog', {
     config = config || {};
     
     config.id = 'customers_groups-dialog-win';
-    config.title = '<?= lang('action_heading_new_customer_group'); ?>';
+    config.title = '<?php echo lang('action_heading_new_customer_group'); ?>';
     config.width = 480;
     config.modal = true;
     config.iconCls = 'icon-customers_groups-win';
@@ -54,15 +56,11 @@ Ext.define('Toc.customers_groups.CustomersGroupsDialog', {
   show: function (id) {
     var groupsId = id || null;
     
-    this.frmCustomersGroups.baseParams['groups_id'] = groupsId;
-     
     if (groupsId > 0) {
+      this.frmCustomersGroups.baseParams['groups_id'] = groupsId;
+     
       this.frmCustomersGroups.load({
-        url: Toc.CONF.CONN_URL,
-        params: {
-          module: 'customers_groups',
-          action: 'load_customers_groups'
-        },
+        url: '<?php echo site_url('customers_groups/load_customers_groups'); ?>',
         success: function() {
           Toc.customers_groups.CustomersGroupsDialog.superclass.show.call(this);
         },
@@ -78,11 +76,8 @@ Ext.define('Toc.customers_groups.CustomersGroupsDialog', {
   
   buildForm: function() {
     this.frmCustomersGroups = Ext.create('Ext.form.Panel', {
-      url: Toc.CONF.CONN_URL,
-      baseParams: {  
-        module: 'customers_groups',
-        action: 'save_customers_groups'
-      },
+      url: '<?php echo site_url('customers_groups/save_customers_groups'); ?>',
+      baseParams: {},
       fieldDefaults: {
         labelSeparator: '',
         anchor: '98%',
@@ -93,7 +88,7 @@ Ext.define('Toc.customers_groups.CustomersGroupsDialog', {
       items: [
         {
           xtype: 'numberfield', 
-          fieldLabel: '<?= lang('field_group_discount'); ?>  (%)', 
+          fieldLabel: '<?php echo lang('field_group_discount'); ?>  (%)', 
           name: 'customers_groups_discount',
           minValue: 0,
           maxValue: 100,
@@ -102,7 +97,7 @@ Ext.define('Toc.customers_groups.CustomersGroupsDialog', {
         },
         {
           xtype: 'checkbox', 
-          fieldLabel: '<?= lang('field_set_as_default'); ?>', 
+          fieldLabel: '<?php echo lang('field_set_as_default'); ?>', 
           name: 'is_default',
           anchor: '',
           inputValue: 1 
@@ -119,7 +114,7 @@ Ext.define('Toc.customers_groups.CustomersGroupsDialog', {
           name: 'customers_groups_name[<?php echo $l['id']; ?>]',
           fieldLabel: '<?php echo $i != 1 ? '&nbsp;' : lang('field_group_name') ?>',
           allowBlank: false,
-          labelStyle: '<?= worldflag_url($l['country_iso']); ?>'
+          labelStyle: '<?php echo worldflag_url($l['country_iso']); ?>'
         });
         
         this.frmCustomersGroups.insert(<?php echo $i; ?>, this.lang<?php echo $l['id']; ?>);
@@ -149,4 +144,4 @@ Ext.define('Toc.customers_groups.CustomersGroupsDialog', {
 });
 
 /* End of file customers_groups_dialog.php */
-/* Location: ./system/modules/customers_groups/views/customers_groups_dialog.php */
+/* Location: ./templates/base/web/views/customers_groups/customers_groups_dialog.php */

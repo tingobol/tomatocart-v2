@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource modules/articles_categories/views/articles_categories_meta_info_panel.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -20,7 +22,7 @@ Ext.define('Toc.articles_categories.MetaInfoPanel', {
   constructor: function(config) {
     config = config || {};
     
-    config.title = '<?= lang('section_meta'); ?>';
+    config.title = '<?php echo lang('section_meta'); ?>';
     config.activeTab = 0;
     config.deferredRender = false;
     config.border = false;
@@ -43,14 +45,14 @@ Ext.define('Toc.articles_categories.MetaInfoPanel', {
           border: false,
           layout: 'anchor',
           items: [
-            {xtype: 'textfield', fieldLabel: '<?= lang('field_page_title'); ?>', name: 'page_title[<?php echo $l['id']; ?>]'},
-            {xtype: 'textarea', fieldLabel: '<?= lang('field_meta_keywords'); ?>', name: 'meta_keywords[<?php echo $l['id']; ?>]'},
-            {xtype: 'textarea', fieldLabel: '<?= lang('field_meta_description'); ?>', name: 'meta_description[<?php echo $l['id']; ?>]'},
+            {xtype: 'textfield', fieldLabel: '<?php echo lang('field_page_title'); ?>', name: 'page_title[<?php echo $l['id']; ?>]'},
+            {xtype: 'textarea', fieldLabel: '<?php echo lang('field_meta_keywords'); ?>', name: 'meta_keywords[<?php echo $l['id']; ?>]'},
+            {xtype: 'textarea', fieldLabel: '<?php echo lang('field_meta_description'); ?>', name: 'meta_description[<?php echo $l['id']; ?>]'},
             {
               xtype: 'textfield', 
-              fieldLabel: '<?= lang('field_url'); ?>', 
+              fieldLabel: '<?php echo lang('field_url'); ?>', 
               name: 'articles_categories_url[<?php echo $l['id']; ?>]',
-              lableStyle: '<?= worldflag_url($l['country_iso']); ?>'
+              lableStyle: '<?php echo worldflag_url($l['country_iso']); ?>'
             }
           ]
         });
@@ -65,4 +67,4 @@ Ext.define('Toc.articles_categories.MetaInfoPanel', {
 });
 
 /* End of file articles_categories_meta_info_panel.php */
-/* Location: ./system/modules/articles_categories/articles_categories_meta_info_panel.php */
+/* Location: ./templates/base/web/views/articles_categories/articles_categories_meta_info_panel.php */

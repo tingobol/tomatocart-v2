@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource modules/categories/categories_move_dialog.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -21,7 +23,7 @@ Ext.define('Toc.categories.CategoriesMoveDialog', {
     config = config || {};
     
     config.id = 'categories-move-dialog-win';
-    config.title = '<?= lang("action_heading_batch_move_categories"); ?>';
+    config.title = '<?php echo lang("action_heading_batch_move_categories"); ?>';
     config.layout = 'fit';
     config.width = 400;
     config.autoHeight = true;
@@ -126,7 +128,7 @@ Ext.define('Toc.categories.CategoriesMoveDialog', {
           return '<div style="margin-left: {margin}px">{text}</div>';
         }
       },
-      fieldLabel: '<?= lang("field_parent_category"); ?>',
+      fieldLabel: '<?php echo lang("field_parent_category"); ?>',
       store: this.dsParentCategories,
       queryMode: 'local',
       valueField: 'id',
@@ -177,4 +179,4 @@ Ext.define('Toc.categories.CategoriesMoveDialog', {
 
 
 /* End of file categories_move_dialog.php */
-/* Location: ./system/modules/categories/views/categories_move_dialog.php */
+/* Location: ./templates/base/web/views/categories/categories_move_dialog.php */

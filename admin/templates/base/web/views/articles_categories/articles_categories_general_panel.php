@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource modules/articles_categories/views/articles_categories_general_panel.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -20,7 +22,7 @@ Ext.define('Toc.articles_categories.GeneralPanel', {
   constructor: function(config) {
     config = config || {};
     
-    config.title = '<?= lang('section_general'); ?>';
+    config.title = '<?php echo lang('section_general'); ?>';
     config.bodyPadding = 8;
     config.border = false;
     config.layout = 'anchor';
@@ -42,7 +44,7 @@ Ext.define('Toc.articles_categories.GeneralPanel', {
           name: 'articles_categories_name[<?php echo $l['id']; ?>]',
           fieldLabel: '<?php echo $i != 1 ? '&nbsp;' : lang('field_name') ?>',
           allowBlank: false,
-          labelStyle: '<?= worldflag_url($l['country_iso']); ?>'
+          labelStyle: '<?php echo worldflag_url($l['country_iso']); ?>'
         });
         
         items.push(txtLang<?php echo $l['id']; ?>);
@@ -61,9 +63,9 @@ Ext.define('Toc.articles_categories.GeneralPanel', {
             {
               xtype: 'radio', 
               name: 'articles_categories_status', 
-              fieldLabel: '<?= lang('field_publish'); ?>', 
+              fieldLabel: '<?php echo lang('field_publish'); ?>', 
               inputValue: '1', 
-              boxLabel: '<?= lang('field_publish_yes'); ?>', 
+              boxLabel: '<?php echo lang('field_publish_yes'); ?>', 
               checked: true
             }
           ]
@@ -77,7 +79,7 @@ Ext.define('Toc.articles_categories.GeneralPanel', {
               hideLabel: true, 
               name: 'articles_categories_status', 
               inputValue: '0',
-              boxLabel: '<?= lang('field_publish_no'); ?>'
+              boxLabel: '<?php echo lang('field_publish_no'); ?>'
             }
           ]
         }
@@ -86,11 +88,11 @@ Ext.define('Toc.articles_categories.GeneralPanel', {
     
     items.push(pnlPublish);
     
-    items.push({xtype: 'numberfield', id: 'articles_categories_order', name: 'articles_categories_order', fieldLabel: '<?= lang('field_articles_order'); ?>', allowBlank: false});
+    items.push({xtype: 'numberfield', id: 'articles_categories_order', name: 'articles_categories_order', fieldLabel: '<?php echo lang('field_articles_order'); ?>', allowBlank: false});
     
     return items;
   }
 });
 
 /* End of file articles_categories_general_panel.php */
-/* Location: ./system/modules/articles_categories/articles_categories_general_panel.php */
+/* Location: ./templates/base/web/views/articles_categories/articles_categories_general_panel.php */

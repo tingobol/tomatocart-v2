@@ -1,18 +1,21 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource modules/categories/views/categories_dialog.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
+
 
 Ext.define('Toc.categories.CategoriesDialog', {
   extend: 'Ext.Window',
@@ -21,7 +24,7 @@ Ext.define('Toc.categories.CategoriesDialog', {
     config = config || {};
     
     config.id = 'categories-dialog-win';
-    config.title = '<?= lang("action_heading_new_category"); ?>';
+    config.title = '<?php echo lang("action_heading_new_category"); ?>';
     config.layout = 'fit';
     config.width = 520;
     config.height = 380;
@@ -54,15 +57,11 @@ Ext.define('Toc.categories.CategoriesDialog', {
   show: function(id) {
     var categoriesId = id || null;
     
-    this.frmCategories.form.baseParams['categories_id'] = categoriesId;
-    
     if (categoriesId > 0) {
+      this.frmCategories.form.baseParams['categories_id'] = categoriesId;
+       
       this.frmCategories.load({
-        url: Toc.CONF.CONN_URL,
-        params: {
-          module: 'categories',
-          action: 'load_category'
-        },
+        url: '<?php echo site_url('categories/load_category'); ?>',
         success: function (form, action) {
           // get the parent id of the loading category.
           var parentId = action.result.data.parent_category_id;
@@ -129,11 +128,8 @@ Ext.define('Toc.categories.CategoriesDialog', {
         labelSeparator: '',
         anchor: '98%'
       },
-      url: Toc.CONF.CONN_URL,
-      baseParams: {  
-        module: 'categories',
-        action: 'save_category'
-      },
+      url: '<?php echo site_url('categories/save_category'); ?>',
+      baseParams: {},
       items: tabCategories
     });
     
@@ -208,4 +204,4 @@ Ext.define('Toc.categories.CategoriesDialog', {
 
 
 /* End of file categories_dialog.php */
-/* Location: ./system/modules/categories/views/categories_dialog.php */
+/* Location: ./templates/base/web/views/categories/categories_dialog.php */
