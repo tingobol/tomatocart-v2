@@ -67,12 +67,10 @@ class Customers_Groups extends TOC_Controller
                     $group_name .= '(' . lang('default_entry') . ')';
                 }
                 
-                $records[] = array(
-                    'language_id' => $group['language_id'],
-                    'customers_groups_id' => $group['customers_groups_id'],
-                    'customers_groups_name' => $group_name,
-                    'customers_groups_discount' => sprintf("%d%%", $group['customers_groups_discount'])
-                );     
+                $records[] = array('language_id' => $group['language_id'],
+                                   'customers_groups_id' => $group['customers_groups_id'],
+                                   'customers_groups_name' => $group_name,
+                                   'customers_groups_discount' => sprintf("%d%%", $group['customers_groups_discount']));     
             }
         }
         
@@ -256,4 +254,4 @@ class Customers_Groups extends TOC_Controller
 }
 
 /* End of file customers_groups.php */
-/* Location: .system/controllers/customers_groups.php */
+/* Location: ./system/controllers/customers_groups.php */
