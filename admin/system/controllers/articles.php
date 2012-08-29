@@ -61,14 +61,7 @@ class Articles extends TOC_Controller {
         $records = array();
         if ($articles != NULL)
         {
-            foreach($articles as $article)
-            {
-                $records[] = array('articles_id' => $article['articles_id'],
-                                   'articles_status' => $article['articles_status'],
-                                   'articles_order' => $article['articles_order'],
-                                   'articles_categories_name' => $article['articles_categories_name'],
-                                   'articles_name' => $article['articles_name']);
-            }
+            $records = $articles;
         }
         
         $this->output->set_output(json_encode(array(EXT_JSON_READER_TOTAL => $this->articles_model->get_total($current_category_id, $search), EXT_JSON_READER_ROOT => $records)));

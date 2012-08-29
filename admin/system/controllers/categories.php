@@ -271,13 +271,13 @@ class Categories extends TOC_Controller
     {
         $data = $this->categories_model->get_data($this->input->post('categories_id'));
     
-        if (!empty($data))
+        if ($data != NULL)
         {
             $response = array('success' => TRUE, 'data' => $data);
         }
         else
         {
-            $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed'));
+            $response = array('success' => FALSE);
         }
         
         $this->output->set_output(json_encode($response));

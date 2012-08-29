@@ -91,12 +91,7 @@ class Countries extends TOC_Controller
         $records = array();
         if ($zones != NULL)
         {
-            foreach($zones as $zone)
-            {
-                $records[] = array('zone_id' => $zone['zone_id'], 
-                                   'zone_code' => $zone['zone_code'], 
-                                   'zone_name' => $zone['zone_name']);
-            }
+            $records = $zones;
         } 
         
         $this->output->set_output(json_encode(array(EXT_JSON_READER_ROOT => $records)));
@@ -320,12 +315,14 @@ class Countries extends TOC_Controller
         
         if ($data != NULL)
         {
-            $this->output->set_output(json_encode(array('success' => TRUE, 'data' => $data)));
+            $response = array('success' => TRUE, 'data' => $data);
         }
         else
         {
-            $this->output->set_output(json_encode(array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed'))));
+            $response = array('success' => FALSE);
         }
+        
+        $this->output->set_output(json_encode($response));
     }
     
 // ------------------------------------------------------------------------ 
@@ -372,7 +369,7 @@ class Countries extends TOC_Controller
         }
         else
         {
-            $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed'));
+            $response = array('success' => FALSE);
         }
         
         $this->output->set_output(json_encode($response));
