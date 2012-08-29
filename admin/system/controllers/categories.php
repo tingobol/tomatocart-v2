@@ -69,7 +69,7 @@ class Categories extends TOC_Controller
         $categories = $this->categories_model->get_categories($start, $limit, $parent_id, $search);
     
         $records = array();
-        if (!empty($categories))
+        if ($categories != NULL)
         {
             foreach($categories as $category)
             {
