@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource ./system/modules/zone_groups/views/zone_entries_grid.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -22,7 +24,7 @@ Ext.define('Toc.zone_groups.ZoneEntriesGrid', {
     
     config.viewConfig = {emptyText: TocLanguage.gridNoRecords};
     
-    config.title = '<?= lang('action_heading_new_zone_entry'); ?>';
+    config.title = '<?php echo lang('action_heading_new_zone_entry'); ?>';
     config.border = false;
     config.region = 'east';
     config.split = true;
@@ -35,11 +37,7 @@ Ext.define('Toc.zone_groups.ZoneEntriesGrid', {
       pageSize: Toc.CONF.GRID_PAGE_SIZE,
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
-        extraParams: {
-          module: 'zone_groups',
-          action: 'list_zone_entries'
-        },
+        url : '<?php echo site_url('zone_groups/list_zone_entries'); ?>',
         reader: {
           type: 'json',
           root: Toc.CONF.JSON_READER_ROOT,
@@ -51,12 +49,12 @@ Ext.define('Toc.zone_groups.ZoneEntriesGrid', {
     config.selModel = Ext.create('Ext.selection.CheckboxModel');
     
     config.columns = [
-      { header: '<?= lang('table_heading_country'); ?>', dataIndex: 'countries_name', flex: 1},
-      { header: '<?= lang('table_heading_zone'); ?>', dataIndex: 'zone_name'},
+      { header: '<?php echo lang('table_heading_country'); ?>', dataIndex: 'countries_name', flex: 1},
+      { header: '<?php echo lang('table_heading_zone'); ?>', dataIndex: 'zone_name'},
       {
         xtype:'actioncolumn', 
         width: 60,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           iconCls: 'icon-action icon-edit-record',
           tooltip: TocLanguage.tipEdit,
@@ -128,10 +126,8 @@ Ext.define('Toc.zone_groups.ZoneEntriesGrid', {
         if (btn == 'yes') {
           Ext.Ajax.request({
             waitMsg: TocLanguage.formSubmitWaitMsg,
-            url: Toc.CONF.CONN_URL,
+            url: '<?php echo site_url('zone_groups/delete_zone_entry'); ?>',
             params: {
-              module: 'zone_groups',
-              action: 'delete_zone_entry',
               geo_zone_entry_id: geoZoneEntryId
             },
             callback: function (options, success, response) {
@@ -170,10 +166,8 @@ Ext.define('Toc.zone_groups.ZoneEntriesGrid', {
           if (btn == 'yes') {
             Ext.Ajax.request({
               waitMsg: TocLanguage.formSubmitWaitMsg,
-              url: Toc.CONF.CONN_URL,
+              url: '<?php echo site_url('zone_groups/delete_zone_entries'); ?>',
               params: {
-                module: 'zone_groups',
-                action: 'delete_zone_entries',
                 batch: batch
               },
               callback: function(options, success, response) {
@@ -204,4 +198,4 @@ Ext.define('Toc.zone_groups.ZoneEntriesGrid', {
 });
 
 /* End of file zone_entries_grid.php */
-/* Location: ./system/modules/countries/views/zone_entries_grid.php */
+/* Location: ./templates/base/web/views/zone_groups/zone_entries_grid.php */

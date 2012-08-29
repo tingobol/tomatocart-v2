@@ -1,15 +1,17 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
+ * @since   Version 2.0
  * @filesource
  */
 ?>
@@ -21,7 +23,7 @@ Ext.define('Toc.countries.CountriesDialog', {
     config = config || {};
     
     config.id = 'countries-dialog-win';
-    config.title = '<?= lang('action_heading_new_country'); ?>';
+    config.title = '<?php echo lang('action_heading_new_country'); ?>';
     config.width = 450;
     config.modal = true;
     config.iconCls = 'icon-countries-win';
@@ -53,15 +55,11 @@ Ext.define('Toc.countries.CountriesDialog', {
   show: function(id) {
     var countriesId = id || null;
     
-    this.frmCountry.form.baseParams['countries_id'] = countriesId;
-    
      if (countriesId > 0) {
+      this.frmCountry.form.baseParams['countries_id'] = countriesId;
+      
       this.frmCountry.load({
-        url: Toc.CONF.CONN_URL,
-        params: {
-          module: 'countries',
-          action: 'load_country'
-        },
+        url: '<?php echo site_url('countries/load_country'); ?>',
         success: function(form, action){
           Toc.countries.CountriesDialog.superclass.show.call(this);
         },
@@ -77,11 +75,8 @@ Ext.define('Toc.countries.CountriesDialog', {
   
   buildForm: function() {
     this.frmCountry = Ext.create('Ext.form.Panel', {
-      url: Toc.CONF.CONN_URL,
-      baseParams: {
-        module: 'countries',
-        action: 'save_country'
-      },
+      url: '<?php echo site_url('countries/save_country'); ?>',
+      baseParams: {},
       fieldDefaults: {
         labelSeparator: '',
         anchor: '97%'
@@ -90,10 +85,10 @@ Ext.define('Toc.countries.CountriesDialog', {
       bodyPadding: 10,
       items: [
         {xtype: 'hidden',name: 'id'},
-        {xtype: 'textfield',fieldLabel: '<?= lang('field_name'); ?>', name: 'countries_name', allowBlank: false},
-        {xtype: 'textfield',fieldLabel: '<?= lang('field_iso_code_2'); ?>', name: 'countries_iso_code_2', allowBlank: false},
-        {xtype: 'textfield',fieldLabel: '<?= lang('field_iso_code_3'); ?>', name: 'countries_iso_code_3', allowBlank: false},
-        {xtype: 'textarea',fieldLabel: '<?= lang('field_address_format'); ?>', name: 'address_format'}
+        {xtype: 'textfield',fieldLabel: '<?php echo lang('field_name'); ?>', name: 'countries_name', allowBlank: false},
+        {xtype: 'textfield',fieldLabel: '<?php echo lang('field_iso_code_2'); ?>', name: 'countries_iso_code_2', allowBlank: false},
+        {xtype: 'textfield',fieldLabel: '<?php echo lang('field_iso_code_3'); ?>', name: 'countries_iso_code_3', allowBlank: false},
+        {xtype: 'textarea',fieldLabel: '<?php echo lang('field_address_format'); ?>', name: 'address_format'}
       ]
     });
     
@@ -118,4 +113,4 @@ Ext.define('Toc.countries.CountriesDialog', {
 });
 
 /* End of file countries_dialog.php */
-/* Location: ./system/modules/countries/views/countries_dialog.php */
+/* Location: ./templates/base/web/views/countries/countries_dialog.php */

@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource ./system/modules/currencies/views/currencies_update_rates_dialog.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -23,7 +25,7 @@ Ext.define('Toc.currencies.CurrenciesUpdateRatesDialog', {
     this.currenciesId = config.currenciesId;
     
     config.id = 'currencies-update-rates-win';
-    config.title = '<?= lang('action_heading_update_rates'); ?>';
+    config.title = '<?php echo lang('action_heading_update_rates'); ?>';
     config.iconCls = 'icon-update-exchange-rates';
     config.layout = 'fit';
     config.width = 450;
@@ -34,7 +36,7 @@ Ext.define('Toc.currencies.CurrenciesUpdateRatesDialog', {
     
     config.buttons = [
       {
-        text: '<?= lang('button_update'); ?>',
+        text: '<?php echo lang('button_update'); ?>',
         handler: function() {
           this.submitForm();
         },
@@ -56,10 +58,8 @@ Ext.define('Toc.currencies.CurrenciesUpdateRatesDialog', {
   
   buildForm: function() {
     this.frmUpdateRates = Ext.create('Ext.form.Panel', {
-      url: Toc.CONF.CONN_URL,
+      url: '<?php echo site_url('currencies/update_currency_rates'); ?>',
       baseParams: {  
-        module: 'currencies',
-        action : 'update_currency_rates',
         currencies_id: this.currenciesId
       },
       border: false,
@@ -69,10 +69,9 @@ Ext.define('Toc.currencies.CurrenciesUpdateRatesDialog', {
         labelSeparator: ''
       },
       items: [
-        {border: false, html: '<p class="form-info"><?= lang('introduction_update_exchange_rates'); ?></p>'},
+        {border: false, html: '<p class="form-info"><?php echo lang('introduction_update_exchange_rates'); ?></p>'},
         {xtype: 'radiofield', name: 'service', boxLabel: 'Oanda (http://www.oanda.com)', inputValue: 'oanda', hideLabel: true, checked: true},
-        {xtype: 'radiofield', name: 'service', boxLabel: 'XE (http://www.xe.com)', inputValue: 'xe', hideLabel: true},
-        {border: false, html: '<p class="form-info"><?= lang('service_terms_agreement'); ?></p>'}
+        {border: false, html: '<p class="form-info"><?php echo lang('service_terms_agreement'); ?></p>'}
       ]
     });
     
@@ -95,4 +94,4 @@ Ext.define('Toc.currencies.CurrenciesUpdateRatesDialog', {
 });
 
 /* End of file currencies_update_rates_dialog.php */
-/* Location: ./system/modules/currencies/views/currencies_update_rates_dialog.php */
+/* Location: ./templates/base/web/views/currencies/currencies_update_rates_dialog.php */

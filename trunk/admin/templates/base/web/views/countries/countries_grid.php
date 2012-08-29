@@ -1,15 +1,17 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
+ * @since   Version 2.0
  * @filesource
  */
 ?>
@@ -29,11 +31,7 @@ Ext.define('Toc.countries.CountriesGrid', {
       pageSize: Toc.CONF.GRID_PAGE_SIZE,
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
-        extraParams: {
-          module: 'countries',
-          action: 'list_countries'
-        },
+        url : '<?php echo site_url('countries/list_countries'); ?>',
         reader: {
           type: 'json',
           root: Toc.CONF.JSON_READER_ROOT,
@@ -44,13 +42,13 @@ Ext.define('Toc.countries.CountriesGrid', {
     });
     
     config.columns = [
-      { header: '<?= lang('table_heading_countries'); ?>', dataIndex: 'countries_name', flex: 1},
-      { header: '<?= lang('table_heading_code'); ?>', align: 'left', dataIndex: 'countries_iso_code', width: 100},
-      { header: '<?= lang('table_heading_total_zones'); ?>', width: 100, align: 'center', dataIndex: 'total_zones'},
+      { header: '<?php echo lang('table_heading_countries'); ?>', dataIndex: 'countries_name', flex: 1},
+      { header: '<?php echo lang('table_heading_code'); ?>', align: 'left', dataIndex: 'countries_iso_code', width: 100},
+      { header: '<?php echo lang('table_heading_total_zones'); ?>', width: 100, align: 'center', dataIndex: 'total_zones'},
       {
         xtype:'actioncolumn', 
         width: 60,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           iconCls: 'icon-action icon-edit-record',
           tooltip: TocLanguage.tipEdit,
@@ -115,10 +113,8 @@ Ext.define('Toc.countries.CountriesGrid', {
         if (btn == 'yes') {
           Ext.Ajax.request({
             waitMsg: TocLanguage.formSubmitWaitMsg,
-            url: Toc.CONF.CONN_URL,
+            url: '<?php echo site_url('countries/delete_country'); ?>',
             params: {
-              module: 'countries',
-              action: 'delete_country',
               countries_id: countriesId
             },
             callback: function (options, success, response) {
@@ -151,6 +147,5 @@ Ext.define('Toc.countries.CountriesGrid', {
   }
 });
 
-
 /* End of file countries_grid.php */
-/* Location: ./system/modules/countries/views/countries_grid.php */
+/* Location: ./templates/base/web/views/countries/countries_grid.php */

@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource ./system/modules/zone_groups/views/zone_groups_grid.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -29,11 +31,7 @@ Ext.define('Toc.zone_groups.ZoneGroupsGrid', {
       pageSize: Toc.CONF.GRID_PAGE_SIZE,
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
-        extraParams: {
-          module: 'zone_groups',
-          action: 'list_zone_groups'
-        },
+        url : '<?php echo site_url('zone_groups/list_zone_groups'); ?>',
         reader: {
           type: 'json',
           root: Toc.CONF.JSON_READER_ROOT,
@@ -44,12 +42,12 @@ Ext.define('Toc.zone_groups.ZoneGroupsGrid', {
     });
     
     config.columns = [
-      { header: '<?= lang('table_heading_zone_groups'); ?>', dataIndex: 'geo_zone_name', flex: 1},
-      { header: '<?= lang('table_heading_total_entries'); ?>', align: 'center', dataIndex: 'geo_zone_entries'},
+      { header: '<?php echo lang('table_heading_zone_groups'); ?>', dataIndex: 'geo_zone_name', flex: 1},
+      { header: '<?php echo lang('table_heading_total_entries'); ?>', align: 'center', dataIndex: 'geo_zone_entries'},
       {
         xtype:'actioncolumn', 
         width: 60,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           iconCls: 'icon-action icon-edit-record',
           tooltip: TocLanguage.tipEdit,
@@ -114,10 +112,8 @@ Ext.define('Toc.zone_groups.ZoneGroupsGrid', {
         if (btn == 'yes') {
           Ext.Ajax.request({
             waitMsg: TocLanguage.formSubmitWaitMsg,
-            url: Toc.CONF.CONN_URL,
+            url: '<?php echo site_url('zone_groups/delete_zone_group'); ?>',
             params: {
-              module: 'zone_groups',
-              action: 'delete_zone_group',
               geo_zone_id: geoZoneId
             },
             callback: function (options, success, response) {
@@ -150,6 +146,5 @@ Ext.define('Toc.zone_groups.ZoneGroupsGrid', {
   }
 });
 
-
 /* End of file zone_groups_grid.php */
-/* Location: ./system/modules/zone_groups/views/zone_groups_grid.php */
+/* Location: ./templates/base/web/views/zone_groups/zone_groups_grid.php */

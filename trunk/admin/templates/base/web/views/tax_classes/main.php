@@ -1,25 +1,29 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource ./system/modules/tax_classes/views/main.php
+ * @since   Version 2.0
+ * @filesource
  */
+
+// ------------------------------------------------------------------------
 
   echo 'Ext.namespace("Toc.tax_classes");';
   
-  require_once 'tax_classes_dialog.php';
-  require_once 'tax_classes_grid.php';
-  require_once 'tax_classes_main_panel.php';
-  require_once 'tax_rates_dialog.php';
-  require_once 'tax_rates_grid.php';
+  include 'tax_classes_dialog.php';
+  include 'tax_classes_grid.php';
+  include 'tax_classes_main_panel.php';
+  include 'tax_rates_dialog.php';
+  include 'tax_rates_grid.php';
 ?>
 
 Ext.override(Toc.desktop.TaxClassesWindow, {
@@ -40,7 +44,7 @@ Ext.override(Toc.desktop.TaxClassesWindow, {
       
       win = desktop.createWindow({
         id: 'slide_images-win',
-        title: '<?= lang('heading_tax_classes_title'); ?>',
+        title: '<?php echo lang('heading_tax_classes_title'); ?>',
         width: 800,
         height: 400,
         iconCls: 'icon-tax_classes-win',
@@ -128,4 +132,4 @@ Ext.override(Toc.desktop.TaxClassesWindow, {
 
 
 /* End of file main.php */
-/* Location: ./system/modules/tax_classes/views/main.php */
+/* Location: ./templates/base/web/views/tax_classes/main.php */

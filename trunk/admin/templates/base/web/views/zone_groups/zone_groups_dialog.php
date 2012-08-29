@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource ./system/modules/zone_groups/views/zone_groups_dialog.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -21,7 +23,7 @@ Ext.define('Toc.zone_groups.ZoneGroupsDialog', {
     config = config || {};
     
     config.id = 'zone_groups-dialog-win';
-    config.title = '<?= lang("action_heading_new_zone_group"); ?>';
+    config.title = '<?php echo lang("action_heading_new_zone_group"); ?>';
     config.width = 440;
     config.modal = true;
     config.iconCls = 'icon-zone_groups-win';
@@ -53,15 +55,11 @@ Ext.define('Toc.zone_groups.ZoneGroupsDialog', {
   show: function (id) {
     var geoZoneId = id || null;
       
-    this.frmZoneGroup.form.baseParams['geo_zone_id'] = geoZoneId;
-    
     if (geoZoneId > 0) {
+      this.frmZoneGroup.form.baseParams['geo_zone_id'] = geoZoneId;
+      
       this.frmZoneGroup.load({
-        url: Toc.CONF.CONN_URL,
-        params: {
-          module: 'zone_groups',
-          action: 'load_zone_group'
-        },              
+        url: '<?php echo site_url('zone_groups/load_zone_group'); ?>',
         success: function (form, action) {
           Toc.zone_groups.ZoneGroupsDialog.superclass.show.call(this);
         },
@@ -77,11 +75,8 @@ Ext.define('Toc.zone_groups.ZoneGroupsDialog', {
   
   buildForm: function() {
     this.frmZoneGroup = Ext.create('Ext.form.Panel', {
-      url: Toc.CONF.CONN_URL,
-      baseParams: {
-        module: 'zone_groups',
-        action: 'save_zone_group'
-      },
+      url: '<?php echo site_url('zone_groups/save_zone_group'); ?>',
+      baseParams: {},
       fieldDefaults: {
         labelSeparator: '',
         anchor: '97%'
@@ -91,13 +86,13 @@ Ext.define('Toc.zone_groups.ZoneGroupsDialog', {
       items: [
         {
           xtype: 'textfield',
-          fieldLabel: '<?= lang("field_name"); ?>',
+          fieldLabel: '<?php echo lang("field_name"); ?>',
           name: 'geo_zone_name',
           allowBlank: false
         },
         {
           xtype: 'textfield',
-          fieldLabel: '<?= lang("field_description"); ?>',
+          fieldLabel: '<?php echo lang("field_description"); ?>',
           name: 'geo_zone_description'
         }
       ]
@@ -123,6 +118,5 @@ Ext.define('Toc.zone_groups.ZoneGroupsDialog', {
   }
 });
 
-
 /* End of file zone_groups_dialog.php */
-/* Location: ./system/modules/zone_groups/views/zone_groups_dialog.php */
+/* Location: ./templates/base/web/views/zone_groups/zone_groups_dialog.php */

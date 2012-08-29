@@ -1,15 +1,17 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
+ * @since   Version 2.0
  * @filesource
  */
 ?>
@@ -21,7 +23,7 @@ Ext.define('Toc.countries.ZonesDialog', {
     config = config || {};
     
     config.id = 'zones-dialog-win';
-    config.title = '<?= lang('action_heading_new_zone'); ?>';
+    config.title = '<?php echo lang('action_heading_new_zone'); ?>';
     config.layout = 'fit';
     config.width = 500;
     config.height = 150;
@@ -92,8 +94,8 @@ Ext.define('Toc.countries.ZonesDialog', {
       border: false,
       bodyPadding: 10,
       items: [
-        {xtype: 'textfield', fieldLabel: '<?= lang('field_zone_name'); ?>', name: 'zone_name', allowBlank: false},
-        {xtype: 'textfield', fieldLabel: '<?= lang('field_zone_code'); ?>', name: 'zone_code', allowBlank: false}
+        {xtype: 'textfield', fieldLabel: '<?php echo lang('field_zone_name'); ?>', name: 'zone_name', allowBlank: false},
+        {xtype: 'textfield', fieldLabel: '<?php echo lang('field_zone_code'); ?>', name: 'zone_code', allowBlank: false}
       ]
     });
     
@@ -117,4 +119,4 @@ Ext.define('Toc.countries.ZonesDialog', {
 });
 
 /* End of file countries_zones_dialog.php */
-/* Location: ./system/modules/countries/views/countries_zones_dialog.php */
+/* Location: ./templates/base/web/views/countries/countries_zones_dialog.php */
