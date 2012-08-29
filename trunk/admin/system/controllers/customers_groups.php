@@ -247,9 +247,15 @@ class Customers_Groups extends TOC_Controller
                 
                 $data['customers_groups_name[' . $info['language_id'] . ']'] = $info['customers_groups_name'];
             }
+            
+            $response = array('success' => TRUE, 'data' => $data);
+        }
+        else
+        {
+            $response = array('success' => FALSE);
         }
         
-        $this->output->set_output(json_encode(array('success' => TRUE, 'data' => $data)));
+        $this->output->set_output(json_encode($response));
     }
 }
 

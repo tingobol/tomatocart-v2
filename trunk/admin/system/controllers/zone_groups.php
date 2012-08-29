@@ -120,8 +120,7 @@ Class Zone_Groups extends TOC_Controller
         {
             foreach($entries as $entry)
             {
-                $records[] = array('countries_id' => $entry['countries_id'],
-                                   'countries_name' => $entry['countries_name']);
+                $records[] = $entry;
             }
         }
         
@@ -147,8 +146,7 @@ Class Zone_Groups extends TOC_Controller
         {
             foreach($entries as $entry)
             {
-                $records[] = array('zone_id' => $entry['zone_id'],
-                                   'zone_name' => $entry['zone_name']);
+                $records[] = $entry;
             }
         }
         
