@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource ./system/modules/zone_groups/views/zone_entries_dialog.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -21,7 +23,7 @@ Ext.define('Toc.zone_groups.ZoneEntriesDialog', {
     config = config || {};
     
     config.id = 'zone_entries-dialog-win';
-    config.title = '<?= lang("action_heading_new_zone_group"); ?>';
+    config.title = '<?php echo lang("action_heading_new_zone_group"); ?>';
     config.width = 440;
     config.modal = true;
     config.iconCls = 'icon-zone_groups-win';
@@ -53,17 +55,14 @@ Ext.define('Toc.zone_groups.ZoneEntriesDialog', {
   show: function (geoZoneId, entryId) {
     this.geoZoneId = geoZoneId || null;
     var geoZoneEntryId = entryId || null;  
-        
+    
     this.frmZoneEntry.form.baseParams['geo_zone_id'] = this.geoZoneId;
-    this.frmZoneEntry.form.baseParams['geo_zone_entry_id'] = geoZoneEntryId;
-
+        
     if (geoZoneEntryId > 0) {
+      this.frmZoneEntry.form.baseParams['geo_zone_entry_id'] = geoZoneEntryId;
+    
       this.frmZoneEntry.load({
-        url: Toc.CONF.CONN_URL,
-        params: {
-          module: 'zone_groups',
-          action: 'load_zone_entry'
-        },
+        url: '<?php echo site_url('zone_groups/load_zone_entry'); ?>',
         success: function (form, action) {
           this.cboCountries.setValue(action.result.data.zone_country_id);
           this.cboCountries.setRawValue(action.result.data.countries_name);
@@ -87,11 +86,7 @@ Ext.define('Toc.zone_groups.ZoneEntriesDialog', {
       pageSize: Toc.CONF.GRID_PAGE_SIZE,
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
-        extraParams: {
-          module: 'zone_groups',
-          action: 'get_countries'
-        },
+        url : '<?php echo site_url('zone_groups/get_countries'); ?>',
         reader: {
           type: 'json',
           root: Toc.CONF.JSON_READER_ROOT,
@@ -102,7 +97,7 @@ Ext.define('Toc.zone_groups.ZoneEntriesDialog', {
     });
     
     this.cboCountries = Ext.create('Ext.form.ComboBox', {
-      fieldLabel: '<?= lang('field_country'); ?>',
+      fieldLabel: '<?php echo lang('field_country'); ?>',
       store: dsCountries, 
       name: 'countries_id', 
       queryMode: 'local',
@@ -123,11 +118,7 @@ Ext.define('Toc.zone_groups.ZoneEntriesDialog', {
       ],
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
-        extraParams: {
-          module: 'zone_groups',
-          action: 'get_zones'
-        },
+        url : '<?php echo site_url('zone_groups/get_zones'); ?>',
         reader: {
           type: 'json',
           root: Toc.CONF.JSON_READER_ROOT,
@@ -137,7 +128,7 @@ Ext.define('Toc.zone_groups.ZoneEntriesDialog', {
     });
     
     this.cboZones = Ext.create('Ext.form.ComboBox', {
-      fieldLabel: '<?= lang('field_zone'); ?>',
+      fieldLabel: '<?php echo lang('field_zone'); ?>',
       disabled: true, 
       store: this.dsZones, 
       name: 'zone_id', 
@@ -149,11 +140,8 @@ Ext.define('Toc.zone_groups.ZoneEntriesDialog', {
     });
     
     this.frmZoneEntry = Ext.create('Ext.form.Panel', {
-      url: Toc.CONF.CONN_URL,
-      baseParams: {  
-        module: 'zone_groups',
-        action: 'save_zone_entry'
-      },
+      url: '<?php echo site_url('zone_groups/save_zone_entry'); ?>',
+      baseParams: {},
       border: false,
       bodyPadding: 5,
       fieldDefaults: {
@@ -201,4 +189,4 @@ Ext.define('Toc.zone_groups.ZoneEntriesDialog', {
 });
 
 /* End of file zone_entries_dialog.php */
-/* Location: ./system/modules/zone_groups/views/zone_entries_dialog.php */
+/* Location: ./templates/base/web/zone_groups/zone_entries_dialog.php */

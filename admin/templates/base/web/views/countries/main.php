@@ -1,25 +1,29 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
+ * @since   Version 2.0
  * @filesource
  */
 
+// ------------------------------------------------------------------------
+
   echo 'Ext.namespace("Toc.countries");';
   
-  require_once 'countries_dialog.php';
-  require_once 'countries_grid.php';
-  require_once 'countries_main_panel.php';
-  require_once 'countries_zones_dialog.php';
-  require_once 'countries_zones_grid.php';
+  include 'countries_dialog.php';
+  include 'countries_grid.php';
+  include 'countries_main_panel.php';
+  include 'countries_zones_dialog.php';
+  include 'countries_zones_grid.php';
 ?>
 
 Ext.override(Toc.desktop.CountriesWindow, {
@@ -40,7 +44,7 @@ Ext.override(Toc.desktop.CountriesWindow, {
 
       win = desktop.createWindow({
         id: 'slide_images-win',
-        title: '<?= lang('heading_countries_title'); ?>',
+        title: '<?php echo lang('heading_countries_title'); ?>',
         width: 800,
         height: 400,
         iconCls: 'icon-countries-win',
@@ -132,4 +136,4 @@ Ext.override(Toc.desktop.CountriesWindow, {
 
 
 /* End of file main.php */
-/* Location: ./system/modules/countries/views/main.php */
+/* Location: ./templates/base/web/views/countries/main.php */

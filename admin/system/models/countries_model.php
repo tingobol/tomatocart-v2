@@ -1,174 +1,359 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
+ * @since   Version 2.0
  * @filesource
  */
 
+// ------------------------------------------------------------------------
+
+/**
+ * Countries Model
+ *
+ * @package   TomatoCart
+ * @subpackage  tomatocart
+ * @category  template-module-model
+ * @author    TomatoCart Dev Team
+ * @link    http://tomatocart.com/wiki/
+ */
 class Countries_Model extends CI_Model
 {
-  public function get_countries($start, $limit)
-  {
-    $Qcountries = $this->db
-    ->select('countries_id, countries_name, countries_iso_code_2, countries_iso_code_3, address_format')
-    ->from('countries')
-    ->limit($limit, $start)
-    ->get();
-    
-    return $Qcountries->result_array();
-  }
-  
-  public function get_total_zones($id)
-  {
-    return $this->db->where('zone_country_id', $id)->from('zones')->count_all_results();
-  }
-  
-  public function get_zones($id)
-  {
-    $Qzones = $this->db
-    ->select('zone_id,zone_code,zone_name')
-    ->from('zones')
-    ->where('zone_country_id', $id)
-    ->get();
-    
-    return $Qzones->result_array();
-  }
-  
-  public function check_address_book($id)
-  {
-    return $this->db->where('entry_country_id', $id)->from('address_book')->count_all_results();
-  }
-  
-  public function check_geo_zones($id)
-  {
-    return $this->db->where('zone_country_id', $id)->from('zones_to_geo_zones')->count_all_results();
-  }
-  
-  public function delete($id)
-  {
-    $this->db->trans_begin();
-    
-    $this->db->delete('zones', array('zone_country_id' => $id));
-    
-    if ($this->db->trans_status() === TRUE)
+    /**
+     * Constructor
+     *
+     * @access public
+     * @return void
+     */
+    public function __construct()
     {
-      $this->db->delete('countries', array('countries_id' => $id));
+        parent::__construct();
     }
     
-    if ($this->db->trans_status() === TRUE)
+// ------------------------------------------------------------------------
+    
+    /**
+     * Get the countries
+     *
+     * @access public
+     * @param $start
+     * @param $limit
+     * @return mixed
+     */
+    public function get_countries($start, $limit)
     {
-      $this->db->trans_commit();
-      
-      return TRUE;
+        $result = $this->db
+        ->select('countries_id, countries_name, countries_iso_code_2, countries_iso_code_3, address_format')
+        ->from('countries')
+        ->limit($limit, $start)
+        ->get();
+        
+        if ($result->num_rows() > 0)
+        {
+            return $result->result_array();
+        }
+        
+        return NULL;
     }
     
-    $this->db->trans_rollback();
-    
-    return FALSE;
-  }
+// ------------------------------------------------------------------------
   
-  public function get_zone_address_books($zone_id)
-  {
-    return $this->db->where('entry_zone_id', $zone_id)->from('address_book')->count_all_results();
-  }
-  
-  public function get_zone_geo_zones($zone_id)
-  {
-    return $this->db->where('zone_id', $zone_id)->from('zones_to_geo_zones')->count_all_results();
-  }
-  
-  public function delete_zone($zone_id)
-  {
-    $this->db->delete('zones', array('zone_id' => $zone_id));
-    
-    if ($this->db->affected_rows() >0)
+    public function get_total_zones($id)
     {
-      return TRUE;
+        return $this->db->where('zone_country_id', $id)->from('zones')->count_all_results();
+    }
+  
+// ------------------------------------------------------------------------
+
+    /**
+     * Get the zones with the country id
+     *
+     * @access public
+     * @param $id
+     * @return mixed
+     */
+    public function get_zones($id)
+    {
+        $result = $this->db
+        ->select('zone_id,zone_code,zone_name')
+        ->from('zones')
+        ->where('zone_country_id', $id)
+        ->get();
+        
+        if ($result->num_rows() > 0)
+        {
+            return $result->result_array();
+        }
+        
+        return NULL;
     }
     
-    return FALSE;
-  }
+// ------------------------------------------------------------------------
   
-  public function get_delete_zones($zones_ids)
-  {
-    $Qzones = $this->db
-    ->select('zone_id, zone_name, zone_code')
-    ->from('zones')
-    ->where_in('zone_id', $zones_ids)
-    ->order_by('zone_name')
-    ->get();
-    
-    return $Qzones->result_array();
-  }
+    /**
+     * Check the total number of the address books with the country id
+     *
+     * @access public
+     * @param $id
+     * @return int
+     */
+    public function check_address_book($id)
+    {
+        return $this->db->where('entry_country_id', $id)->from('address_book')->count_all_results();
+    }
   
-  public function save($id = NULL, $data)
-  {
-    if (is_numeric($id) && $id > 0)
-    {
-      $this->db->update('countries', $data, array('countries_id' => $id));
-    }
-    else
-    {
-      $this->db->insert('countries', $data);
-    }
-    
-    if ($this->db->affected_rows() > 0)
-    {
-      return TRUE;
-    }
-    
-    return FALSE;
-  }
+// ------------------------------------------------------------------------
   
-  public function get_data($id)
-  {
-    $Qcountries = $this->db->get('countries', array('countries_id' => $id));
-    
-    $total_zones = $this->db->where('zone_country_id', $id)->from('zones')->count_all_results();
-    
-    $data = array_merge($Qcountries->row_array(), array('total_zones' => $total_zones));
-    
-    $Qcountries->free_result();
-    
-    return $data;
-  }
-  
-  public function save_zone($id = NULL, $data)
-  {
-    if (is_numeric($id) && $id > 0)
+    /**
+     * Check the total number of the geo zones with the country id
+     *
+     * @access public
+     * @param $id
+     * @return int
+     */
+    public function check_geo_zones($id)
     {
-      $this->db->update('zones', $data, array('zone_id' => $id));
+        return $this->db->where('zone_country_id', $id)->from('zones_to_geo_zones')->count_all_results();
     }
-    else
-    {
-      $this->db->insert('zones', $data);
-    }
-    
-    if ($this->db->affected_rows() > 0)
-    {
-      return TRUE;
-    }
-    
-    return FALSE;
-  }
   
-  public function get_zone_data($id)
-  {
-    $Qzones = $this->db->get('zones', array('zone_id' => $id));
-    
-    return $Qzones->row_array();
-  }
+// ------------------------------------------------------------------------
   
-  public function get_totals()
-  {
-    return $this->db->count_all('countries');
-  }
+    /**
+     * Delete the country with the country id
+     *
+     * @access public
+     * @param $id
+     * @return boolean
+     */
+    public function delete($id)
+    {
+        $this->db->trans_begin();
+        
+        $this->db->delete('zones', array('zone_country_id' => $id));
+        
+        if ($this->db->trans_status() === TRUE)
+        {
+            $this->db->delete('countries', array('countries_id' => $id));
+        }
+        
+        if ($this->db->trans_status() === TRUE)
+        {
+            $this->db->trans_commit();
+          
+            return TRUE;
+        }
+        
+        $this->db->trans_rollback();
+        
+        return FALSE;
+    }
+  
+// ------------------------------------------------------------------------
+  
+    /**
+     * Get the total number of the address books with the zone id
+     *
+     * @access public
+     * @param $id
+     * @return int
+     */
+    public function get_zone_address_books($id)
+    {
+        return $this->db->where('entry_zone_id', $id)->from('address_book')->count_all_results();
+    }
+  
+// ------------------------------------------------------------------------
+  
+    /**
+     * Get the total number of geo zones with the zone id
+     *
+     * @access public
+     * @param $id
+     * @return int
+     */
+    public function get_zone_geo_zones($id)
+    {
+        return $this->db->where('zone_id', $id)->from('zones_to_geo_zones')->count_all_results();
+    }
+  
+// ------------------------------------------------------------------------
+  
+    /**
+     * Delete the zone with the zone id
+     *
+     * @access public
+     * @param $id
+     * @return boolean
+     */
+    public function delete_zone($id)
+    {
+        $this->db->delete('zones', array('zone_id' => $id));
+        
+        if ($this->db->affected_rows() >0)
+        {
+            return TRUE;
+        }
+        
+        return FALSE;
+    }
+  
+// ------------------------------------------------------------------------
+  
+    /**
+     * Get the info of the zones that will be deleted with the zone ids
+     *
+     * @access public
+     * @param $zones_ids
+     * @return mixed
+     */
+    public function get_delete_zones($zones_ids)
+    {
+        $result = $this->db
+        ->select('zone_id, zone_name, zone_code')
+        ->from('zones')
+        ->where_in('zone_id', $zones_ids)
+        ->order_by('zone_name')
+        ->get();
+        
+        if ($result->num_rows() > 0)
+        {
+            return $result->result_array();
+        }
+        
+        return NULL;
+    }
+  
+// ------------------------------------------------------------------------
+  
+    /**
+     * Save the country
+     *
+     * @access public
+     * @param $id
+     * @param $data
+     * @return boolean
+     */
+    public function save($id = NULL, $data)
+    {
+        if (is_numeric($id) && $id > 0)
+        {
+            $this->db->update('countries', $data, array('countries_id' => $id));
+        }
+        else
+        {
+            $this->db->insert('countries', $data);
+        }
+        
+        if ($this->db->affected_rows() > 0)
+        {
+            return TRUE;
+        }
+        
+        return FALSE;
+    }
+  
+// ------------------------------------------------------------------------
+  
+    /**
+     * Load the country with country id
+     *
+     * @access public
+     * @param $id
+     * @return mixed
+     */
+    public function get_data($id)
+    {
+        $result = $this->db
+        ->select('*')
+        ->from('countries')
+        ->where('countries_id', $id)
+        ->get();
+        
+        $total_zones = $this->db->where('zone_country_id', $id)->from('zones')->count_all_results();
+        
+        if ($result->num_rows() > 0)
+        {
+            $data = array_merge($result->row_array(), array('total_zones' => $total_zones));
+            
+            return $data;
+        }
+        
+        return NULL;
+    }
+  
+// ------------------------------------------------------------------------
+  
+    /**
+     * Save the zone in the country
+     *
+     * @access public
+     * @param $id
+     * @param $data
+     * @return boolean
+     */
+    public function save_zone($id = NULL, $data)
+    {
+        if (is_numeric($id) && $id > 0)
+        {
+            $this->db->update('zones', $data, array('zone_id' => $id));
+        }
+        else
+        {
+            $this->db->insert('zones', $data);
+        }
+        
+        if ($this->db->affected_rows() > 0)
+        {
+            return TRUE;
+        }
+        
+        return FALSE;
+    }
+  
+// ------------------------------------------------------------------------
+  
+    /**
+     * Get the data of the zone with the zone id
+     *
+     * @access public
+     * @param $id
+     * @return mixed
+     */
+    public function get_zone_data($id)
+    {
+        $result = $this->db
+        ->select('*')
+        ->from('zones')
+        ->where('zone_id', $id)
+        ->get();
+        
+        if ($result->num_rows() > 0)
+        {
+            return $result->row_array();
+        }
+        
+        return NULL;
+    }
+  
+// ------------------------------------------------------------------------
+  
+    /**
+     * Get the total number of the countries
+     *
+     * @access public
+     * @return int
+     */
+    public function get_totals()
+    {
+        return $this->db->count_all('countries');
+    }
 }   

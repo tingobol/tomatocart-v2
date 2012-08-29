@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource 
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -21,7 +23,7 @@ Ext.define('Toc.tax_classes.TaxRatesDialog', {
     config = config || {};
     
     config.id = 'tax-rate-dialog-win';
-    config.title = '<?= lang('action_heading_new_tax_rate'); ?>';
+    config.title = '<?php echo lang('action_heading_new_tax_rate'); ?>';
     config.width = 500;
     config.modal = true;
     config.items = this.buildForm();
@@ -53,16 +55,12 @@ Ext.define('Toc.tax_classes.TaxRatesDialog', {
     var taxRatesId = ratesId || null; 
     
     this.frmTaxRate.form.baseParams['tax_class_id'] = this.taxClassId;
-    this.frmTaxRate.form.baseParams['tax_rates_id'] = taxRatesId;
 
     if (taxRatesId > 0) {
+      this.frmTaxRate.form.baseParams['tax_rates_id'] = taxRatesId;
+      
       this.frmTaxRate.load({
-        url: Toc.CONF.CONN_URL,
-        params: {
-          module: 'tax_classes',
-          action: 'load_tax_rate',
-          tax_rates_id: taxRatesId
-        },
+        url: '<?php echo site_url('tax_classes/load_tax_rate'); ?>',
         success: function(form, action) {
           Toc.tax_classes.TaxRatesDialog.superclass.show.call(this);
         },
@@ -82,11 +80,7 @@ Ext.define('Toc.tax_classes.TaxRatesDialog', {
       pageSize: Toc.CONF.GRID_PAGE_SIZE,
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
-        extraParams: {
-          module: 'tax_classes',
-          action: 'list_geo_zones'
-        },
+        url : '<?php echo site_url('tax_classes/list_geo_zones'); ?>',
         reader: {
           type: 'json',
           root: Toc.CONF.JSON_READER_ROOT,
@@ -97,7 +91,7 @@ Ext.define('Toc.tax_classes.TaxRatesDialog', {
     });
     
     this.cobZoneGroup = Ext.create('Ext.form.ComboBox', {
-      fieldLabel: '<?= lang('field_tax_rate_zone_group'); ?>',
+      fieldLabel: '<?php echo lang('field_tax_rate_zone_group'); ?>',
       store: dsGeoZone, 
       name: 'geo_zone_id', 
       queryMode: 'local',
@@ -108,11 +102,8 @@ Ext.define('Toc.tax_classes.TaxRatesDialog', {
     });
     
     this.frmTaxRate = Ext.create('Ext.form.Panel', {
-      url: Toc.CONF.CONN_URL,
-      baseParams: {  
-        module: 'tax_classes',
-        action: 'save_tax_rate'
-      },
+      url: '<?php echo site_url('tax_classes/save_tax_rate'); ?>',
+      baseParams: {},
       border: false,
       bodyPadding: 10,
       fieldDefaults: {
@@ -121,9 +112,9 @@ Ext.define('Toc.tax_classes.TaxRatesDialog', {
       },
       items: [
         this.cobZoneGroup,
-        {xtype: 'numberfield', fieldLabel: '<?= lang('field_tax_rate'); ?>', name: 'tax_rate', decimalPrecision: 4, width:300},
-        {xtype: 'textfield', fieldLabel: '<?= lang('field_tax_rate_description'); ?>', name: 'tax_description', width:300},
-        {xtype: 'textfield', fieldLabel: '<?= lang('field_tax_rate_priority'); ?>', name: 'tax_priority', width:300}
+        {xtype: 'numberfield', fieldLabel: '<?php echo lang('field_tax_rate'); ?>', name: 'tax_rate', decimalPrecision: 4, width:300},
+        {xtype: 'textfield', fieldLabel: '<?php echo lang('field_tax_rate_description'); ?>', name: 'tax_description', width:300},
+        {xtype: 'textfield', fieldLabel: '<?php echo lang('field_tax_rate_priority'); ?>', name: 'tax_priority', width:300}
       ]
     });
     
@@ -149,4 +140,4 @@ Ext.define('Toc.tax_classes.TaxRatesDialog', {
 
 
 /* End of file tax_rates_dialog.php */
-/* Location: ./system/modules/tax_classes/tax_rates_dialog.php */
+/* Location: ./templates/base/web/views/tax_classes/tax_rates_dialog.php */

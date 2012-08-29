@@ -60,7 +60,7 @@ class Guest_Book extends TOC_Controller {
         $guest_books = $this->guest_book_model->get_guest_books($start, $limit);
         
         $records = array();
-        if (!empty($guest_books))
+        if ($guest_books != NULL)
         {
             foreach($guest_books as $guest_book)
             {

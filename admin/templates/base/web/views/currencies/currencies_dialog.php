@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource ./system/modules/currencies/views/currencies_dialog.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -21,7 +23,7 @@ Ext.define('Toc.currencies.CurrenciesDialog', {
     config = config || {};
     
     config.id = 'currencies-dialog-win';
-    config.title = '<?= lang('action_heading_new_currency'); ?>';
+    config.title = '<?php echo lang('action_heading_new_currency'); ?>';
     config.width = 450;
     config.autoHeight = true;
     config.modal = true;
@@ -54,14 +56,11 @@ Ext.define('Toc.currencies.CurrenciesDialog', {
   show: function(id) {
     var currenciesId = id || null;
     
-    this.frmCurrency.form.baseParams['currencies_id'] = currenciesId;
-
     if (currenciesId > 0) {
+      this.frmCurrency.form.baseParams['currencies_id'] = currenciesId;
+      
       this.frmCurrency.load({
-        url: Toc.CONF.CONN_URL,
-        params:{
-          action: 'load_currency',
-        },
+        url: '<?php echo site_url('currencies/load_currency'); ?>',
         success: function(form, action) {
           if(action.result.data.is_default == '1') {
             Ext.getCmp('is_default').disable();
@@ -81,11 +80,8 @@ Ext.define('Toc.currencies.CurrenciesDialog', {
   
   buildForm: function() {
     this.frmCurrency = Ext.create('Ext.form.Panel', {
-      url: Toc.CONF.CONN_URL,
-      baseParams: {  
-        module: 'currencies',
-        action: 'save_currency'
-      },
+      url: '<?php echo site_url('currencies/save_currency'); ?>',
+      baseParams: {},
       fieldDefaults: {
         labelSeparator: '',
         anchor: '97%'
@@ -93,13 +89,13 @@ Ext.define('Toc.currencies.CurrenciesDialog', {
       border: false,
       bodyPadding: 10,
       items: [
-        {xtype: 'textfield', fieldLabel: '<?= lang('field_title'); ?>', name: 'title', allowBlank: false},
-        {xtype: 'textfield', fieldLabel: '<?= lang('field_code'); ?>', name: 'code', allowBlank: false},
-        {xtype: 'textfield', fieldLabel: '<?= lang('field_symbol_left'); ?>', name: 'symbol_left'},
-        {xtype: 'textfield', fieldLabel: '<?= lang('field_symbol_right'); ?>', name: 'symbol_right'},
-        {xtype: 'numberfield', fieldLabel: '<?= lang('field_decimal_places'); ?>', name: 'decimal_places', allowDecimals: false},
-        {xtype: 'numberfield', fieldLabel: '<?= lang('field_currency_value'); ?>', name: 'value', decimalPrecision: 10},
-        {xtype: 'checkbox', fieldLabel: '<?= lang('field_set_default'); ?>', id: 'is_default', name: 'is_default', anchor: ''}
+        {xtype: 'textfield', fieldLabel: '<?php echo lang('field_title'); ?>', name: 'title', allowBlank: false},
+        {xtype: 'textfield', fieldLabel: '<?php echo lang('field_code'); ?>', name: 'code', allowBlank: false},
+        {xtype: 'textfield', fieldLabel: '<?php echo lang('field_symbol_left'); ?>', name: 'symbol_left'},
+        {xtype: 'textfield', fieldLabel: '<?php echo lang('field_symbol_right'); ?>', name: 'symbol_right'},
+        {xtype: 'numberfield', fieldLabel: '<?php echo lang('field_decimal_places'); ?>', name: 'decimal_places', allowDecimals: false},
+        {xtype: 'numberfield', fieldLabel: '<?php echo lang('field_currency_value'); ?>', name: 'value', decimalPrecision: 10},
+        {xtype: 'checkbox', fieldLabel: '<?php echo lang('field_set_default'); ?>', id: 'is_default', name: 'is_default', anchor: ''}
       ]
     });
     
@@ -124,4 +120,4 @@ Ext.define('Toc.currencies.CurrenciesDialog', {
 });
 
 /* End of file currencies_dialog.php */
-/* Location: ./system/modules/currencies/views/currencies_dialog.php */
+/* Location: ./templates/base/web/views/currencies/currencies_dialog.php */

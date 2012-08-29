@@ -1,51 +1,121 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource .system/modules/zone_groups/models/zone_groups_model.php
+ * @since   Version 2.0
+ * @filesource
  */
 
+// ------------------------------------------------------------------------
+
+/**
+ * Zone Groups Model
+ *
+ * @package   TomatoCart
+ * @subpackage  tomatocart
+ * @category  template-module-model
+ * @author    TomatoCart Dev Team
+ * @link    http://tomatocart.com/wiki/
+ */
 class Zone_Groups_Model extends CI_Model
 {
+    /**
+     * Constructor
+     *
+     * @access public
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
+    
+// ------------------------------------------------------------------------
+  
+    /**
+     * Get all the geo zones
+     *
+     * @access public
+     * @return mixed
+     */
     public function get_all_geo_zones()
     {
-        $Qzones = $this->db
+        $result = $this->db
         ->select('*')
         ->from('geo_zones')
         ->order_by('geo_zone_name')
         ->get();
+        
+        if ($result->num_rows() > 0)
+        {
+            return $result->result_array();
+        }
 
-        return $Qzones->result_array();
+        return NULL;
     }
+    
+// ------------------------------------------------------------------------
 
+    /**
+     * Get the geo zones
+     *
+     * @access public
+     * @param $start
+     * @param $limit
+     * @return mixed
+     */
     public function get_geo_zones($start, $limit)
     {
-        $Qzones = $this->db
+        $result = $this->db
         ->select('*')
         ->from('geo_zones')
         ->order_by('geo_zone_name')
         ->limit($limit, $start)
         ->get();
+        
+        if ($result->num_rows() > 0)
+        {
+            return $result->result_array();
+        }
 
-        return $Qzones->result_array();
+        return NULL;
     }
+    
+// ------------------------------------------------------------------------
 
+    /**
+     * Get total number of geo zones
+     *
+     * @access public
+     * @param $geo_zone_id
+     * @return int
+     */
     public function get_entries($geo_zone_id)
     {
         return $this->db->where('geo_zone_id', $geo_zone_id)->from('zones_to_geo_zones')->count_all_results();
     }
+    
+// ------------------------------------------------------------------------
 
+    /**
+     * Get the info of the zone entry
+     *
+     * @access public
+     * @param $geo_zone_id
+     * @return mixed
+     */
     public function get_zone_entries_info($geo_zone_id)
     {
-        $Qentries_info = $this->db
+        $result = $this->db
         ->select('z2gz.association_id, z2gz.zone_country_id countries_id, c.countries_name, z2gz.zone_id, z2gz.geo_zone_id, z2gz.last_modified, z2gz.date_added, z.zone_name')
         ->from('zones_to_geo_zones z2gz')
         ->join('countries c', 'z2gz.zone_country_id = c.countries_id', 'left')
@@ -53,31 +123,73 @@ class Zone_Groups_Model extends CI_Model
         ->where('z2gz.geo_zone_id', $geo_zone_id)
         ->order_by('c.countries_name, z.zone_name')
         ->get();
-
-        return $Qentries_info->result_array();
+        
+        if ($result->num_rows() > 0)
+        {
+            return $result->result_array();
+        }
+        
+        return NULL;
     }
+    
+// ------------------------------------------------------------------------
 
+    /**
+     * Get all the countries
+     *
+     * @access public
+     * @return mixed
+     */
     public function get_countries()
     {
-        $Qentries = $this->db
+        $result = $this->db
         ->select('countries_name,countries_id')
         ->from('countries')
         ->get();
+        
+        if ($result->num_rows() > 0)
+        {
+            return $result->result_array();
+        }
 
-        return $Qentries->result_array();
+        return NULL;
     }
+    
+// ------------------------------------------------------------------------
 
+    /**
+     * Get the zones in the country
+     *
+     * @access public
+     * @param $id
+     * @return mixed
+     */
     public function get_zones($id)
     {
-        $Qentries = $this->db
+        $result = $this->db
         ->select('zone_id,zone_name')
         ->from('zones')
         ->where('zone_country_id', $id)
         ->get();
+        
+        if ($result->num_rows() > 0)
+        {
+            return $result->result_array();
+        }
 
-        return $Qentries->result_array();
+        return NULL;
     }
+    
+// ------------------------------------------------------------------------
 
+    /**
+     * Save the zone in the zone group
+     *
+     * @access public
+     * @param $id
+     * @param $data
+     * @return boolean
+     */
     public function save_entry($id = NULL, $data)
     {
         if (is_numeric($id))
@@ -104,7 +216,16 @@ class Zone_Groups_Model extends CI_Model
 
         return FALSE;
     }
+    
+// ------------------------------------------------------------------------
 
+    /**
+     * Delete the zone
+     *
+     * @access public
+     * @param $id
+     * @return boolean
+     */
     public function delete_entry($id)
     {
         $this->db->delete('zones_to_geo_zones', array('association_id' => $id));
@@ -116,34 +237,44 @@ class Zone_Groups_Model extends CI_Model
 
         return FALSE;
     }
+    
+// ------------------------------------------------------------------------
 
+    /**
+     * Get the data of the zone
+     *
+     * @access public
+     * @param $id
+     * @return mixed
+     */
     public function get_entry_data($id)
     {
-        $Qentries = $this->db
+        $result = $this->db
         ->select('z2gz.*, c.countries_name, z.zone_name')
         ->from('zones_to_geo_zones z2gz')
         ->join('countries c', 'z2gz.zone_country_id = c.countries_id', 'left')
         ->join('zones z', 'z2gz.zone_id = z.zone_id', 'left')
         ->where('z2gz.association_id', $id)
         ->get();
-
-        $data = $Qentries->row_array();
-
-        $Qentries->free_result();
-
-        if (empty($data['countries_name']))
+        
+        if ($result->num_rows() > 0)
         {
-            $data['countries_name'] = lang('all_countries');
+            return $result->row_array();
         }
 
-        if (empty($data['zone_name']))
-        {
-            $data['zone_name'] = lang('all_zones');
-        }
-
-        return $data;
+        return NULL;
     }
+    
+// ------------------------------------------------------------------------
 
+    /**
+     * Save the zone group
+     *
+     * @access public
+     * @param $id
+     * @param $data
+     * @return boolean
+     */
     public function save($id = NULL, $data)
     {
         if (is_numeric($id))
@@ -169,41 +300,74 @@ class Zone_Groups_Model extends CI_Model
 
         return FALSE;
     }
+    
+// ------------------------------------------------------------------------
 
+    /**
+     * Get data of the zone group
+     *
+     * @access public
+     * @param $geo_zone_id
+     * @param $key
+     * @return mixed
+     */
     public function get_data($geo_zone_id, $key = NULL)
     {
-        $Qzones = $this->db
+        $result = $this->db
         ->select('*')
         ->from('geo_zones')
         ->where('geo_zone_id', $geo_zone_id)
         ->get();
-
-        $data = $Qzones->row_array();
-
-        $Qzones->free_result();
-
-        $data['total_entries'] = $this->db->where('geo_zone_id', $geo_zone_id)->from('zones_to_geo_zones')->count_all_results();
-
-        if (empty($key))
+        
+        if ($result->num_rows() > 0)
         {
-            return $data;
+            $data = $result->row_array();
+            
+            $data['total_entries'] = $this->db->where('geo_zone_id', $geo_zone_id)->from('zones_to_geo_zones')->count_all_results();
+            
+            if (empty($key))
+            {
+                return $data;
+            }
+            else
+            {
+                return $data[$key];
+            }
         }
-
-        return $data[$key];
+        
+        return NULL;
     }
+    
+// ------------------------------------------------------------------------
 
-    public function get_tax_rates($geo_zone_id)
+    /**
+     * Check the tax rates of the geo zone
+     *
+     * @access public
+     * @param $id
+     * @return int
+     */
+    public function get_tax_rates($id)
     {
-        $Qcheck = $this->db
+        $result = $this->db
         ->select('tax_zone_id')
         ->from('tax_rates')
-        ->where('tax_zone_id', $geo_zone_id)
+        ->where('tax_zone_id', $id)
         ->limit(1)
         ->get();
 
-        return $Qcheck->num_rows();
+        return $result->num_rows();
     }
+    
+// ------------------------------------------------------------------------
 
+    /**
+     * Delete the zone group
+     *
+     * @access public
+     * @param $id
+     * @return boolean
+     */
     public function delete($id)
     {
         $this->db->trans_begin();
@@ -226,7 +390,15 @@ class Zone_Groups_Model extends CI_Model
 
         return FALSE;
     }
+    
+// ------------------------------------------------------------------------
 
+    /**
+     * Get the total number of the zone groups
+     *
+     * @access public
+     * @return int
+     */
     public function get_total()
     {
         return $this->db->count_all('geo_zones');
@@ -234,4 +406,4 @@ class Zone_Groups_Model extends CI_Model
 }
 
 /* End of file zone_groups_model.php */
-/* Location: ./system/modules/zone_groups/models/zone_groups_model.php */
+/* Location: ./system/models/zone_groups_model.php */

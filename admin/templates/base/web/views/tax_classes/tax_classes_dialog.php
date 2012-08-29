@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource 
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -21,7 +23,7 @@ Ext.define('Toc.tax_classes.TaxClassesDialog', {
     config = config || {};
     
     config.id = 'tax-class-dialog-win';
-    config.title = '<?= lang('action_heading_new_tax_class'); ?>';
+    config.title = '<?php echo lang('action_heading_new_tax_class'); ?>';
     config.width = 500;
     config.modal = true;
     config.iconCls = 'icon-tax_classes-win';
@@ -53,15 +55,11 @@ Ext.define('Toc.tax_classes.TaxClassesDialog', {
   show: function (id) {
     var taxClassesId = id || null;
     
-    this.frmTaxClass.form.baseParams['tax_class_id'] = taxClassesId;
-
     if (taxClassesId > 0) {
+      this.frmTaxClass.form.baseParams['tax_class_id'] = taxClassesId;
+      
       this.frmTaxClass.load({
-        url: Toc.CONF.CONN_URL,
-        params: {
-          module: 'tax_classes',
-          action: 'load_tax_class'
-        },
+        url: '<?php echo site_url('tax_classes/load_tax_class'); ?>',
         success: function() {
           Toc.tax_classes.TaxClassesDialog.superclass.show.call(this);
         },
@@ -77,11 +75,8 @@ Ext.define('Toc.tax_classes.TaxClassesDialog', {
   
   buildForm: function() {
     this.frmTaxClass = Ext.create('Ext.form.Panel', {
-      url: Toc.CONF.CONN_URL,
-      baseParams: {  
-        module: 'tax_classes',
-        action: 'save_tax_class'
-      },
+      url: '<?php echo site_url('tax_classes/save_tax_class'); ?>',
+      baseParams: {},
       fieldDefaults: {
         labelSeparator: '',
         anchor: '97%'
@@ -91,13 +86,13 @@ Ext.define('Toc.tax_classes.TaxClassesDialog', {
       items: [                           
         {
           xtype: 'textfield', 
-          fieldLabel: '<?= lang('field_title'); ?>', 
+          fieldLabel: '<?php echo lang('field_title'); ?>', 
           name: 'tax_class_title', 
           allowBlank: false
         },
         {
           xtype: 'textfield', 
-          fieldLabel: '<?= lang('field_description'); ?>', 
+          fieldLabel: '<?php echo lang('field_description'); ?>', 
           name: 'tax_class_description'
         }
       ]
@@ -124,4 +119,4 @@ Ext.define('Toc.tax_classes.TaxClassesDialog', {
 });
 
 /* End of file tax_classes_dialog.php */
-/* Location: ./system/modules/tax_classes/tax_classes_dialog.php */
+/* Location: ./templates/base/web/views/tax_classes/tax_classes_dialog.php */
