@@ -57,7 +57,7 @@ class Customers_Groups extends TOC_Controller
         $groups = $this->customers_groups_model->get_groups($start, $limit);
         
         $records = array();
-        if (!empty($groups))
+        if ($groups != NULL)
         {
             foreach($groups as $group)
             {
@@ -235,7 +235,7 @@ class Customers_Groups extends TOC_Controller
         $infos = $this->customers_groups_model->get_info($this->input->post('groups_id'));
         
         $data = array();
-        if (!empty($infos))
+        if ($infos != NULL)
         {
             foreach($infos as $info)
             {

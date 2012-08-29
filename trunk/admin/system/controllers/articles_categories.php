@@ -57,7 +57,7 @@ class Articles_Categories extends TOC_Controller
         $articles_categories = $this->articles_categories_model->get_articles_categories($start, $limit);
 
         $records = array();
-        if (!empty($articles_categories))
+        if ($articles_categories != NULL)
         {
             foreach($articles_categories as $articles_category)
             {
@@ -261,7 +261,7 @@ class Articles_Categories extends TOC_Controller
         $articles_categories_infos = $this->articles_categories_model->get_info($this->input->post('articles_categories_id'));
 
         $data = array();
-        if (!empty($articles_categories_infos))
+        if ($articles_categories_infos != NULL)
         {
             foreach($articles_categories_infos as $info)
             {

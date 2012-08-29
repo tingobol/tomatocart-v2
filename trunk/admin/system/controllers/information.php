@@ -58,7 +58,7 @@ class Information extends TOC_Controller
         $articles = $this->information_model->get_articles($start, $limit);
         
         $records = array();
-        if (!empty($articles))
+        if ($articles != NULL)
         {
             foreach($articles as $article)
             {
@@ -220,7 +220,7 @@ class Information extends TOC_Controller
         $articles_infos = $this->articles_model->get_info($this->input->post('articles_id'));
         
         $data = array();
-        if (!empty($articles_infos))
+        if ($articles_infos != NULL)
         {
             foreach($articles_infos as $articles_info)
             {

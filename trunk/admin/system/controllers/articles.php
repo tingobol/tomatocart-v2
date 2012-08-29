@@ -59,7 +59,7 @@ class Articles extends TOC_Controller {
         $articles = $this->articles_model->get_articles($start, $limit, $current_category_id, $search);
         
         $records = array();
-        if (!empty($articles))
+        if ($articles != NULL)
         {
             foreach($articles as $article)
             {
@@ -94,7 +94,7 @@ class Articles extends TOC_Controller {
             $records = array(array('id' => '', 'text' => lang('top_articles_category')));
         }
         
-        if (!empty($article_categories))
+        if ($article_categories != NULL)
         {
             foreach($article_categories as $category)
             {
@@ -240,7 +240,7 @@ class Articles extends TOC_Controller {
         $articles_infos = $this->articles_model->get_info($this->input->post('articles_id'));
       
         $data = array();
-        if (!empty($articles_infos))
+        if ($articles_infos != NULL)
         {
             foreach($articles_infos as $articles_info)
             {
