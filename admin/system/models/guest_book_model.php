@@ -26,7 +26,8 @@
  * @author    TomatoCart Dev Team
  * @link    http://tomatocart.com/wiki/
  */
-class Guest_Book_Model extends CI_Model {
+class Guest_Book_Model extends CI_Model 
+{
     /**
      * Constructor
      *

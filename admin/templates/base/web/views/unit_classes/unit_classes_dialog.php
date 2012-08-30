@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource .system/modules/unit_classes/views/unit_classes_dialog.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -21,7 +23,7 @@ Ext.define('Toc.unit_classes.UnitClassesDialog', {
     config = config || {};
     
     config.id = 'unit_classes-dialog-win';
-    config.title = '<?= lang('action_heading_new_quantity_unit_class'); ?>';
+    config.title = '<?php echo lang('action_heading_new_quantity_unit_class'); ?>';
     config.layout = 'fit';
     config.width = 400;
     config.height = 200;
@@ -55,17 +57,14 @@ Ext.define('Toc.unit_classes.UnitClassesDialog', {
   show: function (unit_class_id) {
     var unit_class_id = unit_class_id || null;
 
-    this.frmUnitClasses.form.baseParams['unit_class_id'] = unit_class_id;
-    
     if (unit_class_id > 0) {
+      this.frmUnitClasses.form.baseParams['unit_class_id'] = unit_class_id;
+      
       this.frmUnitClasses.load({
-        url: Toc.CONF.CONN_URL,
-        params: {
-          action: 'load_unit_class'
-        },
+        url: '<?php echo site_url('unit_classes/load_unit_class'); ?>',
         success: function(form, action) {
           if (!action.result.data.is_default) {    
-            this.frmUnitClasses.add({xtype: 'checkbox', name: 'default', id:'default_unit_classess', fieldLabel: '<?= lang('field_is_default_unit'); ?>', anchor:''});
+            this.frmUnitClasses.add({xtype: 'checkbox', name: 'default', id:'default_unit_classess', fieldLabel: '<?php echo lang('field_is_default_unit'); ?>', anchor:''});
           }
           
           Toc.unit_classes.UnitClassesDialog.superclass.show.call(this);
@@ -76,7 +75,7 @@ Ext.define('Toc.unit_classes.UnitClassesDialog', {
         scope: this       
       });
     } else {   
-      this.frmUnitClasses.add({xtype: 'checkbox', name: 'default', id:'default_unit_classess', fieldLabel: '<?= lang('field_is_default_unit'); ?>', anchor:''});    
+      this.frmUnitClasses.add({xtype: 'checkbox', name: 'default', id:'default_unit_classess', fieldLabel: '<?php echo lang('field_is_default_unit'); ?>', anchor:''});    
       
       this.callParent();
     }
@@ -84,11 +83,8 @@ Ext.define('Toc.unit_classes.UnitClassesDialog', {
   
   buildForm: function() {
     this.frmUnitClasses = Ext.create('Ext.form.Panel', {
-      url: Toc.CONF.CONN_URL,
-      baseParams: {  
-        module: 'unit_classes',
-        action: 'save_unit_class'
-      },
+      url: '<?php echo site_url('unit_classes/save_unit_class'); ?>',
+      baseParams: {},
       border: false,
       bodyPadding: 5,
       fieldDefaults: {
@@ -107,7 +103,7 @@ Ext.define('Toc.unit_classes.UnitClassesDialog', {
           name: 'unit_class_title[<?php echo $l['id']; ?>]',
           fieldLabel: '<?php echo $i != 1 ? '&nbsp;' : lang('field_unit_class_name'); ?>',
           allowBlank: false,
-          labelStyle: '<?= worldflag_url($l['country_iso']); ?>'
+          labelStyle: '<?php echo worldflag_url($l['country_iso']); ?>'
         });
         
         this.frmUnitClasses.add(txtLang<?php echo $l['id']; ?>);
@@ -136,5 +132,5 @@ Ext.define('Toc.unit_classes.UnitClassesDialog', {
   }
 });
 
-/* End of file unit_classes_grid.php */
-/* Location: .system/modules/unit_classes/views/unit_classes_grid.php */
+/* End of file unit_classes_dialog.php */
+/* Location: ./templates/base/web/views/unit_classes/unit_classes_dialog.php */

@@ -1,69 +1,123 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
+ * @since   Version 2.0
  * @filesource
  */
 
+// ------------------------------------------------------------------------
+
+/**
+ * Orders Status Model
+ *
+ * @package   TomatoCart
+ * @subpackage  tomatocart
+ * @category  template-module-model
+ * @author    TomatoCart Dev Team
+ * @link    http://tomatocart.com/wiki/
+ */
 class Orders_Status_Model extends CI_Model
 {
+    /**
+     * Constructor
+     *
+     * @access public
+     * @return void
+     */
     public function __construct()
     {
         parent::__construct();
-
     }
+    
+// ------------------------------------------------------------------------
 
-    public function get_order_status()
-    {
-        $Qstatus = $this->db
-        ->select('*')
-        ->from('orders_status')
-        ->where(array('language_id' => lang_id()))
-        ->get();
-
-        return $Qstatus->result_array();
-    }
-
-    public function get_data($id)
-    {
-        $Qstatus = $this->db
-        ->select('*')
-        ->from('orders_status')
-        ->where(array('orders_status_id' => $id, 'language_id' => lang_id()))
-        ->get();
-
-        return $Qstatus->row_array();
-    }
-
+     /**
+     * Get the orders_status
+     *
+     * @access public
+     * @param $start
+     * @param $limit
+     * @return mixed
+     */
     public function get_orders_status($start, $limit)
     {
-        $Qstatuses = $this->db
+        $result = $this->db
         ->select('orders_status_id, orders_status_name, public_flag')
         ->from('orders_status')
         ->where('language_id', lang_id())
         ->limit($limit, $start)
         ->get();
+        
+        if ($result->num_rows() > 0)
+        {
+            return $result->result_array();
+        }
 
-        return $Qstatuses->result_array();
+        return NULL;
     }
+    
+// ------------------------------------------------------------------------
 
+     /**
+     * Get data of the order status with the id
+     *
+     * @access public
+     * @param $id
+     * @return mixed
+     */
+    public function get_data($id)
+    {
+        $result = $this->db
+        ->select('*')
+        ->from('orders_status')
+        ->where(array('orders_status_id' => $id, 'language_id' => lang_id()))
+        ->get();
+        
+        if ($result->num_rows() > 0)
+        {
+            return $result->row_array();
+        }
+
+        return NULL;
+    }
+    
+// ------------------------------------------------------------------------
+
+    /**
+     * Get total number of the orders status
+     *
+     * @access public
+     * @return int
+     */
     public function get_total()
     {
         return $this->db->where('language_id', lang_id())->from('orders_status')->count_all_results();
     }
+    
+// ------------------------------------------------------------------------
 
+    /**
+     * Set the status of the order status
+     *
+     * @access public
+     * @param $orders_status_id
+     * @param $flag
+     * @return boolean
+     */
     public function set_status($orders_status_id, $flag)
     {
         $this->db->update('orders_status', array('public_flag' => $flag),
-        array('orders_status_id' => $orders_status_id));
+                                           array('orders_status_id' => $orders_status_id));
          
         if ($this->db->affected_rows() > 0)
         {
@@ -72,7 +126,18 @@ class Orders_Status_Model extends CI_Model
 
         return FALSE;
     }
+    
+// ------------------------------------------------------------------------
 
+    /**
+     * Save the orders_status
+     *
+     * @access public
+     * @param $id
+     * @param $data
+     * @param $default
+     * @return boolean
+     */
     public function save($id = NULL, $data, $default = FALSE)
     {
         $error = FALSE;
@@ -85,14 +150,15 @@ class Orders_Status_Model extends CI_Model
         }
         else
         {
-            $Qstatus = $this->db->
+            $result = $this->db->
             select_max('orders_status_id')
             ->from('orders_status')
             ->get();
-
-            $status = $Qstatus->row_array();
-
+            
+            $status = $result->row_array();
             $orders_status_id = $status['orders_status_id'] + 1;
+            
+            $result->free_result();
         }
 
         foreach(lang_get_all() as $l)
@@ -100,17 +166,17 @@ class Orders_Status_Model extends CI_Model
             if (is_numeric($id))
             {
                 $this->db->update('orders_status',
-                array('orders_status_name' => $data['name'][$l['id']],
-                                'public_flag' => $data['public_flag']), 
-                array('orders_status_id' => $orders_status_id,
-                                'language_id' => $l['id']));
+                                  array('orders_status_name' => $data['name'][$l['id']],
+                                        'public_flag' => $data['public_flag']), 
+                                  array('orders_status_id' => $orders_status_id,
+                                        'language_id' => $l['id']));
             }
             else
             {
                 $this->db->insert('orders_status', array('orders_status_id' => $orders_status_id,
-                                                 'language_id' => $l['id'], 
-                                                 'orders_status_name' => $data['name'][$l['id']], 
-                                                 'public_flag' => $data['public_flag']));
+                                                         'language_id' => $l['id'], 
+                                                         'orders_status_name' => $data['name'][$l['id']], 
+                                                         'public_flag' => $data['public_flag']));
             }
 
             if ($this->db->trans_status() === FALSE)
@@ -125,7 +191,7 @@ class Orders_Status_Model extends CI_Model
             if ($default === TRUE)
             {
                 $this->db->update('configuration', array('configuration_value' => $orders_status_id),
-                array('configuration_key' => 'DEFAULT_ORDERS_STATUS_ID'));
+                                                   array('configuration_key' => 'DEFAULT_ORDERS_STATUS_ID'));
                  
                 if ($this->db->trans_status() === FALSE)
                 {
@@ -145,28 +211,69 @@ class Orders_Status_Model extends CI_Model
 
         return FALSE;
     }
+  
+// ------------------------------------------------------------------------
 
+    /**
+     * Load the orders_status
+     *
+     * @access public
+     * @param $id
+     * @return mixed
+     */
     public function load_order_status($id)
     {
-        $Qstatus = $this->db
+        $result = $this->db
         ->select('language_id, orders_status_name, public_flag')
         ->from('orders_status')
         ->where('orders_status_id', $id)
         ->get();
+        
+        if ($result->num_rows() > 0)
+        {
+            return $result->result_array();
+        }
 
-        return $Qstatus->result_array();
+        return NULL;
     }
+    
+// ------------------------------------------------------------------------
 
+    /**
+     * Whether the order status is using in orders
+     *
+     * @access public
+     * @param $id
+     * @return int
+     */
     public function check_orders($id)
     {
         return $this->db->where('orders_status', $id)->from('orders')->count_all_results();
     }
+    
+// ------------------------------------------------------------------------
 
+    /**
+     * Whether the order status is using in order status history
+     *
+     * @access public
+     * @param $id
+     * @return int
+     */
     public function check_history($id)
     {
         return $this->db->where('orders_status_id', $id)->from('orders_status_history')->group_by('orders_id')->count_all_results();
     }
+    
+// ------------------------------------------------------------------------
 
+    /**
+     * Delete the order status
+     *
+     * @access public
+     * @param $id
+     * @return boolean
+     */
     public function delete($id)
     {
         $this->db->delete('orders_status', array('orders_status_id' => $id));
@@ -179,7 +286,6 @@ class Orders_Status_Model extends CI_Model
         return FALSE;
     }
 }
-
 
 /* End of file orders_status_model.php */
 /* Location: ./system/models/orders_status_model.php */

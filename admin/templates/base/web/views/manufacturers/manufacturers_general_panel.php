@@ -1,15 +1,17 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
+ * @since   Version 2.0
  * @filesource
  */
 ?>
@@ -20,7 +22,7 @@ Ext.define('Toc.manufacturers.GeneralPanel', {
   constructor: function(config) {
     config = config || {};
     
-    config.title = '<?= lang('section_general'); ?>';
+    config.title = '<?php echo lang('section_general'); ?>';
     config.border = false;
     config.layout = 'anchor';
     config.bodyPadding = 8;
@@ -32,9 +34,9 @@ Ext.define('Toc.manufacturers.GeneralPanel', {
   buildForm: function() {
     var items = [];
     
-    items.push({xtype: 'textfield', fieldLabel: '<?= lang('field_name'); ?>', name: 'manufacturers_name', allowBlank: false});
+    items.push({xtype: 'textfield', fieldLabel: '<?php echo lang('field_name'); ?>', name: 'manufacturers_name', allowBlank: false});
     items.push({xtype: 'panel', id: 'manufactuerer_image_panel', border: false, html: ''});
-    items.push({xtype: 'fileuploadfield', fieldLabel: '<?= lang('field_image'); ?>', name: 'manufacturers_image'});
+    items.push({xtype: 'fileuploadfield', fieldLabel: '<?php echo lang('field_image'); ?>', name: 'manufacturers_image'});
     
     <?php
       $i = 1;
@@ -44,7 +46,7 @@ Ext.define('Toc.manufacturers.GeneralPanel', {
         this.lang<?php echo $l['id']; ?> = Ext.create('Ext.form.TextField', {
           name: 'manufacturers_url[' + '<?php echo $l['id']; ?>' + ']',
           fieldLabel: '<?php echo $i == 1 ? lang('field_url') : '&nbsp;'; ?>',
-          labelStyle: '<?= worldflag_url($l['country_iso']); ?>',
+          labelStyle: '<?php echo worldflag_url($l['country_iso']); ?>',
           value: 'http://'
         });
         
@@ -59,4 +61,4 @@ Ext.define('Toc.manufacturers.GeneralPanel', {
 });
 
 /* End of file manufacturers_general_panel.php */
-/* Location: ./system/modules/manufacturers/views/manufacturers_general_panel.php */
+/* Location: ./templates/base/web/views/manufacturers/manufacturers_general_panel.php */

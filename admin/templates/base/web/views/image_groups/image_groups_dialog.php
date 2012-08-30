@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource ./system/modules/image_groups/views/image_groups_dialog.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -21,7 +23,7 @@ Ext.define('Toc.image_groups.ImageGroupsDialog', {
     config = config || {};
     
     config.id = 'image_groups-dialog-win';
-    config.title = '<?= lang('action_heading_new_image_group'); ?>';
+    config.title = '<?php echo lang('action_heading_new_image_group'); ?>';
     config.layout = 'fit';
     config.width = 450;
     config.autoHeight = true;
@@ -53,14 +55,11 @@ Ext.define('Toc.image_groups.ImageGroupsDialog', {
   show: function(id) {
     imageGroupsId = id || null;      
     
-    this.frmImageGroup.form.baseParams['image_groups_id'] = imageGroupsId;
-
     if (imageGroupsId > 0) {
+      this.frmImageGroup.form.baseParams['image_groups_id'] = imageGroupsId;
+      
       this.frmImageGroup.load({
-        url: Toc.CONF.CONN_URL,
-        params:{
-          action: 'load_image_group'
-        },
+        url : '<?php echo site_url('image_groups/load_image_group'); ?>',
         success: function(form, action) {
           if(action.result.data.is_default) {
             Ext.getCmp('default_image_group').disable();
@@ -80,11 +79,8 @@ Ext.define('Toc.image_groups.ImageGroupsDialog', {
   
   buildForm: function() {
     this.frmImageGroup = Ext.create('Ext.form.Panel', {
-      url: Toc.CONF.CONN_URL,
-      baseParams: {  
-        module: 'image_groups',
-        action: 'save_image_group'
-      },
+      url : '<?php echo site_url('image_groups/save_image_group'); ?>',
+      baseParams: {},
       border: false,
       bodyPadding: 10,
       fieldDefaults: {
@@ -101,18 +97,18 @@ Ext.define('Toc.image_groups.ImageGroupsDialog', {
             {
               xtype: 'textfield', 
               name: 'title[<?php echo $l['id']; ?>]', 
-              fieldLabel: '<?= ($i != 1) ? '&nbsp;' : lang('field_title') ?>',
-              labelStyle: '<?= worldflag_url($l['country_iso']); ?>'
+              fieldLabel: '<?php echo ($i != 1) ? '&nbsp;' : lang('field_title') ?>',
+              labelStyle: '<?php echo worldflag_url($l['country_iso']); ?>'
             },
         <?php
             $i++;
           }
         ?>
-        {xtype: 'textfield', name: 'code', allowBlank: false, fieldLabel: '<?= lang('field_code'); ?>'},
-        {xtype: 'numberfield', name: 'size_width', allowBlank: false, fieldLabel: '<?= lang('field_width'); ?>'},
-        {xtype: 'numberfield', name: 'size_height', allowBlank: false, fieldLabel: '<?= lang('field_height'); ?>'},
-        {xtype: 'checkbox', name: 'force_size', fieldLabel: '<?= lang('field_force_size'); ?>', anchor: ''},
-        {xtype: 'checkbox', name: 'is_default', id: 'default_image_group', fieldLabel: '<?= lang('field_set_as_default'); ?>', anchor: ''}
+        {xtype: 'textfield', name: 'code', allowBlank: false, fieldLabel: '<?php echo lang('field_code'); ?>'},
+        {xtype: 'numberfield', name: 'size_width', allowBlank: false, fieldLabel: '<?php echo lang('field_width'); ?>'},
+        {xtype: 'numberfield', name: 'size_height', allowBlank: false, fieldLabel: '<?php echo lang('field_height'); ?>'},
+        {xtype: 'checkbox', name: 'force_size', fieldLabel: '<?php echo lang('field_force_size'); ?>', anchor: ''},
+        {xtype: 'checkbox', name: 'is_default', id: 'default_image_group', fieldLabel: '<?php echo lang('field_set_as_default'); ?>', anchor: ''}
       ]
     });
     
@@ -136,6 +132,5 @@ Ext.define('Toc.image_groups.ImageGroupsDialog', {
   }
 });
 
-
-/* End of file image_groups_grid.php */
-/* Location: ./system/modules/image_groups/views/image_groups_dialog.php */
+/* End of file image_groups_dialog.php */
+/* Location: ./templates/base/web/views/image_groups/image_groups_dialog.php */
