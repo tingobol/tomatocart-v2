@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource ./system/modules/orders_status/views/orders_status_grid.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -20,9 +22,9 @@ Ext.define('Toc.orders_status.OrdersStatusGrid', {
   statics: {
     renderStatus : function(status) {
       if(status == 1) {
-        return '<img class="img-button" src="<?= icon_status_url('icon_status_green.gif'); ?>" />&nbsp;<img class="img-button btn-status-off" style="cursor: pointer" src="<?= icon_status_url('icon_status_red_light.gif'); ?>" />';
+        return '<img class="img-button" src="<?php echo icon_status_url('icon_status_green.gif'); ?>" />&nbsp;<img class="img-button btn-status-off" style="cursor: pointer" src="<?php echo icon_status_url('icon_status_red_light.gif'); ?>" />';
       }else {
-        return '<img class="img-button btn-status-on" style="cursor: pointer" src="<?= icon_status_url('icon_status_green_light.gif'); ?>" />&nbsp;<img class="img-button" src= "<?= icon_status_url('icon_status_red.gif'); ?>" />';
+        return '<img class="img-button btn-status-on" style="cursor: pointer" src="<?php echo icon_status_url('icon_status_green_light.gif'); ?>" />&nbsp;<img class="img-button" src= "<?php echo icon_status_url('icon_status_red.gif'); ?>" />';
       }
     }
   },
@@ -45,11 +47,7 @@ Ext.define('Toc.orders_status.OrdersStatusGrid', {
       pageSize: Toc.CONF.GRID_PAGE_SIZE,
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
-        extraParams: {
-          module: 'orders_status',
-          action: 'list_orders_status'
-        },
+        url : '<?php echo site_url('orders_status/list_orders_status'); ?>',
         reader: {
           type: 'json',
           root: Toc.CONF.JSON_READER_ROOT,
@@ -61,12 +59,12 @@ Ext.define('Toc.orders_status.OrdersStatusGrid', {
     
     config.selModel = Ext.create('Ext.selection.CheckboxModel');
     config.columns =[
-      {header: '<?= lang('table_heading_order_statuses'); ?>', dataIndex: 'orders_status_name', flex: 1},
-      {header: '<?= lang('table_heading_public_flag'); ?>', align: 'center', dataIndex: 'public_flag', renderer: statics.renderStatus},
+      {header: '<?php echo lang('table_heading_order_statuses'); ?>', dataIndex: 'orders_status_name', flex: 1},
+      {header: '<?php echo lang('table_heading_public_flag'); ?>', align: 'center', dataIndex: 'public_flag', renderer: statics.renderStatus},
       {
         xtype: 'actioncolumn', 
         width: 80,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           tooltip: TocLanguage.tipEdit,
           iconCls: 'icon-action icon-edit-record',
@@ -139,10 +137,8 @@ Ext.define('Toc.orders_status.OrdersStatusGrid', {
         if (btn == 'yes') {
           Ext.Ajax.request({
             waitMsg: TocLanguage.formSubmitWaitMsg,
-            url: Toc.CONF.CONN_URL,
+            url: '<?php echo site_url('orders_status/delete_orders_status'); ?>',
             params: {
-              module: 'orders_status',
-              action: 'delete_orders_status',
               orders_status_id: ordersStatusId
             },
             callback: function (options, success, response) {
@@ -181,10 +177,8 @@ Ext.define('Toc.orders_status.OrdersStatusGrid', {
           if (btn == 'yes') {
             Ext.Ajax.request({
               waitMsg: TocLanguage.formSubmitWaitMsg,
-              url: Toc.CONF.CONN_URL,
+              url: '<?php echo site_url('orders_status/batch_delete_orders_status'); ?>',
               params: {
-                module: 'orders_status',
-                action: 'batch_delete_orders_status',
                 batch: batch
               },
               callback: function(options, success, response) {
@@ -234,10 +228,8 @@ Ext.define('Toc.orders_status.OrdersStatusGrid', {
   
   onAction: function(action, ordersStatusId, flag, index) {
     Ext.Ajax.request({
-      url: Toc.CONF.CONN_URL,
+      url: '<?php echo site_url('orders_status'); ?>/' + action,
       params: {
-        module: 'orders_status',
-        action: action,
         orders_status_id: ordersStatusId,
         flag: flag
       },
@@ -265,4 +257,4 @@ Ext.define('Toc.orders_status.OrdersStatusGrid', {
 });
 
 /* End of file orders_status_grid.php */
-/* Location: ./system/modules/orders_status/views/orders_status_grid.php */
+/* Location: ./templates/base/web/views/orders_status/orders_status_grid.php */

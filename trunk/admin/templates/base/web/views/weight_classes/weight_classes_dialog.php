@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource modules/weight_classes/views/weight_classes_dialog.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -21,7 +23,7 @@ Ext.define('Toc.weight_classes.WeightClassesDialog', {
     config = config || {};
     
     config.id = 'weight_classes-dialog-win';
-    config.title = '<?= lang("action_heading_new_weight_class"); ?>';
+    config.title = '<?php echo lang("action_heading_new_weight_class"); ?>';
     config.layout = 'fit';
     config.width = 480;
     config.height = 360;
@@ -55,13 +57,12 @@ Ext.define('Toc.weight_classes.WeightClassesDialog', {
   show: function (id) {
     var weightClassesId = id || null;
     
-    this.frmWeightClass.form.baseParams['weight_class_id'] = weightClassesId;
-    
     if (weightClassesId > 0) {
+      this.frmWeightClass.form.baseParams['weight_class_id'] = weightClassesId;
+      
       this.frmWeightClass.load({
-        url: Toc.CONF.CONN_URL,
+        url: '<?php echo site_url('weight_classes/load_weight_classes'); ?>',
         params: {
-          action: 'load_weight_classes',
           weight_class_id: weightClassesId
         },
         success: function (form, action) {
@@ -80,7 +81,7 @@ Ext.define('Toc.weight_classes.WeightClassesDialog', {
             this.frmWeightClass.add({
               xtype: 'checkbox',
               name: 'is_default',
-              fieldLabel: '<?= lang("field_set_as_default"); ?>'
+              fieldLabel: '<?php echo lang("field_set_as_default"); ?>'
             });
           }
           
@@ -95,11 +96,7 @@ Ext.define('Toc.weight_classes.WeightClassesDialog', {
       });
     } else {
       Ext.Ajax.request({
-        url: Toc.CONF.CONN_URL,
-        params: {
-          module: 'weight_classes',
-          action: 'get_weight_classes_rules'
-        },
+        url: '<?php echo site_url('weight_classes/get_weight_classes_rules'); ?>',
         callback: function(options, success, response) {
           var result = Ext.decode(response.responseText);
           
@@ -118,7 +115,7 @@ Ext.define('Toc.weight_classes.WeightClassesDialog', {
             this.frmWeightClass.add({
               xtype: 'checkbox',
               name: 'is_default',
-              fieldLabel: '<?= lang("field_set_as_default"); ?>',
+              fieldLabel: '<?php echo lang("field_set_as_default"); ?>',
               anchor: ''
             });
           
@@ -134,11 +131,8 @@ Ext.define('Toc.weight_classes.WeightClassesDialog', {
   
   buildForm: function () {
     this.frmWeightClass = Ext.create('Ext.form.Panel', {
-      url: Toc.CONF.CONN_URL,
-      baseParams: {
-        module: 'weight_classes',
-        action: 'save_weight_classes'       
-      },
+      url: '<?php echo site_url('weight_classes/save_weight_classes'); ?>',
+      baseParams: {},
       border: false,
       bodyPadding: 10,
       autoScroll: true,
@@ -167,7 +161,7 @@ Ext.define('Toc.weight_classes.WeightClassesDialog', {
                 {
                   xtype: 'textfield',
                   name: 'name[<?php echo $l['id']; ?>]',
-                  labelStyle: '<?= worldflag_url($l['country_iso']); ?>',
+                  labelStyle: '<?php echo worldflag_url($l['country_iso']); ?>',
                   width: 100,
                   allowBlank: false,
                   fieldLabel: '<?php echo $i == 1 ? lang('field_title_and_code') : '&nbsp;'?>'
@@ -199,7 +193,7 @@ Ext.define('Toc.weight_classes.WeightClassesDialog', {
     this.frmWeightClass.add({
       xtype: 'displayfield',
       border: false,
-      fieldLabel: '<?= lang("field_rules"); ?>',
+      fieldLabel: '<?php echo lang("field_rules"); ?>',
       value: ''
     });
     
@@ -223,7 +217,5 @@ Ext.define('Toc.weight_classes.WeightClassesDialog', {
   }
 });
 
-
-
 /* End of file weight_classes_dialog.php */
-/* Location: ./system/modules/weight_classes/views/weight_classes_dialog.php */
+/* Location: ./templates/base/web/views/weight_classes/weight_classes_dialog.php */

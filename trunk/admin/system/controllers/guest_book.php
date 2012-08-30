@@ -26,8 +26,8 @@
  * @author    TomatoCart Dev Team
  * @link    http://tomatocart.com/wiki/
  */
-class Guest_Book extends TOC_Controller {
-    
+class Guest_Book extends TOC_Controller 
+{
     /**
      * Constructor
      *

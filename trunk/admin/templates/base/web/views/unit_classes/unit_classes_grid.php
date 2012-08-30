@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource .system/modules/unit_classes/views/unit_classes_grid.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -32,11 +34,7 @@ Ext.define('Toc.unit_classes.UnitClassesGrid', {
       pageSize: Toc.CONF.GRID_PAGE_SIZE,
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
-        extraParams: {
-          module: 'unit_classes',
-          action: 'list_unit_classes'
-        },
+        url : '<?php echo site_url('unit_classes/list_unit_classes'); ?>',
         reader: {
           type: 'json',
           root: Toc.CONF.JSON_READER_ROOT,
@@ -48,11 +46,11 @@ Ext.define('Toc.unit_classes.UnitClassesGrid', {
     
     config.selModel = Ext.create('Ext.selection.CheckboxModel');
     config.columns =[
-      {header: '<?= lang('table_heading_unit_name'); ?>', dataIndex: 'unit_class_title', flex: 1},
+      {header: '<?php echo lang('table_heading_unit_name'); ?>', dataIndex: 'unit_class_title', flex: 1},
       {
         xtype: 'actioncolumn', 
         width: 80,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           tooltip: TocLanguage.tipEdit,
           iconCls: 'icon-action icon-edit-record',
@@ -121,10 +119,8 @@ Ext.define('Toc.unit_classes.UnitClassesGrid', {
         if (btn == 'yes') {
           Ext.Ajax.request({
             waitMsg: TocLanguage.formSubmitWaitMsg,
-            url: Toc.CONF.CONN_URL,
+            url: '<?php echo site_url('unit_classes/delete_unit_class'); ?>',
             params: {
-              module: 'unit_classes',
-              action: 'delete_unit_class',
               unit_class_id: unit_class_id
             },
             callback: function (options, success, response) {
@@ -162,10 +158,8 @@ Ext.define('Toc.unit_classes.UnitClassesGrid', {
         function(btn) {
           if (btn == 'yes') {
             Ext.Ajax.request({
-              url: Toc.CONF.CONN_URL,
+              url: '<?php echo site_url('unit_classes/delete_unit_classes'); ?>',
               params: {
-                module: 'unit_classes',
-                action: 'delete_unit_classes',
                 batch: batch
               },
               callback: function(options, success, response){
@@ -196,4 +190,4 @@ Ext.define('Toc.unit_classes.UnitClassesGrid', {
 
 
 /* End of file unit_classes_grid.php */
-/* Location: .system/modules/unit_classes/views/unit_classes_grid.php */
+/* Location: ./templates/base/web/views/unit_classes/unit_classes_grid.php */

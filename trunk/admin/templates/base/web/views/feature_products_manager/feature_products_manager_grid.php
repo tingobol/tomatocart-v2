@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource ./system/modules/feature_products_manager/views/feature_products_manager_grid.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -32,11 +34,7 @@ Ext.define('Toc.feature_products_manager.ProductsManagerGrid', {
       pageSize: Toc.CONF.GRID_PAGE_SIZE,
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
-        extraParams: {
-          module: 'feature_products_manager',
-          action: 'list_products'
-        },
+        url : '<?php echo site_url('feature_products_manager/list_products'); ?>',
         reader: {
           type: 'json',
           root: Toc.CONF.JSON_READER_ROOT,
@@ -49,9 +47,9 @@ Ext.define('Toc.feature_products_manager.ProductsManagerGrid', {
     config.selModel = Ext.create('Ext.selection.CheckboxModel');
     config.selType = 'cellmodel';
     config.columns =[
-      {header: '<?= lang('table_heading_products'); ?>', dataIndex: 'products_name', flex: 1},
+      {header: '<?php echo lang('table_heading_products'); ?>', dataIndex: 'products_name', flex: 1},
       {
-        header: '<?= lang('table_heading_sort_order'); ?>', 
+        header: '<?php echo lang('table_heading_sort_order'); ?>', 
         align: 'right', 
         dataIndex: 'sort_order',
         editor: {
@@ -62,7 +60,7 @@ Ext.define('Toc.feature_products_manager.ProductsManagerGrid', {
       {
         xtype: 'actioncolumn', 
         width: 40,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           iconCls: 'icon-action icon-delete-record',
           tooltip: TocLanguage.tipDelete,
@@ -95,11 +93,7 @@ Ext.define('Toc.feature_products_manager.ProductsManagerGrid', {
       pageSize: Toc.CONF.GRID_PAGE_SIZE,
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
-        extraParams: {
-          module: 'feature_products_manager',
-          action: 'get_categories'
-        },
+        url : '<?php echo site_url('feature_products_manager/get_categories'); ?>',
         reader: {
           type: 'json',
           root: Toc.CONF.JSON_READER_ROOT,
@@ -116,7 +110,7 @@ Ext.define('Toc.feature_products_manager.ProductsManagerGrid', {
       },
       store: config.dsCategories,
       queryMode: 'remote',
-      emptyText: '<?= lang("top_category"); ?>',
+      emptyText: '<?php echo lang("top_category"); ?>',
       valueField: 'id',
       displayField: 'text',
       triggerAction: 'all',
@@ -171,10 +165,8 @@ Ext.define('Toc.feature_products_manager.ProductsManagerGrid', {
         if (btn == 'yes') {
           Ext.Ajax.request({
             waitMsg: TocLanguage.formSubmitWaitMsg,
-            url: Toc.CONF.CONN_URL,
+            url : '<?php echo site_url('feature_products_manager/delete_product'); ?>',
             params: {
-              module: 'feature_products_manager',
-              action: 'delete_product',
               products_id: productsId
             },
             callback: function (options, success, response) {
@@ -213,10 +205,8 @@ Ext.define('Toc.feature_products_manager.ProductsManagerGrid', {
           if (btn == 'yes') {
             Ext.Ajax.request({
               waitMsg: TocLanguage.formSubmitWaitMsg,
-              url: Toc.CONF.CONN_URL,
+              url : '<?php echo site_url('feature_products_manager/delete_products'); ?>',
               params: {
-                module: 'feature_products_manager',
-                action: 'delete_products',
                 batch: batch
               },
               callback: function(options, success, response) {
@@ -243,10 +233,8 @@ Ext.define('Toc.feature_products_manager.ProductsManagerGrid', {
   
   onGrdAfterEdit: function(editor, e, options) {
     Ext.Ajax.request({
-      url: Toc.CONF.CONN_URL,
+      url : '<?php echo site_url('feature_products_manager/update_sort_order'); ?>',
       params: {
-        module: 'feature_products_manager',
-        action: 'update_sort_order',
         products_id: e.record.get("products_id"),
         sort_value: e.value
       },
@@ -269,7 +257,5 @@ Ext.define('Toc.feature_products_manager.ProductsManagerGrid', {
   } 
 });
 
-
-
-/* End of file main.php */
-/* Location: ./system/modules/feature_products_manager/views/feature_products_manager_grid.php */
+/* End of file feature_products_manager_grid.php */
+/* Location: ./templates/base/web/views/feature_products_manager/feature_products_manager_grid.php */

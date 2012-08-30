@@ -1,15 +1,17 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
+ * @since   Version 2.0
  * @filesource
  */
 ?>
@@ -21,7 +23,7 @@ Ext.define('Toc.manufacturers.ManufacturersDialog', {
     config = config || {};
     
     config.id = 'manufacturers_dialog-win';
-    config.title = '<?= lang('action_heading_new_manufacturer'); ?>';
+    config.title = '<?php echo lang('action_heading_new_manufacturer'); ?>';
     config.width = 500;
     config.height = 380;
     config.modal = true;
@@ -55,20 +57,16 @@ Ext.define('Toc.manufacturers.ManufacturersDialog', {
   show: function(id) {
     var manufacturersId = id || null;
     
-    this.frmManufacturer.baseParams['manufacturers_id'] = manufacturersId;
-    
     if (manufacturersId > 0) {
+      this.frmManufacturer.baseParams['manufacturers_id'] = manufacturersId;
+      
       this.frmManufacturer.load({
-        url: Toc.CONF.CONN_URL,
-        params: {
-          module: 'manufacturers',
-          action: 'load_manufacturer'
-        },
+        url : '<?php echo site_url('manufacturers/load_manufacturer'); ?>',
         success: function(form, action) {
           var img = action.result.data.manufacturers_image;
           
           if (img) {
-            var html = '<img src ="<?= IMGHTTPPATH; ?>manufacturers/' + img + '"  style = "margin-left: 110px; width: 80px; height: 80px" /><br/><span style = "padding-left: 110px;">/images/manufacturers/' + img + '</span>';
+            var html = '<img src ="<?php echo IMGHTTPPATH; ?>manufacturers/' + img + '"  style = "margin-left: 110px; width: 80px; height: 80px" /><br/><span style = "padding-left: 110px;">/images/manufacturers/' + img + '</span>';
             this.pnlGeneral.getComponent('manufactuerer_image_panel').update(html);
           }          
           
@@ -111,11 +109,8 @@ Ext.define('Toc.manufacturers.ManufacturersDialog', {
         labelWidth: 100,
         anchor: '97%'
       },
-      url: Toc.CONF.CONN_URL,
-      baseParams: {  
-        module: 'manufacturers',
-        action: 'save_manufacturer'
-      },
+      url : '<?php echo site_url('manufacturers/save_manufacturer'); ?>',
+      baseParams: {},
       items: tabManufacturers
     });
     
@@ -140,4 +135,4 @@ Ext.define('Toc.manufacturers.ManufacturersDialog', {
 });
 
 /* End of file manufacturers_dialog.php */
-/* Location: ./system/modules/manufacturers/views/manufacturers_dialog.php */
+/* Location: ./templates/base/web/views/manufacturers/manufacturers_dialog.php */
