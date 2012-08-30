@@ -1,6 +1,0 @@
-The TomatoCart Core Team's goal is to continue to provide regular, frequent updates for the v2.0.
-
-
-Modules      Status         Review        Developer     Date
-
-Articles     Completed      Pending       Jack.yin      2012/8/28
