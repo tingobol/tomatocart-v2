@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource ./system/modules/product_variants/views/product_variants_entries_dialog.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -21,7 +23,7 @@ Ext.define('Toc.product_variants.ProductVariantsEntriesDialog', {
     config = config || {};
     
     config.id = 'product_variants_entries-dialog-win';
-    config.title = '<?= lang("action_heading_new_group_entry");?>';
+    config.title = '<?php echo lang("action_heading_new_group_entry");?>';
     config.width = 440;
     config.modal = true;
     config.iconCls = 'icon-product_variants-win';
@@ -60,11 +62,7 @@ Ext.define('Toc.product_variants.ProductVariantsEntriesDialog', {
       this.frmEntry.form.baseParams['products_variants_values_id'] = variantsValuesId;
       
       this.frmEntry.load({
-        url: Toc.CONF.CONN_URL,
-        params: {
-          module: 'product_variants',
-          action: 'load_product_variants_entry'
-        },
+        url : '<?php echo site_url('product_variants/load_product_variants_entry'); ?>',
         success: function (form, action) {
           Toc.product_variants.ProductVariantsEntriesDialog.superclass.show.call(this);
         },
@@ -80,11 +78,8 @@ Ext.define('Toc.product_variants.ProductVariantsEntriesDialog', {
   
   buildForm: function() {
     this.frmEntry = Ext.create('Ext.form.Panel', {
-      url: Toc.CONF.CONN_URL,
-      baseParams: {  
-        module: 'product_variants',
-        action: 'save_product_variants_entry'
-      },
+      url : '<?php echo site_url('product_variants/save_product_variants_entry'); ?>',
+      baseParams: {},
       border: false,
       bodyPadding: 10,
       fieldDefaults: {
@@ -102,7 +97,7 @@ Ext.define('Toc.product_variants.ProductVariantsEntriesDialog', {
             name: 'products_variants_values_name[<?php echo $l['id']; ?>]',
             fieldLabel: '<?php echo $i != 1 ? '&nbsp;' : lang('field_group_entry_name'); ?>',
             allowBlank: false,
-            labelStyle: '<?= worldflag_url($l['country_iso']); ?>'
+            labelStyle: '<?php echo worldflag_url($l['country_iso']); ?>'
           });
           
           this.frmEntry.add(lang<?php echo $l['id']; ?>);
@@ -132,4 +127,4 @@ Ext.define('Toc.product_variants.ProductVariantsEntriesDialog', {
 });
 
 /* End of file product_variants_entries_dialog.php */
-/* Location: ./system/modules/product_variants/product_variants_entries_dialog.php */
+/* Location: ./templates/base/web/views/product_variants/product_variants_entries_dialog.php */

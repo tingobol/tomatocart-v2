@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource ./system/modules/specials/views/specials_grid.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -34,11 +36,7 @@ Ext.define('Toc.specials.SpecialsGrid', {
       pageSize: Toc.CONF.GRID_PAGE_SIZE,
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
-        extraParams: {
-          module: 'specials',
-          action: 'list_specials'
-        },
+        url : '<?php echo site_url('specials/list_specials'); ?>',
         reader: {
           type: 'json',
           root: Toc.CONF.JSON_READER_ROOT,
@@ -50,12 +48,12 @@ Ext.define('Toc.specials.SpecialsGrid', {
     
     config.selModel = Ext.create('Ext.selection.CheckboxModel');
     config.columns =[
-      {header: '<?= lang('table_heading_products'); ?>', dataIndex: 'products_name', flex: 1},
-      {header: '<?= lang('table_heading_price'); ?>', dataIndex: 'specials_new_products_price', width: 180},
+      {header: '<?php echo lang('table_heading_products'); ?>', dataIndex: 'products_name', flex: 1},
+      {header: '<?php echo lang('table_heading_price'); ?>', dataIndex: 'specials_new_products_price', width: 180},
       {
         xtype: 'actioncolumn', 
         width: 80,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           tooltip: TocLanguage.tipEdit,
           iconCls: 'icon-action icon-edit-record',
@@ -87,11 +85,7 @@ Ext.define('Toc.specials.SpecialsGrid', {
       pageSize: Toc.CONF.GRID_PAGE_SIZE,
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
-        extraParams: {
-          module: 'specials',
-          action: 'list_manufacturers'
-        },
+        url : '<?php echo site_url('specials/list_manufacturers'); ?>',
         reader: {
           type: 'json',
           root: Toc.CONF.JSON_READER_ROOT,
@@ -105,7 +99,7 @@ Ext.define('Toc.specials.SpecialsGrid', {
       store: dsManufacturers,
       valueField: 'manufacturers_id', 
       displayField: 'manufacturers_name',
-      emptyText: '<?= lang('top_manufacturers'); ?>',
+      emptyText: '<?php echo lang('top_manufacturers'); ?>',
       triggerAction: 'all',
       listeners: {
         select: this.onSearch,
@@ -122,11 +116,7 @@ Ext.define('Toc.specials.SpecialsGrid', {
       pageSize: Toc.CONF.GRID_PAGE_SIZE,
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
-        extraParams: {
-          module: 'specials',
-          action: 'list_categories'
-        },
+        url : '<?php echo site_url('specials/list_categories'); ?>',
         reader: {
           type: 'json',
           root: Toc.CONF.JSON_READER_ROOT,
@@ -141,7 +131,7 @@ Ext.define('Toc.specials.SpecialsGrid', {
           return '<div style="margin-left: {margin}px">{text}</div>';
         }
       },
-      emptyText: '<?= lang("top_category"); ?>',
+      emptyText: '<?php echo lang("top_category"); ?>',
       store: dsCategories,
       queryMode: 'remote',
       valueField: 'id',
@@ -223,10 +213,8 @@ Ext.define('Toc.specials.SpecialsGrid', {
         if (btn == 'yes') {
           Ext.Ajax.request({
             waitMsg: TocLanguage.formSubmitWaitMsg,
-            url: Toc.CONF.CONN_URL,
+            url : '<?php echo site_url('specials/delete_special'); ?>',
             params: {
-              module: 'specials',
-              action: 'delete_special',
               specials_id: specialsId
             },
             callback: function (options, success, response) {
@@ -266,10 +254,8 @@ Ext.define('Toc.specials.SpecialsGrid', {
           if (btn == 'yes') {
             Ext.Ajax.request({
               waitMsg: TocLanguage.formSubmitWaitMsg,
-              url: Toc.CONF.CONN_URL,
+              url : '<?php echo site_url('specials/delete_specials'); ?>',
               params: {
-                module: 'specials',
-                action: 'delete_specials',
                 batch: batch
               },
               callback: function(options, success, response) {
@@ -300,4 +286,4 @@ Ext.define('Toc.specials.SpecialsGrid', {
 });
 
 /* End of file specials_grid.php */
-/* Location: ./system/modules/specials/views/specials_grid.php */
+/* Location: ./templates/base/web/views/specials/specials_grid.php */

@@ -143,6 +143,8 @@ class Products_Model extends CI_Model
   
   public function get_tax_classes()
   {
+    $this->load->library('tax');
+    
     $tax_classes = array(array('id' => '0',
                                'rate' => '0',
                                'text' => lang('none')));

@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource ./system/modules/product_variants/views/product_variants_entries_grid.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -20,7 +22,7 @@ Ext.define('Toc.product_variants.ProductVariantsEntriesGrid', {
   constructor: function(config) {
     config = config || {};
     
-    config.title = '<?= lang('heading_product_variants_title'); ?>';
+    config.title = '<?php echo lang('heading_product_variants_title'); ?>';
     config.region = 'east';
     config.border = false;
     config.split = true;
@@ -34,11 +36,7 @@ Ext.define('Toc.product_variants.ProductVariantsEntriesGrid', {
       pageSize: Toc.CONF.GRID_PAGE_SIZE,
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
-        extraParams: {
-          module: 'product_variants',
-          action: 'list_product_variants_entries'
-        },
+        url : '<?php echo site_url('product_variants/list_product_variants_entries'); ?>',
         reader: {
           type: 'json',
           root: Toc.CONF.JSON_READER_ROOT,
@@ -49,11 +47,11 @@ Ext.define('Toc.product_variants.ProductVariantsEntriesGrid', {
     
     config.selModel = Ext.create('Ext.selection.CheckboxModel');
     config.columns = [
-      { header: '<?= lang('table_heading_entries'); ?>', dataIndex: 'products_variants_values_name', flex: 1},
+      { header: '<?php echo lang('table_heading_entries'); ?>', dataIndex: 'products_variants_values_name', flex: 1},
       {
         xtype:'actioncolumn', 
         width: 60,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           iconCls: 'icon-action icon-edit-record',
           tooltip: TocLanguage.tipEdit,
@@ -126,10 +124,8 @@ Ext.define('Toc.product_variants.ProductVariantsEntriesGrid', {
         if (btn == 'yes') {
           Ext.Ajax.request({
             waitMsg: TocLanguage.formSubmitWaitMsg,
-            url: Toc.CONF.CONN_URL,
+            url : '<?php echo site_url('product_variants/delete_product_variants_entry'); ?>',
             params: {
-              module: 'product_variants',
-              action: 'delete_product_variants_entry',
               products_variants_values_id: variantsValuesId,
               products_variants_groups_id: variantsGroupsId
             },
@@ -170,10 +166,8 @@ Ext.define('Toc.product_variants.ProductVariantsEntriesGrid', {
           if (btn == 'yes') {
             Ext.Ajax.request({
               waitMsg: TocLanguage.formSubmitWaitMsg,
-              url: Toc.CONF.CONN_URL,
+              url : '<?php echo site_url('product_variants/delete_product_variants_entries'); ?>',
               params: {
-                module: 'product_variants',
-                action: 'delete_product_variants_entries',
                 batch: batch, 
                 products_variants_groups_id: variantsGroupsId
               },
@@ -205,4 +199,4 @@ Ext.define('Toc.product_variants.ProductVariantsEntriesGrid', {
 });
 
 /* End of file product_variants_entries_grid.php */
-/* Location: ./system/modules/product_variants/product_variants_entries_grid.php */
+/* Location: ./templates/base/web/views/product_variants/product_variants_entries_grid.php */
