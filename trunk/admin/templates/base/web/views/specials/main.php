@@ -1,22 +1,26 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource ./system/modules/specials/views/main.php
+ * @since   Version 2.0
+ * @filesource
  */
+
+// ------------------------------------------------------------------------
 
   echo 'Ext.namespace("Toc.specials");';
   
-  require_once 'specials_dialog.php';
-  require_once 'specials_grid.php';
+  include 'specials_dialog.php';
+  include 'specials_grid.php';
 ?>
 
 Ext.override(Toc.desktop.SpecialsWindow, {
@@ -33,7 +37,7 @@ Ext.override(Toc.desktop.SpecialsWindow, {
       
       win = desktop.createWindow({
         id: 'specials-win',
-        title: '<?= lang('heading_specials_title'); ?>',
+        title: '<?php echo lang('heading_specials_title'); ?>',
         width: 800,
         height: 400,
         iconCls: 'icon-specials-win',
@@ -47,7 +51,7 @@ Ext.override(Toc.desktop.SpecialsWindow, {
   
   onCreateSpecial: function(grd) {
     var dlg = this.createSpecialsDialog();
-    dlg.setTitle('<?= lang("action_heading_new_special"); ?>');
+    dlg.setTitle('<?php echo lang("action_heading_new_special"); ?>');
     
     this.onSaveSuccess(dlg, grd);
     
@@ -104,5 +108,4 @@ Ext.override(Toc.desktop.SpecialsWindow, {
 });
 
 /* End of file main.php */
-/* Location: ./system/modules/specials/views/main.php */
-
+/* Location: ./templates/base/web/views/specials/main.php */

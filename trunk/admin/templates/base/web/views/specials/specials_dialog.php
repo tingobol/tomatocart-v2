@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource ./system/modules/specials/views/specials_dialog.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -59,10 +61,7 @@ Ext.define('Toc.specials.SpecialsDialog', {
       this.frmSpecials.form.baseParams['specials_id'] = specialsId;
       
       this.frmSpecials.load({
-        url: Toc.CONF.CONN_URL,
-        params: {
-          action: 'load_specials'
-        },
+        url : '<?php echo site_url('specials/load_specials'); ?>',
         success: function (form, action) {
           var netValue = action.result.data.specials_new_products_price;
           var rate = this.getTaxRate();
@@ -96,11 +95,7 @@ Ext.define('Toc.specials.SpecialsDialog', {
       ],
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
-        extraParams: {
-          module: 'specials',
-          action: 'list_products'
-        },
+        url : '<?php echo site_url('specials/list_products'); ?>',
         reader: {
           type: 'json',
           root: Toc.CONF.JSON_READER_ROOT,
@@ -111,7 +106,7 @@ Ext.define('Toc.specials.SpecialsDialog', {
     
     this.cboProducts = Ext.create('Ext.form.ComboBox', {
       store: this.dsProducts,
-      fieldLabel: '<?= lang("field_product"); ?>',
+      fieldLabel: '<?php echo lang("field_product"); ?>',
       name: 'products_id',
       allowBlank: false,
       queryMode: 'remote',
@@ -123,7 +118,7 @@ Ext.define('Toc.specials.SpecialsDialog', {
     });
     
     this.txtPriceNet = Ext.create('Ext.form.TextField', {
-      fieldLabel: '<?= lang("field_price_net_percentage"); ?>', 
+      fieldLabel: '<?php echo lang("field_price_net_percentage"); ?>', 
       xtype:'textfield',
       name: 'specials_new_products_price',
       value: '0'
@@ -131,7 +126,7 @@ Ext.define('Toc.specials.SpecialsDialog', {
     this.txtPriceNet.on('change', this.onPriceNetChange, this);
     
     this.txtPriceGross = Ext.create('Ext.form.TextField', {
-      fieldLabel: '<?= lang("field_price_gross"); ?>', 
+      fieldLabel: '<?php echo lang("field_price_gross"); ?>', 
       xtype:'textfield',
       name: 'products_price_gross',
       value: '0'
@@ -139,11 +134,8 @@ Ext.define('Toc.specials.SpecialsDialog', {
     this.txtPriceGross.on('change', this.onPriceGrossChange, this);
     
     this.frmSpecials = Ext.create('Ext.form.Panel', {
-      url: Toc.CONF.CONN_URL,
-      baseParams: {
-        module: 'specials',
-        action: 'save_specials'       
-      },
+      url : '<?php echo site_url('specials/save_specials'); ?>',
+      baseParams: {},
       border: false,
       frame: false,
       bodyPadding: 5,
@@ -158,20 +150,20 @@ Ext.define('Toc.specials.SpecialsDialog', {
         this.txtPriceGross, 
         {
           xtype: 'checkbox',
-          fieldLabel: '<?= lang("field_status"); ?>',
+          fieldLabel: '<?php echo lang("field_status"); ?>',
           name: 'status',
           anchor: ''
         },
         {
           xtype: 'datefield',
-          fieldLabel: '<?= lang("field_date_start"); ?>',
+          fieldLabel: '<?php echo lang("field_date_start"); ?>',
           name: 'start_date',
           format: 'Y-m-d',
           allowBlank: false
         }, 
         {
           xtype: 'datefield',
-          fieldLabel: '<?= lang("field_date_expires"); ?>',
+          fieldLabel: '<?php echo lang("field_date_expires"); ?>',
           name: 'expires_date',
           format: 'Y-m-d',
           allowBlank: false
@@ -252,4 +244,4 @@ Ext.define('Toc.specials.SpecialsDialog', {
 });
 
 /* End of file specials_dialog.php */
-/* Location: ./system/modules/specials/views/specials_dialog.php */
+/* Location: ./templates/base/web/views/specials/specials_dialog.php */

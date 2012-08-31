@@ -1,25 +1,29 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource ./system/modules/product_variants/views/main.php
+ * @since   Version 2.0
+ * @filesource
  */
+
+// ------------------------------------------------------------------------
 
   echo 'Ext.namespace("Toc.product_variants");';
   
-  require_once 'product_variants_entries_dialog.php';
-  require_once 'product_variants_entries_grid.php';
-  require_once 'product_variants_groups_dialog.php';
-  require_once 'product_variants_groups_grid.php';
-  require_once 'product_variants_main_panel.php';
+  include 'product_variants_entries_dialog.php';
+  include 'product_variants_entries_grid.php';
+  include 'product_variants_groups_dialog.php';
+  include 'product_variants_groups_grid.php';
+  include 'product_variants_main_panel.php';
 ?>
 
 Ext.override(Toc.desktop.ProductVariantsWindow, {
@@ -40,7 +44,7 @@ Ext.override(Toc.desktop.ProductVariantsWindow, {
       
       win = desktop.createWindow({
         id: 'product_variants-win',
-        title: '<?= lang("heading_product_variants_title"); ?>',
+        title: '<?php echo lang("heading_product_variants_title"); ?>',
         width: 800,
         height: 400,
         iconCls: 'icon-product_variants-win',
@@ -74,7 +78,7 @@ Ext.override(Toc.desktop.ProductVariantsWindow, {
   
   onEditVariantsGroups: function(grdGroups, record) {
     var dlg = this.createProductVariantsGroupsDialog();
-    dlg.setTitle('<?= lang("action_heading_new_variant_group"); ?>');
+    dlg.setTitle('<?php echo lang("action_heading_new_variant_group"); ?>');
     
     this.onSaveSuccess(dlg, grdGroups);
     
@@ -131,4 +135,4 @@ Ext.override(Toc.desktop.ProductVariantsWindow, {
 });
 
 /* End of file main.php */
-/* Location: ./system/modules/product_variants/views/main.php */
+/* Location: ./templates/base/web/views/product_variants/main.php */

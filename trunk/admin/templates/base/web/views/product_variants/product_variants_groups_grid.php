@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource ./system/modules/product_variants/views/product_variants_groups_grid.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -29,11 +31,7 @@ Ext.define('Toc.product_variants.ProductVariantsGroupsGrid', {
       pageSize: Toc.CONF.GRID_PAGE_SIZE,
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
-        extraParams: {
-          module: 'product_variants',
-          action: 'list_product_variants'
-        },
+        url : '<?php echo site_url('product_variants/list_product_variants'); ?>',
         reader: {
           type: 'json',
           root: Toc.CONF.JSON_READER_ROOT,
@@ -44,12 +42,12 @@ Ext.define('Toc.product_variants.ProductVariantsGroupsGrid', {
     });
     
     config.columns = [
-      { header: '<?= lang('table_heading_variant_groups'); ?>', dataIndex: 'products_variants_groups_name', flex: 1},
-      { header: '<?= lang('table_heading_total_entries'); ?>', align: 'center', dataIndex: 'total_entries'},
+      { header: '<?php echo lang('table_heading_variant_groups'); ?>', dataIndex: 'products_variants_groups_name', flex: 1},
+      { header: '<?php echo lang('table_heading_total_entries'); ?>', align: 'center', dataIndex: 'total_entries'},
       {
         xtype:'actioncolumn', 
         width: 60,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           iconCls: 'icon-action icon-edit-record',
           tooltip: TocLanguage.tipEdit,
@@ -99,7 +97,7 @@ Ext.define('Toc.product_variants.ProductVariantsGroupsGrid', {
       itemclick: this.onClick
     };
     
-    this.addEvents({'create': true, 'selectchange': true});
+    this.addEvents({'create': true, 'selectchange': true, 'delete': true});
     
     this.callParent([config]);
   },
@@ -114,10 +112,8 @@ Ext.define('Toc.product_variants.ProductVariantsGroupsGrid', {
         if (btn == 'yes') {
           Ext.Ajax.request({
             waitMsg: TocLanguage.formSubmitWaitMsg,
-            url: Toc.CONF.CONN_URL,
+            url : '<?php echo site_url('product_variants/delete_product_variant'); ?>',
             params: {
-              module: 'product_variants',
-              action: 'delete_product_variant',
               products_variants_groups_id: groupsId
             },
             callback: function (options, success, response) {
@@ -151,4 +147,4 @@ Ext.define('Toc.product_variants.ProductVariantsGroupsGrid', {
 });
 
 /* End of file product_variants_groups_grid.php */
-/* Location: ./system/modules/product_variants/product_variants_groups_grid.php */
+/* Location: ./templates/base/web/views/product_variants/product_variants_groups_grid.php */

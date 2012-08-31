@@ -1,321 +1,483 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource ./system/modules/product_variants/models/product_variants_model.php
+ * @since   Version 2.0
+ * @filesource
  */
 
+// ------------------------------------------------------------------------
+
+/**
+ * Product Variants Model
+ *
+ * @package   TomatoCart
+ * @subpackage  tomatocart
+ * @category  template-module-model
+ * @author    TomatoCart Dev Team
+ * @link    http://tomatocart.com/wiki/
+ */
 class Product_Variants_Model extends CI_Model
 {
-  public function get_variants_groups($start, $limit)
-  {
-    $Qgroup = $this->db
-    ->select('products_variants_groups_id, products_variants_groups_name')
-    ->from('products_variants_groups')
-    ->where('language_id', lang_id())
-    ->order_by('products_variants_groups_name')
-    ->limit($limit, $start)
-    ->get();
-    
-    return $Qgroup->result_array();
-  }
-  
-  public function get_total_entries($groups_id)
-  {
-    return $this->db->where('products_variants_groups_id', $groups_id)->from('products_variants_values_to_products_variants_groups')->count_all_results();
-  }
-  
-  public function get_variants_entries($groups_id)
-  {
-    $Qentries = $this->db
-    ->select('pvv.products_variants_values_id, pvv.products_variants_values_name')
-    ->from('products_variants_values pvv')
-    ->join('products_variants_values_to_products_variants_groups pvv2pvg', 'pvv2pvg.products_variants_values_id = pvv.products_variants_values_id')
-    ->where(array('pvv2pvg.products_variants_groups_id' => $groups_id, 'pvv.language_id' => lang_id()))
-    ->order_by('pvv.products_variants_values_name')
-    ->get();
-    
-    return $Qentries->result_array();
-  }
-  
-  public function get_entry_data($id, $language_id = NULL)
-  {
-    $language_id = empty($language_id) ? lang_id() : $language_id;
-    
-    $Qentry = $this->db
-    ->select('*')
-    ->from('products_variants_values')
-    ->where(array('products_variants_values_id' => $id, 'language_id' => $language_id))
-    ->get();
-    
-    $data = $Qentry->row_array();
-    $Qentry->free_result();
-    
-    $total_products = $this->db
-    ->where('products_variants_values_id', $data['products_variants_values_id'])
-    ->from('products_variants_entries')
-    ->count_all_results();
-    
-    $data['total_products'] = $total_products;
-    
-    return $data;
-  }
-  
-  public function delete_entry($id, $group_id)
-  {
-    $error = FALSE;
-    
-    $this->db->trans_begin();
-    
-    $this->db->delete('products_variants_values', array('products_variants_values_id' => $id));
-    
-    if ($this->db->trans_status() === TRUE)
+    /**
+     * Constructor
+     *
+     * @access public
+     * @return void
+     */
+    public function __construct()
     {
-      $this->db->delete('products_variants_values_to_products_variants_groups', 
-                        array('products_variants_groups_id' => $group_id, 
-                              'products_variants_values_id' => $id));
+        parent::__construct();
     }
     
-    if ($this->db->trans_status() === TRUE)
+// ------------------------------------------------------------------------
+   
+    /**
+     * Get the variants groups
+     *
+     * @access public
+     * @param $start
+     * @param $limit
+     * @return mixed
+     */
+    public function get_variants_groups($start, $limit)
     {
-      $this->db->trans_commit();
-      
-      return TRUE;
-    }
-    
-    $this->db->trans_rollback();
-    
-    return FALSE;
-  }
-  
-  public function save_entry($id, $data)
-  {
-    $error = FALSE;
-    
-    if (is_numeric($id))
-    {
-      $entry_id = $id;
-    }
-    else
-    {
-      $Qcheck = $this->db
-      ->select_max('products_variants_values_id')
-      ->from('products_variants_values')
-      ->get();
-      
-      $max_values = $Qcheck->row_array();
-      $entry_id = $max_values['products_variants_values_id'] + 1;
-    }
-    
-    $this->db->trans_begin();
-    
-    foreach(lang_get_all() as $l)
-    {
-      if (is_numeric($id))
-      {
-        $this->db->update('products_variants_values', 
-                          array('products_variants_values_name' => $data['name'][$l['id']]), 
-                          array('products_variants_values_id' => $entry_id, 'language_id' => $l['id']));
-      }
-      else
-      {
-        $this->db->insert('products_variants_values', 
-                          array('products_variants_values_id' => $entry_id, 
-                                'language_id' => $l['id'], 
-                                'products_variants_values_name' => $data['name'][$l['id']]));
-      }
-      
-      if ($this->db->trans_status() === FALSE)
-      {
-        $error = TRUE;
-        break;
-      }
-    }
-    
-    if ($error === FALSE)
-    {
-      if (!is_numeric($id))
-      {
-        $this->db->insert('products_variants_values_to_products_variants_groups', 
-                          array('products_variants_groups_id' => $data['products_variants_groups_id'], 
-                                'products_variants_values_id' => $entry_id));
-                          
-        if ($this->db->trans_status() === FALSE)
-        {
-          $error = TRUE;
-        }
-      }
-    }
-    
-    if ($error === FALSE)
-    {
-      $this->db->trans_commit();
-      
-      return TRUE;
-    }
-    
-    $this->db->trans_rollback();
-    
-    return FALSE;
-  }
-  
-  public function get_entries_data($id)
-  {
-    $Qentry = $this->db
-    ->select('*')
-    ->from('products_variants_values')
-    ->where('products_variants_values_id', $id)
-    ->get();
-    
-    return $Qentry->result_array();
-  }
-  
-  public function get_groups_data($id)
-  {
-    $Qgroup = $this->db
-    ->select('*')
-    ->from('products_variants_groups')
-    ->where('products_variants_groups_id', $id)
-    ->get();
-    
-    return $Qgroup->result_array();
-  }
-  
-  public function save($id = NULL, $data)
-  {
-    $error = FALSE;
-    
-    if (is_numeric($id))
-    {
-      $group_id = $id;
-    }
-    else
-    {
-      $Qcheck = $this->db
-      ->select_max('products_variants_groups_id')
-      ->from('products_variants_values_to_products_variants_groups')
-      ->get();
-      
-      $max_groups = $Qcheck->row_array();
-      $Qcheck->free_result();
-      
-      $group_id = $max_groups['products_variants_groups_id'] + 1;
-    }
-    
-    $this->db->trans_begin();
-    
-    foreach(lang_get_all() as $l)
-    {
-      if (is_numeric($id))
-      {
-        $this->db->update('products_variants_groups', 
-                          array('products_variants_groups_name' => $data['name'][$l['id']]), 
-                          array('products_variants_groups_id' => $group_id, 'language_id' => $l['id']));
-      }
-      else
-      {
-        $this->db->insert('products_variants_groups', 
-                          array('products_variants_groups_id' => $group_id, 
-                                'language_id' => $l['id'], 
-                                'products_variants_groups_name' => $data['name'][$l['id']]));
-      }
-      
-      if ($this->db->trans_status() === FALSE)
-      {
-        $error = TRUE;
-        break;
-      }
-    }
-    
-    if ($error === FALSE)
-    {
-      $this->db->trans_commit();
-      
-      return TRUE;
-    }
-    
-    $this->db->trans_rollback();
-    
-    return FALSE;
-  }
-  
-  public function delete($id)
-  {
-    $error = FALSE;
-    
-    $this->db->trans_begin();
-    
-    $Qentries = $this->db
-    ->select('products_variants_values_id')
-    ->from('products_variants_values_to_products_variants_groups')
-    ->where('products_variants_groups_id', $id)
-    ->get();
-    
-    if ($Qentries->num_rows() > 0)
-    {
-      foreach($Qentries->result_array() as $entry)
-      {
-        $this->db->delete('products_variants_values', array('products_variants_values_id' => $entry['products_variants_values_id']));
+        $result = $this->db
+        ->select('products_variants_groups_id, products_variants_groups_name')
+        ->from('products_variants_groups')
+        ->where('language_id', lang_id())
+        ->order_by('products_variants_groups_name')
+        ->limit($limit, $start)
+        ->get();
         
-        if ($this->db->trans_status() === FALSE)
+        if ($result->num_rows() > 0)
         {
-          $error = TRUE;
-          break;
+            return $result->result_array();
         }
-      }
+        
+        return NULL;
     }
     
-    if ($error === FALSE)
+// ------------------------------------------------------------------------
+    
+    /**
+     * Get the total number of the variants values in the variants group
+     *
+     * @access public
+     * @param $groups_id
+     * @return int
+     */
+    public function get_total_entries($groups_id)
     {
-      $this->db->delete('products_variants_values_to_products_variants_groups', array('products_variants_groups_id' => $id));
-      
-      if ($this->db->trans_status() === FALSE)
-      {
-        $error = TRUE;
-      }
+        return $this->db->where('products_variants_groups_id', $groups_id)->from('products_variants_values_to_products_variants_groups')->count_all_results();
     }
     
-    if ($error === FALSE)
+// ------------------------------------------------------------------------
+    
+    /**
+     * Get the variants values in the variants group
+     *
+     * @access public
+     * @param $groups_id
+     * @return mixed
+     */
+    public function get_variants_entries($groups_id)
     {
-      $this->db->delete('products_variants_groups', array('products_variants_groups_id' => $id));
-      
-      if ($this->db->trans_status() === FALSE)
-      {
-        $error = TRUE;
-      }
+        $result = $this->db
+        ->select('pvv.products_variants_values_id, pvv.products_variants_values_name')
+        ->from('products_variants_values pvv')
+        ->join('products_variants_values_to_products_variants_groups pvv2pvg', 'pvv2pvg.products_variants_values_id = pvv.products_variants_values_id')
+        ->where(array('pvv2pvg.products_variants_groups_id' => $groups_id, 'pvv.language_id' => lang_id()))
+        ->order_by('pvv.products_variants_values_name')
+        ->get();
+        
+        if ($result->num_rows() > 0)
+        {
+            return $result->result_array();
+        }
+        
+        return NULL;
     }
     
-    if ($error === FALSE)
+// ------------------------------------------------------------------------
+    
+    /**
+     * Get the data of the product variants value with id
+     *
+     * @access public
+     * @param $id
+     * @param $language_id
+     * @return mixed
+     */
+    public function get_entry_data($id, $language_id = NULL)
     {
-      $this->db->trans_commit();
-      
-      return TRUE;
+        $language_id = empty($language_id) ? lang_id() : $language_id;
+        
+        $result = $this->db
+        ->select('*')
+        ->from('products_variants_values')
+        ->where(array('products_variants_values_id' => $id, 'language_id' => $language_id))
+        ->get();
+        
+        if ($result->num_rows() > 0)
+        {
+            $data = $result->row_array();
+            $result->free_result();
+            
+            $data['total_products'] = $this->db
+            ->where('products_variants_values_id', $data['products_variants_values_id'])
+            ->from('products_variants_entries')
+            ->count_all_results();
+            
+            return $data;
+        }
+        
+        return NULL;
     }
     
-    $this->db->trans_rollback();
+// ------------------------------------------------------------------------
     
-    return FALSE;
-  }
+    /**
+     * Delete the product variants value from the variants group
+     *
+     * @access public
+     * @param $id
+     * @param $group_id
+     * @return boolean
+     */
+    public function delete_entry($id, $group_id)
+    {
+        $error = FALSE;
+        
+        $this->db->trans_begin();
+        
+        $this->db->delete('products_variants_values', array('products_variants_values_id' => $id));
+        
+        if ($this->db->trans_status() === TRUE)
+        {
+            $this->db->delete('products_variants_values_to_products_variants_groups', 
+                              array('products_variants_groups_id' => $group_id, 
+                                    'products_variants_values_id' => $id));
+        }
+        
+        if ($this->db->trans_status() === TRUE)
+        {
+            $this->db->trans_commit();
+            
+            return TRUE;
+        }
+        
+        $this->db->trans_rollback();
+        
+        return FALSE;
+    }
+    
+// ------------------------------------------------------------------------
+    
+    /**
+     * Save the product variants value to a variants group
+     *
+     * @access public
+     * @param $id
+     * @param $data
+     * @return bolean
+     */
+    public function save_entry($id, $data)
+    {
+        $error = FALSE;
+        
+        if (is_numeric($id))
+        {
+            $entry_id = $id;
+        }
+        else
+        {
+            $result = $this->db
+            ->select_max('products_variants_values_id')
+            ->from('products_variants_values')
+            ->get();
+            
+            $max_values = $result->row_array();
+            $entry_id = $max_values['products_variants_values_id'] + 1;
+            
+            $result->free_result();
+        }
+        
+        $this->db->trans_begin();
+        
+        foreach(lang_get_all() as $l)
+        {
+            if (is_numeric($id))
+            {
+                $this->db->update('products_variants_values', 
+                                  array('products_variants_values_name' => $data['name'][$l['id']]), 
+                                  array('products_variants_values_id' => $entry_id, 'language_id' => $l['id']));
+            }
+            else
+            {
+                $this->db->insert('products_variants_values', 
+                                  array('products_variants_values_id' => $entry_id, 
+                                        'language_id' => $l['id'], 
+                                        'products_variants_values_name' => $data['name'][$l['id']]));
+            }
+            
+            if ($this->db->trans_status() === FALSE)
+            {
+                $error = TRUE;
+                break;
+            }
+        }
+        
+        if ($error === FALSE)
+        {
+            if (!is_numeric($id))
+            {
+                $this->db->insert('products_variants_values_to_products_variants_groups', 
+                                  array('products_variants_groups_id' => $data['products_variants_groups_id'], 
+                                        'products_variants_values_id' => $entry_id));
+                                  
+                if ($this->db->trans_status() === FALSE)
+                {
+                    $error = TRUE;
+                }
+            }
+        }
+        
+        if ($error === FALSE)
+        {
+            $this->db->trans_commit();
+            
+            return TRUE;
+        }
+        
+        $this->db->trans_rollback();
+        
+        return FALSE;
+    }
+    
+// ------------------------------------------------------------------------
+    
+    /**
+     * Get the data of the product variants value with id
+     *
+     * @access public
+     * @param $id
+     * @return mixed
+     */
+    public function get_entries_data($id)
+    {
+        $result = $this->db
+        ->select('*')
+        ->from('products_variants_values')
+        ->where('products_variants_values_id', $id)
+        ->get();
+        
+        if ($result->num_rows() > 0)
+        {
+            return $result->result_array();
+        }
+        
+        return NULL;
+    }
   
-  public function get_group_products($groups_id)
-  {
-    return $this->db->where('products_variants_groups_id', $groups_id)->from('products_variants_entries')->count_all_results();
-  }
-  
-  
-  public function get_total()
-  {
-    return $this->db->where('language_id', lang_id())->from('products_variants_groups')->count_all_results();
-  }
+// ------------------------------------------------------------------------
+    
+    /**
+     * Get the data of the group with id
+     *
+     * @access public
+     * @param $id
+     * @return mixed
+     */
+    public function get_groups_data($id)
+    {
+        $result = $this->db
+        ->select('*')
+        ->from('products_variants_groups')
+        ->where('products_variants_groups_id', $id)
+        ->get();
+        
+        if ($result->num_rows() > 0)
+        {
+            return $result->result_array();
+        }
+        
+        return NULL;
+    }
+    
+// ------------------------------------------------------------------------
+    
+    /**
+     * save the variants group
+     *
+     * @access public
+     * @param $id
+     * @param $data
+     * @return boolean
+     */
+    public function save($id = NULL, $data)
+    {
+        $error = FALSE;
+        
+        if (is_numeric($id))
+        {
+            $group_id = $id;
+        }
+        else
+        {
+            $result = $this->db
+            ->select_max('products_variants_groups_id')
+            ->from('products_variants_values_to_products_variants_groups')
+            ->get();
+            
+            $max_groups = $result->row_array();
+            $result->free_result();
+            
+            $group_id = $max_groups['products_variants_groups_id'] + 1;
+        }
+        
+        $this->db->trans_begin();
+        
+        foreach(lang_get_all() as $l)
+        {
+            if (is_numeric($id))
+            {
+                $this->db->update('products_variants_groups', 
+                                  array('products_variants_groups_name' => $data['name'][$l['id']]), 
+                                  array('products_variants_groups_id' => $group_id, 'language_id' => $l['id']));
+            }
+            else
+            {
+                $this->db->insert('products_variants_groups', 
+                                  array('products_variants_groups_id' => $group_id, 
+                                        'language_id' => $l['id'], 
+                                        'products_variants_groups_name' => $data['name'][$l['id']]));
+            }
+            
+            if ($this->db->trans_status() === FALSE)
+            {
+                $error = TRUE;
+                break;
+            }
+        }
+        
+        if ($error === FALSE)
+        {
+            $this->db->trans_commit();
+            
+            return TRUE;
+        }
+        
+        $this->db->trans_rollback();
+        
+        return FALSE;
+    }
+    
+// ------------------------------------------------------------------------
+    
+    /**
+     * delete the variants group with id
+     *
+     * @access public
+     * @param $id
+     * @return boolean
+     */
+    public function delete($id)
+    {
+        $error = FALSE;
+        
+        $this->db->trans_begin();
+        
+        $result = $this->db
+        ->select('products_variants_values_id')
+        ->from('products_variants_values_to_products_variants_groups')
+        ->where('products_variants_groups_id', $id)
+        ->get();
+        
+        if ($result->num_rows() > 0)
+        {
+            foreach($result->result_array() as $entry)
+            {
+                $this->db->delete('products_variants_values', array('products_variants_values_id' => $entry['products_variants_values_id']));
+                
+                if ($this->db->trans_status() === FALSE)
+                {
+                    $error = TRUE;
+                    break;
+                }
+            }
+            
+            $result->free_result();
+        }
+        
+        if ($error === FALSE)
+        {
+            $this->db->delete('products_variants_values_to_products_variants_groups', array('products_variants_groups_id' => $id));
+            
+            if ($this->db->trans_status() === FALSE)
+            {
+                $error = TRUE;
+            }
+        }
+        
+        if ($error === FALSE)
+        {
+            $this->db->delete('products_variants_groups', array('products_variants_groups_id' => $id));
+            
+            if ($this->db->trans_status() === FALSE)
+            {
+                $error = TRUE;
+            }
+        }
+        
+        if ($error === FALSE)
+        {
+            $this->db->trans_commit();
+            
+            return TRUE;
+        }
+        
+        $this->db->trans_rollback();
+        
+        return FALSE;
+    }
+    
+// ------------------------------------------------------------------------
+    
+    /**
+     * Get the total number of group products
+     *
+     * @access public
+     * @param $groups_id
+     * @return int
+     */
+    public function get_group_products($groups_id)
+    {
+        return $this->db->where('products_variants_groups_id', $groups_id)->from('products_variants_entries')->count_all_results();
+    }
+    
+// ------------------------------------------------------------------------
+    
+    /**
+     * Get the total number of variants groups
+     *
+     * @access public
+     * @return int
+     */
+    public function get_total()
+    {
+        return $this->db->where('language_id', lang_id())->from('products_variants_groups')->count_all_results();
+    }
 }
 
 /* End of file product_variants_model.php */
-/* Location: ./system/modules/product_variants/models/product_variants_model.php */
+/* Location: ./system/models/product_variants_model.php */
