@@ -38,96 +38,101 @@ class Search_Model extends CI_Model
     {
         parent::__construct();
     }
-    
-    public function get_result($params = array())
+
+    /**
+     * Get search result
+     * 
+     * @param $filters
+     */
+    public function get_result($filters = array())
     {
         $sql = 'select SQL_CALC_FOUND_ROWS distinct p.*, pd.*, m.*, i.image, if(s.status, s.specials_new_products_price, null) as specials_new_products_price, if(s.status, s.specials_new_products_price, p.products_price) as final_price';
-        
-        $has_price_set = (isset($params['price_from']) || isset($params['price_to']));
-        $price_with_tax = isset($params['with_tax']) && ($params['with_tax'] == '1');
-        
+
+        $has_price_set = (isset($filters['price_from']) || isset($filters['price_to']));
+        $price_with_tax = isset($filters['with_tax']) && ($filters['with_tax'] == '1');
+
         if ($has_price_set && $price_with_tax)
         {
             $sql .= ', sum(tr.tax_rate) as tax_rate';
         }
-        
+
         $sql .= ' from ' . $this->db->protect_identifiers('products', TRUE) . ' p left join ' . $this->db->protect_identifiers('manufacturers', TRUE) . ' m using(manufacturers_id) left join ' . $this->db->protect_identifiers('specials', TRUE) . ' s on (p.products_id = s.products_id) left join ' . $this->db->protect_identifiers('products_images', TRUE) . ' i on (p.products_id = i.products_id and i.default_flag = 1)';
-        
+
         if ($has_price_set && $price_with_tax)
         {
-            $sql .= ' left join ' . $this->db->protect_identifiers('tax_rates', TRUE) . ' tr on p.products_tax_class_id = tr.tax_class_id left join ' . $this->db->protect_identifiers('zones_to_geo_zones', TRUE) . ' gz on tr.tax_zone_id = gz.geo_zone_id and (gz.zone_country_id is null or gz.zone_country_id = 0 or gz.zone_country_id = ' . $params['country_id'] . ') and (gz.zone_id is null or gz.zone_id = 0 or gz.zone_id = ' . $params['zone_id'] . ')';
+            $sql .= ' left join ' . $this->db->protect_identifiers('tax_rates', TRUE) . ' tr on p.products_tax_class_id = tr.tax_class_id left join ' . $this->db->protect_identifiers('zones_to_geo_zones', TRUE) . ' gz on tr.tax_zone_id = gz.geo_zone_id and (gz.zone_country_id is null or gz.zone_country_id = 0 or gz.zone_country_id = ' . $filters['country_id'] . ') and (gz.zone_id is null or gz.zone_id = 0 or gz.zone_id = ' . $filters['zone_id'] . ')';
         }
-        
+
         $sql .= ', ' . $this->db->protect_identifiers('products_description', TRUE) . ' pd, ' . $this->db->protect_identifiers('categories', TRUE) . ' c, ' . $this->db->protect_identifiers('products_to_categories', TRUE) . 'p2c';
-        $sql .= ' where p.products_status = 1 and p.products_id = pd.products_id and pd.language_id = ' . $params['language_id'] . ' and p.products_id = p2c.products_id and p2c.categories_id = c.categories_id';
-        
+        $sql .= ' where p.products_status = 1 and p.products_id = pd.products_id and pd.language_id = ' . lang_id() . ' and p.products_id = p2c.products_id and p2c.categories_id = c.categories_id';
+
         //has the category
-        if (isset($params['subcategories']) && !empty($params['subcategories']))
+        if (isset($filters['subcategories']) && !empty($filters['subcategories']))
         {
-            $sql .= ' and p2c.products_id = p.products_id and p2c.products_id = pd.products_id and p2c.categories_id in (' . implode(',', $params['subcategories']) . ')';
+            $sql .= ' and p2c.products_id = p.products_id and p2c.products_id = pd.products_id and p2c.categories_id in (' . implode(',', $filters['subcategories']) . ')';
         }
-        else if (isset($params['category']) && !empty($params['category']))
+        else if (isset($filters['category']) && !empty($filters['category']))
         {
-            $sql .= ' and p2c.products_id = p.products_id and p2c.products_id = pd.products_id and pd.language_id = ' . $params['language_id'] . ' and p2c.categories_id = ' . $params['category'];
+            $sql .= ' and p2c.products_id = p.products_id and p2c.products_id = pd.products_id and pd.language_id = ' . lang_id() . ' and p2c.categories_id = ' . $filters['category'];
         }
-        
+
         //has manufacturer
-        if (isset($params['manufacturer']) && !empty($params['manufacturer']))
+        if (isset($filters['manufacturer']) && !empty($filters['manufacturer']))
         {
-            $sql .= ' and m.manufacturers_id = ' . $params['manufacturer'];
+            $sql .= ' and m.manufacturers_id = ' . $filters['manufacturer'];
         }
-        
+
         //has keywords
-        if (isset($params['keywords']) && !empty($params['keywords']))
+        if (isset($filters['keywords']) && !empty($filters['keywords']))
         {
-            $sql .= ' and (pd.products_name like "%' . $this->db->escape_like_str($params['keywords']) . '%" or pd.products_description like "%' . $this->db->escape_like_str($params['keywords']) . '%")';
+            $sql .= ' and (pd.products_name like "%' . $this->db->escape_like_str($filters['keywords']) . '%" or pd.products_description like "%' . $this->db->escape_like_str($filters['keywords']) . '%")';
         }
-        
+
         //has price from
-        if (isset($params['price_from']) && !empty($params['price_from']))
+        if (isset($filters['price_from']) && !empty($filters['price_from']))
         {
-            $params['price_from'] = $params['price_from'] / $params['currency'];
+            $filters['price_from'] = $filters['price_from'];
         }
-        
+
         //has price to
-        if (isset($params['price_to']) && !empty($params['price_to']))
+        if (isset($filters['price_to']) && !empty($filters['price_to']))
         {
-            $params['price_to'] = $params['price_to'] / $params['currency'];
+            $filters['price_to'] = $filters['price_to'];
         }
-        
+
         //display price with tax
         if ($price_with_tax)
         {
-            if ($params['price_from'] > 0)
+            if (isset($filters['price_from']) && ($filters['price_from'] > 0))
             {
-                $sql .= ' and (if(s.status, s.specials_new_products_price, p.products_price) * if(gz.geo_zone_id is null, 1, 1 + (tr.tax_rate / 100) ) >= ' . $params['price_from'] . ')';
+                $sql .= ' and (if(s.status, s.specials_new_products_price, p.products_price) * if(gz.geo_zone_id is null, 1, 1 + (tr.tax_rate / 100) ) >= ' . $filters['price_from'] . ')';
             }
-            
-            if ($params['price_to'] > 0)
+
+            if (isset($filters['price_to']) && ($filters['price_to'] > 0))
             {
-                $sql .= ' and (if(s.status, s.specials_new_products_price, p.products_price) * if(gz.geo_zone_id is null, 1, 1 + (tr.tax_rate / 100) ) <= ' . $params['price_to'] . ')';
+                $sql .= ' and (if(s.status, s.specials_new_products_price, p.products_price) * if(gz.geo_zone_id is null, 1, 1 + (tr.tax_rate / 100) ) <= ' . $filters['price_to'] . ')';
             }
         }
         else
         {
-            if ($params['price_from'] > 0)
+            if (isset($filters['price_from']) && ($filters['price_from'] > 0))
             {
-                $sql .= ' and (if(s.status, s.specials_new_products_price, p.products_price) >= ' . $params['price_from'] . ')';
+                $sql .= ' and (if(s.status, s.specials_new_products_price, p.products_price) >= ' . $filters['price_from'] . ')';
             }
-            
-            if ($params['price_to'] > 0)
+
+            if (isset($filters['price_to']) && ($filters['price_to'] > 0))
             {
-                $sql .= ' and (if(s.status, s.specials_new_products_price, p.products_price) <= ' . $params['price_to'] . ')';
+                $sql .= ' and (if(s.status, s.specials_new_products_price, p.products_price) <= ' . $filters['price_to'] . ')';
             }
         }
-        
+
         if ($has_price_set && $price_with_tax)
         {
             $sql .= ' group by p.products_id, tr.tax_priority';
         }
-        
+
         $result = $this->db->query($sql);
-        
+
         return $result->result_array();
     }
 }

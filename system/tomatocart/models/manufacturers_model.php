@@ -48,12 +48,17 @@ class Manufacturers_Model extends CI_Model
     public function get_manufacturers()
     {
         $result = $this->db
-        ->select('manufacturers_id, manufacturers_name, manufacturers_image')
-        ->from('manufacturers')
-        ->order_by('manufacturers_name')
-        ->get();
+            ->select('manufacturers_id, manufacturers_name, manufacturers_image')
+            ->from('manufacturers')
+            ->order_by('manufacturers_name')
+            ->get();
         
-        return $result->result_array();
+        if ($result->num_rows() > 0) 
+        {
+            return $result->result_array();
+        }
+        
+        return NULL;
     }
 }
 

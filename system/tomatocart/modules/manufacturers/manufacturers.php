@@ -1,14 +1,86 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+/**
+ * TomatoCart Open Source Shopping Cart Solution
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
+ *
+ * @package      TomatoCart
+ * @author       TomatoCart Dev Team
+ * @copyright    Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license      http://www.gnu.org/licenses/gpl.html
+ * @link         http://tomatocart.com
+ * @since        Version 2.0
+ * @filesource
+ */
 
-class Manufacturers extends TOC_Module {
-    /**module code*/
+// ------------------------------------------------------------------------
+
+/**
+ * Manufacturers Categories Controller
+ *
+ * @package     TomatoCart
+ * @subpackage  tomatocart
+ * @category    template-module-controller
+ * @author      TomatoCart Dev Team
+ * @link        http://tomatocart.com/wiki/
+ */
+class Manufacturers extends TOC_Module 
+{
+    /**
+     * Template Module Code
+     *
+     * @access private
+     * @var string
+     */
     var $code = 'manufacturers';
-    
+
+    /**
+     * Template Module Author Name
+     *
+     * @access private
+     * @var string
+     */
     var $author_name = 'TomatoCart';
-    
+
+    /**
+     * Template Module Author Url
+     *
+     * @access private
+     * @var string
+     */
     var $author_url = 'http://www.tomatocart.com';
-    
+
+    /**
+     * Template Module Version
+     *
+     * @access private
+     * @var string
+     */
     var $version = '1.0';
+
+    /**
+     * Template Module Parameter
+     *
+     * @access private
+     * @var string
+     */
+    var $params = array(
+        array('name' => 'BOX_MANUFACTURERS_LIST_TYPE',
+              'title' => 'Manufacturers List Type', 
+              'type' => 'combobox',
+              'mode' => 'local',
+              'value' => 'Image List',
+              'description' => 'The type of the manufacturers list(ComboBox, Image List).',
+              'values' => array(
+                  array('id' => 'ComboBox', 'text' => 'ComboBox'),
+                  array('id' => 'Image List', 'text' => 'Image List'))),
+         array('name' => 'BOX_MANUFACTURERS_LIST_SIZE', 
+              'title' => 'Manufacturers List Size', 
+              'type' => 'numberfield',
+    		  'value' => '1',
+              'description' => 'The size of the manufacturers pull down menu listing.'));
   
     /**
      * Module Constructor
@@ -42,16 +114,18 @@ class Manufacturers extends TOC_Module {
         //setup view data
         $manufacturers = $this->ci->manufacturers_model->get_manufacturers();
         
-        $data['manufacturers'] = array();
-        if (!empty($manufacturers))
+        if ($manufacturers != NULL) 
         {
-            foreach($manufacturers as $manufacturer)
-            {
-                $data['manufacturers'][] = array('image_url' => image_url('manufacturers/' .  $manufacturer['manufacturers_image']), 'link_href' => site_url('search/manufacturers/' . $manufacturer['manufacturers_id']));
-            }
+            $data = array(
+            	'list_type' => $this->config['BOX_MANUFACTURERS_LIST_TYPE'], 
+            	'list_size' => $this->config['BOX_MANUFACTURERS_LIST_SIZE'],
+                'manufacturers' => $manufacturers
+            );
+            
+            //load view
+            return $this->load_view('index.php', $data);
         }
         
-        //load view
-        return $this->load_view('index.php', $data);
+        return NULL;
     }
 }

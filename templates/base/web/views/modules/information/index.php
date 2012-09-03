@@ -17,19 +17,17 @@
 ?>
 
 <div class="box">
-  <h4 class="title"><?php echo $title; ?></h4>
+  <h4 class="title"><?php echo lang('box_information_heading'); ?></h4>
   
   <div class="contents">
     <ul>
       <?php 
-        foreach ($informations as $info):
+        foreach ($information as $info):
       ?>
-        <li><a href="<?php echo $info['link_href']; ?>"><?php echo $info['link_title']; ?></a></li>
+        <li><a href="<?php echo $info['link']; ?>"><?php echo $info['title']; ?></a></li>
       <?php 
         endforeach;
       ?>
-    	<li><a href="<?php echo $contact_link; ?>"><?php echo $contact_link_title; ?></a></li>
-    	<li><a href="<?php echo $sitemap_link; ?>"><?php echo $sitemap_link_title; ?></a></li>
     </ul>
   </div>
 </div>

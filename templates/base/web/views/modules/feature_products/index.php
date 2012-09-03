@@ -17,7 +17,7 @@
 ?>
 
 <div class="box">
-    <h4 class="title"><?php echo $title; ?></h4>
+    <h4 class="title"><?php echo lang('feature_products_title'); ?></h4>
     
     <div class="contents">
     <?php 
@@ -25,12 +25,13 @@
     ?>
         <div class="product col3">
             <div>
-                <a href="<?php echo $product['product_link']; ?>">
-					<img title="<?php echo $product['products_name']; ?>" alt="<?php echo $product['products_name']; ?>" src="<?php echo $product['products_image']; ?>">
+                <a href="<?php echo site_url('product/' . $product['products_id']); ?>">
+					<img title="<?php echo $product['products_name']; ?>" alt="<?php echo $product['products_name']; ?>" src="<?php echo product_image_url($product['products_image']); ?>">
                 </a>
             </div>
-            <div><a href="<?php echo $product['product_link']; ?>"><?php echo $product['products_name']; ?></a></div>
-            <div><a href="<?php echo $product['product_link']; ?>"><?php echo $product['products_price']; ?></a></div>
+            <div><a href="<?php echo site_url('product/' . $product['products_id']); ?>"><?php echo $product['products_name']; ?></a></div>
+            <div><a href="<?php echo site_url('product/' . $product['products_id']); ?>"><?php echo currencies_format($product['products_price']); ?></a></div>
+            <div><a href="<?php echo site_url('cart_add/' . $product['products_id']); ?>" class="button small"><span><?php echo lang('button_add_to_cart'); ?></span></a></div>
         </div>
     <?php 
       endforeach;

@@ -46,10 +46,14 @@ class TOC_Controller extends CI_Controller
         $this->lang->db_load('general');
         $this->lang->db_load('modules-boxes');
         $this->lang->db_load('modules-content');
-
+        
         //load cache
+        $this->load->driver('cache', array('adapter' => 'file'));
+
+        //load category tree
         $this->load->library('category_tree');
 
+        //load settings
         $this->settings = $this->settings_model->get_settings();
 
         //load language package
@@ -82,6 +86,21 @@ class TOC_Controller extends CI_Controller
         $this->template->set('is_logged_on', $this->customer->is_logged_on());
         $this->template->set('items_num', $this->shopping_cart->number_of_items());
 
+        //languages
+        $langs = array();
+
+        $languages = $this->lang->get_languages();
+        foreach($languages as $language)
+        {
+            $code = strtolower(substr($language['code'], 3));
+
+            $langs[] = array(
+            	'name' => $language['name'], 
+            	'url' => current_url() . '?language=' . $language['code'], 
+            	'image' => image_url('worldflags/' . $code . '.png'));
+        }
+        $this->template->set('languages', $langs);
+        
         //set layout
         $this->template->set_layout('index.php');
     }

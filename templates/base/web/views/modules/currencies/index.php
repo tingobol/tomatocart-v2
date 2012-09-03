@@ -17,25 +17,11 @@
 ?>
 
 <div class="box">
-    <h4 class="title"><?php echo $title; ?></h4>
+    <h4 class="title"><?php echo lang('box_currencies_heading'); ?></h4>
     
     <div class="contents">
-        <form method="get" action="<?php echo current_url(); ?>" name="currencies">
-            <select onchange="this.form.submit();" id="currency" name="currency">
-            <?php 
-            foreach ($currencies as $currency):
-                if ($currency['code'] == $currency_code):
-            ?>
-            	<option selected="selected" value="<?php echo $currency['code']; ?>"><?php echo $currency['title']; ?></option>
-            <?php 
-              else :
-            ?>
-            	<option value="<?php echo $currency['code']; ?>"><?php echo $currency['title']; ?></option>
-            <?php 
-              endif;
-            endforeach;
-            ?>
-            </select>
+        <form method="post" action="<?php echo current_url(); ?>" name="currencies">
+        	<?php echo form_dropdown('currency', $currencies, $currency_code, 'onchange="this.form.submit();" style="width: 99%"'); ?>
         </form>
     </div>
 </div>

@@ -73,7 +73,7 @@ class New_Products_Content extends TOC_Module
               'type' => 'numberfield',
               'value' => '9',
               'description' => 'Maximum number of feature products to display'),
-    
+
         //MODULE_NEW_PRODUCTS_CACHE
         array('name' => 'MODULE_NEW_PRODUCTS_CACHE',
               'title' => 'Cache Contents', 
@@ -95,7 +95,6 @@ class New_Products_Content extends TOC_Module
         {
             $this->config = json_decode($config, true);
         }
-
         $this->title = lang('new_products_title');
     }
 
@@ -119,17 +118,16 @@ class New_Products_Content extends TOC_Module
             foreach($products as $product)
             {
                 $data['products'][] = array(
-                    'product_id' => $product['products_id'],
-                    'product_link' => site_url('product/' . $product['products_id']),
+                    'products_id' => $product['products_id'],
                     'products_name' => $product['products_name'],
                   	'products_image' => $product['image'],
-                  	'products_price' => $this->ci->currencies->format($product['products_price']));
+                  	'products_price' => $product['products_price']);
             }
-            
+
             //load view
             return $this->load_view('index.php', $data);
-        } 
-        
+        }
+
         return FALSE;
     }
 }

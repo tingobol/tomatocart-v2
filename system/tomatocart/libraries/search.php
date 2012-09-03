@@ -27,14 +27,56 @@
  * @link    http://tomatocart.com/wiki/
  */
 
-class TOC_Search {
+class TOC_Search
+{
+    /**
+     * Cached data
+     *
+     * @access private
+     * @var array
+     */
     protected $price_from = NULL;
+
+    /**
+     * Cached data
+     *
+     * @access private
+     * @var array
+     */
     protected $price_to = NULL;
-    protected $keywords = NULL;
-    protected $category = NULL;
-    protected $manufacturer = NULL;
-    protected $recursive = TRUE;
     
+    /**
+     * Cached data
+     *
+     * @access private
+     * @var array
+     */
+    protected $keywords = NULL;
+    
+    /**
+     * Cached data
+     *
+     * @access private
+     * @var array
+     */
+    protected $category = NULL;
+    
+    /**
+     * Cached data
+     *
+     * @access private
+     * @var array
+     */
+    protected $manufacturer = NULL;
+    
+    /**
+     * Cached data
+     *
+     * @access private
+     * @var array
+     */
+    protected $recursive = TRUE;
+
     /**
      * Constructor
      */
@@ -43,7 +85,7 @@ class TOC_Search {
         //initialize the ci instance
         $this->ci = get_instance();
     }
-    
+
     /**
      * Get the property
      *
@@ -54,7 +96,7 @@ class TOC_Search {
     {
         return $this->$key;
     }
-    
+
     /**
      * Set the property
      *
@@ -66,7 +108,7 @@ class TOC_Search {
     {
         $this->$name = $value;
     }
-    
+
     /**
      * Set the search keywords
      *
@@ -78,11 +120,11 @@ class TOC_Search {
         $terms = explode(' ', trim($keywords));
         $keywords = array();
         $counter = 0;
-        
+
         foreach($terms as $word)
         {
             $counter++;
-            
+
             if ($counter > 5)
             {
                 break;
@@ -92,10 +134,10 @@ class TOC_Search {
                 $keywords[] = $word;
             }
         }
-        
+
         $this->keywords = implode(' ', $keywords);
     }
-    
+
     /**
      * Get the search results
      *
@@ -106,9 +148,9 @@ class TOC_Search {
     {
         //load model
         $this->ci->load->model('search_model');
-        
+
         //orgnize params
-        $params = array('price_from' => $this->price_from, 
+        $params = array('price_from' => $this->price_from,
                         'price_to' => $this->price_to, 
                         'keywords' => $this->keywords, 
                         'category' => $this->category, 
@@ -118,28 +160,28 @@ class TOC_Search {
                         'currency' => $this->ci->currencies->value($this->ci->currencies->get_code()), 
                         'max_results' => config('MAX_DISPLAY_SEARCH_RESULTS'),
                         'language_id' => lang_id());
-        
+
         if (!empty($this->category) && ($this->recursive === TRUE))
         {
             $subcategories = array();
-            
+
             //load category tree library
             $this->ci->load->library('category_tree');
-            
+
             //add the subcategories
             $this->ci->category_tree->get_children($this->category, $subcategories);
-            
+
             if (!empty($subcategories))
             {
                 $params['subcategories'] = array($this->category);
-                
+
                 foreach($subcategories as $subcategory)
                 {
                     if (strpos($subcategory['id'], '_') !== FALSE)
                     {
                         $cPath_array = array_unique(array_filter(explode('_', $subcategory['id']), 'is_numeric'));
                         $category_id = end($cPath_array);
-                        
+
                         $params['subcategories'][] = $category_id;
                     }
                     else
@@ -149,22 +191,11 @@ class TOC_Search {
                 }
             }
         }
-        
-        if ($this->ci->customer->is_logged_on())
-        {
-            $params['country_id'] = $this->ci->customer->get_country_id();
-            $params['zone_id'] = $this->ci->customer->get_zone_id();
-        }
-        else
-        {
-            $params['country_id'] = config('STORE_COUNTRY');
-            $params['zone_id'] = config('STORE_ZONE');
-        }
-        
+
         $search_result = $this->ci->search_model->get_result($params);
-        
+
         return $search_result;
     }
-    
-    
-} 
+
+
+}

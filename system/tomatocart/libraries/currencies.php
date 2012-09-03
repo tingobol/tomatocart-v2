@@ -59,12 +59,12 @@ class TOC_Currencies
 
         //initialize the currencies system
         $session_currency = $this->ci->session->userdata('currency');
-        $get_currency = $this->ci->input->get('currency');
-        if (($session_currency === FALSE) || ($get_currency !== FALSE) || ( (config('USE_DEFAULT_LANGUAGE_CURRENCY') == '1') && ($this->get_code($this->ci->lang->get_currency_id()) != $session_currency) ) )
+        $post_currency = $this->ci->input->post('currency');
+        if (($session_currency === NULL) || ($post_currency !== NULL) || ( (config('USE_DEFAULT_LANGUAGE_CURRENCY') == '1') && ($this->get_code($this->ci->lang->get_currency_id()) != $session_currency) ) )
         {
-            if (isset($get_currency) && $this->exists($get_currency))
+            if (isset($post_currency) && $this->exists($post_currency))
             {
-                $session_currency = $get_currency;
+                $session_currency = $post_currency;
             } 
             else 
             {

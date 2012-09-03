@@ -119,12 +119,11 @@ class Special_Products_Content extends TOC_Module
             foreach($products as $product)
             {
                 $data['products'][] = array(
-                    'product_id' => $product['products_id'],
-                    'product_link' => site_url('product/' . $product['products_id']),
+                    'products_id' => $product['products_id'],
                     'products_name' => $product['products_name'],
                     'products_image' => $product['image'],
-                    'products_price' => $this->ci->currencies->format($product['products_price']),
-                    'special_price' => $this->ci->currencies->format($product['special_price']));
+                    'products_price' => $product['products_price'],
+                    'special_price' => $product['special_price']);
             }
             
             //load view

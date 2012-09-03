@@ -785,8 +785,8 @@ span.error {
 
 
 /* Info/Guest book */
-.contents dt{font-weight: bold;}
-.contents dd{padding: 10px;}
+.content dt{font-weight: bold;}
+.content dd{padding: 10px;}
 
 /* Info/Faqs */
 #faqs .answer, #faqs .url {padding: 10px 15px;}
@@ -800,3 +800,5 @@ span.error {
 
 #tab-reviews .review dt {font-size: 11px; font-weight: bold;}
 #tab-reviews .customers-ratings .name {font-size: 11px; padding: 0 10px 0 10px}
+
+

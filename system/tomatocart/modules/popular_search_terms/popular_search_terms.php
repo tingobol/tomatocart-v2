@@ -1,44 +1,124 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+/**
+ * TomatoCart Open Source Shopping Cart Solution
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
+ *
+ * @package      TomatoCart
+ * @author       TomatoCart Dev Team
+ * @copyright    Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license      http://www.gnu.org/licenses/gpl.html
+ * @link         http://tomatocart.com
+ * @since        Version 2.0
+ * @filesource
+ */
 
-class Popular_Search_Terms extends TOC_Module {
-  /**module code*/
-  var $code = 'popular_search_terms';
-  
-  var $author_name = 'TomatoCart';
-  
-  var $author_url = 'http://www.tomatocart.com';
-  
-  var $version = '1.0';
+// ------------------------------------------------------------------------
 
-  var $params = array(
-        array('name' => 'MODULE_POPULAR_SEARCH_TERM_CACHE', 
+/**
+ * Module New Products Content Controller
+ *
+ * @package		TomatoCart
+ * @subpackage	tomatocart
+ * @category	template-module-controller
+ * @author		TomatoCart Dev Team
+ * @link		http://tomatocart.com/wiki/
+ */
+class Popular_Search_Terms extends TOC_Module
+{
+    /**
+     * Template Module Code
+     *
+     * @access private
+     * @var string
+     */
+    var $code = 'popular_search_terms';
+
+    /**
+     * Template Module Author Name
+     *
+     * @access private
+     * @var string
+     */
+    var $author_name = 'TomatoCart';
+
+    /**
+     * Template Module Author Url
+     *
+     * @access private
+     * @var string
+     */
+    var $author_url = 'http://www.tomatocart.com';
+
+    /**
+     * Template Module Version
+     *
+     * @access private
+     * @var string
+     */
+    var $version = '1.0';
+
+    var $params = array(
+    array('name' => 'MODULE_POPULAR_SEARCH_TERM_CACHE',
               'title' => 'Cache Contents', 
               'type' => 'numberfield',
-         		  'value' => '60',
+         	  'value' => '60',
               'description' => 'Number of minutes to keep the contents cached (0 = no cache)'));
-        
-  public function __construct()
-  {
-    parent::__construct();
-    
-    $this->title = lang('box_popular_search_terms_tag_cloud_heading');
-  }
 
-  public function index()
-  {
-    $data['title'] = 'Popular Search Terms';
-     
-    $data['keywords'] = array(
-    array('link_href' => 'index.php/keywords/apple', 'font_size' => '9px', 'title' => 'apple'),
-    array('link_href' => 'index.php/keywords/sony', 'font_size' => '9px', 'title' => 'sony'),
-    array('link_href' => 'index.php/keywords/acer', 'font_size' => '25px', 'title' => 'acer'),
-    array('link_href' => 'index.php/keywords/benq', 'font_size' => '13px', 'title' => 'benq'),
-    array('link_href' => 'index.php/keywords/lenovo', 'font_size' => '15px', 'title' => 'lenovo'),
+    /**
+     * New Products Content Module Constructor
+     *
+     * @access public
+     * @param string
+     */
+    public function __construct()
+    {
+        parent::__construct();
 
-    array('link_href' => 'index.php/keywords/nokia', 'font_size' => '20px', 'title' => 'nokia'),
-    array('link_href' => 'index.php/keywords/LG', 'font_size' => '20px', 'title' => 'LG'),
-    array('link_href' => 'index.php/keywords/Samsung', 'font_size' => '12px', 'title' => 'Samsung'));
-     
-    return $this->load_view('index.php', $data);
-  }
+        if (!empty($config) && is_string($config))
+        {
+            $this->config = json_decode($config, true);
+        }
+        $this->title = lang('box_popular_search_terms_tag_cloud_heading');
+    }
+
+    /**
+     * Default Function
+     *
+     * @access public
+     * @return string contains the html content of new products content module
+     */
+    public function index()
+    {
+        //load model
+        $this->load_model('popular_search_terms');
+
+        //get keywords
+        $keywords = $this->popular_search_terms->get_popular_search_terms();
+
+        if ($keywords != NULL)
+        {
+            $search_terms = array();
+            foreach($keywords as $keyword)
+            {
+                $search_terms[] = array(
+                  'tag' => $keyword['text'], 
+                  'url' => site_url('search?keywords=' . $keyword['text']), 
+                  'count' => $keyword['search_count']);
+            }
+
+            //load library
+            $this->ci->load->library('tag_cloud', $search_terms);
+
+            //keywords
+            $data['keywords'] = $this->ci->tag_cloud->generate_tag_cloud_array();
+
+            //load view
+            return $this->load_view('index.php', $data);
+        }
+
+        return NULL;
+    }
 }

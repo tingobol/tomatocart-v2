@@ -52,7 +52,8 @@ class Guestbooks_Model extends CI_Model
         $result = $this->db
             ->select('guest_books_id, title, email, url, guest_books_status, languages_id, content, date_added')
             ->from('guest_books')
-            ->where(array('guest_books_status' => 1, 'languages_id' => lang_id()))
+            ->where('languages_id', lang_id())
+            ->where('guest_books_status', 1)
             ->order_by('guest_books_id', 'desc')
             ->get();
 
@@ -61,7 +62,7 @@ class Guestbooks_Model extends CI_Model
             return $result->result_array();
         }
 
-        return FALSE;
+        return NULL;
     }
 
     /**

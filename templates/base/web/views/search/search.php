@@ -20,7 +20,7 @@
 
 <?php echo toc_validation_errors('search'); ?>
 
-<form name="search" action="<?php echo site_url('search_post'); ?>" method="post">
+<form name="search" action="<?php echo site_url('search'); ?>" method="post">
     <div class="moduleBox searchBox">
         <h6><?php echo lang('search_criteria_title'); ?></h6>
         
