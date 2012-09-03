@@ -27,7 +27,8 @@
  * @link		http://tomatocart.com/wiki/
  */
 
-class Contact_Us extends TOC_Controller {
+class Contact_Us extends TOC_Controller 
+{
     /**
      * The view data
      *
@@ -84,9 +85,10 @@ class Contact_Us extends TOC_Controller {
     public function save()
     {
         //validate department email
-        if (!empty($this->input->post('department_email')))
+        $department_email = $this->input->post('department_email');
+        if (!empty($department_email))
         {
-            $department_email = $this->security->xss_clean($this->input->post('department_email'));
+            $department_email = $this->security->xss_clean($department_email);
             
             if (!validate_email_address($department_email))
             {
@@ -95,13 +97,14 @@ class Contact_Us extends TOC_Controller {
         }
         else
         {
-            $department_email = STORE_OWNER_EMAIL_ADDRESS;
+            $department_email = config('STORE_OWNER_EMAIL_ADDRESS');
         }
         
         //validate customer name field
-        if (!empty($this->input->post('name')))
+        $name = $this->input->post('name');
+        if (!empty($name))
         {
-            $name = $this->security->xss_clean($this->input->post('name'));
+            $name = $this->security->xss_clean($name);
         }
         else
         {
@@ -109,9 +112,10 @@ class Contact_Us extends TOC_Controller {
         }
         
         //validate customer email field
-        if (!empty($this->input->post('email')) && validate_email_address($this->input->post('email')))
+        $email = $this->input->post('email');
+        if (!empty($email) && validate_email_address($email))
         {
-            $email = $this->security->xss_clean($this->input->post('email'));
+            $email = $this->security->xss_clean($email);
         }
         else
         {
@@ -119,15 +123,17 @@ class Contact_Us extends TOC_Controller {
         }
         
         //validate customer telephone
-        if (!empty($this->input->post('telephone')))
+        $telephone = $this->input->post('telephone');
+        if (!empty($telephone))
         {
-            $telephone = $this->security->xss_clean($this->input->post('telephone'));
+            $telephone = $this->security->xss_clean($telephone);
         }
         
         //validate enquiry
-        if (!empty($this->input->post('enquiry')))
+        $enquiry = $this->input->post('enquiry');
+        if (!empty($enquiry))
         {
-            $enquiry = $this->security->xss_clean($this->input->post('enquiry'));
+            $enquiry = $this->security->xss_clean($enquiry);
         }
         else
         {

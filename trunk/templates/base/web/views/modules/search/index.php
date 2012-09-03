@@ -17,15 +17,15 @@
 ?>
 
 <div class="box">
-    <h4 class="title"><?php echo $title; ?></h4>
+    <h4 class="title"><?php echo lang('box_search_heading'); ?></h4>
     
     <div class="contents">
-        <form method="get" action="<?php echo $action;?>" name="search">
+        <form method="post" action="<?php echo site_url('search');?>" name="search">
         	<input type="text" maxlength="30" style="width: 80%;" name="keywords">&nbsp;
         	<p>
-        	  <button class="button small"><?php echo $btn_search_text; ?></button>
+        	  <button class="button small"><?php echo lang('button_search'); ?></button>
         	</p>
-        	<a href="<?php echo $advanced_search_link;?>"><?php echo $link_advanced_search_text;?></a>
+        	<a href="<?php echo site_url('search');?>"><?php echo lang('sitemap_advanced_search');?></a>
         </form>
     </div>
 </div>

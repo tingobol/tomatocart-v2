@@ -17,14 +17,14 @@
 ?>
 
 <div class="box">
-    <h4 class="title"><?php echo $title; ?></h4>
+    <h4 class="title"><?php echo lang('box_popular_search_terms_tag_cloud_heading'); ?></h4>
     
     <div class="contents">
     <?php 
       foreach($keywords as $keyword):
     ?>
-        <a href="<?php echo $keyword['link_href']; ?>" style="font-size: <?php echo $keyword['font_size']; ?>">
-            <?php echo $keyword['title']; ?>
+        <a href="<?php echo $keyword['url']; ?>" style="font-size: <?php echo $keyword['size']; ?>px">
+            <?php echo $keyword['tag']; ?>
         </a>&nbsp; 
     <?php 
       endforeach;

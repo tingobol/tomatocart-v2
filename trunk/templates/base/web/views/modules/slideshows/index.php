@@ -36,6 +36,7 @@
     $(document).ready(function() {
         $('#<?php echo $mid; ?>').slides({
             preload: true,
+            preloadImage: '',
             generatePagination: false,
             play: <?php echo $play_interval; ?>,
             pause: <?php echo $pause_interval; ?>,

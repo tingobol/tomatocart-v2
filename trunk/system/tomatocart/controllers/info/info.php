@@ -27,7 +27,7 @@
  * @link    http://tomatocart.com/wiki/
  */
 
-class Articles extends TOC_Controller {
+class Info extends TOC_Controller {
     /**
      * Constructor
      *
@@ -43,44 +43,45 @@ class Articles extends TOC_Controller {
      *
      * @access public
      */
-    public function index($articles_id = NULL)
+    public function index($id = NULL)
     {
-        if ($articles_id !== NULL)
+        if ($id !== NULL)
         {
             //load model
             $this->load->model('info_model');
 
             //get the article
-            $article = $this->info_model->get_article($articles_id, lang_id());
+            $information = $this->info_model->get_article($id);
 
-            if ($article != NULL)
+            //if information is not NULL
+            if ($information != NULL)
             {
                 //set page title
-                $this->template->set_title($article['articles_name']);
+                $this->template->set_title($information['articles_name']);
 
                 //add the meta title
-                if (!empty($article['page_title']))
+                if (!empty($information['page_title']))
                 {
-                    $this->template->add_meta_tags('title', $article['page_title']);
+                    $this->template->add_meta_tags('title', $information['page_title']);
                 }
 
                 //add the meta keywords
-                if (!empty($article['meta_keywords']))
+                if (!empty($information['meta_keywords']))
                 {
-                    $this->template->add_meta_tags('keywords', $article['meta_keywords']);
+                    $this->template->add_meta_tags('keywords', $information['meta_keywords']);
                 }
 
                 //add the meta description
-                if (!empty($article['meta_description']))
+                if (!empty($information['meta_description']))
                 {
-                    $this->template->add_meta_tags('description', $article['meta_description']);
+                    $this->template->add_meta_tags('description', $information['meta_description']);
                 }
 
                 //setup view data
-                $data['article'] = $article;
+                $data['information'] = $information;
 
                 //setup view
-                $this->template->build('info/article', $data);
+                $this->template->build('info/info', $data);
             }
             else
             {

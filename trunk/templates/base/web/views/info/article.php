@@ -21,5 +21,5 @@
 <p><?php echo $article['articles_description']; ?></p>
 
 <div class="submitFormButtons clearfix">
-  <a href="<?php echo site_url('index'); ?>" class="button fr"><?php echo lang('button_continue'); ?></a>
+	<a href="<?php echo site_url('index'); ?>" class="button fr"><?php echo lang('button_continue'); ?></a>
 </div>

@@ -23,7 +23,7 @@
         foreach ($articles as $article) :
 ?>
 <div class="moduleBox">
-    <h6><span class="fr"><?php echo mdate('%d/%m/%Y', human_to_unix($article['articles_date_added'])); ?></span><a href="<?php echo site_url('articles/' . $article['articles_id']); ?>"><?php echo $article['articles_name']; ?></a></h6>
+    <h6><span class="fr"><?php echo get_date_short($article['articles_date_added']); ?></span><a href="<?php echo site_url('articles/' . $article['articles_id']); ?>"><?php echo $article['articles_name']; ?></a></h6>
     
     <div class="content clearfix">
         <p>
@@ -45,7 +45,7 @@
 </div>
 
 <div class="submitFormButtons clearfix">
-    <a href="<?php echo site_url('index'); ?>" class="button fr"><?php echo lang('button_continue'); ?></a>
+    <a href="<?php echo site_url(); ?>" class="button fr"><?php echo lang('button_continue'); ?></a>
 </div>
 
 <?php    

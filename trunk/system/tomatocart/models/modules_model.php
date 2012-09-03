@@ -39,7 +39,7 @@ class Modules_Model extends CI_Model
     {
       foreach($result->result_array() as $row)
       {
-        $data[$row['content_group']][] = array('id' => $row['id'], 'module' => $row['module'], 'params' => json_decode($row['params'], TRUE));
+        $data[$row['content_group']][] = array('id' => $row['id'], 'module' => $row['module'], 'params' => $row['params']);
       }
     } 
     //get all page modules

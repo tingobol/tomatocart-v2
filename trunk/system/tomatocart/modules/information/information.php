@@ -1,38 +1,112 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+/**
+ * TomatoCart Open Source Shopping Cart Solution
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
+ *
+ * @package      TomatoCart
+ * @author       TomatoCart Dev Team
+ * @copyright    Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license      http://www.gnu.org/licenses/gpl.html
+ * @link         http://tomatocart.com
+ * @since        Version 2.0
+ * @filesource
+ */
 
-class Information extends TOC_Module {
-  /**module code*/
-  var $code = 'information';
-  
-  var $author_name = 'TomatoCart';
-  
-  var $author_url = 'http://www.tomatocart.com';
-  
-  var $version = '1.0';
-  
-  public function __construct($config)
-  {
-    parent::__construct();
+// ------------------------------------------------------------------------
 
-    $this->title = lang('box_information_heading');
-  }
+/**
+ * Module Information Controller
+ *
+ * @package     TomatoCart
+ * @subpackage  tomatocart
+ * @category    template-module-controller
+ * @author      TomatoCart Dev Team
+ * @link        http://tomatocart.com/wiki/
+ */
+class Information extends TOC_Module 
+{
+    /**
+     * Template Module Code
+     *
+     * @access private
+     * @var string
+     */
+    var $code = 'information';
 
-  public function index()
-  {
-    $data['title'] = 'Information';
-     
-    $data['informations'] = array(
-    array('link_title' => 'About Us', 'link_href' => 'index.php/info/1'),
-    array('link_title' => 'Shipping &amp;Returns', 'link_href' => 'index.php/info/2'),
-    array('link_title' => 'Privacy Notice', 'link_href' => 'index.php/info/3'),
-    array('link_title' => 'Conditions of Use', 'link_href' => 'index.php/info/4'),
-    array('link_title' => 'Imprint', 'link_href' => 'index.php/info/5'));
-     
-    $data['contact_link_title'] = 'Contact Us';
-    $data['contact_link'] = 'index.php/info/contact_us';
-    $data['sitemap_link_title'] = 'Sitemap';
-    $data['sitemap_link'] = 'index.php/info/sitemap';
-     
-    return $this->load_view('index.php', $data);
-  }
+    /**
+     * Template Module Author Name
+     *
+     * @access private
+     * @var string
+     */
+    var $author_name = 'TomatoCart';
+
+    /**
+     * Template Module Author Url
+     *
+     * @access private
+     * @var string
+     */
+    var $author_url = 'http://www.tomatocart.com';
+
+    /**
+     * Template Module Version
+     *
+     * @access private
+     * @var string
+     */
+    var $version = '1.0';
+    
+    /**
+     * Categories Information Constructor
+     *
+     * @access public
+     * @param string
+     */
+    public function __construct($config)
+    {
+        parent::__construct();
+        
+        $this->title = lang('box_information_heading');
+    }
+
+    /**
+     * Default Function
+     *
+     * @access public
+     * @return string contains the html content of categories module
+     */
+    public function index()
+    {
+        //load model
+        $this->ci->load->model('info_model');
+
+        $articles = $this->ci->info_model->get_articles(1);
+
+        $information = array();
+        if ($articles != NULL)
+        {
+            foreach($articles as $article) 
+            {
+                $information[] = array(
+                	'link' => site_url('info/' . $article['articles_id']),
+                    'title' => $article['articles_name']);
+            }
+        }
+        
+        //contact us
+        $information[] = array(
+                	'link' => site_url('contact_us'),
+                    'title' => lang('box_information_contact'));
+        
+        //sitemap
+        $information[] = array(
+                	'link' => site_url('info/sitemap'),
+                    'title' => lang('box_information_sitemap'));
+        
+        return $this->load_view('index.php', array('information' => $information));
+    }
 }

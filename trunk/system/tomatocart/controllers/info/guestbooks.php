@@ -83,9 +83,10 @@ class Guestbooks extends TOC_Controller {
     public function save()
     {
         //validate title
-        if (!empty($this->input->post('title')))
+        $title = $this->input->post('title');
+        if (!empty($title))
         {
-            $data['title'] = $this->security->xss_clean($this->input->post('title'));
+            $data['title'] = $this->security->xss_clean($title);
         }
         else
         {
@@ -93,9 +94,10 @@ class Guestbooks extends TOC_Controller {
         }
 
         //validate email
-        if (!empty($this->input->post('email')) && validate_email_address($this->input->post('email')))
+        $email = $this->input->post('email');
+        if (!empty($email) && validate_email_address($email))
         {
-            $data['email'] = $this->security->xss_clean($this->input->post('email'));
+            $data['email'] = $this->security->xss_clean($email);
         }
         else
         {
@@ -103,16 +105,19 @@ class Guestbooks extends TOC_Controller {
         }
 
         //validate content
-        if (!empty($this->input->post('content')))
+        $content = $this->input->post('content');
+        if (!empty($content))
         {
-            $data['content'] = $this->security->xss_clean($this->input->post('content'));
+            $data['content'] = $this->security->xss_clean($content);
         }
         else
         {
             $this->message_stack->add('guestbook', lang('field_guestbook_content_error'));
         }
         
-        $data['url'] = $this->security->xss_clean($this->input->post('url'));
+        //url
+        $url = $this->input->post('url');
+        $data['url'] = $this->security->xss_clean($url);
 
         if ($this->message_stack->size('guestbook') === 0)
         {

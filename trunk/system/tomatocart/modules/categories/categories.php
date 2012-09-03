@@ -61,7 +61,7 @@ class Categories extends TOC_Module
     var $version = '1.0';
 
     /**
-     * Template Module Version
+     * Template Module Parameter
      *
      * @access private
      * @var string
@@ -89,7 +89,7 @@ class Categories extends TOC_Module
         
         if (!empty($config) && is_string($config))
         {
-            $this->config = json_decode($config, true);
+            $this->config = json_decode($config, TRUE);
         }
         
         $this->title = lang('box_categories_heading');
@@ -108,7 +108,7 @@ class Categories extends TOC_Module
         $cpath = $this->ci->registry->get('cpath');
         
         $this->ci->category_tree->reset();
-        $this->ci->category_tree->set_show_category_product_count(($this->config['MODULE_CATEGORIES_SHOW_PRODUCT_COUNT'] == '1') ? true : false);
+        $this->ci->category_tree->set_show_category_product_count(($this->config['MODULE_CATEGORIES_SHOW_PRODUCT_COUNT'] == '1') ? TRUE : FALSE);
         $this->ci->category_tree->set_category_path($cpath, '<b>', '</b>');
         $this->ci->category_tree->set_parent_group_string('', '');
         $this->ci->category_tree->set_parent_string('', '&raquo;');

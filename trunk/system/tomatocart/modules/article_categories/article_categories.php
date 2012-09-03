@@ -27,78 +27,87 @@
  * @link        http://tomatocart.com/wiki/
  */
 
-class Article_Categories extends TOC_Module {
-  /**
-   * Template Module Code
-   *
-   * @access private
-   * @var string
-   */
-  var $code = 'article_categories';
-  
-  /**
-   * Template Module Author Name
-   *
-   * @access private
-   * @var string
-   */
-  var $author_name = 'TomatoCart';
-  
-  /**
-   * Template Module Author Url
-   *
-   * @access private
-   * @var string
-   */
-  var $author_url = 'http://www.tomatocart.com';
-  
-  /**
-   * Template Module Version
-   *
-   * @access private
-   * @var string
-   */
-  var $version = '1.0';
-  
-  /**
-   * Template Module Params
-   *
-   * @access private
-   * @var array
-   */
-  var $params = array(
+class Article_Categories extends TOC_Module 
+{
+    /**
+     * Template Module Code
+     *
+     * @access private
+     * @var string
+     */
+    var $code = 'article_categories';
+
+    /**
+     * Template Module Author Name
+     *
+     * @access private
+     * @var string
+     */
+    var $author_name = 'TomatoCart';
+
+    /**
+     * Template Module Author Url
+     *
+     * @access private
+     * @var string
+     */
+    var $author_url = 'http://www.tomatocart.com';
+
+    /**
+     * Template Module Version
+     *
+     * @access private
+     * @var string
+     */
+    var $version = '1.0';
+
+    /**
+     * Template Module Params
+     *
+     * @access private
+     * @var array
+     */
+    var $params = array(
         array('name' => 'MODULE_ARTICLES_CATEGORIES_MAX_LIST',
               'title' => 'Maximum List Size', 
               'type' => 'numberfield',
               'value' => '10',
               'description' => 'Maximum amount of article categories to show in the listing'));
-  
-  /**
-   * Article Categories Module Constructor
-   *
-   * @access public
-   */      
-  public function __construct()
-  {
-      parent::__construct();
-      
-      $this->title = lang('box_articles_categories_heading');
-  }
 
-  /**
-   * Default Function
-   *
-   * @access public
-   * @return string contains the html content of article categories module
-   */
-  public function index()
-  {
-      //load model
-      $this->ci->load->model('info_model');
-      
-      //setup the view data
-      $data['categories'] = $this->ci->info_model->get_articles_categories(lang_id(), config('BOX_ARTICLES_CATEGORIES_MAX_LIST'));
+    /**
+     * Article Categories Module Constructor
+     *
+     * @access public
+     */
+    public function __construct($config)
+    {
+        parent::__construct();
 
-      return $this->load_view('index.php', $data);
-  }
+        if (!empty($config) && is_string($config))
+        {
+            $this->config = json_decode($config, TRUE);
+        }
+        
+        $this->title = lang('box_articles_categories_heading');
+    }
+
+    /**
+     * Default Function
+     *
+     * @access public
+     * @return string contains the html content of article categories module
+     */
+    public function index()
+    {
+        //load model
+        $this->ci->load->model('info_model');
+
+        $categories = $this->ci->info_model->get_articles_categories($this->config['MODULE_ARTICLES_CATEGORIES_MAX_LIST']);
+        if ($categories != NULL)
+        {
+            return $this->load_view('index.php', array('categories' => $categories));
+        }
+
+        return NULL;
+    }
 }

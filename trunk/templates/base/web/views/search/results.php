@@ -33,11 +33,11 @@
         <?php
             if (!empty($product['specials_new_products_price'])) :
         ?>     
-        <p class="price"><s><?php echo $product['products_price']; ?></s><span class="special"><?php echo $product['specials_new_products_price']; ?></span></p>
+        <p class="price"><s><?php echo currencies_format($product['products_price']); ?></s><span class="special"><?php echo currencies_format($product['specials_new_products_price']); ?></span></p>
         <?php
             else :
         ?>
-        <p class="price"><?php echo $product['products_price']; ?></p>
+        <p class="price"><?php echo currencies_format($product['products_price']); ?></p>
         <?php
             endif;
         ?>
