@@ -90,6 +90,7 @@ $route['search/(:any)'] = "search/search/search_with_get";
 
 $route['articles_categories/(:num)'] = "info/articles_categories/index/$1";
 $route['articles/(:num)'] = "info/articles/index/$1";
+$route['info/(:num)'] = "info/info/index/$1";
 $route['contact_us'] = "info/contact_us";
 $route['contact_save'] = "info/contact_us/save";
 
