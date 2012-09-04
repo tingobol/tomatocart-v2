@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource ./system/modules/administrators/views/administrators_dialog.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -24,7 +26,7 @@ Ext.define('Toc.administrators.AdministratorsDialog', {
     this.aID = config.aID;
     
     config.id = 'administrators_dialog-win';
-    config.title = '<?= lang('action_heading_new_administrator'); ?>';
+    config.title = '<?php echo lang('action_heading_new_administrator'); ?>';
     config.width = 400;
     config.height = 480;
     config.modal = true;
@@ -62,11 +64,7 @@ Ext.define('Toc.administrators.AdministratorsDialog', {
       this.frmAdministrator.form.baseParams['aID'] = administratorsId;
       
       this.frmAdministrator.load({
-        url: Toc.CONF.CONN_URL,
-        params: {
-          module: 'administrators',
-          action: 'load_administrator'
-        },
+        url : '<?php echo site_url('administrators/load_administrator'); ?>',
         success: function(form, action) {
           Toc.administrators.AdministratorsDialog.superclass.show.call(this);
         },
@@ -82,11 +80,8 @@ Ext.define('Toc.administrators.AdministratorsDialog', {
   
   buildForm: function() {
     this.frmAdministrator = Ext.create('Ext.form.Panel', {
-      url: Toc.CONF.CONN_URL,
-      baseParams: {  
-        module: 'administrators',
-        action: 'save_administrator'
-      },
+      url : '<?php echo site_url('administrators/save_administrator'); ?>',
+      baseParams: {},
       border: false,
       layout: 'border',
       fieldDefaults: {
@@ -112,19 +107,19 @@ Ext.define('Toc.administrators.AdministratorsDialog', {
       items: [
         {
           xtype: 'textfield', 
-          fieldLabel: '<?= lang('field_username'); ?>', 
+          fieldLabel: '<?php echo lang('field_username'); ?>', 
           name: 'user_name', 
           allowBlank: false
         },
         {
           xtype: 'textfield', 
-          fieldLabel: '<?= lang('field_password'); ?>', 
+          fieldLabel: '<?php echo lang('field_password'); ?>', 
           name: 'user_password', 
           allowBlank: this.aID > 0 ? true : false
         },
         {
           xtype: 'textfield', 
-          fieldLabel: '<?= lang('field_email'); ?>', 
+          fieldLabel: '<?php echo lang('field_email'); ?>', 
           name: 'email_address', 
           allowBlank: false
         }
@@ -137,7 +132,7 @@ Ext.define('Toc.administrators.AdministratorsDialog', {
   getAccessPanel: function() {
     this.chkGlobal = Ext.create('Ext.form.Checkbox', {
       name: 'access_globaladmin', 
-      boxLabel: '<?= lang('global_access'); ?>',
+      boxLabel: '<?php echo lang('global_access'); ?>',
       listeners: {
         change: function(chk, checked) {
           if(checked)
@@ -149,10 +144,7 @@ Ext.define('Toc.administrators.AdministratorsDialog', {
       }
     });
     
-    var extraParams = {
-      module: 'administrators',
-      action: 'get_accesses'
-    };
+    var extraParams = {};
     
     if (this.aID > 0)
     {
@@ -162,12 +154,12 @@ Ext.define('Toc.administrators.AdministratorsDialog', {
     var dsAccessTree = Ext.create('Ext.data.TreeStore', {
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
+        url : '<?php echo site_url('administrators/get_accesses'); ?>',
         extraParams: extraParams
       },
       root: {
         id: '0',
-        text: '<?= lang('top_category'); ?>',
+        text: '<?php echo lang('top_category'); ?>',
         leaf: false,
         expandable: true,  
         expanded: true  
@@ -247,4 +239,4 @@ Ext.define('Toc.administrators.AdministratorsDialog', {
 });
 
 /* End of file administrators_dialog.php */
-/* Location: ./system/modules/administrators/views/administrators_dialog.php */
+/* Location: ./templates/base/web/views/administrators/administrators_dialog.php */

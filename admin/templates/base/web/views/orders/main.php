@@ -1,25 +1,30 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
+ *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource main.php
+ * @since   Version 2.0
+ * @filesource
  */
+
+// ------------------------------------------------------------------------
 
   echo 'Ext.namespace("Toc.orders");';
   
-  require_once 'orders_grid.php';
-  require_once 'orders_dialog.php';
-  require_once 'orders_products_grid.php';
-  require_once 'orders_status_panel.php';
-  require_once 'orders_transaction_grid.php';
-  require_once 'orders_delete_confirm_dialog.php';
+  include 'orders_grid.php';
+  include 'orders_dialog.php';
+  include 'orders_products_grid.php';
+  include 'orders_status_panel.php';
+  include 'orders_transaction_grid.php';
+  include 'orders_delete_confirm_dialog.php';
 ?>
 
 Ext.override(Toc.desktop.OrdersWindow, {
@@ -37,7 +42,7 @@ Ext.override(Toc.desktop.OrdersWindow, {
       
       win = desktop.createWindow({
         id: 'orders-win',
-        title: '<?= lang('heading_orders_title'); ?>',
+        title: '<?php echo lang('heading_orders_title'); ?>',
         width: 850,
         height: 400,
         iconCls: 'icon-orders-win',
@@ -50,13 +55,13 @@ Ext.override(Toc.desktop.OrdersWindow, {
   },
   
   onDeleteOrder: function(grd, record) {
-    var dlg = this.createOrdersDeleteConfirmDialog(grd);
+    var dlg = this.createOrdersDeleteConfirmDialog(grd, 'delete_order');
     
     dlg.show('delete_order', record.get('orders_id'), record.get('orders_id') + ': ' + record.get('customers_name'));
   },
   
   onBatchDeleteOrder: function(grd, params) {
-    var dlg = this.createOrdersDeleteConfirmDialog(grd);
+    var dlg = this.createOrdersDeleteConfirmDialog(grd, 'delete_orders');
     
     dlg.show('delete_orders', Ext.JSON.encode(params.ordersIds), params.orders);
   },
@@ -84,12 +89,12 @@ Ext.override(Toc.desktop.OrdersWindow, {
     return dlg;
   },
   
-  createOrdersDeleteConfirmDialog: function(grd) {
+  createOrdersDeleteConfirmDialog: function(grd, action) {
     var desktop = this.app.getDesktop();
     var dlg = desktop.getWindow('orders-delete-confirm-dialog-win');
     
     if (!dlg) {
-      dlg = desktop.createWindow(null, Toc.orders.OrdersDeleteComfirmDialog);
+      dlg = desktop.createWindow({'action': action}, Toc.orders.OrdersDeleteComfirmDialog);
       
       dlg.on('deletesuccess', function(feedback) {
         grd.onRefresh();
@@ -110,4 +115,4 @@ Ext.override(Toc.desktop.OrdersWindow, {
 });
 
 /* End of file main.php */
-/* Location: ./system/modules/orders/views/main.php */
+/* Location: ./templates/base/web/views/orders/main.php */

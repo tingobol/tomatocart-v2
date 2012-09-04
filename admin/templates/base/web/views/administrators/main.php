@@ -1,22 +1,26 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource ./system/modules/administrators/views/main.php
+ * @since   Version 2.0
+ * @filesource
  */
+
+// ------------------------------------------------------------------------
 
   echo 'Ext.namespace("Toc.administrators");';
   
-  require_once 'administrators_grid.php';
-  require_once 'administrators_dialog.php';
+  include 'administrators_grid.php';
+  include 'administrators_dialog.php';
 ?>
 
 Ext.override(Toc.desktop.AdministratorsWindow, {
@@ -34,7 +38,7 @@ Ext.override(Toc.desktop.AdministratorsWindow, {
       
       win = desktop.createWindow({
         id: 'administrators-win',
-        title: '<?= lang('heading_administrators_title'); ?>',
+        title: '<?php echo lang('heading_administrators_title'); ?>',
         width: 800,
         height: 400,
         iconCls: 'icon-administrators-win',
@@ -94,4 +98,4 @@ Ext.override(Toc.desktop.AdministratorsWindow, {
 });
 
 /* End of file main.php */
-/* Location: ./system/modules/administrators/views/main.php */
+/* Location: ./templates/base/web/views/administrators/main.php */

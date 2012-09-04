@@ -1,34 +1,87 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource ./system/modules/administrators/models/administrators_model.php
+ * @since   Version 2.0
+ * @filesource
  */
 
+// ------------------------------------------------------------------------
+
+/**
+ * Administrators Model
+ *
+ * @package   TomatoCart
+ * @subpackage  tomatocart
+ * @category  template-module-model
+ * @author    TomatoCart Dev Team
+ * @link    http://tomatocart.com/wiki/
+ */
 class Administrators_Model extends CI_Model
 {
+    /**
+     * Constructor
+     *
+     * @access public
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
+      
+  // ------------------------------------------------------------------------
+
+    /**
+     * Get the administrators
+     *
+     * @access public
+     * @param $start
+     * @param $limit
+     * @return mixed
+     */
     public function get_administrators($start, $limit)
     {
-        $Qadmin = $this->db
+        $result = $this->db
         ->select('id, user_name, email_address')
         ->from('administrators')
         ->order_by('user_name')
         ->limit($limit, $start)
         ->get();
-
-        return $Qadmin->result_array();
+        
+        if ($result->num_rows() > 0)
+        {
+            return $result->result_array();
+        }
+        
+        return NULL;
     }
+    
+// ------------------------------------------------------------------------
 
+    /**
+     * Save the administrator
+     *
+     * @access public
+     * @param $id
+     * @param $data
+     * @param $modules
+     * @return boolean
+     */
     public function save($id = NULL, $data, $modules = NULL)
     {
+        $this->load->helper('email');
+        $this->load->library('encrypt');
+        
         $error = FALSE;
 
         //check email
@@ -44,9 +97,9 @@ class Administrators_Model extends CI_Model
                 $this->db->where('id !=', $id);
             }
 
-            $QcheckEmail = $this->db->get();
+            $result = $this->db->get();
 
-            if ($QcheckEmail->num_rows() > 0)
+            if ($result->num_rows() > 0)
             {
                 return -4;
             }
@@ -64,9 +117,9 @@ class Administrators_Model extends CI_Model
             $this->db->where('id !=', $id);
         }
 
-        $Qcheck_username = $this->db->limit(1)->get();
+        $result = $this->db->limit(1)->get();
 
-        if ($Qcheck_username->num_rows() == 1)
+        if ($result->num_rows() == 1)
         {
             return -2;
         }
@@ -117,14 +170,14 @@ class Administrators_Model extends CI_Model
 
                 foreach($modules as $module)
                 {
-                    $Qcheck = $this->db
+                    $result = $this->db
                     ->select('administrators_id')
                     ->from('administrators_access')
                     ->where(array('administrators_id' => $id, 'module' => $module))
                     ->limit(1)
                     ->get();
 
-                    if ($Qcheck->num_rows() < 1)
+                    if ($result->num_rows() < 1)
                     {
                         $this->db->insert('administrators_access', array('administrators_id' => $id, 'module' => $module));
 
@@ -134,6 +187,8 @@ class Administrators_Model extends CI_Model
                             break;
                         }
                     }
+                    
+                    $result->free_result();
                 }
             }
         }
@@ -169,7 +224,16 @@ class Administrators_Model extends CI_Model
             return -1;
         }
     }
-
+    
+// ------------------------------------------------------------------------
+  
+    /**
+     * Delete the administrator
+     *
+     * @access public
+     * @param $id
+     * @return boolean
+     */
     public function delete($id)
     {
         $this->db->trans_begin();
@@ -185,24 +249,40 @@ class Administrators_Model extends CI_Model
         {
             $this->db->trans_commit();
 
-            return true;
+            return TRUE;
         }
 
         $this->db->trans_rollback();
 
         return FALSE;
     }
+    
+// ------------------------------------------------------------------------
 
+    /**
+     * Get the data of the administrator with the id
+     *
+     * @access public
+     * @param $id
+     * @return mixed
+     */
     public function get_data($id)
     {
-        $Qadmin = $this->db
+        $result = $this->db
         ->select('id, user_name, email_address')
         ->from('administrators')
         ->where('id', $id)
         ->get();
+        
+        if ($result->num_rows() > 0)
+        {
+            return $result->row_array();
+        }
 
-        return $Qadmin->row_array();
+        return NULL;
     }
+    
+// ------------------------------------------------------------------------
 
     public function get_admin($email)
     {
@@ -214,6 +294,8 @@ class Administrators_Model extends CI_Model
 
         return $Qadmin->row_array();
     }
+    
+// ------------------------------------------------------------------------
 
     public function update_password($email, $password)
     {
@@ -226,17 +308,33 @@ class Administrators_Model extends CI_Model
 
         return FALSE;
     }
+    
+// ------------------------------------------------------------------------
 
+    /**
+     * Get the modules that the administrator could access
+     *
+     * @access public
+     * @param $id
+     * @return mixed
+     */
     public function get_modules($id)
     {
-        $Qmodules = $this->db
+        $result = $this->db
         ->select('module')
         ->from('administrators_access')
         ->where('administrators_id', $id)
         ->get();
+        
+        if ($result->num_rows() > 0)
+        {
+            return $result->result_array();
+        }
 
-        return $Qmodules->result_array();
+        return NULL;
     }
+    
+// ------------------------------------------------------------------------
 
     /**
      * 
@@ -253,8 +351,15 @@ class Administrators_Model extends CI_Model
 
         return FALSE;
     }
+    
+// ------------------------------------------------------------------------
 
-
+    /**
+     * Get the total number of administrators
+     *
+     * @access public
+     * @return int
+     */
     public function get_total()
     {
         return $this->db->count_all('administrators');
@@ -262,4 +367,4 @@ class Administrators_Model extends CI_Model
 }
 
 /* End of file administrators_model.php */
-/* Location: ./system/modules/administrators/models/administrators_model.php */
+/* Location: ./system/models/administrators_model.php */

@@ -1,15 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
+ *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource orders_status_panel.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -20,7 +23,7 @@ Ext.define('Toc.orders.OrdersStatusPanel', {
     config = config || {};
     
     config = config || {};
-    config.title = '<?= lang('section_status_history'); ?>';
+    config.title = '<?php echo lang('section_status_history'); ?>';
     config.layout = 'border';
     config.border = false;
     
@@ -47,10 +50,8 @@ Ext.define('Toc.orders.OrdersStatusPanel', {
       ],
       proxy: {
         type: 'ajax',
-        url: Toc.CONF.CONN_URL,
+        url: '<?php echo site_url('orders/list_orders_status'); ?>',
         extraParams: {
-          module: 'orders',
-          action: 'list_orders_status',
           orders_id: ordersId   
         },
         reader: {
@@ -67,10 +68,10 @@ Ext.define('Toc.orders.OrdersStatusPanel', {
       region: 'center',
       store: store,
       columns: [
-        { header: '<?= lang('table_heading_date_added'); ?>', dataIndex: 'date_added', width: 120, align: 'center'},
-        { header: '<?= lang('table_heading_status'); ?>', dataIndex: 'status', width: 120, align: 'center'},
-        { header: '<?= lang('table_heading_comments'); ?>', dataIndex: 'comments', align: 'center', flex: 1},
-        { header: '<?= lang('table_heading_customer_notified'); ?>', dataIndex: 'customer_notified',  width: 120, align: 'center'}
+        { header: '<?php echo lang('table_heading_date_added'); ?>', dataIndex: 'date_added', width: 120, align: 'center'},
+        { header: '<?php echo lang('table_heading_status'); ?>', dataIndex: 'status', width: 120, align: 'center'},
+        { header: '<?php echo lang('table_heading_comments'); ?>', dataIndex: 'comments', align: 'center', flex: 1},
+        { header: '<?php echo lang('table_heading_customer_notified'); ?>', dataIndex: 'customer_notified',  width: 120, align: 'center'}
       ]
     });
     
@@ -85,11 +86,7 @@ Ext.define('Toc.orders.OrdersStatusPanel', {
       ],
       proxy: {
         type: 'ajax',
-        url: Toc.CONF.CONN_URL,
-        extraParams: {
-          module: 'orders',
-          action: 'get_status'
-        },
+        url: '<?php echo site_url('orders/get_status'); ?>',
         reader: {
           type: 'json',
           root: Toc.CONF.JSON_READER_ROOT,
@@ -104,10 +101,8 @@ Ext.define('Toc.orders.OrdersStatusPanel', {
       border: false,
       height: 200,
       bodyPadding: 10, 
-      url: Toc.CONF.CONN_URL,
+      url: '<?php echo site_url('orders/update_orders_status'); ?>',
       baseParams: {  
-        module: 'orders',
-        action: 'update_orders_status',
         orders_id: ordersId
       },
       fieldDefaults: {
@@ -115,12 +110,12 @@ Ext.define('Toc.orders.OrdersStatusPanel', {
         labelWidth: 200
       },
       items: [
-        {xtype: 'combobox', fieldLabel: '<?= lang('field_status'); ?>', store: dsStatus, displayField: 'status_name', valueField: 'status_id', name: 'status', editable: false, queryMode: 'local', allowBlank: false},                        
-        {xtype: 'textareafield', fieldLabel: '<?= lang('field_add_comment'); ?>', name: 'comment', anchor: '97%'},
-        {xtype: 'checkboxfield', fieldLabel: '<?= lang('field_notify_customer'); ?>', name: 'notify_customer'},
-        {xtype: 'checkboxfield', fieldLabel: '<?= lang('field_notify_customer_with_comments'); ?>', name: 'notify_with_comments'}
+        {xtype: 'combobox', fieldLabel: '<?php echo lang('field_status'); ?>', store: dsStatus, displayField: 'status_name', valueField: 'status_id', name: 'status', editable: false, queryMode: 'local', allowBlank: false},                        
+        {xtype: 'textareafield', fieldLabel: '<?php echo lang('field_add_comment'); ?>', name: 'comment', anchor: '97%'},
+        {xtype: 'checkboxfield', fieldLabel: '<?php echo lang('field_notify_customer'); ?>', name: 'notify_customer'},
+        {xtype: 'checkboxfield', fieldLabel: '<?php echo lang('field_notify_customer_with_comments'); ?>', name: 'notify_with_comments'}
       ],
-      buttons: [{text: '<?= lang('button_update');?>', iconCls:'refresh', handler: this.submitForm, scope: this}]
+      buttons: [{text: '<?php echo lang('button_update');?>', iconCls:'refresh', handler: this.submitForm, scope: this}]
     });
     
     return this.frmOrdersStatus;
