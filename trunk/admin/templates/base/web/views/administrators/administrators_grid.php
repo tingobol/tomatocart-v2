@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource ./system/modules/administrators/views/administrators_grid.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -32,11 +34,7 @@ Ext.define('Toc.administrators.AdministratorsGrid', {
       pageSize: Toc.CONF.GRID_PAGE_SIZE,
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
-        extraParams: {
-          module: 'administrators',
-          action: 'list_administrators'
-        },
+        url : '<?php echo site_url('administrators/list_administrators'); ?>',
         reader: {
           type: 'json',
           root: Toc.CONF.JSON_READER_ROOT,
@@ -48,12 +46,12 @@ Ext.define('Toc.administrators.AdministratorsGrid', {
     
     config.selModel = Ext.create('Ext.selection.CheckboxModel');
     config.columns =[
-      {header: '<?= lang('table_heading_administrators'); ?>', dataIndex: 'user_name', flex: 1},
-      {header: '<?= lang('table_heading_email'); ?>', dataIndex: 'email_address', width: 250},
+      {header: '<?php echo lang('table_heading_administrators'); ?>', dataIndex: 'user_name', flex: 1},
+      {header: '<?php echo lang('table_heading_email'); ?>', dataIndex: 'email_address', width: 250},
       {
         xtype: 'actioncolumn', 
         width: 80,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           tooltip: TocLanguage.tipEdit,
           iconCls: 'icon-action icon-edit-record',
@@ -122,10 +120,8 @@ Ext.define('Toc.administrators.AdministratorsGrid', {
         if (btn == 'yes') {
           Ext.Ajax.request({
             waitMsg: TocLanguage.formSubmitWaitMsg,
-            url: Toc.CONF.CONN_URL,
+            url : '<?php echo site_url('administrators/delete_administrator'); ?>',
             params: {
-              module: 'administrators',
-              action: 'delete_administrator',
               adminId: administratorsId
             },
             callback: function (options, success, response) {
@@ -164,10 +160,8 @@ Ext.define('Toc.administrators.AdministratorsGrid', {
           if (btn == 'yes') {
             Ext.Ajax.request({
               waitMsg: TocLanguage.formSubmitWaitMsg,
-              url: Toc.CONF.CONN_URL,
+              url : '<?php echo site_url('administrators/delete_administrators'); ?>',
               params: {
-                module: 'administrators',
-                action: 'delete_administrators',
                 batch: batch
               },
               callback: function(options, success, response) {
@@ -198,4 +192,4 @@ Ext.define('Toc.administrators.AdministratorsGrid', {
 });
 
 /* End of file administrators_grid.php */
-/* Location: ./system/modules/administrators/views/administrators_grid.php */
+/* Location: ./templates/base/web/views/administrators/administrators_grid.php */

@@ -1,15 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
+ *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource orders_delete_confirm_dialog.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -19,11 +22,13 @@ Ext.define('Toc.orders.OrdersDeleteComfirmDialog', {
   constructor: function(config) {
     config = config || {};
     
+    config.action = config.action || 'delete_order';
+    
     config.id = 'orders-delete-confirm-dialog-win';
     config.width = 450;
     config.modal = true;
     config.iconCls = 'icon-orders-win';
-    config.items = this.buildForm();
+    config.items = this.buildForm(config.action);
     
     config.buttons = [
       {
@@ -48,19 +53,17 @@ Ext.define('Toc.orders.OrdersDeleteComfirmDialog', {
   },
   
   show: function (action, ordersId, orders) {
-    this.frmConfirm.baseParams['action'] = action;
-    
     if (action == 'delete_order') {
       this.frmConfirm.baseParams['orders_id'] = ordersId; 
-      this.setTitle('<?= lang('introduction_delete_order'); ?>');
+      this.setTitle('<?php echo lang('introduction_delete_order'); ?>');
 
-      html = '<p class="form-info"><?= lang('introduction_delete_order'); ?></p><p class="form-info"><b>#' + orders + '</b></p>';
+      html = '<p class="form-info"><?php echo lang('introduction_delete_order'); ?></p><p class="form-info"><b>#' + orders + '</b></p>';
       this.pnlConfirmInfo.update(html);
     } else {
       this.frmConfirm.baseParams['batch'] = ordersId;
-      this.setTitle('<?= lang('introduction_batch_delete_orders'); ?>');
+      this.setTitle('<?php echo lang('introduction_batch_delete_orders'); ?>');
        
-      html = '<p class="form-info"><?= lang('introduction_batch_delete_orders'); ?></p><p class="form-info"><b>' + orders + '</b></p>';
+      html = '<p class="form-info"><?php echo lang('introduction_batch_delete_orders'); ?></p><p class="form-info"><b>' + orders + '</b></p>';
       this.pnlConfirmInfo.update(html);
     }
     
@@ -69,7 +72,7 @@ Ext.define('Toc.orders.OrdersDeleteComfirmDialog', {
     this.callParent();
   },
   
-  buildForm: function() {
+  buildForm: function(action) {
     this.pnlConfirmInfo = Ext.create('Ext.Panel', {border: false});
     
     this.pnlRestockCheckbox = Ext.create('Ext.Panel', {
@@ -81,16 +84,14 @@ Ext.define('Toc.orders.OrdersDeleteComfirmDialog', {
           name: 'restock',
           fieldLabel: 'Checkbox',
           hideLabel: true,
-          boxLabel: '<?= lang('field_restock_product_quantity'); ?>'
+          boxLabel: '<?php echo lang('field_restock_product_quantity'); ?>'
         }
       ]
     });
     
     this.frmConfirm = Ext.create('Ext.form.Panel', {
-      url: Toc.CONF.CONN_URL,
-      baseParams: {  
-        module: 'orders'
-      },
+      url: '<?php echo site_url('orders'); ?>/' + action,
+      baseParams: {},
       bodyPadding: 10,
       border: false,
       items: [this.pnlConfirmInfo, this.pnlRestockCheckbox]

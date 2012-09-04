@@ -1,15 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
+ *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource orders_products_grid.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -19,7 +22,7 @@ Ext.define('Toc.orders.OrdersProductsGrid', {
   constructor: function(config) {
     config = config || {};
     
-    config.title = '<?= lang('section_products'); ?>';
+    config.title = '<?php echo lang('section_products'); ?>';
     config.viewConfig = {emptyText: TocLanguage.gridNoRecords};
     config.border = false;
     
@@ -37,10 +40,8 @@ Ext.define('Toc.orders.OrdersProductsGrid', {
       ],
       proxy: {
         type: 'ajax',
-        url: Toc.CONF.CONN_URL,
+        url: '<?php echo site_url('orders/list_order_products'); ?>',
         extraParams: {
-          module: 'orders',
-          action: 'list_order_products',
           orders_id: config.ordersId    
         },
         reader: {
@@ -53,12 +54,12 @@ Ext.define('Toc.orders.OrdersProductsGrid', {
     });
     
     config.columns = [
-      { header: '<?= lang('table_heading_products'); ?>', dataIndex: 'products', flex: 1},
-      { header: '<?= lang('table_heading_product_sku'); ?>', dataIndex: 'sku', width: 80, align: 'right'},
-      { header: '<?= lang('table_heading_tax'); ?>', dataIndex: 'tax', align: 'center', width: 80, align: 'right'},
-      { header: '<?= lang('table_heading_price_gross'); ?>', dataIndex: 'price_gross',  width: 120, align: 'right'},
-      { header: '<?= lang('table_heading_total_gross'); ?>', dataIndex: 'total_gross',  width: 120, align: 'right'},
-      { header: '<?= lang('table_heading_return_quantity'); ?>', dataIndex: 'return_quantity',  width: 100, align: 'center'}
+      { header: '<?php echo lang('table_heading_products'); ?>', dataIndex: 'products', flex: 1},
+      { header: '<?php echo lang('table_heading_product_sku'); ?>', dataIndex: 'sku', width: 80, align: 'right'},
+      { header: '<?php echo lang('table_heading_tax'); ?>', dataIndex: 'tax', align: 'center', width: 80, align: 'right'},
+      { header: '<?php echo lang('table_heading_price_gross'); ?>', dataIndex: 'price_gross',  width: 120, align: 'right'},
+      { header: '<?php echo lang('table_heading_total_gross'); ?>', dataIndex: 'total_gross',  width: 120, align: 'right'},
+      { header: '<?php echo lang('table_heading_return_quantity'); ?>', dataIndex: 'return_quantity',  width: 100, align: 'center'}
     ];
     
     this.callParent([config]);
@@ -66,4 +67,4 @@ Ext.define('Toc.orders.OrdersProductsGrid', {
 });
 
 /* End of file orders_products_grid.php */
-/* Location: ./system/modules/orders/views/orders_products_grid.php */
+/* Location: ./templates/base/web/views/orders/orders_products_grid.php */

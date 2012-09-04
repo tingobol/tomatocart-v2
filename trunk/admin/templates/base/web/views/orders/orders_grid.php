@@ -1,15 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
+ *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource orders_grid.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -41,11 +44,7 @@ Ext.define('Toc.orders.OrdersGrid', {
       pageSize: Toc.CONF.GRID_PAGE_SIZE,
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
-        extraParams: {
-          module: 'orders',
-          action: 'list_orders'
-        },
+        url : '<?php echo site_url('orders/list_orders'); ?>',
         reader: {
           type: 'json',
           root: Toc.CONF.JSON_READER_ROOT,
@@ -59,17 +58,17 @@ Ext.define('Toc.orders.OrdersGrid', {
     
     config.columns =[
       {header: 'ID', dataIndex: 'orders_id', width: 30, align: 'center'},
-      { header: '<?= lang('table_heading_customers'); ?>', dataIndex: 'customers_name', flex: 1},
-      { header: '<?= lang('table_heading_order_total'); ?>', dataIndex: 'order_total', width: 120, align: 'right'},
-      { header: '<?= lang('table_heading_date_purchased'); ?>', dataIndex: 'date_purchased', align: 'center', width: 120, sortable: true},
-      { header: '<?= lang('table_heading_status'); ?>', dataIndex: 'orders_status_name', align: 'center', width: 120},
+      { header: '<?php echo lang('table_heading_customers'); ?>', dataIndex: 'customers_name', flex: 1},
+      { header: '<?php echo lang('table_heading_order_total'); ?>', dataIndex: 'order_total', width: 120, align: 'right'},
+      { header: '<?php echo lang('table_heading_date_purchased'); ?>', dataIndex: 'date_purchased', align: 'center', width: 120, sortable: true},
+      { header: '<?php echo lang('table_heading_status'); ?>', dataIndex: 'orders_status_name', align: 'center', width: 120},
       {
         xtype:'actioncolumn', 
         width: 80,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           iconCls: 'icon-action icon-view-record',
-          tooltip: '<?= lang('tip_view_order');?>',
+          tooltip: '<?php echo lang('tip_view_order');?>',
           handler: function(grid, rowIndex, colIndex) {
             var rec = grid.getStore().getAt(rowIndex);
             
@@ -78,7 +77,7 @@ Ext.define('Toc.orders.OrdersGrid', {
           scope: this
         },
         {
-          tooltip: '<?= lang('tip_create_invoice');?>',
+          tooltip: '<?php echo lang('tip_create_invoice');?>',
           getClass: this.getCreateInvoiceClass,
           handler: function(grid, rowIndex, colIndex) {
             var rec = grid.getStore().getAt(rowIndex);
@@ -112,19 +111,19 @@ Ext.define('Toc.orders.OrdersGrid', {
             '<table width="98%">',
              '<tr>',
                '<td width="25%">',
-                 '<strong><?= lang('subsection_shipping_address'); ?></strong>',
+                 '<strong><?php echo lang('subsection_shipping_address'); ?></strong>',
                  '<p>{shipping_address}</p>',
-                 '<strong><?= lang('subsection_delivery_method'); ?></strong>',
+                 '<strong><?php echo lang('subsection_delivery_method'); ?></strong>',
                  '<p>{shipping_method}</p>',
                '</td>',
                '<td width="25%">',
-                 '<strong><?= lang('subsection_billing_address'); ?></strong>',
+                 '<strong><?php echo lang('subsection_billing_address'); ?></strong>',
                  '<p>{billing_address}</p>',
-                 '<strong><?= lang('subsection_payment_method'); ?></strong>',
+                 '<strong><?php echo lang('subsection_payment_method'); ?></strong>',
                  '<p>{payment_method}</p>',
                '</td>',
                '<td>',
-                 '<strong><?= lang('subsection_products'); ?></strong>',
+                 '<strong><?php echo lang('subsection_products'); ?></strong>',
                  '<div class="order_products">{products}</div>',
                  '<div class="order_totals">{totals}</div>',
                '</td>',
@@ -143,10 +142,8 @@ Ext.define('Toc.orders.OrdersGrid', {
       pageSize: Toc.CONF.GRID_PAGE_SIZE,
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
+        url : '<?php echo site_url('orders/get_status'); ?>',
         extraParams: {
-          module: 'orders',
-          action: 'get_status',
           top: '1'
         },
         reader: {
@@ -166,7 +163,7 @@ Ext.define('Toc.orders.OrdersGrid', {
     
     config.cboStatus = Ext.create('Ext.form.ComboBox', {
       labelWidth: 50,
-      fieldLabel: '<?= lang('operation_heading_filter_status'); ?>', 
+      fieldLabel: '<?php echo lang('operation_heading_filter_status'); ?>', 
       store: dsStatus, 
       name: 'status', 
       displayField: 'status_name', 
@@ -178,12 +175,12 @@ Ext.define('Toc.orders.OrdersGrid', {
     
     this.txtOrderId = Ext.create('Ext.form.TextField', {
       width: 120,
-      emptyText: '<?= lang('operation_heading_order_id'); ?>'
+      emptyText: '<?php echo lang('operation_heading_order_id'); ?>'
     });
     
     this.txtCustomerId = Ext.create('Ext.form.TextField', {
       width: 120,
-      emptyText: '<?= lang('operation_heading_customer_id'); ?>'
+      emptyText: '<?php echo lang('operation_heading_customer_id'); ?>'
     });
     
     config.tbar = [
@@ -250,14 +247,12 @@ Ext.define('Toc.orders.OrdersGrid', {
     
     Ext.MessageBox.confirm(
       TocLanguage.msgWarningTitle, 
-      '<?= lang('create_invoice_confirmation');?>',
+      '<?php echo lang('create_invoice_confirmation');?>',
       function(btn) {
         if (btn == 'yes') {
           Ext.Ajax.request({
-            url: Toc.CONF.CONN_URL,
+            url : '<?php echo site_url('orders/create_invoice'); ?>',
             params: {
-              module: 'orders',
-              action: 'create_invoice',
               orders_id: ordersId
             },
             callback: function(options, success, response) {
@@ -317,4 +312,4 @@ Ext.define('Toc.orders.OrdersGrid', {
 });
 
 /* End of file orders_grid.php */
-/* Location: ./system/modules/orders/views/orders_grid.php */
+/* Location: ./templates/base/web/views/orders/orders_grid.php */
