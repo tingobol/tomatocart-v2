@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource system/modules/reports_customers/views/orders_total_panel.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -19,7 +21,7 @@ Ext.define('Toc.reports_customers.OrdersTotalPanel', {
   
   statics: {
     formatCurrency : function(price) {
-      return Ext.util.Format.currency(price, '<?php echo $this->currencies->get_symbol_left(); ?>', parseInt('<?php echo $this->currencies->get_decimal_places(); ?>'), '<?php echo $this->currencies->get_symbol_right(); ?>');
+      return Ext.util.Format.currency(price, '<?php echo get_instance()->currencies->get_symbol_left(); ?>', parseInt('<?php echo get_instance()->currencies->get_decimal_places(); ?>'), '<?php echo get_instance()->currencies->get_symbol_right(); ?>');
     }
   },
   
@@ -34,13 +36,13 @@ Ext.define('Toc.reports_customers.OrdersTotalPanel', {
     config.dateStart = Ext.create('Ext.form.DateField', {
       width: 150, 
       format: 'Y-m-d', 
-      emptyText: '<?= lang("field_start_date"); ?>'
+      emptyText: '<?php echo lang("field_start_date"); ?>'
     });
     
     config.dateEnd = Ext.create('Ext.form.DateField', {
       width: 150, 
       format: 'Y-m-d', 
-      emptyText: '<?= lang("field_end_date"); ?>'
+      emptyText: '<?php echo lang("field_end_date"); ?>'
     });
     
     config.tbar = [
@@ -73,11 +75,8 @@ Ext.define('Toc.reports_customers.OrdersTotalPanel', {
       pageSize: Toc.CONF.GRID_PAGE_SIZE,
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
-        extraParams: {
-          module: 'reports_customers',
-          action: 'list_orders_total'
-        },
+        url : '<?php echo site_url('reports_customers/list_orders_total'); ?>',
+        extraParams: {},
         reader: {
           type: 'json',
           root: Toc.CONF.JSON_READER_ROOT,
@@ -100,7 +99,7 @@ Ext.define('Toc.reports_customers.OrdersTotalPanel', {
           label: {
             renderer: statics.formatCurrency
           },
-          title: '<?= lang('table_heading_total'); ?>',
+          title: '<?php echo lang('table_heading_total'); ?>',
           grid: true,
           minimum: 0
         }, 
@@ -108,7 +107,7 @@ Ext.define('Toc.reports_customers.OrdersTotalPanel', {
           type: 'Category',
           position: 'left',
           fields: ['customers_name'],
-          title: '<?= lang('table_heading_customers'); ?>'
+          title: '<?php echo lang('table_heading_customers'); ?>'
         }
       ],
       series: [
@@ -174,4 +173,4 @@ Ext.define('Toc.reports_customers.OrdersTotalPanel', {
 });
 
 /* End of file orders_total_panel.php */
-/* Location: ./system/modules/reports_products/views/orders_total_panel.php */
+/* Location: ./templates/base/web/views/reports_customers/orders_total_panel.php */

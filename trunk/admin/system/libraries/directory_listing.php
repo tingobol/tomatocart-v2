@@ -47,7 +47,7 @@
       }
     }
 
-    public function setIncludeDirectories($boolean) {
+    public function set_include_directories($boolean) {
       if ($boolean === true) {
         $this->_include_directories = true;
       } else {
@@ -85,7 +85,7 @@
       }
     }
 
-    public function setCheckExtension($extension) {
+    public function set_check_extension($extension) {
       $this->_check_extension[] = $extension;
     }
 
@@ -162,7 +162,7 @@
       }
     }
 
-    public function getFiles($sort_by_directories = true) {
+    public function get_files($sort_by_directories = true) {
       if (!is_array($this->_listing)) {
         $this->read();
       }

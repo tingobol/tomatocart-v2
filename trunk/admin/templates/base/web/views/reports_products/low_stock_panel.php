@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource system/modules/reports_products/views/low_stock_panel.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -31,11 +33,7 @@ Ext.define('Toc.reports_products.LowStockPanel', {
       ],
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
-        extraParams: {
-          module: 'reports_products',
-          action: 'get_categories'
-        },
+        url : '<?php echo site_url('reports_products/get_categories'); ?>',
         reader: {
           type: 'json',
           root: Toc.CONF.JSON_READER_ROOT,
@@ -51,7 +49,7 @@ Ext.define('Toc.reports_products.LowStockPanel', {
           return '<div style="margin-left: {margin}px">{text}</div>';
         }
       },
-      emptyText: '<?= lang("top_category"); ?>',
+      emptyText: '<?php echo lang("top_category"); ?>',
       name: 'categories',
       store: dsCategories,
       queryMode: 'local',
@@ -84,11 +82,8 @@ Ext.define('Toc.reports_products.LowStockPanel', {
       pageSize: Toc.CONF.GRID_PAGE_SIZE,
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
-        extraParams: {
-          module: 'reports_products',
-          action: 'list_low_stock'
-        },
+        url : '<?php echo site_url('reports_products/list_low_stock'); ?>',
+        extraParams: {},
         reader: {
           type: 'json',
           root: Toc.CONF.JSON_READER_ROOT,
@@ -108,7 +103,7 @@ Ext.define('Toc.reports_products.LowStockPanel', {
           type: 'Numeric',
           position: 'bottom',
           fields: ['products_quantity'],
-          title: '<?= lang('table_heading_quantity'); ?>',
+          title: '<?php echo lang('table_heading_quantity'); ?>',
           grid: true,
           minimum: 0
         }, 
@@ -116,7 +111,7 @@ Ext.define('Toc.reports_products.LowStockPanel', {
           type: 'Category',
           position: 'left',
           fields: ['products_name'],
-          title: '<?= lang('table_heading_products'); ?>'
+          title: '<?php echo lang('table_heading_products'); ?>'
         }
       ],
       series: [
@@ -136,7 +131,7 @@ Ext.define('Toc.reports_products.LowStockPanel', {
                 products_name = products_name.substr(0, 25) + '... ';
               }
               
-              this.setTitle(products_name + ':  ' + storeItem.get('products_quantity') + ' <?= lang('low_stock_tip'); ?>');
+              this.setTitle(products_name + ':  ' + storeItem.get('products_quantity') + ' <?php echo lang('low_stock_tip'); ?>');
             }
           },
           label: {
@@ -180,4 +175,4 @@ Ext.define('Toc.reports_products.LowStockPanel', {
 
 
 /* End of file low_stock_panel.php */
-/* Location: ./system/modules/reports_products/views/low_stock_panel.php */
+/* Location: ./templates/base/web/views/reports_products/low_stock_panel.php */

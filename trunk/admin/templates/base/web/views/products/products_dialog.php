@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource products_dialog.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -21,7 +23,7 @@ Ext.define('Toc.products.ProductDialog', {
     config = config || {};
     
     config.id = 'products-dialog-win';
-    config.title = '<?= lang('action_heading_new_product'); ?>';
+    config.title = '<?php echo lang('action_heading_new_product'); ?>';
     config.layout = 'fit';
     config.width = 870;
     config.height = 540;
@@ -30,6 +32,7 @@ Ext.define('Toc.products.ProductDialog', {
     config.iconCls = 'icon-products-win';
     config.productsId = config.products_id || null;
     config.flagContinueEdit = false;
+    config.shadow = false;
     
     config.items = this.buildForm(config.productsId);
     config.buttons = [
@@ -57,9 +60,8 @@ Ext.define('Toc.products.ProductDialog', {
   show: function() {
     if (this.productsId > 0) {
       this.frmProduct.load({
-        url: Toc.CONF.CONN_URL,
+        url: '<?php echo site_url('products/load_product'); ?>',
         params:{
-          action: 'load_product',
           products_id: this.productsId
         },
         success: function(form, action) {
@@ -124,12 +126,8 @@ Ext.define('Toc.products.ProductDialog', {
       layout: 'fit',
       border: false,
       fileUpload: true,
-      url: Toc.CONF.CONN_URL,
+      url: '<?php echo site_url('products/save_product'); ?>',
       labelWidth: 120,
-      baseParams: {  
-        module: 'products',
-        action: 'save_product'
-      },
       items: tabProduct
     });
     
@@ -138,7 +136,6 @@ Ext.define('Toc.products.ProductDialog', {
   
   submitForm: function() {
     var params = {
-      action: 'save_product',
       accessories_ids: this.pnlAccessories.getAccessoriesIds(),
       xsell_ids: this.pnlXsellProducts.getXsellProductIds(),
       products_variants: this.pnlVariants.getVariants(), 
@@ -154,6 +151,7 @@ Ext.define('Toc.products.ProductDialog', {
     
     if (status == true) { 
       this.frmProduct.form.submit({
+        url: '<?php echo site_url('products/save_product'); ?>',
         params: params,
         waitMsg: TocLanguage.formSubmitWaitMsg,
         success:function(form, action){
@@ -169,10 +167,10 @@ Ext.define('Toc.products.ProductDialog', {
         scope: this
       });  
     } else {
-      Ext.MessageBox.alert(TocLanguage.msgErrTitle, '<?= lang('msg_select_default_variants_records'); ?>');
+      Ext.MessageBox.alert(TocLanguage.msgErrTitle, '<?php echo lang('msg_select_default_variants_records'); ?>');
     }
   }
 });
 
 /* End of file products_dialog.php */
-/* Location: ./system/modules/products/views/products_dialog.php */
+/* Location: ./templates/base/web/views/products/products_dialog.php */

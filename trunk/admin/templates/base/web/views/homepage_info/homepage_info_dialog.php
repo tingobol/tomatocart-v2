@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource ./system/modules/homepage_info/views/homepage_info_dialog.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -20,7 +22,7 @@ Ext.define('Toc.homepage_info.HomepageInfoDialog', {
   constructor: function(config) {
     config = config || {};
     
-    config.title = '<?= lang('heading_homepage_info_title'); ?>';
+    config.title = '<?php echo lang('heading_homepage_info_title'); ?>';
     config.layout = 'fit';
     config.width = 870;
     config.height = 450;
@@ -53,11 +55,7 @@ Ext.define('Toc.homepage_info.HomepageInfoDialog', {
   
   show: function() {
     this.frmPagehomeInfo.load({
-      url: Toc.CONF.CONN_URL,
-      params: {
-        module: 'homepage_info',
-        action: 'load_info'
-      }
+      url: '<?php echo site_url('homepage_info/load_info') ?>'
     }, this);
     
     this.callParent();
@@ -80,17 +78,13 @@ Ext.define('Toc.homepage_info.HomepageInfoDialog', {
     });
     
     this.frmPagehomeInfo = Ext.create('Ext.form.Panel', {
-      url: Toc.CONF.CONN_URL,
+      url: '<?php echo site_url('homepage_info/save_info'); ?>',
       layout: 'fit',
       labelWidth: 120,
       border: false,
       fieldDefaults: {
         labelSeparator: '',
         anchor: '98%'
-      },
-      baseParams: {  
-        module: 'homepage_info',
-        action : 'save_info'
       },
       items: tabProduct
     });
@@ -116,4 +110,4 @@ Ext.define('Toc.homepage_info.HomepageInfoDialog', {
 });
 
 /* End of file homepage_info_dialog.php */
-/* Location: ./system/modules/homepage_info/views/homepage_info_dialog.php */
+/* Location: ./templates/base/web/views/homepage_info/homepage_info_dialog.php */

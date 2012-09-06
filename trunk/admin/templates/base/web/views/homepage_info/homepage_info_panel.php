@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource ./system/modules/homepage_info/views/homepage_info_panel.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -20,7 +22,7 @@ Ext.define('Toc.homepage_info.HomepageInfoPanel', {
   constructor: function(config) {
     config = config || {};
     
-    config.title = '<?= lang('section_homepage_text_title'); ?>';
+    config.title = '<?php echo lang('section_homepage_text_title'); ?>';
     config.border = false;
     config.layout = 'fit';
     
@@ -47,7 +49,7 @@ Ext.define('Toc.homepage_info.HomepageInfoPanel', {
           bodyPadding: 6,
           border: false,
           items: [
-            {xtype: 'htmleditor', height: 300, fieldLabel: '<?= lang('field_homepage_text'); ?>', name: 'index_text[<?php echo $l['id']; ?>]'}
+            {xtype: 'htmleditor', height: 300, fieldLabel: '<?php echo lang('field_homepage_text'); ?>', name: 'index_text[<?php echo $l['id']; ?>]'}
           ]
         });
         
@@ -61,4 +63,4 @@ Ext.define('Toc.homepage_info.HomepageInfoPanel', {
 });
 
 /* End of file homepage_info_panel.php */
-/* Location: ./system/modules/homepage_info/views/homepage_info_panel.php */
+/* Location: ./templates/base/web/views/homepage_info/homepage_info_panel.php */

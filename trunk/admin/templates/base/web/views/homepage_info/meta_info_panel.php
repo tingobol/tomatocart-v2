@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource ./system/modules/homepage_info/views/meta_info_panel.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -20,7 +22,7 @@ Ext.define('Toc.homepage_info.MetaInfoPanel', {
   constructor: function(config) {
     config = config || {};
     
-    config.title = '<?= lang('section_meta_info_title'); ?>';
+    config.title = '<?php echo lang('section_meta_info_title'); ?>';
     config.border = false;
     config.layout = 'fit';
     config.items = this.buildForm();
@@ -46,9 +48,9 @@ Ext.define('Toc.homepage_info.MetaInfoPanel', {
           layout: 'anchor',
           border: false,
           items: [
-            {xtype: 'textfield', fieldLabel: '<?= lang('field_page_title'); ?>', name: 'HOME_PAGE_TITLE[<?= strtoupper($l['code']); ?>]'},
-            {xtype: 'textfield', fieldLabel: '<?= lang('field_meta_keywords'); ?>', name: 'HOME_META_KEYWORD[<?= strtoupper($l['code']); ?>]'},
-            {xtype: 'textarea', height: 200, resizable: true, fieldLabel: '<?= lang('field_meta_description'); ?>', name: 'HOME_META_DESCRIPTION[<?= strtoupper($l['code']); ?>]'}
+            {xtype: 'textfield', fieldLabel: '<?php echo lang('field_page_title'); ?>', name: 'HOME_PAGE_TITLE[<?php echo strtoupper($l['code']); ?>]'},
+            {xtype: 'textfield', fieldLabel: '<?php echo lang('field_meta_keywords'); ?>', name: 'HOME_META_KEYWORD[<?php echo strtoupper($l['code']); ?>]'},
+            {xtype: 'textarea', height: 200, resizable: true, fieldLabel: '<?php echo lang('field_meta_description'); ?>', name: 'HOME_META_DESCRIPTION[<?php echo strtoupper($l['code']); ?>]'}
           ]
         });
         
@@ -63,4 +65,4 @@ Ext.define('Toc.homepage_info.MetaInfoPanel', {
 });
 
 /* End of file meta_info_panel.php */
-/* Location: ./system/modules/homepage_info/views/meta_info_panel.php */
+/* Location: ./templates/base/web/views/homepage_info/meta_info_panel.php */

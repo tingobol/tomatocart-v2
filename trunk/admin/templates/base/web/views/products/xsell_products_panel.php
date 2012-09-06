@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource xsell_products_panel.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -20,17 +22,15 @@ Ext.define('Toc.products.XsellProductsGrid', {
   constructor: function(config) {
     config = config || {};
     
-    config.title = '<?= lang('section_xsell_products'); ?>';
+    config.title = '<?php echo lang('section_xsell_products'); ?>';
     config.productsId = config.productsId || null;
     
     config.store = Ext.create('Ext.data.Store', {
       fields: ['products_id', 'products_name'],
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
+        url : '<?php echo site_url('products/get_xsell_products'); ?>',
         extraParams: {
-          module: 'products',
-          action: 'get_xsell_products',
           products_id: config.productsId
         },
         reader: {
@@ -47,11 +47,11 @@ Ext.define('Toc.products.XsellProductsGrid', {
     
     config.columns =[
       Ext.create('Ext.grid.RowNumberer'),
-      { header: '<?= lang('table_heading_products'); ?>', dataIndex: 'products_name', sortable: true, flex: 1},
+      { header: '<?php echo lang('table_heading_products'); ?>', dataIndex: 'products_name', sortable: true, flex: 1},
       {
         xtype:'actioncolumn', 
         width:50,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           iconCls: 'icon-action icon-delete-record',
           tooltip: TocLanguage.tipDelete,
@@ -78,7 +78,7 @@ Ext.define('Toc.products.XsellProductsGrid', {
       this.cboProducts, 
       ' ', 
       {
-        text: '<?= lang('button_insert'); ?>',
+        text: '<?php echo lang('button_insert'); ?>',
         iconCls : 'add',
         handler: this.addProduct,
         scope: this
@@ -93,10 +93,8 @@ Ext.define('Toc.products.XsellProductsGrid', {
       fields: ['id', 'text'],
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
+        url : '<?php echo site_url('products/get_products'); ?>',
         extraParams: {
-          module: 'products',
-          action: 'get_products',
           products_id: productsId
         },
         reader: {
@@ -111,7 +109,7 @@ Ext.define('Toc.products.XsellProductsGrid', {
     this.cboProducts = Ext.create('Ext.form.ComboBox', {
       name: 'xsellproducts',
       store: store,
-      emptyText: '<?= lang('section_xsell_products'); ?>',
+      emptyText: '<?php echo lang('section_xsell_products'); ?>',
       width: 400,
       queryMode: 'local', 
       displayField: 'text', 
@@ -167,4 +165,4 @@ Ext.define('Toc.products.XsellProductsGrid', {
 });
 
 /* End of file xsell_products_panel.php */
-/* Location: ./system/modules/products/views/xsell_products_panel.php */
+/* Location: ./templates/base/web/views/products/xsell_products_panel.php */

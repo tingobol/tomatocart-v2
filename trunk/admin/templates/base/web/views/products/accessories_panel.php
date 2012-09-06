@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource accessories_panel.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -21,7 +23,7 @@ Ext.define('Toc.products.AccessoriesPanel', {
     config = config || {};
     
     config.border = false;
-    config.title = '<?= lang('section_accessories'); ?>';
+    config.title = '<?php echo lang('section_accessories'); ?>';
     config.viewConfig = {emptyText: TocLanguage.gridNoRecords};
     config.productsId = config.productsId || null;
     
@@ -29,10 +31,8 @@ Ext.define('Toc.products.AccessoriesPanel', {
       fields: ['accessories_id', 'products_name'],
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
+        url : '<?php echo site_url('products/get_accessories'); ?>',
         extraParams: {
-          module: 'products',
-          action: 'get_accessories',
           products_id: config.productsId
         },
         reader: {
@@ -49,11 +49,11 @@ Ext.define('Toc.products.AccessoriesPanel', {
     
     config.columns =[
       Ext.create('Ext.grid.RowNumberer'),
-      { header: '<?= lang('table_heading_products'); ?>', dataIndex: 'products_name', sortable: true, flex: 1},
+      { header: '<?php echo lang('table_heading_products'); ?>', dataIndex: 'products_name', sortable: true, flex: 1},
       {
         xtype:'actioncolumn', 
         width:50,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           iconCls: 'icon-action icon-delete-record',
           tooltip: TocLanguage.tipDelete,
@@ -80,7 +80,7 @@ Ext.define('Toc.products.AccessoriesPanel', {
       this.cboProducts, 
       ' ', 
       {
-        text: '<?= lang('button_insert'); ?>',
+        text: '<?php echo lang('button_insert'); ?>',
         iconCls : 'add',
         handler: this.addProduct,
         scope: this
@@ -95,10 +95,8 @@ Ext.define('Toc.products.AccessoriesPanel', {
       fields: ['id', 'text'],
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
+        url : '<?php echo site_url('products/get_products'); ?>',
         extraParams: {
-          module: 'products',
-          action: 'get_products',
           products_id: productsId
         },
         reader: {
@@ -113,7 +111,7 @@ Ext.define('Toc.products.AccessoriesPanel', {
     this.cboProducts = Ext.create('Ext.form.ComboBox', {
       name: 'accessories_name',
       store: store,
-      emptyText: '<?= lang('section_accessories'); ?>',
+      emptyText: '<?php echo lang('section_accessories'); ?>',
       width: 400,
       queryMode: 'local', 
       displayField: 'text', 
@@ -169,4 +167,4 @@ Ext.define('Toc.products.AccessoriesPanel', {
 });
 
 /* End of file accessories_panel.php */
-/* Location: ./system/modules/products/views/accessories_panel.php */
+/* Location: ./templates/base/web/views/products/accessories_panel.php */
