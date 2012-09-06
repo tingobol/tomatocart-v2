@@ -1,25 +1,28 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource variants_panel.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
+
 Ext.define('Toc.products.VariantsPanel', {
   extend: 'Ext.Panel',
   
   constructor: function(config) {
     config = config || {};
     
-    config.title = '<?= lang('section_variants'); ?>';
+    config.title = '<?php echo lang('section_variants'); ?>';
     config.layout = 'border';
     config.defaults = {split: true};
     
@@ -48,10 +51,9 @@ Ext.define('Toc.products.VariantsPanel', {
       labelAlign: 'top',
       autoScroll: true,
       tbar: [{
-        text: '<?= lang('button_manage_variants_groups'); ?>',
+        text: '<?php echo lang('button_manage_variants_groups'); ?>',
         iconCls : 'add',
         handler: function() {
-          console.log('run');
           this.fireEvent('addvariantsgroups', this.groupIds);
         },
         scope: this
@@ -69,10 +71,8 @@ Ext.define('Toc.products.VariantsPanel', {
       fields: ['products_variants_id', 'variants_values', 'variants_groups', 'variants_values_name', 'data', 'default'],
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
+        url : '<?php echo site_url('products/get_variants_products'); ?>',
         extraParams: {
-          module: 'products',
-          action: 'get_variants_products',
           products_id: productsId
         },
         reader: {
@@ -95,10 +95,10 @@ Ext.define('Toc.products.VariantsPanel', {
       collapsible: true,
       store: dsVariants,
       columns: [
-        {header: '<?= lang("table_heading_variants"); ?>', dataIndex: 'variants_values_name', flex: 1},
+        {header: '<?php echo lang("table_heading_variants"); ?>', dataIndex: 'variants_values_name', flex: 1},
         {
           xtype: 'checkcolumn',
-          header: '<?= lang("table_heading_default"); ?>',
+          header: '<?php echo lang("table_heading_default"); ?>',
           dataIndex: 'default',
           width: 55,
           listeners: {
@@ -122,7 +122,7 @@ Ext.define('Toc.products.VariantsPanel', {
         {
           xtype:'actioncolumn', 
           width:50,
-          header: '<?= lang("table_heading_action"); ?>',
+          header: '<?php echo lang("table_heading_action"); ?>',
           items: [{
             iconCls: 'icon-action icon-delete-record',
             tooltip: TocLanguage.tipDelete,
@@ -199,10 +199,8 @@ Ext.define('Toc.products.VariantsPanel', {
             fields: ['id', 'text'],
             proxy: {
               type: 'ajax',
-              url : Toc.CONF.CONN_URL,
+              url : '<?php echo site_url('products/get_variants_values'); ?>',
               extraParams: {
-                module: 'products',
-                action: 'get_variants_values',
                 group_id: groups[i].id
               },
               reader: {
@@ -261,7 +259,7 @@ Ext.define('Toc.products.VariantsPanel', {
     });
     
     if (error === true) {
-      Ext.MessageBox.alert(TocLanguage.msgErrTitle, '<?= lang('msg_warning_must_choose_value_for_variant_group'); ?>');
+      Ext.MessageBox.alert(TocLanguage.msgErrTitle, '<?php echo lang('msg_warning_must_choose_value_for_variant_group'); ?>');
       return;
     }
     
@@ -283,7 +281,7 @@ Ext.define('Toc.products.VariantsPanel', {
     }
     
     if (found == true) {
-      Ext.MessageBox.alert(TocLanguage.msgErrTitle, '<?= lang('msg_warning_variant_values_exist'); ?>');
+      Ext.MessageBox.alert(TocLanguage.msgErrTitle, '<?php echo lang('msg_warning_variant_values_exist'); ?>');
       return;
     }
     
@@ -449,4 +447,4 @@ Ext.define('Toc.products.VariantsPanel', {
 });
 
 /* End of file variants_panel.php */
-/* Location: ./system/modules/products/views/variants_panel.php */
+/* Location: ./templates/base/web/views/products/variants_panel.php */

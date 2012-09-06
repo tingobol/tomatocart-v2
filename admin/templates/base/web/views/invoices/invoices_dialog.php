@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource system/modules/invoices/views/invoices_dialog.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -21,7 +23,7 @@ Ext.define('Toc.invoices.InvoicesDialog', {
     config = config || {};
   
     config.id = 'invoices-dialog-win';
-    config.title = '<?= lang('heading_invoices_title'); ?>';
+    config.title = '<?php echo lang('heading_invoices_title'); ?>';
     config.width = 700;
     config.height = 480;
     config.layout = 'fit';
@@ -34,31 +36,31 @@ Ext.define('Toc.invoices.InvoicesDialog', {
       '<table width="100%">',
         '<tr>',
           '<td width= "33%" valign="top">',
-            '<h1><?= icon('personal.png'); ?><span style= "margin-left:4px;"><?= lang('subsection_customer'); ?></span></h1>',
+            '<h1><?php echo icon('personal.png'); ?><span style= "margin-left:4px;"><?php echo lang('subsection_customer'); ?></span></h1>',
             '{customer}',
           '</td>',
          
           '<td width= "33%" valign="top">',
-            '<h1><?= icon('home.png'); ?><span style= "margin-left:4px;"><?= lang('subsection_shipping_address'); ?></span></h1>', 
+            '<h1><?php echo icon('home.png'); ?><span style= "margin-left:4px;"><?php echo lang('subsection_shipping_address'); ?></span></h1>', 
             '{shippingAddress}', 
           '</td>',
          
           '<td valign="top">',
-            '<h1><?= icon('bill.png'); ?><span style= "margin-left:4px;"><?= lang('subsection_billing_address'); ?></span></h1>',
+            '<h1><?php echo icon('bill.png'); ?><span style= "margin-left:4px;"><?php echo lang('subsection_billing_address'); ?></span></h1>',
             '{billingAddress}',
           '</td>',
         '</tr>',
         '<tr>',    
           '<td width= "33%" valign="top">',
-            '<h1><?= icon('payment.png'); ?><span style= "margin-left:4px;"><?= lang('subsection_payment_method'); ?></span></h1>',
+            '<h1><?php echo icon('payment.png'); ?><span style= "margin-left:4px;"><?php echo lang('subsection_payment_method'); ?></span></h1>',
             '{paymentMethod}',
           '</td>',
           '<td width= "33%" valign="top">',
-            '<h1><?= icon('history.png'); ?><span style= "margin-left:4px;"><?= lang('subsection_status'); ?></h1>',
+            '<h1><?php echo icon('history.png'); ?><span style= "margin-left:4px;"><?php echo lang('subsection_status'); ?></h1>',
             '{status}',
           '</td>',
           '<td valign="top">',
-            '<h1><?= icon('calculator.png'); ?><span style= "margin-left:4px;"><?= lang('subsection_total'); ?></span></h1>',
+            '<h1><?php echo icon('calculator.png'); ?><span style= "margin-left:4px;"><?php echo lang('subsection_total'); ?></span></h1>',
             '{total}',
           '</td>',
         '</tr>',
@@ -80,7 +82,7 @@ Ext.define('Toc.invoices.InvoicesDialog', {
   
   buildForm: function(ordersId) {
     this.pnlSummary = Ext.create('Ext.Panel', {
-      title: '<?= lang('section_summary'); ?>',
+      title: '<?php echo lang('section_summary'); ?>',
       border: false,
       cls: 'pnlSummary',
       bodyPadding: 10
@@ -104,10 +106,8 @@ Ext.define('Toc.invoices.InvoicesDialog', {
   
   loadSummaryPanel: function(ordersId) {
     Ext.Ajax.request({
-      url: Toc.CONF.CONN_URL,
+      url: '<?php echo site_url('orders/load_summary_data'); ?>',
       params: {
-        module: 'orders',
-        action: 'load_summary_data',
         orders_id: ordersId        
       },
       success: function(response) {
@@ -121,4 +121,4 @@ Ext.define('Toc.invoices.InvoicesDialog', {
 });
 
 /* End of file invoices_dialog.php */
-/* Location: system/modules/invoices/views/invoices_dialog.php */
+/* Location: ./templates/base/web/views/invoices/invoices_dialog.php */

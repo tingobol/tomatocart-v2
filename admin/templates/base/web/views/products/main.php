@@ -1,35 +1,39 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource main.php
+ * @since   Version 2.0
+ * @filesource
  */
+
+// ------------------------------------------------------------------------
 
   echo 'Ext.namespace("Toc.products");';
   
-  require_once 'variants_data_panel.php';
-  require_once 'variants_panel.php';
-  require_once 'variants_groups_dialog.php';
-  require_once 'images_grid.php';
-  require_once 'images_panel.php';
-  require_once 'accessories_panel.php';
-  require_once 'xsell_products_panel.php';
-  require_once 'categories_panel.php';
-  require_once 'data_panel.php';
-  require_once 'meta_panel.php';
-  require_once 'general_panel.php';
-  require_once 'categories_tree_panel.php';
-  require_once 'products_main_panel.php';
-  require_once 'products_grid.php';
-  require_once 'products_dialog.php';
+  include 'variants_data_panel.php';
+  include 'variants_panel.php';
+  include 'variants_groups_dialog.php';
+  include 'images_grid.php';
+  include 'images_panel.php';
+  include 'accessories_panel.php';
+  include 'xsell_products_panel.php';
+  include 'categories_panel.php';
+  include 'data_panel.php';
+  include 'meta_panel.php';
+  include 'general_panel.php';
+  include 'categories_tree_panel.php';
+  include 'products_main_panel.php';
+  include 'products_grid.php';
+  include 'products_dialog.php';
 ?>
 
 Ext.override(Toc.desktop.ProductsWindow, {
@@ -117,7 +121,7 @@ Ext.override(Toc.desktop.ProductsWindow, {
         if ( this.groupIds.sort().toString() != ids.sort().toString()) {
           Ext.MessageBox.confirm(
             TocLanguage.msgWarningTitle, 
-            '<?= lang('msg_warning_variants_groups_changed'); ?>',
+            '<?php echo lang('msg_warning_variants_groups_changed'); ?>',
             function(btn) {
               if (btn == 'yes') {
                 this.deleteVariants();
@@ -157,4 +161,4 @@ Ext.override(Toc.desktop.ProductsWindow, {
 });
 
 /* End of file main.php */
-/* Location: ./system/modules/products/views/main.php */
+/* Location: ./templates/base/web/views/products/main.php */

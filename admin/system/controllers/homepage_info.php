@@ -18,15 +18,15 @@
 // ------------------------------------------------------------------------
 
 /**
- * Configurations Model
+ * Homepage Info Controller
  *
  * @package   TomatoCart
  * @subpackage  tomatocart
- * @category  template-module-model
+ * @category  template-module-controller
  * @author    TomatoCart Dev Team
  * @link    http://tomatocart.com/wiki/
  */
-class Configurations_Model extends CI_Model
+class Homepage_Info extends TOC_Controller
 {
     /**
      * Constructor
@@ -37,56 +37,53 @@ class Configurations_Model extends CI_Model
     public function __construct()
     {
         parent::__construct();
+        
+        $this->load->model('homepage_info_model');
     }
     
 // ------------------------------------------------------------------------
     
     /**
-     * Get the configurations
+     * Save the home information
      *
      * @access public
-     * @param $id
-     * @return mixed
+     * @return string
      */
-    public function get_configurations($id)
+    public function save_info()
     {
-        $result = $this->db
-        ->select('configuration_id, configuration_key, configuration_title, configuration_description, configuration_value, use_function, set_function')
-        ->from('configuration')
-        ->where('configuration_group_id', $id)
-        ->order_by('sort_order')
-        ->get();
+        $data = array('page_title' => $this->input->post('HOME_PAGE_TITLE'), 
+                      'keywords' => $this->input->post('HOME_META_KEYWORD'), 
+                      'descriptions' => $this->input->post('HOME_META_DESCRIPTION'), 
+                      'index_text' => $this->input->post('index_text'));
         
-        if ($result->num_rows() > 0)
+        if ($this->homepage_info_model->save_data($data))
         {
-            return $result->result_array();
+            $response = array('success' => TRUE, 'feedback' => lang('ms_success_action_performed'));
+        }
+        else
+        {
+            $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed'));
         }
         
-        return NULL;
+        $this->output->set_output(json_encode($response));
     }
     
 // ------------------------------------------------------------------------
     
     /**
-     * Save the configurations
+     * Load the home page infomation
      *
      * @access public
-     * @param $id
-     * @param $value
-     * @return boolean
+     * @return string
      */
-    public function save($id, $value)
+    public function load_info()
     {
-        $this->db->update('configuration', array('configuration_value' => $value) , array('configuration_id' => $id));
+      
+        $data = $this->homepage_info_model->get_data();
         
-        if ($this->db->affected_rows() > 0)
-        {
-            return TRUE;
-        }
-        
-        return FALSE;
+        $this->output->set_output(json_encode(array('success' => TRUE, 'data' => $data)));
     }
 }
 
-/* End of file configuration_model.php */
-/* Location: ./system/models/configuration_model.php */
+/* End of file homepage_info.php */
+/* Location: ./system/controllers/homepage_info.php */

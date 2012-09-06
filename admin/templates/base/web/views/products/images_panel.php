@@ -1,25 +1,28 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource images_panel.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
+
 Ext.define('Toc.products.ImagesPanel', {
   extend: 'Ext.Panel',
   
   constructor: function(config) {
     config = config || {};
     
-    config.title = '<?= lang('section_images'); ?>';
+    config.title = '<?php echo lang('section_images'); ?>';
     config.layout = 'fit';
     
     config.productsId = config.productsId || null;
@@ -70,10 +73,8 @@ Ext.define('Toc.products.ImagesPanel', {
         
         if (form.isValid()) {
           form.submit({
-            url: Toc.CONF.CONN_URL,
+            url: '<?php echo site_url('products/upload_image'); ?>',
             params: {
-              module: 'products',
-              action: 'upload_image',
               products_id: productsId
             },
             waitMsg: 'Uploading your photo...',
@@ -91,7 +92,7 @@ Ext.define('Toc.products.ImagesPanel', {
     });
     
     this.pnlImagesUpload = Ext.create('Ext.form.Panel', {
-      title: '<?= lang('image_remote_upload'); ?>',
+      title: '<?php echo lang('image_remote_upload'); ?>',
       bodyPadding: '5',
       border: false,
       items: [
@@ -150,11 +151,7 @@ Ext.define('Toc.products.ImagesPanel', {
       pageSize: Toc.CONF.GRID_PAGE_SIZE,
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
-        extraParams: {
-          module: 'products',
-          action: 'get_local_images'
-        },
+        url : '<?php echo site_url('products/get_local_images'); ?>',
         reader: {
           type: 'json',
           root: Toc.CONF.JSON_READER_ROOT,
@@ -171,18 +168,18 @@ Ext.define('Toc.products.ImagesPanel', {
     });
     
     var pnlLocalImages = Ext.create('Ext.Panel', {
-      title: '<?= lang('image_local_files'); ?>',
+      title: '<?php echo lang('image_local_files'); ?>',
       layout: 'border',
       border: false,
       items:[
         {
           region: 'north',
           border: false,
-          html: '<p class="form-info"><?= lang('introduction_select_local_images'); ?></p>'
+          html: '<p class="form-info"><?php echo lang('introduction_select_local_images'); ?></p>'
         },  
         {
           xtype:'fieldset',
-          title: '<?= lang('section_images'); ?>',
+          title: '<?php echo lang('section_images'); ?>',
           region: 'center',
           border: false,
           items: this.selLocalImages
@@ -212,10 +209,8 @@ Ext.define('Toc.products.ImagesPanel', {
     }
     
     Ext.Ajax.request({
-      url: Toc.CONF.CONN_URL, 
+      url: '<?php echo site_url('products/assign_local_images'); ?>', 
       params: {
-        module: 'products',
-        action: 'assign_local_images',
         products_id: this.productsId,
         localimages: images
       },
@@ -237,4 +232,4 @@ Ext.define('Toc.products.ImagesPanel', {
 });
 
 /* End of file images_panel.php */
-/* Location: ./system/modules/products/views/images_panel.php */
+/* Location: ./templates/base/web/views/products/images_panel.php */

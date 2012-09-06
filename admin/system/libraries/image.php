@@ -123,7 +123,7 @@ Class TOC_Image {
      */
     public  function get_width($code) 
     {
-        return $this->_groups[$this->getID($code)]['size_width'];
+        return $this->_groups[$this->get_id($code)]['size_width'];
     }
   
 // ------------------------------------------------------------------------
@@ -137,7 +137,7 @@ Class TOC_Image {
      */
     public function get_height($code) 
     {
-        return $this->_groups[$this->getID($code)]['size_height'];
+        return $this->_groups[$this->get_id($code)]['size_height'];
     }
   
 // ------------------------------------------------------------------------
@@ -151,7 +151,7 @@ Class TOC_Image {
      */
     public function exists($code) 
     {
-        return isset($this->_groups[$this->getID($code)]);
+        return isset($this->_groups[$this->get_id($code)]);
     }
   
 // ------------------------------------------------------------------------

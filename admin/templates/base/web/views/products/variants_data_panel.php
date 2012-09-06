@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource products_dialog.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -37,7 +39,7 @@ Ext.define('Toc.products.VariantDataPanel', {
      var items = [
       {
         xtype: 'fieldset',
-        title: '<?= lang('fieldset_lengend_data_title'); ?>',
+        title: '<?php echo lang('fieldset_lengend_data_title'); ?>',
         labelWidth: 80,
         labelSeparator: ' ',
         autoHeight: true,
@@ -46,7 +48,7 @@ Ext.define('Toc.products.VariantDataPanel', {
         },
         items: [
           {
-            fieldLabel: '<?= lang('field_quantity'); ?>',
+            fieldLabel: '<?php echo lang('field_quantity'); ?>',
             name: 'variants_quantity[' + valuesId + ']',
             xtype: 'numberfield',
             allowDecimals: false,
@@ -54,25 +56,25 @@ Ext.define('Toc.products.VariantDataPanel', {
             value: data.variants_quantity
           },
           {
-            fieldLabel: '<?= lang('field_price_net'); ?>',
+            fieldLabel: '<?php echo lang('field_price_net'); ?>',
             xtype: 'textfield',
             name: 'variants_net_price[' + valuesId + ']',
             value: data.variants_net_price
           },
           {
-            fieldLabel: '<?= lang('field_sku'); ?>',
+            fieldLabel: '<?php echo lang('field_sku'); ?>',
             xtype: 'textfield',
             name: 'variants_sku[' + valuesId + ']',
             value: data.variants_sku
           },
           {
-            fieldLabel: '<?= lang('field_model'); ?>',
+            fieldLabel: '<?php echo lang('field_model'); ?>',
             xtype: 'textfield',
             name: 'variants_model[' + valuesId + ']',
             value: data.variants_model
           },
           {
-            fieldLabel: '<?= lang('field_weight'); ?>',
+            fieldLabel: '<?php echo lang('field_weight'); ?>',
             xtype: 'textfield',
             name: 'variants_weight[' + valuesId + ']',
             value: data.variants_weight
@@ -86,10 +88,10 @@ Ext.define('Toc.products.VariantDataPanel', {
                 labelWidth: 80,
                 border: false,
                 items: [{
-                  fieldLabel: '<?= lang('field_status'); ?>', 
+                  fieldLabel: '<?php echo lang('field_status'); ?>', 
                   xtype:'radio', 
                   name: 'variants_status_' + valuesId, 
-                  boxLabel: '<?= lang('status_enabled'); ?>', 
+                  boxLabel: '<?php echo lang('status_enabled'); ?>', 
                   xtype:'radio', 
                   inputValue: '1', 
                   checked: (data.variants_status == 1 ? true: false) 
@@ -98,7 +100,7 @@ Ext.define('Toc.products.VariantDataPanel', {
               {
                 border: false,
                 items: [{
-                  boxLabel: '<?= lang('status_disabled'); ?>', 
+                  boxLabel: '<?php echo lang('status_disabled'); ?>', 
                   xtype:'radio',
                   style: 'margin:0 8px;', 
                   name: 'variants_status_' + valuesId, 
@@ -113,7 +115,7 @@ Ext.define('Toc.products.VariantDataPanel', {
       },
       
       this.fsImages = Ext.create('Ext.form.FieldSet', {
-        title: '<?= lang("fieldset_lengend_image_title"); ?>',
+        title: '<?php echo lang("fieldset_lengend_image_title"); ?>',
         labelWidth: 80, 
         labelSeparator: ' ', 
         defaults: {anchor: '94%'}, 
@@ -175,7 +177,7 @@ Ext.define('Toc.products.VariantDataPanel', {
       pnlImages.items.push({
         xtype: 'displayfield', 
         hideLabel: true, 
-        value: '<?= lang('ms_notice_no_products_image');?>', 
+        value: '<?php echo lang('ms_notice_no_products_image');?>', 
         style: 'margin-bottom: 10px'
       });
     }
@@ -189,6 +191,5 @@ Ext.define('Toc.products.VariantDataPanel', {
   }, 
 });
 
-
 /* End of file variants_data_panel.php */
-/* Location: ./system/modules/products/views/variants_data_panel.php */
+/* Location: ./templates/base/web/views/products/variants_data_panel.php */

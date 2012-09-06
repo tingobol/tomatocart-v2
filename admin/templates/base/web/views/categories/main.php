@@ -15,6 +15,8 @@
  * @filesource
  */
 
+// ------------------------------------------------------------------------
+
   echo 'Ext.namespace("Toc.categories");';
   
   include 'categories_grid.php';

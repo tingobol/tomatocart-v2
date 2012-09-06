@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource system/modules/reports_products/views/categories_purchased_panel.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -19,7 +21,7 @@ Ext.define('Toc.reports_products.CategoriesPurchasedPanel', {
   
   statics: {
     formatCurrency : function(price) {
-      return Ext.util.Format.currency(price, '<?php echo $this->currencies->get_symbol_left(); ?>', parseInt('<?php echo $this->currencies->get_decimal_places(); ?>'), '<?php echo $this->currencies->get_symbol_right(); ?>');
+      return Ext.util.Format.currency(price, '<?php echo get_instance()->currencies->get_symbol_left(); ?>', parseInt('<?php echo get_instance()->currencies->get_decimal_places(); ?>'), '<?php echo get_instance()->currencies->get_symbol_right(); ?>');
     }
   },
   
@@ -39,11 +41,7 @@ Ext.define('Toc.reports_products.CategoriesPurchasedPanel', {
       ],
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
-        extraParams: {
-          module: 'reports_products',
-          action: 'get_categories'
-        },
+        url : '<?php echo site_url('reports_products/get_categories'); ?>',
         reader: {
           type: 'json',
           root: Toc.CONF.JSON_READER_ROOT,
@@ -59,7 +57,7 @@ Ext.define('Toc.reports_products.CategoriesPurchasedPanel', {
           return '<div style="margin-left: {margin}px">{text}</div>';
         }
       },
-      emptyText: '<?= lang("top_category"); ?>',
+      emptyText: '<?php echo lang("top_category"); ?>',
       name: 'categories',
       store: dsCategories,
       queryMode: 'local',
@@ -75,13 +73,13 @@ Ext.define('Toc.reports_products.CategoriesPurchasedPanel', {
     config.dateStart = Ext.create('Ext.form.DateField', {
       width: 150, 
       format: 'Y-m-d', 
-      emptyText: '<?= lang("field_start_date"); ?>'
+      emptyText: '<?php echo lang("field_start_date"); ?>'
     });
     
     config.dateEnd = Ext.create('Ext.form.DateField', {
       width: 150, 
       format: 'Y-m-d', 
-      emptyText: '<?= lang("field_end_date"); ?>'
+      emptyText: '<?php echo lang("field_end_date"); ?>'
     });
     
     config.tbar = [
@@ -123,11 +121,8 @@ Ext.define('Toc.reports_products.CategoriesPurchasedPanel', {
       pageSize: Toc.CONF.GRID_PAGE_SIZE,
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
-        extraParams: {
-          module: 'reports_products',
-          action: 'list_categories_purchased'
-        },
+        url : '<?php echo site_url('reports_products/list_categories_purchased'); ?>',
+        extraParams: {},
         reader: {
           type: 'json',
           root: Toc.CONF.JSON_READER_ROOT,
@@ -150,7 +145,7 @@ Ext.define('Toc.reports_products.CategoriesPurchasedPanel', {
           label: {
             renderer: statics.formatCurrency
           },
-          title: '<?= lang('table_heading_total'); ?>',
+          title: '<?php echo lang('table_heading_total'); ?>',
           grid: true,
           minimum: 0
         }, 
@@ -158,7 +153,7 @@ Ext.define('Toc.reports_products.CategoriesPurchasedPanel', {
           type: 'Category',
           position: 'left',
           fields: ['categories_name'],
-          title: '<?= lang('table_heading_categories'); ?>'
+          title: '<?php echo lang('table_heading_categories'); ?>'
         }
       ],
       series: [
@@ -178,7 +173,7 @@ Ext.define('Toc.reports_products.CategoriesPurchasedPanel', {
                 categories_name = categories_name.substr(0, 25) + '... ';
               }
               
-              this.setTitle(categories_name + ':  ' + storeItem.get('quantity') + ' <?= lang('products_purchased_tip'); ?>');
+              this.setTitle(categories_name + ':  ' + storeItem.get('quantity') + ' <?php echo lang('products_purchased_tip'); ?>');
             }
           },
           label: {
@@ -248,4 +243,4 @@ Ext.define('Toc.reports_products.CategoriesPurchasedPanel', {
 });
 
 /* End of file categories_purchased_panel.php */
-/* Location: system/modules/reports_products/views/categories_purchased_panel.php */
+/* Location: ./templates/base/web/views/reports_products/categories_purchased_panel.php */

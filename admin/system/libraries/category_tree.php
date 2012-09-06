@@ -524,7 +524,7 @@ class TOC_Category_Tree {
     return $result;
   }
   
-  function buildCheckTree($parent_id = 0,$checked = array()) {
+  public function build_check_tree($parent_id = 0,$checked = array()) {
     $result = array();
     
     if (isset($this->data[$parent_id])) {
@@ -540,7 +540,7 @@ class TOC_Category_Tree {
         }
 
         if (isset($this->data[$category_id])) {
-          $data['children'] = $this->buildCheckTree($category_id, $checked);
+          $data['children'] = $this->build_check_tree($category_id, $checked);
         } else {
           $data['leaf'] = TRUE;
         }
@@ -550,18 +550,6 @@ class TOC_Category_Tree {
     }
     
     return $result;
-  }
-  
-  function setBreadcrumbUsage($breadcrumb_usage) {
-    if ($breadcrumb_usage === true) {
-      $this->breadcrumb_usage = true;
-    } else {
-      $this->breadcrumb_usage = false;
-    }
-  }
-  
-  function getTree($parent_id = '') {
-    return $this->buildBranchArray((empty($parent_id) ? $this->root_category_id : $parent_id));
   }
   
   function buildBranchArray($parent_id, $level = 0, $result = '') {
