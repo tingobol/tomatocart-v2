@@ -48,11 +48,11 @@ Ext.define('Toc.unit_classes.UnitClassesGrid', {
     
     config.selModel = Ext.create('Ext.selection.CheckboxModel');
     config.columns =[
-      {header: '<?= lang('table_heading_unit_name'); ?>', dataIndex: 'unit_class_title', flex: 1},
+      {header: '<?php echo lang('table_heading_unit_name'); ?>', dataIndex: 'unit_class_title', flex: 1},
       {
         xtype: 'actioncolumn', 
         width: 80,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           tooltip: TocLanguage.tipEdit,
           iconCls: 'icon-action icon-edit-record',

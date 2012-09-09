@@ -30,7 +30,7 @@ Ext.override(Toc.desktop.ImageGroupsWindow, {
       
       win = desktop.createWindow({
         id: 'image_groups-win',
-        title: '<?= lang('heading_image_groups_title'); ?>',
+        title: '<?php echo lang('heading_image_groups_title'); ?>',
         width: 800,
         height: 400,
         iconCls: 'icon-image_groups-win',

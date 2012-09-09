@@ -49,9 +49,9 @@ Ext.define('Toc.feature_products_manager.ProductsManagerGrid', {
     config.selModel = Ext.create('Ext.selection.CheckboxModel');
     config.selType = 'cellmodel';
     config.columns =[
-      {header: '<?= lang('table_heading_products'); ?>', dataIndex: 'products_name', flex: 1},
+      {header: '<?php echo lang('table_heading_products'); ?>', dataIndex: 'products_name', flex: 1},
       {
-        header: '<?= lang('table_heading_sort_order'); ?>', 
+        header: '<?php echo lang('table_heading_sort_order'); ?>', 
         align: 'right', 
         dataIndex: 'sort_order',
         editor: {
@@ -62,7 +62,7 @@ Ext.define('Toc.feature_products_manager.ProductsManagerGrid', {
       {
         xtype: 'actioncolumn', 
         width: 40,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           iconCls: 'icon-action icon-delete-record',
           tooltip: TocLanguage.tipDelete,
@@ -116,7 +116,7 @@ Ext.define('Toc.feature_products_manager.ProductsManagerGrid', {
       },
       store: config.dsCategories,
       queryMode: 'remote',
-      emptyText: '<?= lang("top_category"); ?>',
+      emptyText: '<?php echo lang("top_category"); ?>',
       valueField: 'id',
       displayField: 'text',
       triggerAction: 'all',

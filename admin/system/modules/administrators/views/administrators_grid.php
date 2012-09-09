@@ -48,12 +48,12 @@ Ext.define('Toc.administrators.AdministratorsGrid', {
     
     config.selModel = Ext.create('Ext.selection.CheckboxModel');
     config.columns =[
-      {header: '<?= lang('table_heading_administrators'); ?>', dataIndex: 'user_name', flex: 1},
-      {header: '<?= lang('table_heading_email'); ?>', dataIndex: 'email_address', width: 250},
+      {header: '<?php echo lang('table_heading_administrators'); ?>', dataIndex: 'user_name', flex: 1},
+      {header: '<?php echo lang('table_heading_email'); ?>', dataIndex: 'email_address', width: 250},
       {
         xtype: 'actioncolumn', 
         width: 80,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           tooltip: TocLanguage.tipEdit,
           iconCls: 'icon-action icon-edit-record',

@@ -21,7 +21,7 @@ Ext.define('Toc.products.VariantsGroupsDialog', {
     config = config || {};
     
     config.id = 'variants_group-dialog-win';
-    config.title = '<?= lang('dialog_variants_groups_heading_title'); ?>';
+    config.title = '<?php echo lang('dialog_variants_groups_heading_title'); ?>';
     config.width = 450;
     config.height = 300;
     config.layout = 'fit';
@@ -81,7 +81,7 @@ Ext.define('Toc.products.VariantsGroupsDialog', {
       selModel: Ext.create('Ext.selection.CheckboxModel'),
       selType: 'cellmodel',
       columns: [
-        {header: '<?= lang('table_heading_attachments_name'); ?>', dataIndex: 'groups_name', flex: 1}
+        {header: '<?php echo lang('table_heading_attachments_name'); ?>', dataIndex: 'groups_name', flex: 1}
       ],
       tbar: [{
         text: TocLanguage.btnRefresh,

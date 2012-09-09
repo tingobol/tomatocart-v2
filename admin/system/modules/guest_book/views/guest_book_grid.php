@@ -20,9 +20,9 @@ Ext.define('Toc.guest_book.GuestBookGrid', {
   statics: {
     renderPublish:function(status) {
       if(status == 1) {
-        return '<img class="img-button" src="<?= icon_status_url('icon_status_green.gif'); ?>" />&nbsp;<img class="img-button btn-status-off" style="cursor: pointer" src="<?= icon_status_url('icon_status_red_light.gif'); ?>" />';
+        return '<img class="img-button" src="<?php echo icon_status_url('icon_status_green.gif'); ?>" />&nbsp;<img class="img-button btn-status-off" style="cursor: pointer" src="<?php echo icon_status_url('icon_status_red_light.gif'); ?>" />';
       }else {
-        return '<img class="img-button btn-status-on" style="cursor: pointer" src="<?= icon_status_url('icon_status_green_light.gif'); ?>" />&nbsp;<img class="img-button" src= "<?= icon_status_url('icon_status_red.gif'); ?>" />';
+        return '<img class="img-button btn-status-on" style="cursor: pointer" src="<?php echo icon_status_url('icon_status_green_light.gif'); ?>" />&nbsp;<img class="img-button" src= "<?php echo icon_status_url('icon_status_red.gif'); ?>" />';
       }
     }
   },  
@@ -58,14 +58,14 @@ Ext.define('Toc.guest_book.GuestBookGrid', {
     config.selModel = Ext.create('Ext.selection.CheckboxModel');
     config.selType = 'cellmodel';
     config.columns =[
-      { header: '<?= lang('table_heading_title'); ?>', dataIndex: 'title', sortable: true},
-      { header: '<?= lang('table_heading_languages'); ?>', align: 'center', dataIndex: 'languages', width: 80},
-      { header: '<?= lang('table_heading_date_added'); ?>', align: 'center', dataIndex: 'date_added', width: 100},
-      { header: '<?= lang('table_heading_guest_books_status'); ?>', align: 'center', dataIndex: 'guest_books_status', width: 100, renderer: statics.renderPublish},
+      { header: '<?php echo lang('table_heading_title'); ?>', dataIndex: 'title', sortable: true},
+      { header: '<?php echo lang('table_heading_languages'); ?>', align: 'center', dataIndex: 'languages', width: 80},
+      { header: '<?php echo lang('table_heading_date_added'); ?>', align: 'center', dataIndex: 'date_added', width: 100},
+      { header: '<?php echo lang('table_heading_guest_books_status'); ?>', align: 'center', dataIndex: 'guest_books_status', width: 100, renderer: statics.renderPublish},
       {
         xtype:'actioncolumn', 
         width:50,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           iconCls: 'icon-action icon-edit-record',
           tooltip: TocLanguage.tipEdit,

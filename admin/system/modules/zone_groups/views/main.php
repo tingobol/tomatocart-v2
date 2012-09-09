@@ -34,7 +34,7 @@ Ext.override(Toc.desktop.ZoneGroupsWindow, {
       
       win = desktop.createWindow({
         id: 'zone_groups-win',
-        title: '<?= lang("heading_zone_groups_title"); ?>',
+        title: '<?php echo lang("heading_zone_groups_title"); ?>',
         width: 800,
         height: 400,
         iconCls: 'icon-zone_groups-win',

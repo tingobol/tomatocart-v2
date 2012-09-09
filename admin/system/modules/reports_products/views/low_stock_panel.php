@@ -51,7 +51,7 @@ Ext.define('Toc.reports_products.LowStockPanel', {
           return '<div style="margin-left: {margin}px">{text}</div>';
         }
       },
-      emptyText: '<?= lang("top_category"); ?>',
+      emptyText: '<?php echo lang("top_category"); ?>',
       name: 'categories',
       store: dsCategories,
       queryMode: 'local',
@@ -108,7 +108,7 @@ Ext.define('Toc.reports_products.LowStockPanel', {
           type: 'Numeric',
           position: 'bottom',
           fields: ['products_quantity'],
-          title: '<?= lang('table_heading_quantity'); ?>',
+          title: '<?php echo lang('table_heading_quantity'); ?>',
           grid: true,
           minimum: 0
         }, 
@@ -116,7 +116,7 @@ Ext.define('Toc.reports_products.LowStockPanel', {
           type: 'Category',
           position: 'left',
           fields: ['products_name'],
-          title: '<?= lang('table_heading_products'); ?>'
+          title: '<?php echo lang('table_heading_products'); ?>'
         }
       ],
       series: [
@@ -136,7 +136,7 @@ Ext.define('Toc.reports_products.LowStockPanel', {
                 products_name = products_name.substr(0, 25) + '... ';
               }
               
-              this.setTitle(products_name + ':  ' + storeItem.get('products_quantity') + ' <?= lang('low_stock_tip'); ?>');
+              this.setTitle(products_name + ':  ' + storeItem.get('products_quantity') + ' <?php echo lang('low_stock_tip'); ?>');
             }
           },
           label: {

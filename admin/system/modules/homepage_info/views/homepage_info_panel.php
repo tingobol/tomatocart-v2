@@ -20,7 +20,7 @@ Ext.define('Toc.homepage_info.HomepageInfoPanel', {
   constructor: function(config) {
     config = config || {};
     
-    config.title = '<?= lang('section_homepage_text_title'); ?>';
+    config.title = '<?php echo lang('section_homepage_text_title'); ?>';
     config.border = false;
     config.layout = 'fit';
     
@@ -47,7 +47,7 @@ Ext.define('Toc.homepage_info.HomepageInfoPanel', {
           bodyPadding: 6,
           border: false,
           items: [
-            {xtype: 'htmleditor', height: 300, fieldLabel: '<?= lang('field_homepage_text'); ?>', name: 'index_text[<?php echo $l['id']; ?>]'}
+            {xtype: 'htmleditor', height: 300, fieldLabel: '<?php echo lang('field_homepage_text'); ?>', name: 'index_text[<?php echo $l['id']; ?>]'}
           ]
         });
         

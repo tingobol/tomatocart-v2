@@ -51,14 +51,14 @@ Ext.define('Toc.languages.LanguagesGrid', {
     
     config.selModel = Ext.create('Ext.selection.CheckboxModel');
     config.columns =[
-      {header: '<?= lang('table_heading_languages'); ?>', dataIndex: 'languages_name', flex: 1},
+      {header: '<?php echo lang('table_heading_languages'); ?>', dataIndex: 'languages_name', flex: 1},
       {header: '', width: 30, dataIndex: 'languages_flag'},
-      {header: '<?= lang('table_heading_total_definitions'); ?>', width: 130, dataIndex: 'total_definitions'},
-      {header: '<?= lang('table_heading_code'); ?>', width: 130, dataIndex: 'code'},
+      {header: '<?php echo lang('table_heading_total_definitions'); ?>', width: 130, dataIndex: 'total_definitions'},
+      {header: '<?php echo lang('table_heading_code'); ?>', width: 130, dataIndex: 'code'},
       {
         xtype: 'actioncolumn', 
         width: 120,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           tooltip: TocLanguage.tipEdit,
           iconCls: 'icon-action icon-edit-record',
@@ -70,7 +70,7 @@ Ext.define('Toc.languages.LanguagesGrid', {
           scope: this
         },
         {
-          tooltip: '<?= lang('icon_export'); ?>',
+          tooltip: '<?php echo lang('icon_export'); ?>',
           iconCls: 'icon-action icon-export-record',
           handler: function(grid, rowIndex, colIndex) {
             var rec = grid.getStore().getAt(rowIndex);
@@ -90,7 +90,7 @@ Ext.define('Toc.languages.LanguagesGrid', {
           scope: this
         },
         {
-          tooltip: '<?= lang('languages'); ?>',
+          tooltip: '<?php echo lang('languages'); ?>',
           iconCls: 'icon-action icon-languages',
           handler: function(grid, rowIndex, colIndex) {
             var rec = grid.getStore().getAt(rowIndex);

@@ -21,7 +21,7 @@ Ext.define('Toc.logo_upload.LogoUploadDialog', {
     config = config || {};
     
     config.id = 'logo_upload-win';
-    config.title = '<?= lang('heading_logo_upload_title'); ?>';
+    config.title = '<?php echo lang('heading_logo_upload_title'); ?>';
     config.width = 400;
     config.height = 250;
     config.iconCls = 'icon-logo_upload-win';
@@ -31,7 +31,7 @@ Ext.define('Toc.logo_upload.LogoUploadDialog', {
     
     config.buttons = [
       {
-        text: '<?= lang('button_save'); ?>',
+        text: '<?php echo lang('button_save'); ?>',
         handler: function() {
           this.submitForm();
         },
@@ -92,7 +92,7 @@ Ext.define('Toc.logo_upload.LogoUploadDialog', {
           border: false,
           bodyPadding: 10,
           items: [
-            {xtype: 'filefield', fieldLabel: '<?= lang('field_logo_image'); ?>', name: 'logo_image'}
+            {xtype: 'filefield', fieldLabel: '<?php echo lang('field_logo_image'); ?>', name: 'logo_image'}
           ]
         }
       ]

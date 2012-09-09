@@ -111,7 +111,7 @@ Ext.define('Toc.specials.SpecialsDialog', {
     
     this.cboProducts = Ext.create('Ext.form.ComboBox', {
       store: this.dsProducts,
-      fieldLabel: '<?= lang("field_product"); ?>',
+      fieldLabel: '<?php echo lang("field_product"); ?>',
       name: 'products_id',
       allowBlank: false,
       queryMode: 'remote',
@@ -123,7 +123,7 @@ Ext.define('Toc.specials.SpecialsDialog', {
     });
     
     this.txtPriceNet = Ext.create('Ext.form.TextField', {
-      fieldLabel: '<?= lang("field_price_net_percentage"); ?>', 
+      fieldLabel: '<?php echo lang("field_price_net_percentage"); ?>', 
       xtype:'textfield',
       name: 'specials_new_products_price',
       value: '0'
@@ -131,7 +131,7 @@ Ext.define('Toc.specials.SpecialsDialog', {
     this.txtPriceNet.on('change', this.onPriceNetChange, this);
     
     this.txtPriceGross = Ext.create('Ext.form.TextField', {
-      fieldLabel: '<?= lang("field_price_gross"); ?>', 
+      fieldLabel: '<?php echo lang("field_price_gross"); ?>', 
       xtype:'textfield',
       name: 'products_price_gross',
       value: '0'
@@ -158,20 +158,20 @@ Ext.define('Toc.specials.SpecialsDialog', {
         this.txtPriceGross, 
         {
           xtype: 'checkbox',
-          fieldLabel: '<?= lang("field_status"); ?>',
+          fieldLabel: '<?php echo lang("field_status"); ?>',
           name: 'status',
           anchor: ''
         },
         {
           xtype: 'datefield',
-          fieldLabel: '<?= lang("field_date_start"); ?>',
+          fieldLabel: '<?php echo lang("field_date_start"); ?>',
           name: 'start_date',
           format: 'Y-m-d',
           allowBlank: false
         }, 
         {
           xtype: 'datefield',
-          fieldLabel: '<?= lang("field_date_expires"); ?>',
+          fieldLabel: '<?php echo lang("field_date_expires"); ?>',
           name: 'expires_date',
           format: 'Y-m-d',
           allowBlank: false

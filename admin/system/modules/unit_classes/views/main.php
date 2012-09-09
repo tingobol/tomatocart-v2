@@ -31,7 +31,7 @@ Ext.override(Toc.desktop.UnitClassesWindow, {
       
       win = desktop.createWindow ({
         id: 'unit_classes-win',
-        title: '<?= lang('heading_unit_classes_title'); ?>',
+        title: '<?php echo lang('heading_unit_classes_title'); ?>',
         width: 600,
         height: 400,
         iconCls: 'icon-unit_classes-win',

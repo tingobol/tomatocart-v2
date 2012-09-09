@@ -21,7 +21,7 @@ Ext.define('Toc.unit_classes.UnitClassesDialog', {
     config = config || {};
     
     config.id = 'unit_classes-dialog-win';
-    config.title = '<?= lang('action_heading_new_quantity_unit_class'); ?>';
+    config.title = '<?php echo lang('action_heading_new_quantity_unit_class'); ?>';
     config.layout = 'fit';
     config.width = 400;
     config.height = 200;
@@ -65,7 +65,7 @@ Ext.define('Toc.unit_classes.UnitClassesDialog', {
         },
         success: function(form, action) {
           if (!action.result.data.is_default) {    
-            this.frmUnitClasses.add({xtype: 'checkbox', name: 'default', id:'default_unit_classess', fieldLabel: '<?= lang('field_is_default_unit'); ?>', anchor:''});
+            this.frmUnitClasses.add({xtype: 'checkbox', name: 'default', id:'default_unit_classess', fieldLabel: '<?php echo lang('field_is_default_unit'); ?>', anchor:''});
           }
           
           Toc.unit_classes.UnitClassesDialog.superclass.show.call(this);
@@ -76,7 +76,7 @@ Ext.define('Toc.unit_classes.UnitClassesDialog', {
         scope: this       
       });
     } else {   
-      this.frmUnitClasses.add({xtype: 'checkbox', name: 'default', id:'default_unit_classess', fieldLabel: '<?= lang('field_is_default_unit'); ?>', anchor:''});    
+      this.frmUnitClasses.add({xtype: 'checkbox', name: 'default', id:'default_unit_classess', fieldLabel: '<?php echo lang('field_is_default_unit'); ?>', anchor:''});    
       
       this.callParent();
     }
@@ -107,7 +107,7 @@ Ext.define('Toc.unit_classes.UnitClassesDialog', {
           name: 'unit_class_title[<?php echo $l['id']; ?>]',
           fieldLabel: '<?php echo $i != 1 ? '&nbsp;' : lang('field_unit_class_name'); ?>',
           allowBlank: false,
-          labelStyle: '<?= worldflag_url($l['country_iso']); ?>'
+          labelStyle: '<?php echo worldflag_url($l['country_iso']); ?>'
         });
         
         this.frmUnitClasses.add(txtLang<?php echo $l['id']; ?>);

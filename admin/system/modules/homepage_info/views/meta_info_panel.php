@@ -20,7 +20,7 @@ Ext.define('Toc.homepage_info.MetaInfoPanel', {
   constructor: function(config) {
     config = config || {};
     
-    config.title = '<?= lang('section_meta_info_title'); ?>';
+    config.title = '<?php echo lang('section_meta_info_title'); ?>';
     config.border = false;
     config.layout = 'fit';
     config.items = this.buildForm();
@@ -46,9 +46,9 @@ Ext.define('Toc.homepage_info.MetaInfoPanel', {
           layout: 'anchor',
           border: false,
           items: [
-            {xtype: 'textfield', fieldLabel: '<?= lang('field_page_title'); ?>', name: 'HOME_PAGE_TITLE[<?= strtoupper($l['code']); ?>]'},
-            {xtype: 'textfield', fieldLabel: '<?= lang('field_meta_keywords'); ?>', name: 'HOME_META_KEYWORD[<?= strtoupper($l['code']); ?>]'},
-            {xtype: 'textarea', height: 200, resizable: true, fieldLabel: '<?= lang('field_meta_description'); ?>', name: 'HOME_META_DESCRIPTION[<?= strtoupper($l['code']); ?>]'}
+            {xtype: 'textfield', fieldLabel: '<?php echo lang('field_page_title'); ?>', name: 'HOME_PAGE_TITLE[<?php echo strtoupper($l['code']); ?>]'},
+            {xtype: 'textfield', fieldLabel: '<?php echo lang('field_meta_keywords'); ?>', name: 'HOME_META_KEYWORD[<?php echo strtoupper($l['code']); ?>]'},
+            {xtype: 'textarea', height: 200, resizable: true, fieldLabel: '<?php echo lang('field_meta_description'); ?>', name: 'HOME_META_DESCRIPTION[<?php echo strtoupper($l['code']); ?>]'}
           ]
         });
         

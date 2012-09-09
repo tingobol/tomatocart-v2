@@ -21,7 +21,7 @@ Ext.define('Toc.server_info.ServerInfoDialog', {
     config = config || {};
     
     config.id = 'server_info-win';
-    config.title = '<?= lang('heading_server_info_title'); ?>';
+    config.title = '<?php echo lang('heading_server_info_title'); ?>';
     config.width = 800;
     config.height = 400;
     config.iconCls = 'icon-server_info-win';
@@ -58,17 +58,17 @@ Ext.define('Toc.server_info.ServerInfoDialog', {
               items: [
                 {
                   xtype: 'displayfield',
-                  fieldLabel: '<?= lang('field_server_host'); ?>',
+                  fieldLabel: '<?php echo lang('field_server_host'); ?>',
                   value: '<?php echo $host . ' (' . $ip . ')'; ?>'
                 },
                 {
                   xtype: 'displayfield',
-                  fieldLabel: '<?= lang('field_server_operating_system'); ?>',
+                  fieldLabel: '<?php echo lang('field_server_operating_system'); ?>',
                   value: '<?php echo $system . ' ' . $kernel; ?>'
                 },
                 {
                   xtype: 'displayfield',
-                  fieldLabel: '<?= lang('field_server_date'); ?>',
+                  fieldLabel: '<?php echo lang('field_server_date'); ?>',
                   value: '<?php echo $date; ?>'
                 }
               ]
@@ -79,12 +79,12 @@ Ext.define('Toc.server_info.ServerInfoDialog', {
               items: [
                 {
                   xtype: 'displayfield',
-                  fieldLabel: '<?= lang('field_database_host'); ?>',
+                  fieldLabel: '<?php echo lang('field_database_host'); ?>',
                   value: '<?php echo $db_server . ' (' . $db_ip . ')'; ?>'
                 },
                 {
                   xtype: 'displayfield',
-                  fieldLabel: '<?= lang('field_database_version'); ?>',
+                  fieldLabel: '<?php echo lang('field_database_version'); ?>',
                   value: '<?php echo $db_version; ?>'
                 }
               ]
@@ -93,14 +93,14 @@ Ext.define('Toc.server_info.ServerInfoDialog', {
         },
         {
           xtype: 'displayfield',
-          fieldLabel: '<?= lang('field_http_server'); ?>',
+          fieldLabel: '<?php echo lang('field_http_server'); ?>',
           value: '<?php echo $http_server; ?>',
           group: true
         },
         {
           xtype: 'displayfield',
-          fieldLabel: '<?= lang('field_php_version'); ?>',
-          value: '<?= 'PHP: ' . $php . ' / Zend: ' . $zend; ?>'
+          fieldLabel: '<?php echo lang('field_php_version'); ?>',
+          value: '<?php echo 'PHP: ' . $php . ' / Zend: ' . $zend; ?>'
         }
       ]
     });

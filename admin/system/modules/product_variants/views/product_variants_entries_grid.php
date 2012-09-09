@@ -20,7 +20,7 @@ Ext.define('Toc.product_variants.ProductVariantsEntriesGrid', {
   constructor: function(config) {
     config = config || {};
     
-    config.title = '<?= lang('heading_product_variants_title'); ?>';
+    config.title = '<?php echo lang('heading_product_variants_title'); ?>';
     config.region = 'east';
     config.border = false;
     config.split = true;
@@ -49,11 +49,11 @@ Ext.define('Toc.product_variants.ProductVariantsEntriesGrid', {
     
     config.selModel = Ext.create('Ext.selection.CheckboxModel');
     config.columns = [
-      { header: '<?= lang('table_heading_entries'); ?>', dataIndex: 'products_variants_values_name', flex: 1},
+      { header: '<?php echo lang('table_heading_entries'); ?>', dataIndex: 'products_variants_values_name', flex: 1},
       {
         xtype:'actioncolumn', 
         width: 60,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           iconCls: 'icon-action icon-edit-record',
           tooltip: TocLanguage.tipEdit,

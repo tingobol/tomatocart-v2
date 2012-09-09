@@ -21,7 +21,7 @@ Ext.define('Toc.products_expected.ProductsExpectedDialog', {
     config = config || {};
     
     config.id = 'products_expected-dialog-win';
-    config.title = '<?= lang("table_heading_date_expected"); ?>';
+    config.title = '<?php echo lang("table_heading_date_expected"); ?>';
     config.layout = 'fit';
     config.width = 400;
     config.autoHeight = true;
@@ -89,7 +89,7 @@ Ext.define('Toc.products_expected.ProductsExpectedDialog', {
       items: [
         {
           xtype: 'datefield',
-          fieldLabel: '<?= lang("table_heading_date_expected"); ?>',
+          fieldLabel: '<?php echo lang("table_heading_date_expected"); ?>',
           name: 'products_date_available',
           format: 'Y-m-d'
         }

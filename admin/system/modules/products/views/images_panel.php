@@ -19,7 +19,7 @@ Ext.define('Toc.products.ImagesPanel', {
   constructor: function(config) {
     config = config || {};
     
-    config.title = '<?= lang('section_images'); ?>';
+    config.title = '<?php echo lang('section_images'); ?>';
     config.layout = 'fit';
     
     config.productsId = config.productsId || null;
@@ -91,7 +91,7 @@ Ext.define('Toc.products.ImagesPanel', {
     });
     
     this.pnlImagesUpload = Ext.create('Ext.form.Panel', {
-      title: '<?= lang('image_remote_upload'); ?>',
+      title: '<?php echo lang('image_remote_upload'); ?>',
       bodyPadding: '5',
       border: false,
       items: [
@@ -171,18 +171,18 @@ Ext.define('Toc.products.ImagesPanel', {
     });
     
     var pnlLocalImages = Ext.create('Ext.Panel', {
-      title: '<?= lang('image_local_files'); ?>',
+      title: '<?php echo lang('image_local_files'); ?>',
       layout: 'border',
       border: false,
       items:[
         {
           region: 'north',
           border: false,
-          html: '<p class="form-info"><?= lang('introduction_select_local_images'); ?></p>'
+          html: '<p class="form-info"><?php echo lang('introduction_select_local_images'); ?></p>'
         },  
         {
           xtype:'fieldset',
-          title: '<?= lang('section_images'); ?>',
+          title: '<?php echo lang('section_images'); ?>',
           region: 'center',
           border: false,
           items: this.selLocalImages

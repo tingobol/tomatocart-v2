@@ -48,12 +48,12 @@ Ext.define('Toc.weight_classes.WeightClassesGrid', {
     
     config.selModel = Ext.create('Ext.selection.CheckboxModel');
     config.columns =[
-      {header: '<?= lang('table_heading_weight_classes'); ?>', dataIndex: 'weight_class_title', flex: 1},
-      {header: '<?= lang('table_heading_unit'); ?>', align: 'center', dataIndex: 'weight_class_key'},
+      {header: '<?php echo lang('table_heading_weight_classes'); ?>', dataIndex: 'weight_class_title', flex: 1},
+      {header: '<?php echo lang('table_heading_unit'); ?>', align: 'center', dataIndex: 'weight_class_key'},
       {
         xtype: 'actioncolumn', 
         width: 80,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           tooltip: TocLanguage.tipEdit,
           iconCls: 'icon-action icon-edit-record',

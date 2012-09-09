@@ -21,7 +21,7 @@ Ext.define('Toc.newsletters.LogDialog', {
     config = config || {};
     
     config.id = 'log-dialog-win';
-    config.title = '<?= lang('heading_newsletters_title'); ?>';
+    config.title = '<?php echo lang('heading_newsletters_title'); ?>';
     config.layout = 'fit';
     config.width = 600;
     config.height = 350;
@@ -75,9 +75,9 @@ Ext.define('Toc.newsletters.LogDialog', {
       store: dsLog,
       border: false,
       columns: [
-        {header: '<?= lang('table_heading_email_addresses'); ?>', dataIndex: 'email_address', flex: 1},
-        {header: '<?= lang('table_heading_sent'); ?>', width: 100, align: 'center', dataIndex: 'sent'},
-        {header: '<?= lang('table_heading_date_sent'); ?>', width: 150, align: 'center', dataIndex: 'date_sent'},
+        {header: '<?php echo lang('table_heading_email_addresses'); ?>', dataIndex: 'email_address', flex: 1},
+        {header: '<?php echo lang('table_heading_sent'); ?>', width: 100, align: 'center', dataIndex: 'sent'},
+        {header: '<?php echo lang('table_heading_date_sent'); ?>', width: 150, align: 'center', dataIndex: 'date_sent'},
       ],
       dockedItems: [{
         xtype: 'pagingtoolbar',

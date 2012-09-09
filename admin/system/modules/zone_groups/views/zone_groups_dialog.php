@@ -21,7 +21,7 @@ Ext.define('Toc.zone_groups.ZoneGroupsDialog', {
     config = config || {};
     
     config.id = 'zone_groups-dialog-win';
-    config.title = '<?= lang("action_heading_new_zone_group"); ?>';
+    config.title = '<?php echo lang("action_heading_new_zone_group"); ?>';
     config.width = 440;
     config.modal = true;
     config.iconCls = 'icon-zone_groups-win';
@@ -91,13 +91,13 @@ Ext.define('Toc.zone_groups.ZoneGroupsDialog', {
       items: [
         {
           xtype: 'textfield',
-          fieldLabel: '<?= lang("field_name"); ?>',
+          fieldLabel: '<?php echo lang("field_name"); ?>',
           name: 'geo_zone_name',
           allowBlank: false
         },
         {
           xtype: 'textfield',
-          fieldLabel: '<?= lang("field_description"); ?>',
+          fieldLabel: '<?php echo lang("field_description"); ?>',
           name: 'geo_zone_description'
         }
       ]

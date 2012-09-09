@@ -51,14 +51,14 @@ Ext.define('Toc.newsletters.NewslettersGrid', {
     
     config.selModel = Ext.create('Ext.selection.CheckboxModel');
     config.columns =[
-      {header: '<?= lang('table_heading_newsletters'); ?>', dataIndex: 'title', flex: 1},
-      {header: '<?= lang('table_heading_size'); ?>', width: 60, align: 'center', dataIndex: 'size'},
-      {header: '<?= lang('table_heading_module'); ?>', width: 140, align: 'center', dataIndex: 'module'},
-      {header: '<?= lang('table_heading_sent'); ?>', width: 60, align: 'center', dataIndex: 'sent'},
+      {header: '<?php echo lang('table_heading_newsletters'); ?>', dataIndex: 'title', flex: 1},
+      {header: '<?php echo lang('table_heading_size'); ?>', width: 60, align: 'center', dataIndex: 'size'},
+      {header: '<?php echo lang('table_heading_module'); ?>', width: 140, align: 'center', dataIndex: 'module'},
+      {header: '<?php echo lang('table_heading_sent'); ?>', width: 60, align: 'center', dataIndex: 'sent'},
       {
         xtype: 'actioncolumn', 
         width: 80,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           tooltip: TocLanguage.tipEdit,
           getClass: this.getEditClass,
@@ -70,7 +70,7 @@ Ext.define('Toc.newsletters.NewslettersGrid', {
           scope: this
         },
         {
-          tooltip: '<?= lang('icon_log'); ?>',
+          tooltip: '<?php echo lang('icon_log'); ?>',
           getClass: this.getLogClass,
           handler: function(grid, rowIndex, colIndex) {
             var rec = grid.getStore().getAt(rowIndex);
@@ -80,7 +80,7 @@ Ext.define('Toc.newsletters.NewslettersGrid', {
           scope: this
         },
         {
-          tooltip: '<?= lang('icon_email_send'); ?>',
+          tooltip: '<?php echo lang('icon_email_send'); ?>',
           getClass: this.getEmailClass,
           handler: function(grid, rowIndex, colIndex) {
             var rec = grid.getStore().getAt(rowIndex);

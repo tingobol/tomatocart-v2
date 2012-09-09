@@ -28,7 +28,7 @@ Ext.override(Toc.desktop.CategoriesWindow, {
       
       win = desktop.createWindow({
         id: 'categories-win',
-        title: '<?= lang('heading_categories_title'); ?>',
+        title: '<?php echo lang('heading_categories_title'); ?>',
         width: 870,
         height: 400,
         iconCls: 'icon-categories-win',
@@ -60,7 +60,7 @@ Ext.override(Toc.desktop.CategoriesWindow, {
   onMoveCategory: function(pnlCategoriesTree, record) {
     var dlg = this.createCategoriesMoveDialog();
     
-    dlg.setTitle('<?= lang("action_heading_move_categories"); ?>');
+    dlg.setTitle('<?php echo lang("action_heading_move_categories"); ?>');
     
     this.onSaveSuccess(dlg, pnlCategoriesTree);
     
@@ -70,7 +70,7 @@ Ext.override(Toc.desktop.CategoriesWindow, {
   onBatchMoveCategories: function(pnlCategoriesTree, categoriesIds) {
     var dlg = this.createCategoriesMoveDialog();
     
-    dlg.setTitle('<?= lang("action_heading_batch_move_categories"); ?>');
+    dlg.setTitle('<?php echo lang("action_heading_batch_move_categories"); ?>');
     
     this.onSaveSuccess(dlg, pnlCategoriesTree);
     

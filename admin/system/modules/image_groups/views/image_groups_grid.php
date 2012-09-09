@@ -45,11 +45,11 @@ Ext.define('Toc.image_groups.ImageGroupsGrid', {
     config.selModel = Ext.create('Ext.selection.CheckboxModel');
     
     config.columns = [
-      { header: '<?= lang('table_heading_image_groups'); ?>', dataIndex: 'title', flex: 1},
+      { header: '<?php echo lang('table_heading_image_groups'); ?>', dataIndex: 'title', flex: 1},
       {
         xtype:'actioncolumn', 
         width: 60,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           iconCls: 'icon-action icon-edit-record',
           tooltip: TocLanguage.tipEdit,

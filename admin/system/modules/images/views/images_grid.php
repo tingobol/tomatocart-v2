@@ -46,11 +46,11 @@ Ext.define('Toc.images.ImagesGrid', {
     });
     
     config.columns =[
-      {header: '<?= lang('table_heading_modules'); ?>', dataIndex: 'module', flex: 1},
+      {header: '<?php echo lang('table_heading_modules'); ?>', dataIndex: 'module', flex: 1},
       {
         xtype: 'actioncolumn', 
         width: 50,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           tooltip: TocLanguage.tipExecute,
           iconCls: 'icon-action icon-execute-record',

@@ -21,7 +21,7 @@ Ext.define('Toc.slideImages.SlideImagesDialog', {
     config = config || {};
     
     config.id = 'slide_images_dialog-win';
-    config.title = '<?= lang('heading_title_new_slide_image'); ?>';
+    config.title = '<?php echo lang('heading_title_new_slide_image'); ?>';
     config.layout = 'fit';
     config.modal = true;
     config.width = 600;
@@ -144,7 +144,7 @@ Ext.define('Toc.slideImages.SlideImagesDialog', {
     var pnlData = Ext.create('Ext.Panel', {
       region: 'north',
       bodyPadding: 10,
-      title: '<?= lang('heading_title_data'); ?>',
+      title: '<?php echo lang('heading_title_data'); ?>',
       height: 100,
       border: false,
       layout: 'fit',
@@ -165,14 +165,14 @@ Ext.define('Toc.slideImages.SlideImagesDialog', {
                       width: 200,
                       border: false,
                       items:[
-                        {xtype:'radio', name: 'status', fieldLabel: '<?= lang('field_publish'); ?>', boxLabel: '<?= lang('status_enabled'); ?>' , inputValue: '1'}
+                        {xtype:'radio', name: 'status', fieldLabel: '<?php echo lang('field_publish'); ?>', boxLabel: '<?php echo lang('status_enabled'); ?>' , inputValue: '1'}
                       ]
                     },
                     {
                       width: 80,
                       border: false,
                       items: [
-                        {xtype:'radio', name: 'status', hideLabel: true, boxLabel: '<?= lang('status_disabled'); ?>', inputValue: '0'}
+                        {xtype:'radio', name: 'status', hideLabel: true, boxLabel: '<?php echo lang('status_disabled'); ?>', inputValue: '0'}
                       ]
                     }
                   ]
@@ -181,7 +181,7 @@ Ext.define('Toc.slideImages.SlideImagesDialog', {
                   xtype: 'numberfield',
                   name: 'sort_order',
                   border: false,
-                  fieldLabel: '<?= lang('field_order'); ?>'
+                  fieldLabel: '<?php echo lang('field_order'); ?>'
                 }
         			]
       			},

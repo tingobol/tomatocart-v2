@@ -21,7 +21,7 @@ Ext.define('Toc.product_variants.ProductVariantsGroupsDialog', {
     config = config || {};
     
     config.id = 'product_variants_groups-dialog-win';
-    config.title = '<?= lang("action_heading_new_variant_group"); ?>';
+    config.title = '<?php echo lang("action_heading_new_variant_group"); ?>';
     config.width = 440;
     config.modal = true;
     config.iconCls = 'icon-product_variants-win';
@@ -99,7 +99,7 @@ Ext.define('Toc.product_variants.ProductVariantsGroupsDialog', {
           name: 'products_variants_groups_name[<?php echo $l['id']; ?>]',
           fieldLabel: '<?php echo $i != 1 ? '&nbsp;' : lang('field_group_name'); ?>',
           allowBlank: false,
-          labelStyle: '<?= worldflag_url($l['country_iso']); ?>'
+          labelStyle: '<?php echo worldflag_url($l['country_iso']); ?>'
         });
         
         this.frmProductVariantGroup.add(lang<?php echo $l['id']; ?>);

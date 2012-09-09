@@ -24,7 +24,7 @@ Ext.define('Toc.administrators.AdministratorsDialog', {
     this.aID = config.aID;
     
     config.id = 'administrators_dialog-win';
-    config.title = '<?= lang('action_heading_new_administrator'); ?>';
+    config.title = '<?php echo lang('action_heading_new_administrator'); ?>';
     config.width = 400;
     config.height = 480;
     config.modal = true;
@@ -112,19 +112,19 @@ Ext.define('Toc.administrators.AdministratorsDialog', {
       items: [
         {
           xtype: 'textfield', 
-          fieldLabel: '<?= lang('field_username'); ?>', 
+          fieldLabel: '<?php echo lang('field_username'); ?>', 
           name: 'user_name', 
           allowBlank: false
         },
         {
           xtype: 'textfield', 
-          fieldLabel: '<?= lang('field_password'); ?>', 
+          fieldLabel: '<?php echo lang('field_password'); ?>', 
           name: 'user_password', 
           allowBlank: this.aID > 0 ? true : false
         },
         {
           xtype: 'textfield', 
-          fieldLabel: '<?= lang('field_email'); ?>', 
+          fieldLabel: '<?php echo lang('field_email'); ?>', 
           name: 'email_address', 
           allowBlank: false
         }
@@ -137,7 +137,7 @@ Ext.define('Toc.administrators.AdministratorsDialog', {
   getAccessPanel: function() {
     this.chkGlobal = Ext.create('Ext.form.Checkbox', {
       name: 'access_globaladmin', 
-      boxLabel: '<?= lang('global_access'); ?>',
+      boxLabel: '<?php echo lang('global_access'); ?>',
       listeners: {
         change: function(chk, checked) {
           if(checked)
@@ -167,7 +167,7 @@ Ext.define('Toc.administrators.AdministratorsDialog', {
       },
       root: {
         id: '0',
-        text: '<?= lang('top_category'); ?>',
+        text: '<?php echo lang('top_category'); ?>',
         leaf: false,
         expandable: true,  
         expanded: true  

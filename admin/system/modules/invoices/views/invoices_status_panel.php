@@ -20,7 +20,7 @@ Ext.define('Toc.invoices.InvoicesStatusPanel', {
     config = config || {};
     
     config = config || {};
-    config.title = '<?= lang('section_status_history'); ?>';
+    config.title = '<?php echo lang('section_status_history'); ?>';
     config.layout = 'border';
     config.border = false;
     
@@ -60,10 +60,10 @@ Ext.define('Toc.invoices.InvoicesStatusPanel', {
       region: 'center',
       store: store,
       columns: [
-        { header: '<?= lang('table_heading_date_added'); ?>', dataIndex: 'date_added', width: 120, align: 'center'},
-        { header: '<?= lang('table_heading_status'); ?>', dataIndex: 'status', width: 120, align: 'center'},
-        { header: '<?= lang('table_heading_comments'); ?>', dataIndex: 'comments', align: 'center', flex: 1},
-        { header: '<?= lang('table_heading_customer_notified'); ?>', dataIndex: 'customer_notified',  width: 120, align: 'center'}
+        { header: '<?php echo lang('table_heading_date_added'); ?>', dataIndex: 'date_added', width: 120, align: 'center'},
+        { header: '<?php echo lang('table_heading_status'); ?>', dataIndex: 'status', width: 120, align: 'center'},
+        { header: '<?php echo lang('table_heading_comments'); ?>', dataIndex: 'comments', align: 'center', flex: 1},
+        { header: '<?php echo lang('table_heading_customer_notified'); ?>', dataIndex: 'customer_notified',  width: 120, align: 'center'}
       ]
     });
     

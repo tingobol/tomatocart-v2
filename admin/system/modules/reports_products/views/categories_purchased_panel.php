@@ -59,7 +59,7 @@ Ext.define('Toc.reports_products.CategoriesPurchasedPanel', {
           return '<div style="margin-left: {margin}px">{text}</div>';
         }
       },
-      emptyText: '<?= lang("top_category"); ?>',
+      emptyText: '<?php echo lang("top_category"); ?>',
       name: 'categories',
       store: dsCategories,
       queryMode: 'local',
@@ -75,13 +75,13 @@ Ext.define('Toc.reports_products.CategoriesPurchasedPanel', {
     config.dateStart = Ext.create('Ext.form.DateField', {
       width: 150, 
       format: 'Y-m-d', 
-      emptyText: '<?= lang("field_start_date"); ?>'
+      emptyText: '<?php echo lang("field_start_date"); ?>'
     });
     
     config.dateEnd = Ext.create('Ext.form.DateField', {
       width: 150, 
       format: 'Y-m-d', 
-      emptyText: '<?= lang("field_end_date"); ?>'
+      emptyText: '<?php echo lang("field_end_date"); ?>'
     });
     
     config.tbar = [
@@ -150,7 +150,7 @@ Ext.define('Toc.reports_products.CategoriesPurchasedPanel', {
           label: {
             renderer: statics.formatCurrency
           },
-          title: '<?= lang('table_heading_total'); ?>',
+          title: '<?php echo lang('table_heading_total'); ?>',
           grid: true,
           minimum: 0
         }, 
@@ -158,7 +158,7 @@ Ext.define('Toc.reports_products.CategoriesPurchasedPanel', {
           type: 'Category',
           position: 'left',
           fields: ['categories_name'],
-          title: '<?= lang('table_heading_categories'); ?>'
+          title: '<?php echo lang('table_heading_categories'); ?>'
         }
       ],
       series: [
@@ -178,7 +178,7 @@ Ext.define('Toc.reports_products.CategoriesPurchasedPanel', {
                 categories_name = categories_name.substr(0, 25) + '... ';
               }
               
-              this.setTitle(categories_name + ':  ' + storeItem.get('quantity') + ' <?= lang('products_purchased_tip'); ?>');
+              this.setTitle(categories_name + ':  ' + storeItem.get('quantity') + ' <?php echo lang('products_purchased_tip'); ?>');
             }
           },
           label: {

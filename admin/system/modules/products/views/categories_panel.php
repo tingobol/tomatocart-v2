@@ -20,7 +20,7 @@ Ext.define('Toc.products.CategoriesPanel', {
   constructor: function(config) {
     config = config || {};
     
-    config.title = '<?= lang('section_categories'); ?>';
+    config.title = '<?php echo lang('section_categories'); ?>';
     config.layout = 'border';
     config.bodyPadding = 5;
     config.treeLoaded = false;
@@ -42,7 +42,7 @@ Ext.define('Toc.products.CategoriesPanel', {
       },
       root: {
         id: '0',
-        text: '<?= lang('top_category'); ?>',
+        text: '<?php echo lang('top_category'); ?>',
         leaf: false,
         expandable: true,  
         expanded: true  

@@ -29,7 +29,7 @@ Ext.override(Toc.desktop.FeatureProductsManagerWindow, {
       
       win = desktop.createWindow({
         id: 'feature_products_manager-win',
-        title: '<?= lang('heading_feature_products_manager_title'); ?>',
+        title: '<?php echo lang('heading_feature_products_manager_title'); ?>',
         width: 800,
         height: 400,
         iconCls: 'icon-feature_products_manager-win',

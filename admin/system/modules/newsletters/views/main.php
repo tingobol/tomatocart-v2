@@ -29,7 +29,7 @@ Ext.override(Toc.desktop.NewslettersWindow, {
       
       win = desktop.createWindow({
         id: 'newsletters-win',
-        title: '<?= lang('heading_newsletters_title'); ?>',
+        title: '<?php echo lang('heading_newsletters_title'); ?>',
         width: 800,
         height: 400,
         iconCls: 'icon-newsletters-win',

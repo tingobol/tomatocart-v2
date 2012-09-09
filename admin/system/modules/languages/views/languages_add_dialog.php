@@ -21,7 +21,7 @@ Ext.define('Toc.languages.LanguagesAddDialog', {
     config = config || {};
     
     config.id = 'languages-add-dialog-win';
-    config.title = '<?= lang('action_heading_import_language'); ?>';
+    config.title = '<?php echo lang('action_heading_import_language'); ?>';
     config.width = 500;
     config.modal = true;
     config.iconCls = 'icon-languages-win';
@@ -88,7 +88,7 @@ Ext.define('Toc.languages.LanguagesAddDialog', {
       items: [
         {
           xtype: 'combo', 
-          fieldLabel: '<?= lang('field_language_selection'); ?>', 
+          fieldLabel: '<?php echo lang('field_language_selection'); ?>', 
           name: 'languages_id',
           queryMode: 'local', 
           store: this.dsLanguages,
@@ -103,21 +103,21 @@ Ext.define('Toc.languages.LanguagesAddDialog', {
           inputValue: 'add',
           checked: true,
           style: 'margin-left: 135px',
-          boxLabel: '<?= lang('only_add_new_records'); ?>'
+          boxLabel: '<?php echo lang('only_add_new_records'); ?>'
         },
         {
           xtype: 'radio',
           name: 'import_type',
           inputValue: 'update',
-          boxLabel: '<?= lang('only_update_existing_records'); ?>',
-          fieldLabel: '<?= lang('field_import_type'); ?>'
+          boxLabel: '<?php echo lang('only_update_existing_records'); ?>',
+          fieldLabel: '<?php echo lang('field_import_type'); ?>'
         },
         {
           xtype: 'radio',
           name: 'import_type',
           inputValue: 'replace',
           style: 'margin-left: 135px',
-          boxLabel: '<?= lang('replace_all'); ?>'
+          boxLabel: '<?php echo lang('replace_all'); ?>'
         }
       ]
     });

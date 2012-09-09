@@ -31,7 +31,7 @@ Ext.override(Toc.desktop.CustomersGroupsWindow, {
       
       win = desktop.createWindow({
         id: 'articles-win',
-        title: '<?= lang('heading_customers_groups_title'); ?>',
+        title: '<?php echo lang('heading_customers_groups_title'); ?>',
         width: 800,
         height: 400,
         iconCls: 'icon-customers_groups-win',

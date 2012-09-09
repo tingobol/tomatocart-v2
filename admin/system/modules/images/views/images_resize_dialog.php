@@ -75,18 +75,18 @@ Ext.define('Toc.images.ImagesResizeDialog', {
     });
     
     this.lstImage = Ext.create('Ext.ux.form.MultiSelect', {
-      fieldLabel: '<?= lang('images_resize_field_groups'); ?>',
+      fieldLabel: '<?php echo lang('images_resize_field_groups'); ?>',
       store: dsImageGroups,
       name: 'groups[]',
       width: 400,
       height: 150,
-      legend: '<?= lang('images_resize_table_heading_groups'); ?>',
+      legend: '<?php echo lang('images_resize_table_heading_groups'); ?>',
       displayField: 'text',
       valueField: 'id'
     });
     
     this.chkImage = Ext.create('Ext.form.Checkbox', {
-      fieldLabel: '<?= lang('images_resize_field_overwrite_images'); ?>',
+      fieldLabel: '<?php echo lang('images_resize_field_overwrite_images'); ?>',
       name: 'overwrite',
       inputValue: '1'
     });
@@ -137,8 +137,8 @@ Ext.define('Toc.images.ImagesResizeDialog', {
       }),
       
       columns: [
-        {header: '<?= lang('images_resize_table_heading_groups'); ?>', dataIndex: 'group', flex: 1},
-        {header: '<?= lang('images_resize_table_heading_total_resized'); ?>', dataIndex: 'count'},
+        {header: '<?php echo lang('images_resize_table_heading_groups'); ?>', dataIndex: 'group', flex: 1},
+        {header: '<?php echo lang('images_resize_table_heading_total_resized'); ?>', dataIndex: 'count'},
       ]
     });
     

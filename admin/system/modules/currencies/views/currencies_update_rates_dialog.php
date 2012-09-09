@@ -23,7 +23,7 @@ Ext.define('Toc.currencies.CurrenciesUpdateRatesDialog', {
     this.currenciesId = config.currenciesId;
     
     config.id = 'currencies-update-rates-win';
-    config.title = '<?= lang('action_heading_update_rates'); ?>';
+    config.title = '<?php echo lang('action_heading_update_rates'); ?>';
     config.iconCls = 'icon-update-exchange-rates';
     config.layout = 'fit';
     config.width = 450;
@@ -34,7 +34,7 @@ Ext.define('Toc.currencies.CurrenciesUpdateRatesDialog', {
     
     config.buttons = [
       {
-        text: '<?= lang('button_update'); ?>',
+        text: '<?php echo lang('button_update'); ?>',
         handler: function() {
           this.submitForm();
         },
@@ -69,10 +69,10 @@ Ext.define('Toc.currencies.CurrenciesUpdateRatesDialog', {
         labelSeparator: ''
       },
       items: [
-        {border: false, html: '<p class="form-info"><?= lang('introduction_update_exchange_rates'); ?></p>'},
+        {border: false, html: '<p class="form-info"><?php echo lang('introduction_update_exchange_rates'); ?></p>'},
         {xtype: 'radiofield', name: 'service', boxLabel: 'Oanda (http://www.oanda.com)', inputValue: 'oanda', hideLabel: true, checked: true},
         {xtype: 'radiofield', name: 'service', boxLabel: 'XE (http://www.xe.com)', inputValue: 'xe', hideLabel: true},
-        {border: false, html: '<p class="form-info"><?= lang('service_terms_agreement'); ?></p>'}
+        {border: false, html: '<p class="form-info"><?php echo lang('service_terms_agreement'); ?></p>'}
       ]
     });
     

@@ -31,7 +31,7 @@ Ext.override(Toc.desktop.OrdersStatusWindow, {
       
       win = desktop.createWindow({
         id: 'orders_status-win',
-        title: '<?= lang('heading_orders_status_title'); ?>',
+        title: '<?php echo lang('heading_orders_status_title'); ?>',
         width: 800,
         height: 400,
         iconCls: 'icon-orders_status-win',

@@ -20,9 +20,9 @@ Ext.define('Toc.customers.CustomersGrid', {
   statics: {
     renderStatus: function(status) {
       if(status == 1) {
-        return '<img class="img-button" src="<?= icon_status_url('icon_status_green.gif'); ?>" />&nbsp;<img class="img-button btn-status-off" style="cursor: pointer" src="<?= icon_status_url('icon_status_red_light.gif'); ?>" />';
+        return '<img class="img-button" src="<?php echo icon_status_url('icon_status_green.gif'); ?>" />&nbsp;<img class="img-button btn-status-off" style="cursor: pointer" src="<?php echo icon_status_url('icon_status_red_light.gif'); ?>" />';
       }else {
-        return '<img class="img-button btn-status-on" style="cursor: pointer" src="<?= icon_status_url('icon_status_green_light.gif'); ?>" />&nbsp;<img class="img-button" src= "<?= icon_status_url('icon_status_red.gif'); ?>" />';
+        return '<img class="img-button btn-status-on" style="cursor: pointer" src="<?php echo icon_status_url('icon_status_green_light.gif'); ?>" />&nbsp;<img class="img-button" src= "<?php echo icon_status_url('icon_status_red.gif'); ?>" />';
       }
     }
   },
@@ -64,15 +64,15 @@ Ext.define('Toc.customers.CustomersGrid', {
     });
     
     config.columns =[
-      { header: '<?= lang('table_heading_last_name'); ?>', dataIndex: 'customers_lastname', flex: 1},
-      { header: '<?= lang('table_heading_first_name'); ?>', dataIndex: 'customers_firstname', width: 85},
-      { header: '<?= lang('table_heading_date_created'); ?>', renderer: Ext.util.Format.dateRenderer('m/d/Y'), dataIndex: 'date_account_created', width: 85, align: 'center'},
-      { header: '<?= lang('table_heading_customers_credits'); ?>', dataIndex: 'customers_credits', width: 100, align: 'center'},
-      { header: '<?= lang('table_heading_customers_status'); ?>', dataIndex: 'customers_status', renderer: statics.renderStatus, width: 80, align: 'center'},
+      { header: '<?php echo lang('table_heading_last_name'); ?>', dataIndex: 'customers_lastname', flex: 1},
+      { header: '<?php echo lang('table_heading_first_name'); ?>', dataIndex: 'customers_firstname', width: 85},
+      { header: '<?php echo lang('table_heading_date_created'); ?>', renderer: Ext.util.Format.dateRenderer('m/d/Y'), dataIndex: 'date_account_created', width: 85, align: 'center'},
+      { header: '<?php echo lang('table_heading_customers_credits'); ?>', dataIndex: 'customers_credits', width: 100, align: 'center'},
+      { header: '<?php echo lang('table_heading_customers_status'); ?>', dataIndex: 'customers_status', renderer: statics.renderStatus, width: 80, align: 'center'},
       {
         xtype:'actioncolumn', 
         width:50,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           iconCls: 'icon-action icon-edit-record',
           tooltip: TocLanguage.tipEdit,

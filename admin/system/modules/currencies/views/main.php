@@ -30,7 +30,7 @@ Ext.override(Toc.desktop.CurrenciesWindow, {
       
       win = desktop.createWindow({
         id: 'currencies-win',
-        title: '<?= lang("heading_currencies_title"); ?>',
+        title: '<?php echo lang("heading_currencies_title"); ?>',
         width: 800,
         height: 400,
         iconCls: 'icon-currencies-win',

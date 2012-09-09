@@ -53,12 +53,12 @@ Ext.define('Toc.languages.TranslationsEditGrid', {
     });
     
     config.columns =[
-      {header: '<?= lang('table_heading_definition_key'); ?>', dataIndex: 'definition_key', sortable: true, width: 200},
-      {header: '<?= lang('table_heading_definition_value'); ?>', width: 130, dataIndex: 'definition_value', flex: 1},
+      {header: '<?php echo lang('table_heading_definition_key'); ?>', dataIndex: 'definition_key', sortable: true, width: 200},
+      {header: '<?php echo lang('table_heading_definition_value'); ?>', width: 130, dataIndex: 'definition_value', flex: 1},
       {
         xtype: 'actioncolumn', 
         width: 120,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           tooltip: TocLanguage.tipEdit,
           iconCls: 'icon-action icon-edit-record',
@@ -86,7 +86,7 @@ Ext.define('Toc.languages.TranslationsEditGrid', {
     
     config.tbar = [
     {
-      text: '<?= lang('button_add_definition'); ?>',
+      text: '<?php echo lang('button_add_definition'); ?>',
       iconCls: 'add',
       handler: function() {
         this.fireEvent('adddefinition', {languagesId: config.languagesId, group: this.contentGroup});

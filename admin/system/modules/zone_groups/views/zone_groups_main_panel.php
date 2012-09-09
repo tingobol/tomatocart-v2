@@ -46,7 +46,7 @@ Ext.define('Toc.zone_groups.MainPanel', {
   },
   
   onGrdZoneGroupsSelectChange: function(record) {
-    this.grdZoneEntries.setTitle('<?= lang('heading_zone_groups_title'); ?>: '+ record.get('geo_zone_name'));
+    this.grdZoneEntries.setTitle('<?php echo lang('heading_zone_groups_title'); ?>: '+ record.get('geo_zone_name'));
     this.grdZoneEntries.iniGrid(record);
   },
   

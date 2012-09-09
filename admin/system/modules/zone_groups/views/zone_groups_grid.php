@@ -44,12 +44,12 @@ Ext.define('Toc.zone_groups.ZoneGroupsGrid', {
     });
     
     config.columns = [
-      { header: '<?= lang('table_heading_zone_groups'); ?>', dataIndex: 'geo_zone_name', flex: 1},
-      { header: '<?= lang('table_heading_total_entries'); ?>', align: 'center', dataIndex: 'geo_zone_entries'},
+      { header: '<?php echo lang('table_heading_zone_groups'); ?>', dataIndex: 'geo_zone_name', flex: 1},
+      { header: '<?php echo lang('table_heading_total_entries'); ?>', align: 'center', dataIndex: 'geo_zone_entries'},
       {
         xtype:'actioncolumn', 
         width: 60,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           iconCls: 'icon-action icon-edit-record',
           tooltip: TocLanguage.tipEdit,

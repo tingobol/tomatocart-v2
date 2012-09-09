@@ -20,7 +20,7 @@ Ext.define('Toc.products.MetaPanel', {
   constructor: function(config) {
     config = config || {};
     
-    config.title = '<?= lang('section_meta'); ?>';
+    config.title = '<?php echo lang('section_meta'); ?>';
     config.activeTab = 0;
     config.deferredRender = false;
     config.items = this.buildForm();

@@ -59,17 +59,17 @@ Ext.define('Toc.orders.OrdersGrid', {
     
     config.columns =[
       {header: 'ID', dataIndex: 'orders_id', width: 30, align: 'center'},
-      { header: '<?= lang('table_heading_customers'); ?>', dataIndex: 'customers_name', flex: 1},
-      { header: '<?= lang('table_heading_order_total'); ?>', dataIndex: 'order_total', width: 120, align: 'right'},
-      { header: '<?= lang('table_heading_date_purchased'); ?>', dataIndex: 'date_purchased', align: 'center', width: 120, sortable: true},
-      { header: '<?= lang('table_heading_status'); ?>', dataIndex: 'orders_status_name', align: 'center', width: 120},
+      { header: '<?php echo lang('table_heading_customers'); ?>', dataIndex: 'customers_name', flex: 1},
+      { header: '<?php echo lang('table_heading_order_total'); ?>', dataIndex: 'order_total', width: 120, align: 'right'},
+      { header: '<?php echo lang('table_heading_date_purchased'); ?>', dataIndex: 'date_purchased', align: 'center', width: 120, sortable: true},
+      { header: '<?php echo lang('table_heading_status'); ?>', dataIndex: 'orders_status_name', align: 'center', width: 120},
       {
         xtype:'actioncolumn', 
         width: 80,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           iconCls: 'icon-action icon-view-record',
-          tooltip: '<?= lang('tip_view_order');?>',
+          tooltip: '<?php echo lang('tip_view_order');?>',
           handler: function(grid, rowIndex, colIndex) {
             var rec = grid.getStore().getAt(rowIndex);
             
@@ -78,7 +78,7 @@ Ext.define('Toc.orders.OrdersGrid', {
           scope: this
         },
         {
-          tooltip: '<?= lang('tip_create_invoice');?>',
+          tooltip: '<?php echo lang('tip_create_invoice');?>',
           getClass: this.getCreateInvoiceClass,
           handler: function(grid, rowIndex, colIndex) {
             var rec = grid.getStore().getAt(rowIndex);
@@ -112,19 +112,19 @@ Ext.define('Toc.orders.OrdersGrid', {
             '<table width="98%">',
              '<tr>',
                '<td width="25%">',
-                 '<strong><?= lang('subsection_shipping_address'); ?></strong>',
+                 '<strong><?php echo lang('subsection_shipping_address'); ?></strong>',
                  '<p>{shipping_address}</p>',
-                 '<strong><?= lang('subsection_delivery_method'); ?></strong>',
+                 '<strong><?php echo lang('subsection_delivery_method'); ?></strong>',
                  '<p>{shipping_method}</p>',
                '</td>',
                '<td width="25%">',
-                 '<strong><?= lang('subsection_billing_address'); ?></strong>',
+                 '<strong><?php echo lang('subsection_billing_address'); ?></strong>',
                  '<p>{billing_address}</p>',
-                 '<strong><?= lang('subsection_payment_method'); ?></strong>',
+                 '<strong><?php echo lang('subsection_payment_method'); ?></strong>',
                  '<p>{payment_method}</p>',
                '</td>',
                '<td>',
-                 '<strong><?= lang('subsection_products'); ?></strong>',
+                 '<strong><?php echo lang('subsection_products'); ?></strong>',
                  '<div class="order_products">{products}</div>',
                  '<div class="order_totals">{totals}</div>',
                '</td>',
@@ -166,7 +166,7 @@ Ext.define('Toc.orders.OrdersGrid', {
     
     config.cboStatus = Ext.create('Ext.form.ComboBox', {
       labelWidth: 50,
-      fieldLabel: '<?= lang('operation_heading_filter_status'); ?>', 
+      fieldLabel: '<?php echo lang('operation_heading_filter_status'); ?>', 
       store: dsStatus, 
       name: 'status', 
       displayField: 'status_name', 
@@ -178,12 +178,12 @@ Ext.define('Toc.orders.OrdersGrid', {
     
     this.txtOrderId = Ext.create('Ext.form.TextField', {
       width: 120,
-      emptyText: '<?= lang('operation_heading_order_id'); ?>'
+      emptyText: '<?php echo lang('operation_heading_order_id'); ?>'
     });
     
     this.txtCustomerId = Ext.create('Ext.form.TextField', {
       width: 120,
-      emptyText: '<?= lang('operation_heading_customer_id'); ?>'
+      emptyText: '<?php echo lang('operation_heading_customer_id'); ?>'
     });
     
     config.tbar = [
@@ -250,7 +250,7 @@ Ext.define('Toc.orders.OrdersGrid', {
     
     Ext.MessageBox.confirm(
       TocLanguage.msgWarningTitle, 
-      '<?= lang('create_invoice_confirmation');?>',
+      '<?php echo lang('create_invoice_confirmation');?>',
       function(btn) {
         if (btn == 'yes') {
           Ext.Ajax.request({

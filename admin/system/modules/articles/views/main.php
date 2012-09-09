@@ -31,7 +31,7 @@ Ext.override(Toc.desktop.ArticlesWindow, {
       
       win = desktop.createWindow({
         id: 'articles-win',
-        title: '<?= lang('heading_articles_title'); ?>',
+        title: '<?php echo lang('heading_articles_title'); ?>',
         width: 800,
         height: 400,
         iconCls: 'icon-articles-win',

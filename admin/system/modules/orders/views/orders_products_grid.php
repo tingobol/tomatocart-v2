@@ -19,7 +19,7 @@ Ext.define('Toc.orders.OrdersProductsGrid', {
   constructor: function(config) {
     config = config || {};
     
-    config.title = '<?= lang('section_products'); ?>';
+    config.title = '<?php echo lang('section_products'); ?>';
     config.viewConfig = {emptyText: TocLanguage.gridNoRecords};
     config.border = false;
     
@@ -53,12 +53,12 @@ Ext.define('Toc.orders.OrdersProductsGrid', {
     });
     
     config.columns = [
-      { header: '<?= lang('table_heading_products'); ?>', dataIndex: 'products', flex: 1},
-      { header: '<?= lang('table_heading_product_sku'); ?>', dataIndex: 'sku', width: 80, align: 'right'},
-      { header: '<?= lang('table_heading_tax'); ?>', dataIndex: 'tax', align: 'center', width: 80, align: 'right'},
-      { header: '<?= lang('table_heading_price_gross'); ?>', dataIndex: 'price_gross',  width: 120, align: 'right'},
-      { header: '<?= lang('table_heading_total_gross'); ?>', dataIndex: 'total_gross',  width: 120, align: 'right'},
-      { header: '<?= lang('table_heading_return_quantity'); ?>', dataIndex: 'return_quantity',  width: 100, align: 'center'}
+      { header: '<?php echo lang('table_heading_products'); ?>', dataIndex: 'products', flex: 1},
+      { header: '<?php echo lang('table_heading_product_sku'); ?>', dataIndex: 'sku', width: 80, align: 'right'},
+      { header: '<?php echo lang('table_heading_tax'); ?>', dataIndex: 'tax', align: 'center', width: 80, align: 'right'},
+      { header: '<?php echo lang('table_heading_price_gross'); ?>', dataIndex: 'price_gross',  width: 120, align: 'right'},
+      { header: '<?php echo lang('table_heading_total_gross'); ?>', dataIndex: 'total_gross',  width: 120, align: 'right'},
+      { header: '<?php echo lang('table_heading_return_quantity'); ?>', dataIndex: 'return_quantity',  width: 100, align: 'center'}
     ];
     
     this.callParent([config]);

@@ -30,7 +30,7 @@ Ext.override(Toc.desktop.OrdersWindow, {
       
       win = desktop.createWindow({
         id: 'orders-win',
-        title: '<?= lang('heading_orders_title'); ?>',
+        title: '<?php echo lang('heading_orders_title'); ?>',
         width: 850,
         height: 400,
         iconCls: 'icon-orders-win',

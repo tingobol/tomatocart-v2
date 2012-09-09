@@ -20,7 +20,7 @@ Ext.define('Toc.categories.GeneralPanel', {
   constructor: function(config) {
     config = config || {};
     
-    config.title = '<?= lang('section_general'); ?>';
+    config.title = '<?php echo lang('section_general'); ?>';
     config.border = false;
     config.bodyPadding = 8;
     config.layout = 'anchor';
@@ -61,7 +61,7 @@ Ext.define('Toc.categories.GeneralPanel', {
           return '<div style="margin-left: {margin}px">{text}</div>';
         }
       },
-      fieldLabel: '<?= lang("field_parent_category"); ?>',
+      fieldLabel: '<?php echo lang("field_parent_category"); ?>',
       store: this.dsParentCategories,
       queryMode: 'local',
       valueField: 'id',
@@ -81,7 +81,7 @@ Ext.define('Toc.categories.GeneralPanel', {
         var lang<?php echo $l['id']; ?> = Ext.create('Ext.form.TextField', {
           name: 'categories_name[<?php echo $l['id']; ?>]',
           fieldLabel: '<?php echo $i != 1 ? '&nbsp;' : lang('field_name'); ?>',
-          labelStyle: '<?= worldflag_url($l['country_iso']); ?>',
+          labelStyle: '<?php echo worldflag_url($l['country_iso']); ?>',
           allowBlank: false
         });
         
@@ -92,7 +92,7 @@ Ext.define('Toc.categories.GeneralPanel', {
       }
     ?>
     
-    items.push({xtype: 'filefield', fieldLabel: '<?= lang("field_image"); ?>', name: 'image'});
+    items.push({xtype: 'filefield', fieldLabel: '<?php echo lang("field_image"); ?>', name: 'image'});
     items.push({xtype: 'panel', name: 'categories_image', id: 'categories_image_panel', border: false});
     
     items.push({
@@ -102,14 +102,14 @@ Ext.define('Toc.categories.GeneralPanel', {
         id: 'status',
         border: false,
         style: "padding-right: 5px;",
-        items:[{fieldLabel: '<?= lang('field_status'); ?>', xtype:'radio', id: 'statusEnable', name: 'categories_status', boxLabel: '<?= lang('status_enabled'); ?>', inputValue: '1', checked: true}]
+        items:[{fieldLabel: '<?php echo lang('field_status'); ?>', xtype:'radio', id: 'statusEnable', name: 'categories_status', boxLabel: '<?php echo lang('status_enabled'); ?>', inputValue: '1', checked: true}]
       },{
         border: false,
-        items: [{fieldLabel: '<?= lang('status_disabled'); ?>', boxLabel: '<?= lang('status_disabled'); ?>', xtype:'radio', name: 'categories_status', hideLabel: true, inputValue: '0'}]
+        items: [{fieldLabel: '<?php echo lang('status_disabled'); ?>', boxLabel: '<?php echo lang('status_disabled'); ?>', xtype:'radio', name: 'categories_status', hideLabel: true, inputValue: '0'}]
       }]
     });
     
-    items.push({xtype: 'numberfield', fieldLabel: '<?= lang("field_sort_order"); ?>', name: 'sort_order'});
+    items.push({xtype: 'numberfield', fieldLabel: '<?php echo lang("field_sort_order"); ?>', name: 'sort_order'});
     
     return items;
   }

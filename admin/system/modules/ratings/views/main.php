@@ -31,7 +31,7 @@ Ext.override(Toc.desktop.RatingsWindow, {
       
       win = desktop.createWindow({
         id: 'ratings-win',
-        title: '<?= lang('heading_title_ratings'); ?>',
+        title: '<?php echo lang('heading_title_ratings'); ?>',
         width: 800,
         height: 400,
         iconCls: 'icon-ratings-win',

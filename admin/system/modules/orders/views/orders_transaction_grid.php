@@ -19,7 +19,7 @@ Ext.define('Toc.orders.OrdersTransactionGrid', {
   constructor: function(config) {
     config = config || {};
     
-    config.title = '<?= lang('section_transaction_history'); ?>';
+    config.title = '<?php echo lang('section_transaction_history'); ?>';
     config.border = false;
     config.viewConfig = {emptyText: TocLanguage.gridNoRecords};
     
@@ -43,9 +43,9 @@ Ext.define('Toc.orders.OrdersTransactionGrid', {
     });
     
     config.columns = [
-      { header: '<?= lang('table_heading_date_added'); ?>', dataIndex: 'date', width: 140, align: 'center'},
-      { header: '<?= lang('table_heading_status'); ?>', dataIndex: 'status', width: 120, align: 'center'},
-      { header: '<?= lang('table_heading_comments'); ?>', dataIndex: 'comments', flex: 1}
+      { header: '<?php echo lang('table_heading_date_added'); ?>', dataIndex: 'date', width: 140, align: 'center'},
+      { header: '<?php echo lang('table_heading_status'); ?>', dataIndex: 'status', width: 120, align: 'center'},
+      { header: '<?php echo lang('table_heading_comments'); ?>', dataIndex: 'comments', flex: 1}
     ];
     
     this.callParent([config]);

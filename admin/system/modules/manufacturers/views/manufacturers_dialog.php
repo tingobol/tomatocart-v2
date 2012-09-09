@@ -21,7 +21,7 @@ Ext.define('Toc.manufacturers.ManufacturersDialog', {
     config = config || {};
     
     config.id = 'manufacturers_dialog-win';
-    config.title = '<?= lang('action_heading_new_manufacturer'); ?>';
+    config.title = '<?php echo lang('action_heading_new_manufacturer'); ?>';
     config.width = 500;
     config.height = 380;
     config.modal = true;
@@ -68,7 +68,7 @@ Ext.define('Toc.manufacturers.ManufacturersDialog', {
           var img = action.result.data.manufacturers_image;
           
           if (img) {
-            var html = '<img src ="<?= IMGHTTPPATH; ?>manufacturers/' + img + '"  style = "margin-left: 110px; width: 80px; height: 80px" /><br/><span style = "padding-left: 110px;">/images/manufacturers/' + img + '</span>';
+            var html = '<img src ="<?php echo IMGHTTPPATH; ?>manufacturers/' + img + '"  style = "margin-left: 110px; width: 80px; height: 80px" /><br/><span style = "padding-left: 110px;">/images/manufacturers/' + img + '</span>';
             this.pnlGeneral.getComponent('manufactuerer_image_panel').update(html);
           }          
           

@@ -20,7 +20,7 @@ Ext.define('Toc.homepage_info.HomepageInfoDialog', {
   constructor: function(config) {
     config = config || {};
     
-    config.title = '<?= lang('heading_homepage_info_title'); ?>';
+    config.title = '<?php echo lang('heading_homepage_info_title'); ?>';
     config.layout = 'fit';
     config.width = 870;
     config.height = 450;

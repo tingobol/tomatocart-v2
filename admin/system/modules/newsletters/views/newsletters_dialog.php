@@ -21,7 +21,7 @@ Ext.define('Toc.newsletters.NewslettersDialog', {
     config = config || {};
     
     config.id = 'newsletters-dialog-win';
-    config.title = '<?= lang('action_heading_new_newsletter'); ?>';
+    config.title = '<?php echo lang('action_heading_new_newsletter'); ?>';
     config.width = 700;
     config.height = 400;
     
@@ -114,7 +114,7 @@ Ext.define('Toc.newsletters.NewslettersDialog', {
         {
           xtype: 'combo',
           name: 'newsletter_module',
-          fieldLabel: '<?= lang('field_module'); ?>', 
+          fieldLabel: '<?php echo lang('field_module'); ?>', 
           store: this.dsModules,
           queryMode: 'local',
           valueField: 'id',
@@ -125,13 +125,13 @@ Ext.define('Toc.newsletters.NewslettersDialog', {
         {
           xtype: 'textfield', 
           name: 'title', 
-          fieldLabel: '<?= lang('field_title'); ?>', 
+          fieldLabel: '<?php echo lang('field_title'); ?>', 
           allowBlank: false
         },
         {
           xtype: 'htmleditor',
           name: 'content', 
-          fieldLabel: '<?= lang('field_content'); ?>', 
+          fieldLabel: '<?php echo lang('field_content'); ?>', 
           height: 250
         }
       ]

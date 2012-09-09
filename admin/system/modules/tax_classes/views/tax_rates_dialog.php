@@ -21,7 +21,7 @@ Ext.define('Toc.tax_classes.TaxRatesDialog', {
     config = config || {};
     
     config.id = 'tax-rate-dialog-win';
-    config.title = '<?= lang('action_heading_new_tax_rate'); ?>';
+    config.title = '<?php echo lang('action_heading_new_tax_rate'); ?>';
     config.width = 500;
     config.modal = true;
     config.items = this.buildForm();
@@ -97,7 +97,7 @@ Ext.define('Toc.tax_classes.TaxRatesDialog', {
     });
     
     this.cobZoneGroup = Ext.create('Ext.form.ComboBox', {
-      fieldLabel: '<?= lang('field_tax_rate_zone_group'); ?>',
+      fieldLabel: '<?php echo lang('field_tax_rate_zone_group'); ?>',
       store: dsGeoZone, 
       name: 'geo_zone_id', 
       queryMode: 'local',
@@ -121,9 +121,9 @@ Ext.define('Toc.tax_classes.TaxRatesDialog', {
       },
       items: [
         this.cobZoneGroup,
-        {xtype: 'numberfield', fieldLabel: '<?= lang('field_tax_rate'); ?>', name: 'tax_rate', decimalPrecision: 4, width:300},
-        {xtype: 'textfield', fieldLabel: '<?= lang('field_tax_rate_description'); ?>', name: 'tax_description', width:300},
-        {xtype: 'textfield', fieldLabel: '<?= lang('field_tax_rate_priority'); ?>', name: 'tax_priority', width:300}
+        {xtype: 'numberfield', fieldLabel: '<?php echo lang('field_tax_rate'); ?>', name: 'tax_rate', decimalPrecision: 4, width:300},
+        {xtype: 'textfield', fieldLabel: '<?php echo lang('field_tax_rate_description'); ?>', name: 'tax_description', width:300},
+        {xtype: 'textfield', fieldLabel: '<?php echo lang('field_tax_rate_priority'); ?>', name: 'tax_priority', width:300}
       ]
     });
     

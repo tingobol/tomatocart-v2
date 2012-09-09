@@ -31,7 +31,7 @@ Ext.override(Toc.desktop.AdministratorsWindow, {
       
       win = desktop.createWindow({
         id: 'administrators-win',
-        title: '<?= lang('heading_administrators_title'); ?>',
+        title: '<?php echo lang('heading_administrators_title'); ?>',
         width: 800,
         height: 400,
         iconCls: 'icon-administrators-win',

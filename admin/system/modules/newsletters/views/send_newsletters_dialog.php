@@ -21,7 +21,7 @@ Ext.define('Toc.newsletters.SendNewslettersDialog', {
     config = config || {};
     
     config.id = 'send-newsletters-dialog-win';
-    config.title = '<?= lang('heading_newsletters_title'); ?>';
+    config.title = '<?php echo lang('heading_newsletters_title'); ?>';
     config.layout = 'fit';
     config.modal = true;
     config.width = 600;
@@ -32,7 +32,7 @@ Ext.define('Toc.newsletters.SendNewslettersDialog', {
     config.buttons = [
       {
         id: 'btn-send-newsletters',
-        text: '<?= lang('button_send') ?>',
+        text: '<?php echo lang('button_send') ?>',
         handler: function() { 
           this.sendEmails();
         },
@@ -69,7 +69,7 @@ Ext.define('Toc.newsletters.SendNewslettersDialog', {
           this.frmNewsletter.update(result.confirmation);
           
           if (result.execute == true) {
-            Ext.getCmp('btn-send-newsletters').setText('<?= lang('button_send') ?>');
+            Ext.getCmp('btn-send-newsletters').setText('<?php echo lang('button_send') ?>');
           } else {
             Ext.getCmp('btn-send-newsletters').hide();
           }
@@ -86,7 +86,7 @@ Ext.define('Toc.newsletters.SendNewslettersDialog', {
   },
   
   sendEmails: function() {
-    this.frmNewsletter.el.mask('<?= lang('sending_please_wait') ?>', 'x-mask-loading');
+    this.frmNewsletter.el.mask('<?php echo lang('sending_please_wait') ?>', 'x-mask-loading');
     
     Ext.Ajax.request({
       url: Toc.CONF.CONN_URL,

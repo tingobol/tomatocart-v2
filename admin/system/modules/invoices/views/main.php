@@ -30,7 +30,7 @@ Ext.override(Toc.desktop.InvoicesWindow, {
       
       win = desktop.createWindow({
         id: 'invoices-win',
-        title: '<?= lang('heading_invoices_title'); ?>',
+        title: '<?php echo lang('heading_invoices_title'); ?>',
         width: 850,
         height: 400,
         iconCls: 'icon-invoices-win',

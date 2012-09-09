@@ -34,7 +34,7 @@ Ext.override(Toc.desktop.TaxClassesWindow, {
       
       win = desktop.createWindow({
         id: 'slide_images-win',
-        title: '<?= lang('heading_tax_classes_title'); ?>',
+        title: '<?php echo lang('heading_tax_classes_title'); ?>',
         width: 800,
         height: 400,
         iconCls: 'icon-tax_classes-win',

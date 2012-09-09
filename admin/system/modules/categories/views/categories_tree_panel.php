@@ -40,7 +40,7 @@ Ext.define('Toc.categories.CategoriesTreePanel', {
       },
       root: {
         id: 0,
-        text: '<?= lang('top_category'); ?>',
+        text: '<?php echo lang('top_category'); ?>',
         leaf: false,
         expandable: true,  
         expanded: true  

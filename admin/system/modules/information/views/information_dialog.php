@@ -21,7 +21,7 @@ Ext.define('Toc.information.InformationDialog', {
     config = config || {};
     
     config.id = 'information-dialog-win';
-    config.title = '<?= lang('action_heading_new_information'); ?>';
+    config.title = '<?php echo lang('action_heading_new_information'); ?>';
     config.layout = 'fit';
     config.width = 850;
     config.height = 530;
@@ -88,7 +88,7 @@ Ext.define('Toc.information.InformationDialog', {
         labelSeparator: '',
         anchor: '97%'
       },
-      title:'<?= lang('heading_title_data'); ?>',
+      title:'<?php echo lang('heading_title_data'); ?>',
       url: Toc.CONF.CONN_URL,
       baseParams: {  
         module: 'information',
@@ -122,12 +122,12 @@ Ext.define('Toc.information.InformationDialog', {
                   width: 200,
                   items: [
                     {
-                      fieldLabel: '<?= lang('field_publish'); ?>', 
+                      fieldLabel: '<?php echo lang('field_publish'); ?>', 
                       xtype:'radio', 
                       name: 'articles_status',
                       inputValue: '1',
                       checked: true,
-                      boxLabel: '<?= lang('field_publish_yes'); ?>'
+                      boxLabel: '<?php echo lang('field_publish_yes'); ?>'
                     }
                   ]
                 },
@@ -140,13 +140,13 @@ Ext.define('Toc.information.InformationDialog', {
                       xtype:'radio', 
                       name: 'articles_status',
                       inputValue: '0',
-                      boxLabel: '<?= lang('field_publish_no'); ?>'
+                      boxLabel: '<?php echo lang('field_publish_no'); ?>'
                     }
                   ]
                 }
               ]
             },
-            {xtype:'numberfield', fieldLabel: '<?= lang('field_order'); ?>', name: 'articles_order', id: 'articles_order'}
+            {xtype:'numberfield', fieldLabel: '<?php echo lang('field_order'); ?>', name: 'articles_order', id: 'articles_order'}
           ]
         }
       ]

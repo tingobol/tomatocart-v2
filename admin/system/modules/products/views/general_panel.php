@@ -20,7 +20,7 @@ Ext.define('Toc.products.GeneralPanel', {
   constructor: function(config) {
     config = config || {};
     
-    config.title = '<?= lang('section_general'); ?>';
+    config.title = '<?php echo lang('section_general'); ?>';
     config.activeTab = 0;
     config.deferredRender = false;
     config.border = false;

@@ -20,7 +20,7 @@ Ext.define('Toc.products.XsellProductsGrid', {
   constructor: function(config) {
     config = config || {};
     
-    config.title = '<?= lang('section_xsell_products'); ?>';
+    config.title = '<?php echo lang('section_xsell_products'); ?>';
     config.productsId = config.productsId || null;
     
     config.store = Ext.create('Ext.data.Store', {
@@ -47,11 +47,11 @@ Ext.define('Toc.products.XsellProductsGrid', {
     
     config.columns =[
       Ext.create('Ext.grid.RowNumberer'),
-      { header: '<?= lang('table_heading_products'); ?>', dataIndex: 'products_name', sortable: true, flex: 1},
+      { header: '<?php echo lang('table_heading_products'); ?>', dataIndex: 'products_name', sortable: true, flex: 1},
       {
         xtype:'actioncolumn', 
         width:50,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           iconCls: 'icon-action icon-delete-record',
           tooltip: TocLanguage.tipDelete,
@@ -78,7 +78,7 @@ Ext.define('Toc.products.XsellProductsGrid', {
       this.cboProducts, 
       ' ', 
       {
-        text: '<?= lang('button_insert'); ?>',
+        text: '<?php echo lang('button_insert'); ?>',
         iconCls : 'add',
         handler: this.addProduct,
         scope: this
@@ -111,7 +111,7 @@ Ext.define('Toc.products.XsellProductsGrid', {
     this.cboProducts = Ext.create('Ext.form.ComboBox', {
       name: 'xsellproducts',
       store: store,
-      emptyText: '<?= lang('section_xsell_products'); ?>',
+      emptyText: '<?php echo lang('section_xsell_products'); ?>',
       width: 400,
       queryMode: 'local', 
       displayField: 'text', 

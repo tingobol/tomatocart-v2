@@ -21,7 +21,7 @@ Ext.define('Toc.customers.AddressBookDialog', {
     config = config || {};
     
     config.id = 'address-book-dialog-win';
-    config.title = '<?= lang('action_heading_new_address_book_entry'); ?>';
+    config.title = '<?php echo lang('action_heading_new_address_book_entry'); ?>';
     config.modal = true;
     config.width = 500;
     config.iconCls = 'icon-customers-win';
@@ -117,7 +117,7 @@ Ext.define('Toc.customers.AddressBookDialog', {
     });
     
     this.cboCountries = Ext.create('Ext.form.ComboBox', {
-      fieldLabel: '<?= lang('field_country'); ?>',
+      fieldLabel: '<?php echo lang('field_country'); ?>',
       store: dsCountries, 
       name: 'country_id', 
       queryMode: 'local',
@@ -125,7 +125,7 @@ Ext.define('Toc.customers.AddressBookDialog', {
       valueField: 'country_id', 
       editable: false,
       forceSelection: true,      
-      emptyText: '<?= lang('none'); ?>',
+      emptyText: '<?php echo lang('none'); ?>',
       listeners :{
         select: this.onCboCountriesSelect,
         scope: this
@@ -153,7 +153,7 @@ Ext.define('Toc.customers.AddressBookDialog', {
     });
     
     this.cboZones = Ext.create('Ext.form.ComboBox', {
-      fieldLabel: '<?= lang('field_state'); ?>',
+      fieldLabel: '<?php echo lang('field_state'); ?>',
       disabled: true, 
       store: this.dsZone, 
       name: 'z_code', 
@@ -162,7 +162,7 @@ Ext.define('Toc.customers.AddressBookDialog', {
       valueField: 'zone_code', 
       editable: false,
       forceSelection: true,      
-      emptyText: '<?= lang('none'); ?>'
+      emptyText: '<?php echo lang('none'); ?>'
     });
     
     this.frmAddressBook = Ext.create('Ext.form.Panel', {
@@ -187,30 +187,30 @@ Ext.define('Toc.customers.AddressBookDialog', {
               width: 220,
               border: false,
               items:[
-                {fieldLabel: '<?= lang('field_gender'); ?>', boxLabel: '<?= lang('gender_male'); ?>' , name: 'gender', xtype:'radio', inputValue: 'm'}
+                {fieldLabel: '<?php echo lang('field_gender'); ?>', boxLabel: '<?php echo lang('gender_male'); ?>' , name: 'gender', xtype:'radio', inputValue: 'm'}
               ]
             },
             { 
               width: 120,
               border: false,
               items:[
-                { hideLabel: true, boxLabel: '<?= lang('gender_female'); ?>' , name: 'gender', xtype:'radio', inputValue: 'f', checked: true}
+                { hideLabel: true, boxLabel: '<?php echo lang('gender_female'); ?>' , name: 'gender', xtype:'radio', inputValue: 'f', checked: true}
               ]
             }
           ]  
         },
-        {xtype: 'textfield', fieldLabel: '<?= lang('field_first_name'); ?>', name: 'firstname'},
-        {xtype: 'textfield', fieldLabel: '<?= lang('field_last_name'); ?>', name: 'lastname'},
-        {xtype: 'textfield', fieldLabel: '<?= lang('field_company'); ?>', name: 'company'},
-        {xtype: 'textfield', fieldLabel: '<?= lang('field_street_address'); ?>', name: 'street_address'},
-        {xtype: 'textfield', fieldLabel: '<?= lang('field_suburb'); ?>', name: 'suburb'},
-        {xtype: 'textfield', fieldLabel: '<?= lang('field_post_code'); ?>', name: 'postcode'},
-        {xtype: 'textfield', fieldLabel: '<?= lang('field_city'); ?>', name: 'city'},
+        {xtype: 'textfield', fieldLabel: '<?php echo lang('field_first_name'); ?>', name: 'firstname'},
+        {xtype: 'textfield', fieldLabel: '<?php echo lang('field_last_name'); ?>', name: 'lastname'},
+        {xtype: 'textfield', fieldLabel: '<?php echo lang('field_company'); ?>', name: 'company'},
+        {xtype: 'textfield', fieldLabel: '<?php echo lang('field_street_address'); ?>', name: 'street_address'},
+        {xtype: 'textfield', fieldLabel: '<?php echo lang('field_suburb'); ?>', name: 'suburb'},
+        {xtype: 'textfield', fieldLabel: '<?php echo lang('field_post_code'); ?>', name: 'postcode'},
+        {xtype: 'textfield', fieldLabel: '<?php echo lang('field_city'); ?>', name: 'city'},
         this.cboCountries,
         this.cboZones,
-        {xtype: 'textfield', fieldLabel: '<?= lang('field_telephone_number'); ?>', name: 'telephone_number'},
-        {xtype: 'textfield', fieldLabel: '<?= lang('field_fax_number'); ?>', name: 'fax_number'},
-        {xtype: 'checkbox',  fieldLabel: '<?= lang('field_set_as_primary'); ?>', name: 'primary', id: 'primary', anchor: ''} 
+        {xtype: 'textfield', fieldLabel: '<?php echo lang('field_telephone_number'); ?>', name: 'telephone_number'},
+        {xtype: 'textfield', fieldLabel: '<?php echo lang('field_fax_number'); ?>', name: 'fax_number'},
+        {xtype: 'checkbox',  fieldLabel: '<?php echo lang('field_set_as_primary'); ?>', name: 'primary', id: 'primary', anchor: ''} 
       ]
     });
     

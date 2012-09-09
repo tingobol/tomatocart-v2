@@ -51,7 +51,7 @@ Ext.define('Toc.reports_products.ProductsViewedPanel', {
           return '<div style="margin-left: {margin}px">{text}</div>';
         }
       },
-      emptyText: '<?= lang("top_category"); ?>',
+      emptyText: '<?php echo lang("top_category"); ?>',
       name: 'categories',
       store: dsCategories,
       queryMode: 'local',
@@ -86,7 +86,7 @@ Ext.define('Toc.reports_products.ProductsViewedPanel', {
     });
     
     config.cboLanguages = Ext.create('Ext.form.ComboBox', {
-      emptyText: '<?= lang("languages"); ?>',
+      emptyText: '<?php echo lang("languages"); ?>',
       name: 'languages',
       store: dsLanguages,
       queryMode: 'local',
@@ -153,7 +153,7 @@ Ext.define('Toc.reports_products.ProductsViewedPanel', {
           type: 'Numeric',
           position: 'bottom',
           fields: ['products_viewed'],
-          title: '<?= lang('table_heading_total'); ?>',
+          title: '<?php echo lang('table_heading_total'); ?>',
           grid: true,
           minimum: 0
         }, 
@@ -161,7 +161,7 @@ Ext.define('Toc.reports_products.ProductsViewedPanel', {
           type: 'Category',
           position: 'left',
           fields: ['products_name'],
-          title: '<?= lang('table_heading_products'); ?>'
+          title: '<?php echo lang('table_heading_products'); ?>'
         }
       ],
       series: [
@@ -181,7 +181,7 @@ Ext.define('Toc.reports_products.ProductsViewedPanel', {
                 products_name = products_name.substr(0, 25) + '... ';
               }
               
-              this.setTitle(products_name + ':  ' + storeItem.get('products_viewed') + ' <?= lang('products_viewed_tip'); ?>');
+              this.setTitle(products_name + ':  ' + storeItem.get('products_viewed') + ' <?php echo lang('products_viewed_tip'); ?>');
             }
           },
           label: {
