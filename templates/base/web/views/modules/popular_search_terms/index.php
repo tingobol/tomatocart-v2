@@ -21,13 +21,13 @@
     
     <div class="contents">
     <?php 
-      foreach($keywords as $keyword):
+        foreach($keywords as $keyword):
     ?>
         <a href="<?php echo $keyword['url']; ?>" style="font-size: <?php echo $keyword['size']; ?>px">
             <?php echo $keyword['tag']; ?>
         </a>&nbsp; 
     <?php 
-      endforeach;
+        endforeach;
     ?>
     </div>
 </div>

@@ -21,7 +21,7 @@
     
     <div class="contents">
     <?php 
-      foreach ($products as $product):
+        foreach ($products as $product):
     ?>
         <div class="product col3">
             <div>
@@ -34,7 +34,7 @@
             <div><a href="<?php echo site_url('cart_add/' . $product['products_id']); ?>" class="button small"><span><?php echo lang('button_add_to_cart'); ?></span></a></div>
         </div>
     <?php 
-      endforeach;
+        endforeach;
     ?>
     
     <div style="clear: both">&nbsp;</div>

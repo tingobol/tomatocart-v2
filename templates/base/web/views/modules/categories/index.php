@@ -16,7 +16,7 @@
 */
 ?>
 
-<div id="boxCategories" class="box">
+<div id="box-categories" class="box">
     <h4><?php echo lang('box_categories_heading'); ?></h4>
     
     <div class="contents">
@@ -24,7 +24,7 @@
         <?php 
           foreach ($categories as $category) :
         ?>
-        	<li><a href="<?php echo site_url('cpath/' . $category['id']); ?>"><?php echo $category['title']; ?></a></li>
+        	<li><a href="<?php echo site_url('cpath/' . $category['id']); ?>" alt="<?php echo $category['title']; ?>" title="<?php echo $category['title']; ?>"><?php echo $category['title']; ?></a></li>
         <?php 
           endforeach;
         ?>
