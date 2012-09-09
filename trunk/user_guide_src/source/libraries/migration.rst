@@ -1,5 +1,0 @@
-################
-Migrations Class
-################
-
-Coming soon.
