@@ -22,13 +22,11 @@
     <div class="contents">
         <ul>
         <?php 
-            if (count($categories) > 0) :
-                foreach($categories as $category) :
+            foreach($categories as $category) :
         ?>
             <li><a href="<?php echo site_url('articles_categories/' . $category['articles_categories_id']); ?>"><?php echo $category['articles_categories_name']; ?></a></li>
         <?php 
-                endforeach;
-            endif;
+            endforeach;
         ?>
         </ul>
     </div>

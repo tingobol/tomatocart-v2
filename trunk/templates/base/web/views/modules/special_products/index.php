@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * TomatoCart Open Source Shopping Cart Solution
- *
+ * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License v3 (2007)
  * as published by the Free Software Foundation.
@@ -13,19 +13,29 @@
  * @link         http://tomatocart.com
  * @since        Version 2.0
  * @filesource
- */
+*/
 ?>
 
 <div class="box">
-    <h4><a href="<?php echo $special_products_link; ?>"><?php echo $title; ?></a></h4>
+    <h4><?php echo $title; ?></h4>
     
     <div class="contents">
-        <a href="<?php echo $product_link; ?>">
-			<img title="<?php echo $product_name; ?>" alt="<?php echo $product_name; ?>" src="<?php echo $product_image; ?>" />
-        </a>
-        <p>
-            <?php echo $product_name; ?><br />
-            <s><?php echo $old_product_price; ?></s>&nbsp;<?php echo $product_price; ?>
-        </p>
+    <?php 
+      foreach($products as $product):
+    ?>
+        <div class="product col3">
+            <div>
+                <a href="<?php echo site_url('product/' . $product['products_id']); ?>">
+                    <img border="0" title="<?php echo $product['products_name']; ?>" alt="<?php echo $product['products_name']; ?>" src="<?php echo product_image_url($product['products_image'], 'thumbnails'); ?>">
+                </a>
+            </div>
+            <div><a href="<?php echo site_url('product/' . $product['products_id']); ?>"><?php echo $product['products_name']; ?></a></div>
+            <div><s><?php echo currencies_format($product['products_price']); ?></s>&nbsp;&nbsp;<span><?php echo currencies_format($product['special_price']);?></span></div>
+            <div><a href="<?php echo site_url('cart_add/' . $product['products_id']); ?>" class="button small"><span><?php echo lang('button_add_to_cart'); ?></span></a></div>
+        </div>
+    <?php 
+      endforeach;
+    ?>
+        <div style="clear: both">&nbsp;</div>
     </div>
 </div>

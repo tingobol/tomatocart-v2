@@ -25,7 +25,8 @@
         	<p>
         	  <button class="button small"><?php echo lang('button_search'); ?></button>
         	</p>
-        	<a href="<?php echo site_url('search');?>"><?php echo lang('sitemap_advanced_search');?></a>
+        	
+        	<?php echo sprintf(lang('box_search_text'), site_url('search')); ?>
         </form>
     </div>
 </div>
