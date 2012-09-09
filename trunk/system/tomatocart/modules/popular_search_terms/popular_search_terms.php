@@ -60,8 +60,14 @@ class Popular_Search_Terms extends TOC_Module
      */
     var $version = '1.0';
 
+    /**
+     * Template Module Parameter
+     *
+     * @access protected
+     * @var string
+     */
     var $params = array(
-    array('name' => 'MODULE_POPULAR_SEARCH_TERM_CACHE',
+        array('name' => 'MODULE_POPULAR_SEARCH_TERM_CACHE',
               'title' => 'Cache Contents', 
               'type' => 'numberfield',
          	  'value' => '60',
@@ -81,6 +87,7 @@ class Popular_Search_Terms extends TOC_Module
         {
             $this->config = json_decode($config, true);
         }
+
         $this->title = lang('box_popular_search_terms_tag_cloud_heading');
     }
 
@@ -122,3 +129,6 @@ class Popular_Search_Terms extends TOC_Module
         return NULL;
     }
 }
+
+/* End of file popular_search_terms.php */
+/* Location: ./system/tomatocart/modules/popular_search_terms/popular_search_terms.php */

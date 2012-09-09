@@ -34,7 +34,7 @@ class Feature_Products extends TOC_Module
      * @access private
      * @var string
      */
-    var $code = 'feature_products';
+    protected $code = 'feature_products';
 
     /**
      * Template Module Author Name
@@ -42,7 +42,7 @@ class Feature_Products extends TOC_Module
      * @access private
      * @var string
      */
-    var $author_name = 'TomatoCart';
+    protected $author_name = 'TomatoCart';
 
     /**
      * Template Module Author Url
@@ -50,7 +50,7 @@ class Feature_Products extends TOC_Module
      * @access private
      * @var string
      */
-    var $author_url = 'http://www.tomatocart.com';
+    protected $author_url = 'http://www.tomatocart.com';
 
     /**
      * Template Module Version
@@ -58,7 +58,7 @@ class Feature_Products extends TOC_Module
      * @access private
      * @var string
      */
-    var $version = '1.0';
+    protected $version = '1.0';
 
     /**
      * Template Module Parameters
@@ -66,8 +66,8 @@ class Feature_Products extends TOC_Module
      * @access private
      * @var string
      */
-    var $params = array(
-    array('name' => 'MODULE_FEATURE_PRODUCTS_MAX_DISPLAY',
+    protected $params = array(
+        array('name' => 'MODULE_FEATURE_PRODUCTS_MAX_DISPLAY',
               'title' => 'Maximum Entries To Display', 
               'type' => 'numberfield',
     		  'value' => '9',
@@ -101,14 +101,24 @@ class Feature_Products extends TOC_Module
         $this->ci->load->model('products_model');
 
         $products = $this->ci->products_model->get_feature_products();
-        foreach($products as $product) {
-            $data['products'][] = array(
+        if ($products != NULL)
+        {
+            $data = array();
+            foreach($products as $product) 
+            {
+                $data['products'][] = array(
                 'products_id' => $product['products_id'],
                 'products_name' => $product['products_name'],
               	'products_image' => $product['image'],
               	'products_price' => $product['products_price']);
+            }
+             
+            return $this->load_view('index.php', $data);
         }
-         
-        return $this->load_view('index.php', $data);
+
+        return NULL;
     }
 }
+
+/* End of file feature_products.php */
+/* Location: ./system/tomatocart/modules/feature_products/feature_products.php */

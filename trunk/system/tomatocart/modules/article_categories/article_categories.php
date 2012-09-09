@@ -35,7 +35,7 @@ class Article_Categories extends TOC_Module
      * @access private
      * @var string
      */
-    var $code = 'article_categories';
+    protected $code = 'article_categories';
 
     /**
      * Template Module Author Name
@@ -43,7 +43,7 @@ class Article_Categories extends TOC_Module
      * @access private
      * @var string
      */
-    var $author_name = 'TomatoCart';
+    protected $author_name = 'TomatoCart';
 
     /**
      * Template Module Author Url
@@ -51,7 +51,7 @@ class Article_Categories extends TOC_Module
      * @access private
      * @var string
      */
-    var $author_url = 'http://www.tomatocart.com';
+    protected $author_url = 'http://www.tomatocart.com';
 
     /**
      * Template Module Version
@@ -59,7 +59,7 @@ class Article_Categories extends TOC_Module
      * @access private
      * @var string
      */
-    var $version = '1.0';
+    protected $version = '1.0';
 
     /**
      * Template Module Params
@@ -67,7 +67,7 @@ class Article_Categories extends TOC_Module
      * @access private
      * @var array
      */
-    var $params = array(
+    protected $params = array(
         array('name' => 'MODULE_ARTICLES_CATEGORIES_MAX_LIST',
               'title' => 'Maximum List Size', 
               'type' => 'numberfield',
@@ -111,3 +111,6 @@ class Article_Categories extends TOC_Module
         return NULL;
     }
 }
+
+/* End of file article_categories.php */
+/* Location: ./system/tomatocart/modules/article_categories/article_categories.php */
