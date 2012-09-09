@@ -61,7 +61,7 @@ class Slideshows extends TOC_Module
     var $version = '1.0';
 
     /**
-     * Template Module Version
+     * Template Module Parameter
      *
      * @access private
      * @var string
@@ -171,6 +171,9 @@ class Slideshows extends TOC_Module
             return $this->load_view('index.php', $data);
         } 
         
-        return FALSE;
+        return NULL;
     }
 }
+
+/* End of file slideshows.php */
+/* Location: ./system/tomatocart/modules/slideshows/slideshows.php */

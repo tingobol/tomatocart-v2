@@ -34,7 +34,7 @@ class Information extends TOC_Module
      * @access private
      * @var string
      */
-    var $code = 'information';
+    protected $code = 'information';
 
     /**
      * Template Module Author Name
@@ -42,7 +42,7 @@ class Information extends TOC_Module
      * @access private
      * @var string
      */
-    var $author_name = 'TomatoCart';
+    protected $author_name = 'TomatoCart';
 
     /**
      * Template Module Author Url
@@ -50,7 +50,7 @@ class Information extends TOC_Module
      * @access private
      * @var string
      */
-    var $author_url = 'http://www.tomatocart.com';
+    protected $author_url = 'http://www.tomatocart.com';
 
     /**
      * Template Module Version
@@ -58,7 +58,7 @@ class Information extends TOC_Module
      * @access private
      * @var string
      */
-    var $version = '1.0';
+    protected $version = '1.0';
     
     /**
      * Categories Information Constructor
@@ -84,6 +84,7 @@ class Information extends TOC_Module
         //load model
         $this->ci->load->model('info_model');
 
+        //articles
         $articles = $this->ci->info_model->get_articles(1);
 
         $information = array();
@@ -104,9 +105,12 @@ class Information extends TOC_Module
         
         //sitemap
         $information[] = array(
-                	'link' => site_url('info/sitemap'),
+                	'link' => site_url('sitemap'),
                     'title' => lang('box_information_sitemap'));
         
         return $this->load_view('index.php', array('information' => $information));
     }
 }
+
+/* End of file information.php */
+/* Location: ./system/tomatocart/modules/information/information.php */

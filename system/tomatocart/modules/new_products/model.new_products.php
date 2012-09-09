@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * TomatoCart Open Source Shopping Cart Solution
- *
+ * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License v3 (2007)
  * as published by the Free Software Foundation.
@@ -13,12 +13,12 @@
  * @link         http://tomatocart.com
  * @since        Version 2.0
  * @filesource
- */
+*/
 
 // ------------------------------------------------------------------------
 
 /**
- * Popular Search Term Model
+ * New Products Content Model
  *
  * @package		TomatoCart
  * @subpackage	tomatocart
@@ -26,7 +26,7 @@
  * @author		TomatoCart Dev Team
  * @link		http://tomatocart.com/wiki/
  */
-class Popular_Search_Terms_Model extends CI_Model
+class New_Products_Model extends CI_Model
 {
     /**
      * New Products Content Model Constructor
@@ -46,18 +46,27 @@ class Popular_Search_Terms_Model extends CI_Model
      * @param int $count number of products to be displayed
      * @return array new products array
      */
-    public function get_popular_search_terms()
+    public function get_new_products($count) 
     {
-        $result = $this->db->select('search_terms_id, text, search_count')->from('search_terms')->where('show_in_terms', 1)->get();
+        $result = $this->db->select('p.products_id, p.products_tax_class_id, p.products_price, pd.products_name, pd.products_keyword, i.image')
+            ->from('products p')
+            ->join('products_images i', 'p.products_id = i.products_id', 'left')
+            ->join('products_description pd', 'p.products_id = pd.products_id', 'inner')
+            ->where('p.products_status', 1)
+            ->where('pd.language_id', lang_id())
+            ->where('i.default_flag', 1)
+            ->order_by('p.products_date_added', 'desc')
+            ->limit($count)
+            ->get();
 
         if ($result->num_rows() > 0)
         {
             return $result->result_array();
         }
-
+        
         return NULL;
     }
 }
 
-/* End of file model.popular_search_term.php */
-/* Location: ./system/tomatocart/modules/new_products_content/model.popular_search_term.php */
+/* End of file mod.new_products_content.php */
+/* Location: ./system/tomatocart/modules/new_products_content/mod.new_products_content.php */

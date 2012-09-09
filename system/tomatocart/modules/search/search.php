@@ -18,7 +18,7 @@
 // ------------------------------------------------------------------------
 
 /**
- * New Products Content Model
+ * Module Search Controller
  *
  * @package		TomatoCart
  * @subpackage	tomatocart
@@ -82,6 +82,10 @@ class Search extends TOC_Module
     public function index() 
     {
         $data = array();
+        
         return $this->load_view('index.php', $data);
     }
 }
+
+/* End of search.php */
+/* Location: ./system/tomatocart/modules/search/search.php */

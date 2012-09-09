@@ -1,4 +1,31 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+/**
+ * TomatoCart Open Source Shopping Cart Solution
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
+ *
+ * @package      TomatoCart
+ * @author       TomatoCart Dev Team
+ * @copyright    Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license      http://www.gnu.org/licenses/gpl.html
+ * @link         http://tomatocart.com
+ * @since        Version 2.0
+ * @filesource
+ */
+
+// ------------------------------------------------------------------------
+
+/**
+ * Module Shop By Price Controller
+ *
+ * @package     TomatoCart
+ * @subpackage  tomatocart
+ * @category    template-module-controller
+ * @author      TomatoCart Dev Team
+ * @link        http://tomatocart.com/wiki/
+ */
 
 class Shop_By_Price extends TOC_Module {
     /**
@@ -7,7 +34,7 @@ class Shop_By_Price extends TOC_Module {
      * @access private
      * @var string
      */
-    var $code = 'shop_by_price';
+    protected $code = 'shop_by_price';
 
     /**
      * Template Module Version
@@ -15,7 +42,7 @@ class Shop_By_Price extends TOC_Module {
      * @access private
      * @var string
      */
-    var $version = '1.0';
+    protected $version = '1.0';
 
     /**
      * Module params
@@ -23,7 +50,7 @@ class Shop_By_Price extends TOC_Module {
      * @access private
      * @var string
      */
-    var $params = array();
+    protected $params = array();
 
     /**
      * Module Constructor
@@ -69,9 +96,6 @@ class Shop_By_Price extends TOC_Module {
      */
     public function index()
     {
-        //load library
-        $this->ci->load->library('currencies');
-
         //create url
         $url = '';
         
@@ -141,3 +165,6 @@ class Shop_By_Price extends TOC_Module {
         return NULL;
     }
 }
+
+/* End of file shop_by_price.php */
+/* Location: ./system/tomatocart/modules/shop_by_price/shop_by_price.php */

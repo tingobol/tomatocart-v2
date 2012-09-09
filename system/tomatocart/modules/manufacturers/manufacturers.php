@@ -18,7 +18,7 @@
 // ------------------------------------------------------------------------
 
 /**
- * Manufacturers Categories Controller
+ * Manufacturers Controller
  *
  * @package     TomatoCart
  * @subpackage  tomatocart
@@ -34,7 +34,7 @@ class Manufacturers extends TOC_Module
      * @access private
      * @var string
      */
-    var $code = 'manufacturers';
+    protected $code = 'manufacturers';
 
     /**
      * Template Module Author Name
@@ -42,7 +42,7 @@ class Manufacturers extends TOC_Module
      * @access private
      * @var string
      */
-    var $author_name = 'TomatoCart';
+    protected $author_name = 'TomatoCart';
 
     /**
      * Template Module Author Url
@@ -50,7 +50,7 @@ class Manufacturers extends TOC_Module
      * @access private
      * @var string
      */
-    var $author_url = 'http://www.tomatocart.com';
+    protected $author_url = 'http://www.tomatocart.com';
 
     /**
      * Template Module Version
@@ -58,7 +58,7 @@ class Manufacturers extends TOC_Module
      * @access private
      * @var string
      */
-    var $version = '1.0';
+    protected $version = '1.0';
 
     /**
      * Template Module Parameter
@@ -66,7 +66,7 @@ class Manufacturers extends TOC_Module
      * @access private
      * @var string
      */
-    var $params = array(
+    protected $params = array(
         array('name' => 'BOX_MANUFACTURERS_LIST_TYPE',
               'title' => 'Manufacturers List Type', 
               'type' => 'combobox',
@@ -129,3 +129,6 @@ class Manufacturers extends TOC_Module
         return NULL;
     }
 }
+
+/* End of file manufacturers.php */
+/* Location: ./system/tomatocart/modules/manufacturers/manufacturers.php */

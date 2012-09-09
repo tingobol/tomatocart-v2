@@ -34,7 +34,7 @@ class Currencies extends TOC_Module
      * @access private
      * @var string
      */
-    var $code = 'currencies';
+    protected $code = 'currencies';
 
     /**
      * Template Module Author Name
@@ -42,7 +42,7 @@ class Currencies extends TOC_Module
      * @access private
      * @var string
      */
-    var $author_name = 'TomatoCart';
+    protected $author_name = 'TomatoCart';
 
     /**
      * Template Module Author Url
@@ -50,7 +50,7 @@ class Currencies extends TOC_Module
      * @access private
      * @var string
      */
-    var $author_url = 'http://www.tomatocart.com';
+    protected $author_url = 'http://www.tomatocart.com';
 
     /**
      * Template Module Version
@@ -58,7 +58,7 @@ class Currencies extends TOC_Module
      * @access private
      * @var string
      */
-    var $version = '1.0';
+    protected $version = '1.0';
 
     /**
      * Categories Module Constructor
@@ -69,7 +69,7 @@ class Currencies extends TOC_Module
     public function __construct()
     {
         parent::__construct();
-        
+
         $this->title = lang('box_currencies_heading');
     }
 
@@ -97,3 +97,6 @@ class Currencies extends TOC_Module
         return NULL;
     }
 }
+
+/* End of file currencies.php */
+/* Location: ./system/tomatocart/modules/currencies/currencies.php */
