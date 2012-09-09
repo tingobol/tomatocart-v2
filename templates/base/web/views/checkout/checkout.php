@@ -67,7 +67,7 @@ $step = 1;
 <script type="text/javascript" src="<?php echo base_url();?>templates/base/web/javascript/checkout.js"></script>
 <script>
 var checkout = new jQuery.Toc.Checkout({
-  logged_on: <?= ($logged_on == true)? 'true' : 'false';?>
+  logged_on: <?php echo ($logged_on == true)? 'true' : 'false';?>
 });
 </script>
 

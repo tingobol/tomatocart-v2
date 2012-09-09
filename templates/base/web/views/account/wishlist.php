@@ -44,7 +44,7 @@
 				<?php foreach ($wishlist_products as $product):?>
 				<?php $rows++; ?>
 				<tr
-					class="<?= ((($rows/2) == floor($rows/2)) ? 'productListing-even' : 'productListing-odd'); ?>">
+					class="<?php echo ((($rows/2) == floor($rows/2)) ? 'productListing-even' : 'productListing-odd'); ?>">
 					<td align="center"><a href="<?php echo $product['link'];?>"><img
 							src="<?php echo image_url($product['image']); ?>" title="<?php echo $product['name']; ?>"
 							alt="<?php echo $product['name']; ?>"> </a><br /> <span><?php echo $product['name']; ?>

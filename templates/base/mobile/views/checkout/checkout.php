@@ -70,7 +70,7 @@ $step = 1;
   <script type="text/javascript">
   $(".type-index").live('pageinit', function() {
     var checkout = new jQuery.Toc.Checkout({
-      logged_on: <?= ($logged_on == true)? 'true' : 'false';?>
+      logged_on: <?php echo ($logged_on == true)? 'true' : 'false';?>
     });
   });
   </script>

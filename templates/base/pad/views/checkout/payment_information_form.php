@@ -20,11 +20,11 @@
   if (config('DISPLAY_CONDITIONS_ON_CHECKOUT') == '1') :
 ?>
     <div class="moduleBox">
-        <h6><?= lang('order_conditions_title'); ?></h6>
+        <h6><?php echo lang('order_conditions_title'); ?></h6>
         
         <div class="content">
-        <?= sprintf(lang('order_conditions_description'), site_url('articles/4')) . '<br /><br />' . form_checkbox('conditions', '1', $order_conditions);?>
-        <label for="conditions"><?= lang('order_conditions_acknowledge');?></label>
+        <?php echo sprintf(lang('order_conditions_description'), site_url('articles/4')) . '<br /><br />' . form_checkbox('conditions', '1', $order_conditions);?>
+        <label for="conditions"><?php echo lang('order_conditions_acknowledge');?></label>
         </div>
     </div>
     
@@ -42,16 +42,16 @@
 ?>
 
     <div style="float: right; padding: 0px 0px 10px 20px; text-align: center;">
-      <?= '<b>' . lang('please_select'); ?>
+      <?php echo '<b>' . lang('please_select'); ?>
     </div>
 
-    <p style="margin-top: 0px;"><?= lang('choose_payment_method'); ?></p>
+    <p style="margin-top: 0px;"><?php echo lang('choose_payment_method'); ?></p>
 
 <?php
   } else {
 ?>
 
-    <p style="margin-top: 0px;"><?= lang('only_one_payment_method_available'); ?></p>
+    <p style="margin-top: 0px;"><?php echo lang('only_one_payment_method_available'); ?></p>
 
 <?php
   }
@@ -80,14 +80,14 @@
     if ($n > 1) {
 ?>
 
-            <td colspan="3"><?= '<b>' . $selection[$i]['module'] . '</b>'; ?></td>
-            <td align="right"><?= form_radio('payment_method', $selection[$i]['id'], ($has_billing_method ? $selected_billing_method_id : null), 'id="' . $selection[$i]['id'] . '"'); ?></td>
+            <td colspan="3"><?php echo '<b>' . $selection[$i]['module'] . '</b>'; ?></td>
+            <td align="right"><?php echo form_radio('payment_method', $selection[$i]['id'], ($has_billing_method ? $selected_billing_method_id : null), 'id="' . $selection[$i]['id'] . '"'); ?></td>
 
 <?php
     } else {
 ?>
 
-            <td colspan="4"><?= '<b>' . $selection[$i]['module'] . '</b>' . osc_draw_hidden_field('payment_method', $selection[$i]['id']); ?></td>
+            <td colspan="4"><?php echo '<b>' . $selection[$i]['module'] . '</b>' . osc_draw_hidden_field('payment_method', $selection[$i]['id']); ?></td>
 
 <?php
   }
@@ -152,15 +152,15 @@
 </div>
 
 <div class="moduleBox">
-  <h6><?= lang('add_comment_to_order_title'); ?></h6>
+  <h6><?php echo lang('add_comment_to_order_title'); ?></h6>
 
   <div class="content">
-    <?= form_textarea(array('id' => 'payment_comments', 'name' => 'payment_comments', 'value' => $payment_comments, 'style' => 'width: 98%;')); ?>
+    <?php echo form_textarea(array('id' => 'payment_comments', 'name' => 'payment_comments', 'value' => $payment_comments, 'style' => 'width: 98%;')); ?>
   </div>
 </div>
 
 <br />
     
 <p align="right">
-  <button type="submit" class="small button" id="btn-save-payment-form" data-theme="b"><?= lang('button_continue'); ?></button>
+  <button type="submit" class="small button" id="btn-save-payment-form" data-theme="b"><?php echo lang('button_continue'); ?></button>
 </p>
