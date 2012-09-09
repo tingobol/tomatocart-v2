@@ -846,26 +846,6 @@ class TOC_Product
 
         exit;
     }
-    
-    /**
-     * Get the discount group of the customer
-     *
-     * @string
-     */
-    public function get_discount_group()
-    {
-        $customers_groups_id = $this->ci->customer->get_customers_groups_id();
-        $quantity_discount_groups_id = $this->ci->customer->get_quantity_discount_groups_id();
-        $discount_group = $this->products_model->get_discount_group($quantity_discount_groups_id, $customers_groups_id);
-    
-        //if quantity discount groups exists and discount_group is not found then try to get default one
-        if ( ($quantity_discount_groups_id > 0) && ($discount_group === FALSE) )
-        {
-            $discount_group = $this->products_model->get_discount_group($quantity_discount_groups_id);
-        }
-    
-        return $discount_group;
-    }
 
     /**
      * Check whether this product has variants
