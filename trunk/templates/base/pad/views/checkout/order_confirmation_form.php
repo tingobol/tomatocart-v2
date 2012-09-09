@@ -21,14 +21,14 @@
         <table border="0" width="100%" cellspacing="0" cellpadding="2">
             <tr>
                 <td width="50%" valign="top">
-                    <p><?= '<b>' . lang('order_delivery_address_title') . '</b> '; ?></p>
+                    <p><?php echo '<b>' . lang('order_delivery_address_title') . '</b> '; ?></p>
                     
                 <?php
                     if ($has_shipping_address) :
                 ?>
-                    <p><?= address_format($shipping_address, '<br />'); ?></p>
+                    <p><?php echo address_format($shipping_address, '<br />'); ?></p>
                     
-                    <p><?= '<b>' . lang('order_shipping_method_title') . '</b> '; ?></p>
+                    <p><?php echo '<b>' . lang('order_shipping_method_title') . '</b> '; ?></p>
                     
                 <?php
                     if ($has_shipping_method) :
@@ -57,9 +57,9 @@
                         ?>
                         
                             <tr>
-                                <td colspan="2"><b><?= lang('order_products_title'); ?></b></td>
-                                <td align="right"><b><?= lang('order_tax_title'); ?></b></td>
-                                <td align="right"><b><?= lang('order_total_title'); ?></b></td>
+                                <td colspan="2"><b><?php echo lang('order_products_title'); ?></b></td>
+                                <td align="right"><b><?php echo lang('order_tax_title'); ?></b></td>
+                                <td align="right"><b><?php echo lang('order_total_title'); ?></b></td>
                             </tr>
                         
                         <?php
@@ -67,7 +67,7 @@
                         ?>
                         
                           	<tr>
-                            	<td colspan="3"><?= '<b>' . lang('order_products_title') . '</b> '; ?></td>
+                            	<td colspan="3"><?php echo '<b>' . lang('order_products_title') . '</b> '; ?></td>
                           	</tr>
 
                         <?php
@@ -146,7 +146,7 @@
 ?>
 
 <div class="moduleBox">
-  <h6><?= lang('order_payment_information_title'); ?></h6>
+  <h6><?php echo lang('order_payment_information_title'); ?></h6>
 
   <div class="content">
     <p><?php echo $confirmation['title']; ?></p>
@@ -198,5 +198,5 @@
   }
   
 ?>
-	<div style="text-align:right;"><button type="submit" class="small button" id="btn-confirm-order" data-role="button" data-theme="b"><?= lang('button_continue'); ?></button></div></form>
+	<div style="text-align:right;"><button type="submit" class="small button" id="btn-confirm-order" data-role="button" data-theme="b"><?php echo lang('button_continue'); ?></button></div></form>
 </div>

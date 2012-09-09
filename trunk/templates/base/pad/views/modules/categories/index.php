@@ -19,11 +19,11 @@
 <div id="categories-box" class="module-box">
     <ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="f">
     
-        <li data-role="list-divider"><?= lang('box_categories_heading'); ?></li>
+        <li data-role="list-divider"><?php echo lang('box_categories_heading'); ?></li>
     <?php 
     foreach ($categories as $category) {
     ?>
-    	<li><a href="<?= site_url('cpath/' . $category['id']); ?>"><?php echo $category['title']; ?></a></li>
+    	<li><a href="<?php echo site_url('cpath/' . $category['id']); ?>"><?php echo $category['title']; ?></a></li>
     <?php 
     }
     ?>

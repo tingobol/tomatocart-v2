@@ -27,7 +27,7 @@
                 <?php echo '<b>' . lang('please_select') . '</b><br />'; ?>
                 </div>
                 
-                <p style="margin-top: 0px;"><?= lang('choose_shipping_address'); ?></p>
+                <p style="margin-top: 0px;"><?php echo lang('choose_shipping_address'); ?></p>
             </li>    
             <li style="margin-bottom: 10px">
             <?php
@@ -49,7 +49,7 @@
             ?>
                 <div data-role="fieldcontain">
                     <fieldset data-role="controlgroup" data-type="horizontal" data-role="fieldcontain">
-						<legend><?= lang('field_customer_gender');?><span class="required">*</span></legend>
+						<legend><?php echo lang('field_customer_gender');?><span class="required">*</span></legend>
                     	<input type="radio" name="shipping_gender" id="gender1" value="m" <?php echo (($shipping_gender == 'm') ? 'checked="checked"' : ''); ?> />
                     	<label for="gender1"><?php echo lang('gender_male'); ?></label>
                     
@@ -116,7 +116,7 @@
     	
                 <div data-role="fieldcontain">     
                     <?php echo draw_label(lang('field_customer_country'), null, 'shipping_country', TRUE); ?>
-                    <?= form_dropdown('shipping_country', $countries, $shipping_country_id, 'id="shipping_country"');?>
+                    <?php echo form_dropdown('shipping_country', $countries, $shipping_country_id, 'id="shipping_country"');?>
                 </div>
       
             <?php 
@@ -127,7 +127,7 @@
                     <?php 
                         if (count($states) > 0) :
                     ?>
-	                    <?= form_dropdown('shipping_state', $states, $shipping_state, 'id="shipping_state"');?>
+	                    <?php echo form_dropdown('shipping_state', $states, $shipping_state, 'id="shipping_state"');?>
                     <?php 
                         else :
                     ?>
@@ -170,14 +170,14 @@
               	<div data-role="fieldcontain">
                     <fieldset data-role="controlgroup">
                     	<input type="checkbox" name="create_shipping_address" id="create_shipping_address" checked="checked" class="custom" />
-                    	<label for="create_shipping_address"><?= lang('create_new_shipping_address');?></label>
+                    	<label for="create_shipping_address"><?php echo lang('create_new_shipping_address');?></label>
                     </fieldset>
               	</div>
             <?php 
                 endif;
             ?>
     
-    		<button type="submit" class="small button" id="btn-save-shipping-form" data-theme="b"><?= lang('button_continue'); ?></button>
+    		<button type="submit" class="small button" id="btn-save-shipping-form" data-theme="b"><?php echo lang('button_continue'); ?></button>
     	</ul>
     </div>
 </div>

@@ -16,38 +16,38 @@
 */
 ?>
 
-<h3><?= lang('login_new_customer_heading'); ?></h3>
+<h3><?php echo lang('login_new_customer_heading'); ?></h3>
 
-<p><?= lang('login_new_customer_text'); ?></p>
+<p><?php echo lang('login_new_customer_text'); ?></p>
 
 <p align="right">
-  <a class="button" href="<?= site_url('account/create'); ?>"><?= lang('button_continue'); ?></a>
+  <a class="button" href="<?php echo site_url('account/create'); ?>"><?php echo lang('button_continue'); ?></a>
 </p>
 
-<h3><?= lang('login_returning_customer_heading'); ?></h3>
+<h3><?php echo lang('login_returning_customer_heading'); ?></h3>
 
 <div class="contents">
-  <form id="login" name="login" action="<?= site_url('account/login/process');?>" method="post">
+  <form id="login" name="login" action="<?php echo site_url('account/login/process');?>" method="post">
 
-    <p><?= lang('login_returning_customer_text'); ?></p>
+    <p><?php echo lang('login_returning_customer_text'); ?></p>
     
     <ul>
       <li>
-        <label for="email_address"><?= lang('field_customer_email_address');?><span class="required">*</span></label>
-        <input type="text" id="email_address" name="email_address" value="<?= set_value('email_address');?>" />
+        <label for="email_address"><?php echo lang('field_customer_email_address');?><span class="required">*</span></label>
+        <input type="text" id="email_address" name="email_address" value="<?php echo set_value('email_address');?>" />
       </li>
       <li>
-        <label for="password"><?= lang('field_customer_password');?><em>*</em></label>
-        <input type="password" id="password" name="password" value="<?= set_value('password');?>" />
+        <label for="password"><?php echo lang('field_customer_password');?><em>*</em></label>
+        <input type="password" id="password" name="password" value="<?php echo set_value('password');?>" />
       </li>
     </ul>
     
     <p>
-      <?= sprintf(lang('login_returning_customer_password_forgotten'), site_url('account/password_forgotten'));?>
+      <?php echo sprintf(lang('login_returning_customer_password_forgotten'), site_url('account/password_forgotten'));?>
     </p>
     
     <p align="right">
-      <button type="submit" class="button"><?= lang('button_sign_in'); ?></button>
+      <button type="submit" class="button"><?php echo lang('button_sign_in'); ?></button>
     </p>
   </form>
 </div>

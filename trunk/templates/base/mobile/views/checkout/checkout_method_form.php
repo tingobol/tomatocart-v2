@@ -17,9 +17,9 @@
 ?>
 
 <!--  Begin: New Customer Form  -->
-  <h3><?= lang('login_new_customer_heading');?></h3>
+  <h3><?php echo lang('login_new_customer_heading');?></h3>
   
-   <p><?= lang('login_new_customer_text');?></p>
+   <p><?php echo lang('login_new_customer_text');?></p>
   
   <div data-role="fieldcontain">
     <fieldset data-role="controlgroup">
@@ -31,26 +31,26 @@
     </fieldset>
   </div>
   
-	<button type="submit" class="small button" id="btn-new-customer" data-theme="b"><?= lang('button_continue'); ?></button>
+	<button type="submit" class="small button" id="btn-new-customer" data-theme="b"><?php echo lang('button_continue'); ?></button>
 <!--  End: New Customer Form  -->
 
 <!--  Begin: Login Form  -->
-  <form name="login" action="<?= site_url('account/create'); ?>" method="post">
-    <h3><?= lang('login_returning_customer_heading');?></h3>
+  <form name="login" action="<?php echo site_url('account/create'); ?>" method="post">
+    <h3><?php echo lang('login_returning_customer_heading');?></h3>
   
-    <p><?= lang('login_returning_customer_text');?></p>
+    <p><?php echo lang('login_returning_customer_text');?></p>
   
   	<div data-role="fieldcontain">
-  	  <label for="email_address"><?= lang('field_customer_email_address');?><em>* </em></label>
+  	  <label for="email_address"><?php echo lang('field_customer_email_address');?><em>* </em></label>
   	  <input type="text" name="email_address" id="email_address" value="" />            
   	</div>      
   	<div data-role="fieldcontain">            
-  	  <label for="password"><?= lang('field_customer_password');?><em>* </em></label>
+  	  <label for="password"><?php echo lang('field_customer_password');?><em>* </em></label>
   	  <input type="password" name="password" id="password" value="" />
   	</div>
   
-    <p><?= sprintf(lang('login_returning_customer_password_forgotten'), site_url('account/password_forgotten'));?></p>
+    <p><?php echo sprintf(lang('login_returning_customer_password_forgotten'), site_url('account/password_forgotten'));?></p>
       
-    <button type="submit" class="small button" id="btn-login" data-theme="e"><?= lang('button_sign_in'); ?></button>
+    <button type="submit" class="small button" id="btn-login" data-theme="e"><?php echo lang('button_sign_in'); ?></button>
   </form>    
 <!--  End: Login Form  -->

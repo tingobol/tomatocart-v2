@@ -16,14 +16,14 @@
 */
 ?>
 
-<h2><?= lang('box_categories_heading'); ?></h2>
+<h2><?php echo lang('box_categories_heading'); ?></h2>
   
 <div class="categories-list"> 
     <ul data-role="listview" data-dividertheme="d">
     <?php 
         foreach ($categories as $category) :
     ?>
-    	<li><a href="<?= site_url('cpath/' . $category['id']); ?>"><img src="<?php echo image_url('categories/' . $category['image']); ?>" /><h3><?php echo $category['title']; ?></h3></a></li>
+    	<li><a href="<?php echo site_url('cpath/' . $category['id']); ?>"><img src="<?php echo image_url('categories/' . $category['image']); ?>" /><h3><?php echo $category['title']; ?></h3></a></li>
     <?php 
         endforeach;
     ?>

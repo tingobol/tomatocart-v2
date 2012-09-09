@@ -24,7 +24,7 @@
     <?php 
       foreach ($categories as $category) {
     ?>
-  		<li><a href="<?= site_url('index/' . $category['id']); ?>"><img src="<?php echo image_url('categories/' . $category['info']['image']);?>" /><h3><?php echo $category['info']['name']; ?></h3></a></li>
+  		<li><a href="<?php echo site_url('index/' . $category['id']); ?>"><img src="<?php echo image_url('categories/' . $category['info']['image']);?>" /><h3><?php echo $category['info']['name']; ?></h3></a></li>
     <?php 
       }
     ?>
