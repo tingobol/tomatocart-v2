@@ -269,7 +269,7 @@ class TOC_Category_Tree
 
                 if ($load_from_cache === TRUE) 
                 {
-                    $this->ci->cache->save('category_tree-' . $this->ci->lang->get_code(), $this->data, config('CACHE_MAX_TIME'));
+                    $this->ci->cache->save('category_tree-' . $this->ci->lang->get_code(), $this->data, CACHE_MAX_TIME);
                 }
             }
         }
