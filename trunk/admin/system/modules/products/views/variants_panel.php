@@ -19,7 +19,7 @@ Ext.define('Toc.products.VariantsPanel', {
   constructor: function(config) {
     config = config || {};
     
-    config.title = '<?= lang('section_variants'); ?>';
+    config.title = '<?php echo lang('section_variants'); ?>';
     config.layout = 'border';
     config.defaults = {split: true};
     
@@ -48,7 +48,7 @@ Ext.define('Toc.products.VariantsPanel', {
       labelAlign: 'top',
       autoScroll: true,
       tbar: [{
-        text: '<?= lang('button_manage_variants_groups'); ?>',
+        text: '<?php echo lang('button_manage_variants_groups'); ?>',
         iconCls : 'add',
         handler: function() {
           console.log('run');
@@ -95,10 +95,10 @@ Ext.define('Toc.products.VariantsPanel', {
       collapsible: true,
       store: dsVariants,
       columns: [
-        {header: '<?= lang("table_heading_variants"); ?>', dataIndex: 'variants_values_name', flex: 1},
+        {header: '<?php echo lang("table_heading_variants"); ?>', dataIndex: 'variants_values_name', flex: 1},
         {
           xtype: 'checkcolumn',
-          header: '<?= lang("table_heading_default"); ?>',
+          header: '<?php echo lang("table_heading_default"); ?>',
           dataIndex: 'default',
           width: 55,
           listeners: {
@@ -122,7 +122,7 @@ Ext.define('Toc.products.VariantsPanel', {
         {
           xtype:'actioncolumn', 
           width:50,
-          header: '<?= lang("table_heading_action"); ?>',
+          header: '<?php echo lang("table_heading_action"); ?>',
           items: [{
             iconCls: 'icon-action icon-delete-record',
             tooltip: TocLanguage.tipDelete,
@@ -261,7 +261,7 @@ Ext.define('Toc.products.VariantsPanel', {
     });
     
     if (error === true) {
-      Ext.MessageBox.alert(TocLanguage.msgErrTitle, '<?= lang('msg_warning_must_choose_value_for_variant_group'); ?>');
+      Ext.MessageBox.alert(TocLanguage.msgErrTitle, '<?php echo lang('msg_warning_must_choose_value_for_variant_group'); ?>');
       return;
     }
     
@@ -283,7 +283,7 @@ Ext.define('Toc.products.VariantsPanel', {
     }
     
     if (found == true) {
-      Ext.MessageBox.alert(TocLanguage.msgErrTitle, '<?= lang('msg_warning_variant_values_exist'); ?>');
+      Ext.MessageBox.alert(TocLanguage.msgErrTitle, '<?php echo lang('msg_warning_variant_values_exist'); ?>');
       return;
     }
     

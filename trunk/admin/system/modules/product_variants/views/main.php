@@ -35,7 +35,7 @@ Ext.override(Toc.desktop.ProductVariantsWindow, {
       
       win = desktop.createWindow({
         id: 'product_variants-win',
-        title: '<?= lang("heading_product_variants_title"); ?>',
+        title: '<?php echo lang("heading_product_variants_title"); ?>',
         width: 800,
         height: 400,
         iconCls: 'icon-product_variants-win',
@@ -69,7 +69,7 @@ Ext.override(Toc.desktop.ProductVariantsWindow, {
   
   onEditVariantsGroups: function(grdGroups, record) {
     var dlg = this.createProductVariantsGroupsDialog();
-    dlg.setTitle('<?= lang("action_heading_new_variant_group"); ?>');
+    dlg.setTitle('<?php echo lang("action_heading_new_variant_group"); ?>');
     
     this.onSaveSuccess(dlg, grdGroups);
     

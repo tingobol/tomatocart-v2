@@ -21,7 +21,7 @@ Ext.define('Toc.ratings.RatingsDialog', {
     config = config || {};
     
     config.id = 'ratings-dialog-win';
-    config.title = '<?= lang('action_heading_new_rating'); ?>';
+    config.title = '<?php echo lang('action_heading_new_rating'); ?>';
     config.layout = 'fit';
     config.width = 440;
     config.modal = true;
@@ -102,7 +102,7 @@ Ext.define('Toc.ratings.RatingsDialog', {
           name: 'ratings_text[<?php echo $l['id']; ?>]',
           fieldLabel: '<?php echo $i != 1 ? '&nbsp;' : lang('field_rating_name'); ?>',
           allowBlank: false,
-          labelStyle: '<?= worldflag_url($l['country_iso']); ?>'
+          labelStyle: '<?php echo worldflag_url($l['country_iso']); ?>'
         });
         
         this.frmRatings.add(txtLang<?php echo $l['id']; ?>);
@@ -123,9 +123,9 @@ Ext.define('Toc.ratings.RatingsDialog', {
             {
               xtype: 'radio', 
               name: 'status', 
-              fieldLabel: '<?= lang('field_rating_status'); ?>', 
+              fieldLabel: '<?php echo lang('field_rating_status'); ?>', 
               inputValue: '1', 
-              boxLabel: '<?= lang('field_status_enabled'); ?>', 
+              boxLabel: '<?php echo lang('field_status_enabled'); ?>', 
               checked: true
             }
           ]
@@ -139,7 +139,7 @@ Ext.define('Toc.ratings.RatingsDialog', {
               hideLabel: true, 
               name: 'status', 
               inputValue: '0', 
-              boxLabel: '<?= lang('field_status_disabled'); ?>', 
+              boxLabel: '<?php echo lang('field_status_disabled'); ?>', 
               width: 150
             }
           ]

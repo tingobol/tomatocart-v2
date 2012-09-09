@@ -22,7 +22,7 @@ Ext.define('Toc.countries.ZonesGrid', {
     
     config.viewConfig = {emptyText: TocLanguage.gridNoRecords};
     
-    config.title = '<?= lang('section_zones'); ?>';
+    config.title = '<?php echo lang('section_zones'); ?>';
     config.border = false;
     config.region = 'east';
     config.split = true;
@@ -52,12 +52,12 @@ Ext.define('Toc.countries.ZonesGrid', {
     config.selModel = Ext.create('Ext.selection.CheckboxModel');
     
     config.columns = [
-      { header: '<?= lang('table_heading_zones'); ?>', dataIndex: 'zone_name', sortable: true, flex: 1},
-      { header: '<?= lang('table_heading_zone_code'); ?>', dataIndex: 'zone_code', width: 60, sortable: true},
+      { header: '<?php echo lang('table_heading_zones'); ?>', dataIndex: 'zone_name', sortable: true, flex: 1},
+      { header: '<?php echo lang('table_heading_zone_code'); ?>', dataIndex: 'zone_code', width: 60, sortable: true},
       {
         xtype:'actioncolumn', 
         width: 60,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           iconCls: 'icon-action icon-edit-record',
           tooltip: TocLanguage.tipEdit,

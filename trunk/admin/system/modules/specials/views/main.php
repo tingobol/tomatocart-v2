@@ -30,7 +30,7 @@ Ext.override(Toc.desktop.SpecialsWindow, {
       
       win = desktop.createWindow({
         id: 'specials-win',
-        title: '<?= lang('heading_specials_title'); ?>',
+        title: '<?php echo lang('heading_specials_title'); ?>',
         width: 800,
         height: 400,
         iconCls: 'icon-specials-win',
@@ -44,7 +44,7 @@ Ext.override(Toc.desktop.SpecialsWindow, {
   
   onCreateSpecial: function(grd) {
     var dlg = this.createSpecialsDialog();
-    dlg.setTitle('<?= lang("action_heading_new_special"); ?>');
+    dlg.setTitle('<?php echo lang("action_heading_new_special"); ?>');
     
     this.onSaveSuccess(dlg, grd);
     

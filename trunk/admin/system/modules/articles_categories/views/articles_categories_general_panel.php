@@ -20,7 +20,7 @@ Ext.define('Toc.articles_categories.GeneralPanel', {
   constructor: function(config) {
     config = config || {};
     
-    config.title = '<?= lang('section_general'); ?>';
+    config.title = '<?php echo lang('section_general'); ?>';
     config.bodyPadding = 8;
     config.border = false;
     config.layout = 'anchor';
@@ -42,7 +42,7 @@ Ext.define('Toc.articles_categories.GeneralPanel', {
           name: 'articles_categories_name[<?php echo $l['id']; ?>]',
           fieldLabel: '<?php echo $i != 1 ? '&nbsp;' : lang('field_name') ?>',
           allowBlank: false,
-          labelStyle: '<?= worldflag_url($l['country_iso']); ?>'
+          labelStyle: '<?php echo worldflag_url($l['country_iso']); ?>'
         });
         
         items.push(txtLang<?php echo $l['id']; ?>);
@@ -61,9 +61,9 @@ Ext.define('Toc.articles_categories.GeneralPanel', {
             {
               xtype: 'radio', 
               name: 'articles_categories_status', 
-              fieldLabel: '<?= lang('field_publish'); ?>', 
+              fieldLabel: '<?php echo lang('field_publish'); ?>', 
               inputValue: '1', 
-              boxLabel: '<?= lang('field_publish_yes'); ?>', 
+              boxLabel: '<?php echo lang('field_publish_yes'); ?>', 
               checked: true
             }
           ]
@@ -77,7 +77,7 @@ Ext.define('Toc.articles_categories.GeneralPanel', {
               hideLabel: true, 
               name: 'articles_categories_status', 
               inputValue: '0',
-              boxLabel: '<?= lang('field_publish_no'); ?>'
+              boxLabel: '<?php echo lang('field_publish_no'); ?>'
             }
           ]
         }
@@ -86,7 +86,7 @@ Ext.define('Toc.articles_categories.GeneralPanel', {
     
     items.push(pnlPublish);
     
-    items.push({xtype: 'numberfield', id: 'articles_categories_order', name: 'articles_categories_order', fieldLabel: '<?= lang('field_articles_order'); ?>', allowBlank: false});
+    items.push({xtype: 'numberfield', id: 'articles_categories_order', name: 'articles_categories_order', fieldLabel: '<?php echo lang('field_articles_order'); ?>', allowBlank: false});
     
     return items;
   }

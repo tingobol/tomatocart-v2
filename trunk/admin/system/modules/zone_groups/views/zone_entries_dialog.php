@@ -21,7 +21,7 @@ Ext.define('Toc.zone_groups.ZoneEntriesDialog', {
     config = config || {};
     
     config.id = 'zone_entries-dialog-win';
-    config.title = '<?= lang("action_heading_new_zone_group"); ?>';
+    config.title = '<?php echo lang("action_heading_new_zone_group"); ?>';
     config.width = 440;
     config.modal = true;
     config.iconCls = 'icon-zone_groups-win';
@@ -102,7 +102,7 @@ Ext.define('Toc.zone_groups.ZoneEntriesDialog', {
     });
     
     this.cboCountries = Ext.create('Ext.form.ComboBox', {
-      fieldLabel: '<?= lang('field_country'); ?>',
+      fieldLabel: '<?php echo lang('field_country'); ?>',
       store: dsCountries, 
       name: 'countries_id', 
       queryMode: 'local',
@@ -137,7 +137,7 @@ Ext.define('Toc.zone_groups.ZoneEntriesDialog', {
     });
     
     this.cboZones = Ext.create('Ext.form.ComboBox', {
-      fieldLabel: '<?= lang('field_zone'); ?>',
+      fieldLabel: '<?php echo lang('field_zone'); ?>',
       disabled: true, 
       store: this.dsZones, 
       name: 'zone_id', 

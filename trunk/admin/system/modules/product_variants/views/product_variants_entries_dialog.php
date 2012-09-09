@@ -21,7 +21,7 @@ Ext.define('Toc.product_variants.ProductVariantsEntriesDialog', {
     config = config || {};
     
     config.id = 'product_variants_entries-dialog-win';
-    config.title = '<?= lang("action_heading_new_group_entry");?>';
+    config.title = '<?php echo lang("action_heading_new_group_entry");?>';
     config.width = 440;
     config.modal = true;
     config.iconCls = 'icon-product_variants-win';
@@ -102,7 +102,7 @@ Ext.define('Toc.product_variants.ProductVariantsEntriesDialog', {
             name: 'products_variants_values_name[<?php echo $l['id']; ?>]',
             fieldLabel: '<?php echo $i != 1 ? '&nbsp;' : lang('field_group_entry_name'); ?>',
             allowBlank: false,
-            labelStyle: '<?= worldflag_url($l['country_iso']); ?>'
+            labelStyle: '<?php echo worldflag_url($l['country_iso']); ?>'
           });
           
           this.frmEntry.add(lang<?php echo $l['id']; ?>);

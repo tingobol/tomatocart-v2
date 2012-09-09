@@ -20,7 +20,7 @@ Ext.define('Toc.languages.ModulesTreePanel', {
   constructor: function(config) {
     config = config || {};
     
-    config.title = '<?= lang('tree_head_title'); ?>';
+    config.title = '<?php echo lang('tree_head_title'); ?>';
     config.region = 'west';
     config.autoScroll = true;
     config.width = 170;
@@ -39,7 +39,7 @@ Ext.define('Toc.languages.ModulesTreePanel', {
       },
       root: {
         id: '0',
-        text: '<?= lang('heading_languages_title'); ?>',
+        text: '<?php echo lang('heading_languages_title'); ?>',
         leaf: false,
         expandable: true,  
         expanded: true  

@@ -45,7 +45,7 @@ Ext.define('Toc.product_variants.MainPanel', {
   },
   
   onGrdVariantsGroupsSelectChange: function(record) {
-    this.grdVariantsEntries.setTitle('<?= lang("heading_product_variants_title");?>:  '+ record.get('products_variants_groups_name'));
+    this.grdVariantsEntries.setTitle('<?php echo lang("heading_product_variants_title");?>:  '+ record.get('products_variants_groups_name'));
     this.grdVariantsEntries.iniGrid(record);
   },
   

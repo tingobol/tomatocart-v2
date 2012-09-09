@@ -22,7 +22,7 @@ Ext.define('Toc.customers.AddressBookGrid', {
     
     this.customersId = null;
     
-    config.title = '<?= lang('section_address_book'); ?>';
+    config.title = '<?php echo lang('section_address_book'); ?>';
     config.border = false;
     config.viewConfig = {emptyText: TocLanguage.gridNoRecords};
     
@@ -50,11 +50,11 @@ Ext.define('Toc.customers.AddressBookGrid', {
     config.selModel = Ext.create('Ext.selection.CheckboxModel');
     
     config.columns =[
-      { header: '<?= lang('section_address_book'); ?>', dataIndex: 'address_html', flex: 1},
+      { header: '<?php echo lang('section_address_book'); ?>', dataIndex: 'address_html', flex: 1},
       {
         xtype:'actioncolumn', 
         width:50,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           iconCls: 'icon-action icon-edit-record',
           tooltip: TocLanguage.tipEdit,

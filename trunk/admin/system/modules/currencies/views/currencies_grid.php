@@ -45,14 +45,14 @@ Ext.define('Toc.currencies.CurrenciesGrid', {
     config.selModel = Ext.create('Ext.selection.CheckboxModel');
     
     config.columns = [
-      { header: '<?= lang('table_heading_currencies'); ?>', dataIndex: 'title', flex: 1},
-      { header: '<?= lang('table_heading_code'); ?>', align: 'right', dataIndex: 'code', width: 100},
-      { header: '<?= lang('table_heading_value'); ?>', align: 'right', dataIndex: 'value', width: 100},
-      { header: '<?= lang('table_heading_example'); ?>', align: 'right', dataIndex: 'example', width: 100},
+      { header: '<?php echo lang('table_heading_currencies'); ?>', dataIndex: 'title', flex: 1},
+      { header: '<?php echo lang('table_heading_code'); ?>', align: 'right', dataIndex: 'code', width: 100},
+      { header: '<?php echo lang('table_heading_value'); ?>', align: 'right', dataIndex: 'value', width: 100},
+      { header: '<?php echo lang('table_heading_example'); ?>', align: 'right', dataIndex: 'example', width: 100},
       {
         xtype:'actioncolumn', 
         width: 80,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           iconCls: 'icon-action icon-edit-record',
           tooltip: TocLanguage.tipEdit,
@@ -73,7 +73,7 @@ Ext.define('Toc.currencies.CurrenciesGrid', {
             scope: this                
         },{ 
           iconCls: 'icon-action icon-update-exchange-rates',
-          tooltip: '<?= lang('button_update_currency_exchange_rates'); ?>',
+          tooltip: '<?php echo lang('button_update_currency_exchange_rates'); ?>',
           handler: function(grid, rowIndex, colIndex) {
             var rec = grid.getStore().getAt(rowIndex);
             

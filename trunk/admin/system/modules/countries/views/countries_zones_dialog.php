@@ -21,7 +21,7 @@ Ext.define('Toc.countries.ZonesDialog', {
     config = config || {};
     
     config.id = 'zones-dialog-win';
-    config.title = '<?= lang('action_heading_new_zone'); ?>';
+    config.title = '<?php echo lang('action_heading_new_zone'); ?>';
     config.layout = 'fit';
     config.width = 500;
     config.height = 150;
@@ -92,8 +92,8 @@ Ext.define('Toc.countries.ZonesDialog', {
       border: false,
       bodyPadding: 10,
       items: [
-        {xtype: 'textfield', fieldLabel: '<?= lang('field_zone_name'); ?>', name: 'zone_name', allowBlank: false},
-        {xtype: 'textfield', fieldLabel: '<?= lang('field_zone_code'); ?>', name: 'zone_code', allowBlank: false}
+        {xtype: 'textfield', fieldLabel: '<?php echo lang('field_zone_name'); ?>', name: 'zone_name', allowBlank: false},
+        {xtype: 'textfield', fieldLabel: '<?php echo lang('field_zone_code'); ?>', name: 'zone_code', allowBlank: false}
       ]
     });
     

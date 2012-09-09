@@ -21,7 +21,7 @@ Ext.define('Toc.customers.CustomersDialog', {
     config = config || {};
     
     config.id = 'customers-dialog-win';
-    config.title = '<?= lang('action_heading_new_customer'); ?>';
+    config.title = '<?php echo lang('action_heading_new_customer'); ?>';
     config.modal = true;
     config.width = 500;
     config.iconCls = 'icon-customers-win';
@@ -99,7 +99,7 @@ Ext.define('Toc.customers.CustomersDialog', {
     });
     
     this.cboCustomersGroups = Ext.create('Ext.form.ComboBox', {
-      fieldLabel: '<?= lang('field_customer_group'); ?>',
+      fieldLabel: '<?php echo lang('field_customer_group'); ?>',
       labelWidth: 149,
       store: dsCustomersGroups, 
       name: 'customers_groups_id', 
@@ -108,7 +108,7 @@ Ext.define('Toc.customers.CustomersDialog', {
       valueField: 'id', 
       editable: false,
       forceSelection: true,      
-      emptyText: '<?= lang('none'); ?>'
+      emptyText: '<?php echo lang('none'); ?>'
     });
     
     this.frmCustomers = Ext.create('Ext.form.FormPanel', {
@@ -133,25 +133,25 @@ Ext.define('Toc.customers.CustomersDialog', {
               width: 220,
               border: false,
               items:[
-                {fieldLabel: '<?= lang('field_gender'); ?>', boxLabel: '<?= lang('gender_male'); ?>' , name: 'customers_gender', xtype:'radio', inputValue: 'm', checked: true}
+                {fieldLabel: '<?php echo lang('field_gender'); ?>', boxLabel: '<?php echo lang('gender_male'); ?>' , name: 'customers_gender', xtype:'radio', inputValue: 'm', checked: true}
               ]
             },
             { 
               border: false,
               items:[
-                { hideLabel: true, boxLabel: '<?= lang('gender_female'); ?>' , name: 'customers_gender', xtype:'radio', inputValue: 'f'}
+                { hideLabel: true, boxLabel: '<?php echo lang('gender_female'); ?>' , name: 'customers_gender', xtype:'radio', inputValue: 'f'}
               ]
             }
           ]
         },
-        {xtype: 'textfield', fieldLabel: '<?= lang('field_first_name'); ?>', name: 'customers_firstname', allowBlank: false},
-        {xtype: 'textfield', fieldLabel: '<?= lang('field_last_name'); ?>', name: 'customers_lastname', allowBlank: false},
-        {xtype: 'datefield', fieldLabel: '<?= lang('field_date_of_birth'); ?>', editable: false, name: 'customers_dob', format: 'Y-m-d'},
-        {xtype: 'textfield', fieldLabel: '<?= lang('field_email_address'); ?>', name: 'customers_email_address', allowBlank: false},
-        {xtype: 'checkbox', anchor: '', fieldLabel: '<?= lang('field_newsletter_subscription'); ?>', name: 'customers_newsletter'},
-        {xtype: 'textfield', inputType: 'password', fieldLabel: '<?= lang('field_password'); ?>', name: 'customers_password'},
-        {xtype: 'textfield', inputType: 'password', fieldLabel: '<?= lang('field_password_confirmation'); ?>', name: 'confirm_password'},
-        {xtype: 'checkbox',anchor: '', fieldLabel: '<?= lang('field_status'); ?>', name: 'customers_status'},
+        {xtype: 'textfield', fieldLabel: '<?php echo lang('field_first_name'); ?>', name: 'customers_firstname', allowBlank: false},
+        {xtype: 'textfield', fieldLabel: '<?php echo lang('field_last_name'); ?>', name: 'customers_lastname', allowBlank: false},
+        {xtype: 'datefield', fieldLabel: '<?php echo lang('field_date_of_birth'); ?>', editable: false, name: 'customers_dob', format: 'Y-m-d'},
+        {xtype: 'textfield', fieldLabel: '<?php echo lang('field_email_address'); ?>', name: 'customers_email_address', allowBlank: false},
+        {xtype: 'checkbox', anchor: '', fieldLabel: '<?php echo lang('field_newsletter_subscription'); ?>', name: 'customers_newsletter'},
+        {xtype: 'textfield', inputType: 'password', fieldLabel: '<?php echo lang('field_password'); ?>', name: 'customers_password'},
+        {xtype: 'textfield', inputType: 'password', fieldLabel: '<?php echo lang('field_password_confirmation'); ?>', name: 'confirm_password'},
+        {xtype: 'checkbox',anchor: '', fieldLabel: '<?php echo lang('field_status'); ?>', name: 'customers_status'},
         this.cboCustomersGroups
       ]
     });

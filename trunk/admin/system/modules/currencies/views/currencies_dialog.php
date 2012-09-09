@@ -21,7 +21,7 @@ Ext.define('Toc.currencies.CurrenciesDialog', {
     config = config || {};
     
     config.id = 'currencies-dialog-win';
-    config.title = '<?= lang('action_heading_new_currency'); ?>';
+    config.title = '<?php echo lang('action_heading_new_currency'); ?>';
     config.width = 450;
     config.autoHeight = true;
     config.modal = true;
@@ -93,13 +93,13 @@ Ext.define('Toc.currencies.CurrenciesDialog', {
       border: false,
       bodyPadding: 10,
       items: [
-        {xtype: 'textfield', fieldLabel: '<?= lang('field_title'); ?>', name: 'title', allowBlank: false},
-        {xtype: 'textfield', fieldLabel: '<?= lang('field_code'); ?>', name: 'code', allowBlank: false},
-        {xtype: 'textfield', fieldLabel: '<?= lang('field_symbol_left'); ?>', name: 'symbol_left'},
-        {xtype: 'textfield', fieldLabel: '<?= lang('field_symbol_right'); ?>', name: 'symbol_right'},
-        {xtype: 'numberfield', fieldLabel: '<?= lang('field_decimal_places'); ?>', name: 'decimal_places', allowDecimals: false},
-        {xtype: 'numberfield', fieldLabel: '<?= lang('field_currency_value'); ?>', name: 'value', decimalPrecision: 10},
-        {xtype: 'checkbox', fieldLabel: '<?= lang('field_set_default'); ?>', id: 'is_default', name: 'is_default', anchor: ''}
+        {xtype: 'textfield', fieldLabel: '<?php echo lang('field_title'); ?>', name: 'title', allowBlank: false},
+        {xtype: 'textfield', fieldLabel: '<?php echo lang('field_code'); ?>', name: 'code', allowBlank: false},
+        {xtype: 'textfield', fieldLabel: '<?php echo lang('field_symbol_left'); ?>', name: 'symbol_left'},
+        {xtype: 'textfield', fieldLabel: '<?php echo lang('field_symbol_right'); ?>', name: 'symbol_right'},
+        {xtype: 'numberfield', fieldLabel: '<?php echo lang('field_decimal_places'); ?>', name: 'decimal_places', allowDecimals: false},
+        {xtype: 'numberfield', fieldLabel: '<?php echo lang('field_currency_value'); ?>', name: 'value', decimalPrecision: 10},
+        {xtype: 'checkbox', fieldLabel: '<?php echo lang('field_set_default'); ?>', id: 'is_default', name: 'is_default', anchor: ''}
       ]
     });
     

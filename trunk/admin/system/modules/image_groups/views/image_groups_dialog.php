@@ -21,7 +21,7 @@ Ext.define('Toc.image_groups.ImageGroupsDialog', {
     config = config || {};
     
     config.id = 'image_groups-dialog-win';
-    config.title = '<?= lang('action_heading_new_image_group'); ?>';
+    config.title = '<?php echo lang('action_heading_new_image_group'); ?>';
     config.layout = 'fit';
     config.width = 450;
     config.autoHeight = true;
@@ -101,18 +101,18 @@ Ext.define('Toc.image_groups.ImageGroupsDialog', {
             {
               xtype: 'textfield', 
               name: 'title[<?php echo $l['id']; ?>]', 
-              fieldLabel: '<?= ($i != 1) ? '&nbsp;' : lang('field_title') ?>',
-              labelStyle: '<?= worldflag_url($l['country_iso']); ?>'
+              fieldLabel: '<?php echo ($i != 1) ? '&nbsp;' : lang('field_title') ?>',
+              labelStyle: '<?php echo worldflag_url($l['country_iso']); ?>'
             },
         <?php
             $i++;
           }
         ?>
-        {xtype: 'textfield', name: 'code', allowBlank: false, fieldLabel: '<?= lang('field_code'); ?>'},
-        {xtype: 'numberfield', name: 'size_width', allowBlank: false, fieldLabel: '<?= lang('field_width'); ?>'},
-        {xtype: 'numberfield', name: 'size_height', allowBlank: false, fieldLabel: '<?= lang('field_height'); ?>'},
-        {xtype: 'checkbox', name: 'force_size', fieldLabel: '<?= lang('field_force_size'); ?>', anchor: ''},
-        {xtype: 'checkbox', name: 'is_default', id: 'default_image_group', fieldLabel: '<?= lang('field_set_as_default'); ?>', anchor: ''}
+        {xtype: 'textfield', name: 'code', allowBlank: false, fieldLabel: '<?php echo lang('field_code'); ?>'},
+        {xtype: 'numberfield', name: 'size_width', allowBlank: false, fieldLabel: '<?php echo lang('field_width'); ?>'},
+        {xtype: 'numberfield', name: 'size_height', allowBlank: false, fieldLabel: '<?php echo lang('field_height'); ?>'},
+        {xtype: 'checkbox', name: 'force_size', fieldLabel: '<?php echo lang('field_force_size'); ?>', anchor: ''},
+        {xtype: 'checkbox', name: 'is_default', id: 'default_image_group', fieldLabel: '<?php echo lang('field_set_as_default'); ?>', anchor: ''}
       ]
     });
     

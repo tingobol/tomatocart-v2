@@ -21,7 +21,7 @@ Ext.define('Toc.articles.ArticlesDialog', {
     config = config || {};
     
     config.id = 'articles-dialog-win';
-    config.title = '<?= lang('heading_title_new_article'); ?>';
+    config.title = '<?php echo lang('heading_title_new_article'); ?>';
     config.layout = 'fit';
     config.width = 850;
     config.height = 600;
@@ -69,7 +69,7 @@ Ext.define('Toc.articles.ArticlesDialog', {
 //          var img = action.result.data.articles_image;
 //          
 //          if (img != null) {
-//            var img = '<?= IMGHTTPPATH; ?>/articles/thumbnails/' + img;
+//            var img = '<?php echo IMGHTTPPATH; ?>/articles/thumbnails/' + img;
 //            var pnlImg = Ext.create('Ext.Panel', {
 //              height: 90,
 //              border: false,
@@ -78,7 +78,7 @@ Ext.define('Toc.articles.ArticlesDialog', {
 //            
 //            var checkboxDel = Ext.create('Ext.form.field.Checkbox', {
 //              name: 'delimage',
-//              boxLabel: '<?= lang('field_delete'); ?>'
+//              boxLabel: '<?php echo lang('field_delete'); ?>'
 //            });
 //            
 //            this.pnlImgUrl.add(pnlImg);
@@ -110,7 +110,7 @@ Ext.define('Toc.articles.ArticlesDialog', {
         labelSeparator: '',
         anchor: '97%'
       },
-      title:'<?= lang('heading_title_data'); ?>',
+      title:'<?php echo lang('heading_title_data'); ?>',
       url: Toc.CONF.CONN_URL,
       baseParams: {  
         module: 'articles',
@@ -150,7 +150,7 @@ Ext.define('Toc.articles.ArticlesDialog', {
     });
     
     this.cboCategories = Ext.create('Ext.form.ComboBox', {
-      fieldLabel: '<?= lang('field_article_category'); ?>', 
+      fieldLabel: '<?php echo lang('field_article_category'); ?>', 
       store: this.dsCategories,
       name: 'articles_categories_id',
       valueField: 'id', 
@@ -188,12 +188,12 @@ Ext.define('Toc.articles.ArticlesDialog', {
                   width: 200,
                   items: [
                     {
-                      fieldLabel: '<?= lang('field_publish'); ?>', 
+                      fieldLabel: '<?php echo lang('field_publish'); ?>', 
                       xtype:'radio', 
                       name: 'articles_status',
                       inputValue: '1',
                       checked: true,
-                      boxLabel: '<?= lang('field_publish_yes'); ?>'
+                      boxLabel: '<?php echo lang('field_publish_yes'); ?>'
                     }
                   ]
                 },
@@ -206,15 +206,15 @@ Ext.define('Toc.articles.ArticlesDialog', {
                       xtype:'radio', 
                       name: 'articles_status',
                       inputValue: '0',
-                      boxLabel: '<?= lang('field_publish_no'); ?>'
+                      boxLabel: '<?php echo lang('field_publish_no'); ?>'
                     }
                   ]
                 }
               ]
             },
             this.cboCategories,
-            {xtype:'numberfield', fieldLabel: '<?= lang('field_order'); ?>', name: 'articles_order', id: 'articles_order'}
-//            {xtype:'fileuploadfield', fieldLabel: '<?= lang('field_image'); ?>', name: 'articles_image'}
+            {xtype:'numberfield', fieldLabel: '<?php echo lang('field_order'); ?>', name: 'articles_order', id: 'articles_order'}
+//            {xtype:'fileuploadfield', fieldLabel: '<?php echo lang('field_image'); ?>', name: 'articles_image'}
           ]
         }
 //        {

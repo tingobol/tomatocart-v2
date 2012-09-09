@@ -22,7 +22,7 @@ Ext.define('Toc.guest_book.GuestBookDialog', {
     
     config.id = 'guest_book-dialog';
     config.iconCls = 'icon-guest_book-win';
-    config.title = '<?= lang('heading_guest_book_title'); ?>';
+    config.title = '<?php echo lang('heading_guest_book_title'); ?>';
     config.modal = true;
     config.width = 500;
     config.items = this.buildForm();
@@ -99,14 +99,14 @@ Ext.define('Toc.guest_book.GuestBookDialog', {
         }
       },
       listeners: {
-        load: function() {this.cboLanguages.setValue('<?= lang_id();?>')},
+        load: function() {this.cboLanguages.setValue('<?php echo lang_id();?>')},
         scope: this
       },
       autoLoad: true
     });
     
     this.cboLanguages = Ext.create('Ext.form.ComboBox', {
-      fieldLabel: '<?= lang('field_language'); ?>', 
+      fieldLabel: '<?php echo lang('field_language'); ?>', 
       store: dsLanguages, 
       name: 'languages_id', 
       displayField: 'text', 
@@ -130,17 +130,17 @@ Ext.define('Toc.guest_book.GuestBookDialog', {
         anchor: '98%'
       },
       items: [
-        {xtype:'textfield',fieldLabel: '<?= lang('field_title'); ?>', name: 'title'},
+        {xtype:'textfield',fieldLabel: '<?php echo lang('field_title'); ?>', name: 'title'},
         this.cboLanguages,
-        {xtype:'textfield', fieldLabel: '<?= lang('field_email'); ?>', name: 'email'},
-        {xtype:'textfield', fieldLabel: '<?= lang('field_url'); ?>', name: 'url'},
-        {xtype:'textarea', fieldLabel: '<?= lang('field_content'); ?>', name: 'content', height: 200},
+        {xtype:'textfield', fieldLabel: '<?php echo lang('field_email'); ?>', name: 'email'},
+        {xtype:'textfield', fieldLabel: '<?php echo lang('field_url'); ?>', name: 'url'},
+        {xtype:'textarea', fieldLabel: '<?php echo lang('field_content'); ?>', name: 'content', height: 200},
         {
           xtype: 'radiogroup',
-          fieldLabel: '<?= lang('field_status'); ?>',
+          fieldLabel: '<?php echo lang('field_status'); ?>',
           items: [
-            {boxLabel: '<?= lang('cbo_field_abled'); ?>', name: 'guest_books_status', inputValue: 1},
-            {boxLabel: '<?= lang('cbo_field_disabled'); ?>', name: 'guest_books_status', inputValue: 0, checked: true}
+            {boxLabel: '<?php echo lang('cbo_field_abled'); ?>', name: 'guest_books_status', inputValue: 1},
+            {boxLabel: '<?php echo lang('cbo_field_disabled'); ?>', name: 'guest_books_status', inputValue: 0, checked: true}
           ]
         }
       ]

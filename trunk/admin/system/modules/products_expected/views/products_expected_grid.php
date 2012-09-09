@@ -46,12 +46,12 @@ Ext.define('Toc.products_expected.ProductsExpectedGrid', {
     });
     
     config.columns =[
-      {header: '<?= lang('table_heading_products'); ?>', dataIndex: 'products_name', flex: 1},
-      {header: '<?= lang('table_heading_date_expected'); ?>', dataIndex: 'products_date_available'},
+      {header: '<?php echo lang('table_heading_products'); ?>', dataIndex: 'products_name', flex: 1},
+      {header: '<?php echo lang('table_heading_date_expected'); ?>', dataIndex: 'products_date_available'},
       {
         xtype: 'actioncolumn', 
         width: 80,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           tooltip: TocLanguage.tipEdit,
           iconCls: 'icon-action icon-edit-record',

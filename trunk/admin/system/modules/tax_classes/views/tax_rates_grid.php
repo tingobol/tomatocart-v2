@@ -22,7 +22,7 @@ Ext.define('Toc.tax_classes.TaxRatesGrid', {
     
     config.viewConfig = {emptyText: TocLanguage.gridNoRecords};
     
-    config.title = '<?= lang('section_tax_rates'); ?>';
+    config.title = '<?php echo lang('section_tax_rates'); ?>';
     config.region = 'east';
     config.split = true;
     config.minWidth = 280;
@@ -51,13 +51,13 @@ Ext.define('Toc.tax_classes.TaxRatesGrid', {
     config.selModel = Ext.create('Ext.selection.CheckboxModel');
     
     config.columns = [
-      { header: '<?= lang('table_heading_tax_rate_zone'); ?>', dataIndex: 'geo_zone_name', flex: 1},
-      { header: '<?= lang('table_heading_tax_rate_priority'); ?>', dataIndex: 'tax_priority', width: 70},
-      { header: '<?= lang('table_heading_tax_rate'); ?>', dataIndex: 'tax_rate', width: 80, align: 'right'},
+      { header: '<?php echo lang('table_heading_tax_rate_zone'); ?>', dataIndex: 'geo_zone_name', flex: 1},
+      { header: '<?php echo lang('table_heading_tax_rate_priority'); ?>', dataIndex: 'tax_priority', width: 70},
+      { header: '<?php echo lang('table_heading_tax_rate'); ?>', dataIndex: 'tax_rate', width: 80, align: 'right'},
       {
         xtype:'actioncolumn', 
         width: 60,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           iconCls: 'icon-action icon-edit-record',
           tooltip: TocLanguage.tipEdit,

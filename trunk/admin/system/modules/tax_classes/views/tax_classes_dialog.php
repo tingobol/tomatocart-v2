@@ -21,7 +21,7 @@ Ext.define('Toc.tax_classes.TaxClassesDialog', {
     config = config || {};
     
     config.id = 'tax-class-dialog-win';
-    config.title = '<?= lang('action_heading_new_tax_class'); ?>';
+    config.title = '<?php echo lang('action_heading_new_tax_class'); ?>';
     config.width = 500;
     config.modal = true;
     config.iconCls = 'icon-tax_classes-win';
@@ -91,13 +91,13 @@ Ext.define('Toc.tax_classes.TaxClassesDialog', {
       items: [                           
         {
           xtype: 'textfield', 
-          fieldLabel: '<?= lang('field_title'); ?>', 
+          fieldLabel: '<?php echo lang('field_title'); ?>', 
           name: 'tax_class_title', 
           allowBlank: false
         },
         {
           xtype: 'textfield', 
-          fieldLabel: '<?= lang('field_description'); ?>', 
+          fieldLabel: '<?php echo lang('field_description'); ?>', 
           name: 'tax_class_description'
         }
       ]

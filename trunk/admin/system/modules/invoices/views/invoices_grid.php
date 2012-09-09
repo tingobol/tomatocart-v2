@@ -57,20 +57,20 @@ Ext.define('Toc.invoices.InvoicesGrid', {
     });
     
     config.columns =[
-      { header: '<?= lang('table_heading_invoices_number'); ?>', dataIndex: 'invoices_number', align: 'center', sortable: true, width: 100},
+      { header: '<?php echo lang('table_heading_invoices_number'); ?>', dataIndex: 'invoices_number', align: 'center', sortable: true, width: 100},
       {header: 'OID', dataIndex: 'orders_id', width: 30, align: 'center'},
-      { header: '<?= lang('table_heading_customers'); ?>', dataIndex: 'customers_name', flex: 1},
-      { header: '<?= lang('table_heading_order_total'); ?>', dataIndex: 'order_total', align: 'right', width: 100, sortable: true},
-      { header: '<?= lang('table_heading_date_purchased'); ?>', dataIndex: 'date_purchased', align: 'center', width: 110, sortable: true},
-      { header: '<?= lang('table_heading_status'); ?>', dataIndex: 'orders_status_name', align: 'center', width: 90, sortable: true},
-      { header: '<?= lang('table_heading_invoices_date'); ?>', dataIndex: 'invoices_date', align: 'center', width: 110, sortable: true},
+      { header: '<?php echo lang('table_heading_customers'); ?>', dataIndex: 'customers_name', flex: 1},
+      { header: '<?php echo lang('table_heading_order_total'); ?>', dataIndex: 'order_total', align: 'right', width: 100, sortable: true},
+      { header: '<?php echo lang('table_heading_date_purchased'); ?>', dataIndex: 'date_purchased', align: 'center', width: 110, sortable: true},
+      { header: '<?php echo lang('table_heading_status'); ?>', dataIndex: 'orders_status_name', align: 'center', width: 90, sortable: true},
+      { header: '<?php echo lang('table_heading_invoices_date'); ?>', dataIndex: 'invoices_date', align: 'center', width: 110, sortable: true},
       {
         xtype:'actioncolumn', 
         width: 50,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           iconCls: 'icon-action icon-view-record',
-          tooltip: '<?= lang('tip_view_invoice');?>',
+          tooltip: '<?php echo lang('tip_view_invoice');?>',
           handler: function(grid, rowIndex, colIndex) {
             var rec = grid.getStore().getAt(rowIndex);
             
@@ -79,7 +79,7 @@ Ext.define('Toc.invoices.InvoicesGrid', {
           scope: this
         },{
           iconCls: 'icon-action icon-invoice-pdf-record',
-          tooltip: '<?= lang('tip_print_invoice');?>',
+          tooltip: '<?php echo lang('tip_print_invoice');?>',
           handler: function(grid, rowIndex, colIndex) {
             var rec = grid.getStore().getAt(rowIndex);
             
@@ -99,19 +99,19 @@ Ext.define('Toc.invoices.InvoicesGrid', {
             '<table width="98%">',
              '<tr>',
                '<td width="25%">',
-                 '<strong><?= lang('subsection_shipping_address'); ?></strong>',
+                 '<strong><?php echo lang('subsection_shipping_address'); ?></strong>',
                  '<p>{shipping_address}</p>',
-                 '<strong><?= lang('subsection_delivery_method'); ?></strong>',
+                 '<strong><?php echo lang('subsection_delivery_method'); ?></strong>',
                  '<p>{shipping_method}</p>',
                '</td>',
                '<td width="25%">',
-                 '<strong><?= lang('subsection_billing_address'); ?></strong>',
+                 '<strong><?php echo lang('subsection_billing_address'); ?></strong>',
                  '<p>{billing_address}</p>',
-                 '<strong><?= lang('subsection_payment_method'); ?></strong>',
+                 '<strong><?php echo lang('subsection_payment_method'); ?></strong>',
                  '<p>{payment_method}</p>',
                '</td>',
                '<td>',
-                 '<strong><?= lang('subsection_products'); ?></strong>',
+                 '<strong><?php echo lang('subsection_products'); ?></strong>',
                  '<div class="order_products">{products}</div>',
                  '<div class="order_totals">{totals}</div>',
                '</td>',
@@ -124,12 +124,12 @@ Ext.define('Toc.invoices.InvoicesGrid', {
     
     this.txtOrderId = Ext.create('Ext.form.TextField', {
       width: 120,
-      emptyText: '<?= lang('operation_heading_order_id'); ?>'
+      emptyText: '<?php echo lang('operation_heading_order_id'); ?>'
     });
     
     this.txtCustomerId = Ext.create('Ext.form.TextField', {
       width: 120,
-      emptyText: '<?= lang('operation_heading_customer_id'); ?>'
+      emptyText: '<?php echo lang('operation_heading_customer_id'); ?>'
     });
     
     config.tbar = [
@@ -164,7 +164,7 @@ Ext.define('Toc.invoices.InvoicesGrid', {
   },
   
   onInvoice: function(record){
-    this.openWin('<?= site_url('index/ajax'); ?>' + '?module=invoices&action=create_invoice&orders_id=' + record.get('orders_id'), 900, 500);
+    this.openWin('<?php echo site_url('index/ajax'); ?>' + '?module=invoices&action=create_invoice&orders_id=' + record.get('orders_id'), 900, 500);
   },
   
   onSearch: function() {

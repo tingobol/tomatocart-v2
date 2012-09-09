@@ -21,7 +21,7 @@ Ext.define('Toc.weight_classes.WeightClassesDialog', {
     config = config || {};
     
     config.id = 'weight_classes-dialog-win';
-    config.title = '<?= lang("action_heading_new_weight_class"); ?>';
+    config.title = '<?php echo lang("action_heading_new_weight_class"); ?>';
     config.layout = 'fit';
     config.width = 480;
     config.height = 360;
@@ -80,7 +80,7 @@ Ext.define('Toc.weight_classes.WeightClassesDialog', {
             this.frmWeightClass.add({
               xtype: 'checkbox',
               name: 'is_default',
-              fieldLabel: '<?= lang("field_set_as_default"); ?>'
+              fieldLabel: '<?php echo lang("field_set_as_default"); ?>'
             });
           }
           
@@ -118,7 +118,7 @@ Ext.define('Toc.weight_classes.WeightClassesDialog', {
             this.frmWeightClass.add({
               xtype: 'checkbox',
               name: 'is_default',
-              fieldLabel: '<?= lang("field_set_as_default"); ?>',
+              fieldLabel: '<?php echo lang("field_set_as_default"); ?>',
               anchor: ''
             });
           
@@ -167,7 +167,7 @@ Ext.define('Toc.weight_classes.WeightClassesDialog', {
                 {
                   xtype: 'textfield',
                   name: 'name[<?php echo $l['id']; ?>]',
-                  labelStyle: '<?= worldflag_url($l['country_iso']); ?>',
+                  labelStyle: '<?php echo worldflag_url($l['country_iso']); ?>',
                   width: 100,
                   allowBlank: false,
                   fieldLabel: '<?php echo $i == 1 ? lang('field_title_and_code') : '&nbsp;'?>'
@@ -199,7 +199,7 @@ Ext.define('Toc.weight_classes.WeightClassesDialog', {
     this.frmWeightClass.add({
       xtype: 'displayfield',
       border: false,
-      fieldLabel: '<?= lang("field_rules"); ?>',
+      fieldLabel: '<?php echo lang("field_rules"); ?>',
       value: ''
     });
     

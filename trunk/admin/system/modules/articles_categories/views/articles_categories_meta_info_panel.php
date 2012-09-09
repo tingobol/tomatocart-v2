@@ -20,7 +20,7 @@ Ext.define('Toc.articles_categories.MetaInfoPanel', {
   constructor: function(config) {
     config = config || {};
     
-    config.title = '<?= lang('section_meta'); ?>';
+    config.title = '<?php echo lang('section_meta'); ?>';
     config.activeTab = 0;
     config.deferredRender = false;
     config.border = false;
@@ -43,14 +43,14 @@ Ext.define('Toc.articles_categories.MetaInfoPanel', {
           border: false,
           layout: 'anchor',
           items: [
-            {xtype: 'textfield', fieldLabel: '<?= lang('field_page_title'); ?>', name: 'page_title[<?php echo $l['id']; ?>]'},
-            {xtype: 'textarea', fieldLabel: '<?= lang('field_meta_keywords'); ?>', name: 'meta_keywords[<?php echo $l['id']; ?>]'},
-            {xtype: 'textarea', fieldLabel: '<?= lang('field_meta_description'); ?>', name: 'meta_description[<?php echo $l['id']; ?>]'},
+            {xtype: 'textfield', fieldLabel: '<?php echo lang('field_page_title'); ?>', name: 'page_title[<?php echo $l['id']; ?>]'},
+            {xtype: 'textarea', fieldLabel: '<?php echo lang('field_meta_keywords'); ?>', name: 'meta_keywords[<?php echo $l['id']; ?>]'},
+            {xtype: 'textarea', fieldLabel: '<?php echo lang('field_meta_description'); ?>', name: 'meta_description[<?php echo $l['id']; ?>]'},
             {
               xtype: 'textfield', 
-              fieldLabel: '<?= lang('field_url'); ?>', 
+              fieldLabel: '<?php echo lang('field_url'); ?>', 
               name: 'articles_categories_url[<?php echo $l['id']; ?>]',
-              lableStyle: '<?= worldflag_url($l['country_iso']); ?>'
+              lableStyle: '<?php echo worldflag_url($l['country_iso']); ?>'
             }
           ]
         });

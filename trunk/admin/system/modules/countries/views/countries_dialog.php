@@ -21,7 +21,7 @@ Ext.define('Toc.countries.CountriesDialog', {
     config = config || {};
     
     config.id = 'countries-dialog-win';
-    config.title = '<?= lang('action_heading_new_country'); ?>';
+    config.title = '<?php echo lang('action_heading_new_country'); ?>';
     config.width = 450;
     config.modal = true;
     config.iconCls = 'icon-countries-win';
@@ -90,10 +90,10 @@ Ext.define('Toc.countries.CountriesDialog', {
       bodyPadding: 10,
       items: [
         {xtype: 'hidden',name: 'id'},
-        {xtype: 'textfield',fieldLabel: '<?= lang('field_name'); ?>', name: 'countries_name', allowBlank: false},
-        {xtype: 'textfield',fieldLabel: '<?= lang('field_iso_code_2'); ?>', name: 'countries_iso_code_2', allowBlank: false},
-        {xtype: 'textfield',fieldLabel: '<?= lang('field_iso_code_3'); ?>', name: 'countries_iso_code_3', allowBlank: false},
-        {xtype: 'textarea',fieldLabel: '<?= lang('field_address_format'); ?>', name: 'address_format'}
+        {xtype: 'textfield',fieldLabel: '<?php echo lang('field_name'); ?>', name: 'countries_name', allowBlank: false},
+        {xtype: 'textfield',fieldLabel: '<?php echo lang('field_iso_code_2'); ?>', name: 'countries_iso_code_2', allowBlank: false},
+        {xtype: 'textfield',fieldLabel: '<?php echo lang('field_iso_code_3'); ?>', name: 'countries_iso_code_3', allowBlank: false},
+        {xtype: 'textarea',fieldLabel: '<?php echo lang('field_address_format'); ?>', name: 'address_format'}
       ]
     });
     

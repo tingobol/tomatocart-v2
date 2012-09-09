@@ -32,7 +32,7 @@ Ext.override(Toc.desktop.WeightClassesWindow, {
       
       win = desktop.createWindow({
         id: 'weight_classes-win',
-        title: '<?= lang('heading_weight_classes_title'); ?>',
+        title: '<?php echo lang('heading_weight_classes_title'); ?>',
         width: 800,
         height: 400,
         iconCls: 'icon-weight_classes-win',

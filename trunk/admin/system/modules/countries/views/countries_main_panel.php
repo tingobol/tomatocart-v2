@@ -46,7 +46,7 @@ Ext.define('Toc.countries.MainPanel', {
   },
   
   onGrdCountriesSelectChange: function(record) {
-    this.grdZones.setTitle('<?= lang('heading_countries_title'); ?>: '+ record.get('countries_name'));
+    this.grdZones.setTitle('<?php echo lang('heading_countries_title'); ?>: '+ record.get('countries_name'));
     this.grdZones.iniGrid(record);
   },
   

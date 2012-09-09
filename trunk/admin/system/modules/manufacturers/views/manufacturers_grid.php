@@ -45,12 +45,12 @@ Ext.define('Toc.manufacturers.ManufacturersGrid', {
     config.selModel = Ext.create('Ext.selection.CheckboxModel');
     
     config.columns = [
-      { header: '<?= lang('table_heading_manufacturers'); ?>', dataIndex: 'manufacturers_name', flex: 1},
-      { header: '<?= lang('table_heading_url_clicks'); ?>', dataIndex: 'url_clicked'},
+      { header: '<?php echo lang('table_heading_manufacturers'); ?>', dataIndex: 'manufacturers_name', flex: 1},
+      { header: '<?php echo lang('table_heading_url_clicks'); ?>', dataIndex: 'url_clicked'},
       {
         xtype:'actioncolumn', 
         width: 60,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           iconCls: 'icon-action icon-edit-record',
           tooltip: TocLanguage.tipEdit,

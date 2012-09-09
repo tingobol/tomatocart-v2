@@ -21,7 +21,7 @@ Ext.define('Toc.categories.CategoriesDialog', {
     config = config || {};
     
     config.id = 'categories-dialog-win';
-    config.title = '<?= lang("action_heading_new_category"); ?>';
+    config.title = '<?php echo lang("action_heading_new_category"); ?>';
     config.layout = 'fit';
     config.width = 520;
     config.height = 380;

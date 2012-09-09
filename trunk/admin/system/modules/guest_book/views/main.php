@@ -32,7 +32,7 @@ Ext.override(Toc.desktop.GuestBookWindow, {
       
       win = desktop.createWindow({
         id: 'guest_book-win',
-        title: '<?= lang('heading_guest_book_title'); ?>',
+        title: '<?php echo lang('heading_guest_book_title'); ?>',
         width: 800,
         height: 400,
         iconCls: 'icon-guest_book-win',

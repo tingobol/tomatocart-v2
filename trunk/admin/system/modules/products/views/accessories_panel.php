@@ -21,7 +21,7 @@ Ext.define('Toc.products.AccessoriesPanel', {
     config = config || {};
     
     config.border = false;
-    config.title = '<?= lang('section_accessories'); ?>';
+    config.title = '<?php echo lang('section_accessories'); ?>';
     config.viewConfig = {emptyText: TocLanguage.gridNoRecords};
     config.productsId = config.productsId || null;
     
@@ -49,11 +49,11 @@ Ext.define('Toc.products.AccessoriesPanel', {
     
     config.columns =[
       Ext.create('Ext.grid.RowNumberer'),
-      { header: '<?= lang('table_heading_products'); ?>', dataIndex: 'products_name', sortable: true, flex: 1},
+      { header: '<?php echo lang('table_heading_products'); ?>', dataIndex: 'products_name', sortable: true, flex: 1},
       {
         xtype:'actioncolumn', 
         width:50,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           iconCls: 'icon-action icon-delete-record',
           tooltip: TocLanguage.tipDelete,
@@ -80,7 +80,7 @@ Ext.define('Toc.products.AccessoriesPanel', {
       this.cboProducts, 
       ' ', 
       {
-        text: '<?= lang('button_insert'); ?>',
+        text: '<?php echo lang('button_insert'); ?>',
         iconCls : 'add',
         handler: this.addProduct,
         scope: this
@@ -113,7 +113,7 @@ Ext.define('Toc.products.AccessoriesPanel', {
     this.cboProducts = Ext.create('Ext.form.ComboBox', {
       name: 'accessories_name',
       store: store,
-      emptyText: '<?= lang('section_accessories'); ?>',
+      emptyText: '<?php echo lang('section_accessories'); ?>',
       width: 400,
       queryMode: 'local', 
       displayField: 'text', 

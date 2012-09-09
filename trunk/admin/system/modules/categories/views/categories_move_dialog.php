@@ -21,7 +21,7 @@ Ext.define('Toc.categories.CategoriesMoveDialog', {
     config = config || {};
     
     config.id = 'categories-move-dialog-win';
-    config.title = '<?= lang("action_heading_batch_move_categories"); ?>';
+    config.title = '<?php echo lang("action_heading_batch_move_categories"); ?>';
     config.layout = 'fit';
     config.width = 400;
     config.autoHeight = true;
@@ -126,7 +126,7 @@ Ext.define('Toc.categories.CategoriesMoveDialog', {
           return '<div style="margin-left: {margin}px">{text}</div>';
         }
       },
-      fieldLabel: '<?= lang("field_parent_category"); ?>',
+      fieldLabel: '<?php echo lang("field_parent_category"); ?>',
       store: this.dsParentCategories,
       queryMode: 'local',
       valueField: 'id',

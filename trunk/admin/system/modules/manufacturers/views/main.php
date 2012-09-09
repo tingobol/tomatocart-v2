@@ -31,7 +31,7 @@ Ext.override(Toc.desktop.ManufacturersWindow, {
       
       win = desktop.createWindow({
         id: 'manufacturers-win',
-        title: '<?= lang('heading_manufacturers_title'); ?>',
+        title: '<?php echo lang('heading_manufacturers_title'); ?>',
         width: 800,
         height: 400,
         iconCls: 'icon-manufacturers-win',
@@ -45,7 +45,7 @@ Ext.override(Toc.desktop.ManufacturersWindow, {
   
   onCreateManufacturer: function(grd) {
     var dlg = this.createManufacturersDialog();
-    dlg.setTitle('<?= lang('heading_new_manufacturers_title'); ?>');
+    dlg.setTitle('<?php echo lang('heading_new_manufacturers_title'); ?>');
     
     this.onSaveSuccess(dlg, grd);
     

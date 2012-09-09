@@ -30,7 +30,7 @@ Ext.override(Toc.desktop.ImagesWindow, {
       
       win = desktop.createWindow({
         id: 'images-win',
-        title: '<?= lang('heading_images_title'); ?>',
+        title: '<?php echo lang('heading_images_title'); ?>',
         width: 800,
         height: 400,
         iconCls: 'icon-images-win',

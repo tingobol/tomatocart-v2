@@ -21,7 +21,7 @@ Ext.define('Toc.customers_groups.CustomersGroupsDialog', {
     config = config || {};
     
     config.id = 'customers_groups-dialog-win';
-    config.title = '<?= lang('action_heading_new_customer_group'); ?>';
+    config.title = '<?php echo lang('action_heading_new_customer_group'); ?>';
     config.width = 480;
     config.modal = true;
     config.iconCls = 'icon-customers_groups-win';
@@ -93,7 +93,7 @@ Ext.define('Toc.customers_groups.CustomersGroupsDialog', {
       items: [
         {
           xtype: 'numberfield', 
-          fieldLabel: '<?= lang('field_group_discount'); ?>  (%)', 
+          fieldLabel: '<?php echo lang('field_group_discount'); ?>  (%)', 
           name: 'customers_groups_discount',
           minValue: 0,
           maxValue: 100,
@@ -102,7 +102,7 @@ Ext.define('Toc.customers_groups.CustomersGroupsDialog', {
         },
         {
           xtype: 'checkbox', 
-          fieldLabel: '<?= lang('field_set_as_default'); ?>', 
+          fieldLabel: '<?php echo lang('field_set_as_default'); ?>', 
           name: 'is_default',
           anchor: '',
           inputValue: 1 
@@ -119,7 +119,7 @@ Ext.define('Toc.customers_groups.CustomersGroupsDialog', {
           name: 'customers_groups_name[<?php echo $l['id']; ?>]',
           fieldLabel: '<?php echo $i != 1 ? '&nbsp;' : lang('field_group_name') ?>',
           allowBlank: false,
-          labelStyle: '<?= worldflag_url($l['country_iso']); ?>'
+          labelStyle: '<?php echo worldflag_url($l['country_iso']); ?>'
         });
         
         this.frmCustomersGroups.insert(<?php echo $i; ?>, this.lang<?php echo $l['id']; ?>);

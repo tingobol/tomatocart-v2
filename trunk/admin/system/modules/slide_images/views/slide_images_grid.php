@@ -20,9 +20,9 @@ Ext.define('Toc.slideImages.SlideImagesGrid', {
   statics: {
     renderStatus : function(status) {
       if(status == 1) {
-        return '<img class="img-button" src="<?= icon_status_url('icon_status_green.gif'); ?>" />&nbsp;<img class="img-button btn-status-off" style="cursor: pointer" src="<?= icon_status_url('icon_status_red_light.gif'); ?>" />';
+        return '<img class="img-button" src="<?php echo icon_status_url('icon_status_green.gif'); ?>" />&nbsp;<img class="img-button btn-status-off" style="cursor: pointer" src="<?php echo icon_status_url('icon_status_red_light.gif'); ?>" />';
       }else {
-        return '<img class="img-button btn-status-on" style="cursor: pointer" src="<?= icon_status_url('icon_status_green_light.gif'); ?>" />&nbsp;<img class="img-button" src= "<?= icon_status_url('icon_status_red.gif'); ?>" />';
+        return '<img class="img-button btn-status-on" style="cursor: pointer" src="<?php echo icon_status_url('icon_status_green_light.gif'); ?>" />&nbsp;<img class="img-button" src= "<?php echo icon_status_url('icon_status_red.gif'); ?>" />';
       }
     }
   },
@@ -57,15 +57,15 @@ Ext.define('Toc.slideImages.SlideImagesGrid', {
     config.selModel = Ext.create('Ext.selection.CheckboxModel');
     
     config.columns = [
-      { header: '<?= lang('table_heading_image'); ?>', dataIndex: 'image', flex: 1},
-      { header: '<?= lang('table_heading_image_url'); ?>', align: 'center', dataIndex: 'image_url', width: 140},
-      { header: '<?= lang('table_heading_status'); ?>', width: 50, align: 'center', renderer: statics.renderStatus, dataIndex: 'status'},
-      { header: '<?= lang('table_heading_group'); ?>', width: 120, align: 'center', dataIndex: 'group'},
-      { header: '<?= lang('table_heading_order'); ?>', align: 'center', dataIndex: 'sort_order', width: 80},
+      { header: '<?php echo lang('table_heading_image'); ?>', dataIndex: 'image', flex: 1},
+      { header: '<?php echo lang('table_heading_image_url'); ?>', align: 'center', dataIndex: 'image_url', width: 140},
+      { header: '<?php echo lang('table_heading_status'); ?>', width: 50, align: 'center', renderer: statics.renderStatus, dataIndex: 'status'},
+      { header: '<?php echo lang('table_heading_group'); ?>', width: 120, align: 'center', dataIndex: 'group'},
+      { header: '<?php echo lang('table_heading_order'); ?>', align: 'center', dataIndex: 'sort_order', width: 80},
       {
         xtype:'actioncolumn', 
         width: 60,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           iconCls: 'icon-action icon-edit-record',
           tooltip: TocLanguage.tipEdit,

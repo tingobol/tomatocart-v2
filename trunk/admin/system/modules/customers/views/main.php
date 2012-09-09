@@ -32,7 +32,7 @@ Ext.override(Toc.desktop.CustomersWindow, {
       
       win = desktop.createWindow({
         id: 'customers-win',
-        title: '<?= lang('heading_customers_title'); ?>',
+        title: '<?php echo lang('heading_customers_title'); ?>',
         width: 850,
         height: 400,
         iconCls: 'icon-customers-win',
@@ -47,7 +47,7 @@ Ext.override(Toc.desktop.CustomersWindow, {
   onCreateCustomer: function() {
     var dlg = this.createCustomerDialog();
     
-    dlg.setTitle('<?= lang('action_heading_new_customer'); ?>');
+    dlg.setTitle('<?php echo lang('action_heading_new_customer'); ?>');
     dlg.show();
   },
   

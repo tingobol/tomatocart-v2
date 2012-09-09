@@ -49,12 +49,12 @@ Ext.define('Toc.customers_groups.CustomersGroupsGrid', {
     
     config.selModel = Ext.create('Ext.selection.CheckboxModel');
     config.columns =[
-      {header: '<?= lang('table_heading_group_name'); ?>', dataIndex: 'customers_groups_name', sortable: true, flex: 1},
-      {header: '<?= lang('table_heading_group_discount'); ?>', align: 'center', dataIndex: 'customers_groups_discount'},
+      {header: '<?php echo lang('table_heading_group_name'); ?>', dataIndex: 'customers_groups_name', sortable: true, flex: 1},
+      {header: '<?php echo lang('table_heading_group_discount'); ?>', align: 'center', dataIndex: 'customers_groups_discount'},
       {
         xtype: 'actioncolumn', 
         width: 80,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           tooltip: TocLanguage.tipEdit,
           iconCls: 'icon-action icon-edit-record',

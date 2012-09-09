@@ -20,7 +20,7 @@ Ext.define('Toc.articles.GeneralPanel', {
   constructor: function(config) {
     config = config || {};
     
-    config.title = '<?= lang('section_general'); ?>';
+    config.title = '<?php echo lang('section_general'); ?>';
     config.activeTab = 0;
     config.border = false;
     config.deferredRender = false;
@@ -46,13 +46,13 @@ Ext.define('Toc.articles.GeneralPanel', {
           items: [
             {
               xtype: 'textfield', 
-              fieldLabel: '<?= lang('field_article_name'); ?>', 
+              fieldLabel: '<?php echo lang('field_article_name'); ?>', 
               name: 'articles_name[<?php echo $l['id']; ?>]', 
               allowBlank: false
             },
             {
               xtype: 'htmleditor',
-              fieldLabel: '<?= lang('filed_article_description'); ?>',
+              fieldLabel: '<?php echo lang('filed_article_description'); ?>',
               name: 'articles_description[<?php echo $l['id']; ?>]',
               height: 230
             }

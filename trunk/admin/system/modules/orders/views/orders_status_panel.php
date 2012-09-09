@@ -20,7 +20,7 @@ Ext.define('Toc.orders.OrdersStatusPanel', {
     config = config || {};
     
     config = config || {};
-    config.title = '<?= lang('section_status_history'); ?>';
+    config.title = '<?php echo lang('section_status_history'); ?>';
     config.layout = 'border';
     config.border = false;
     
@@ -67,10 +67,10 @@ Ext.define('Toc.orders.OrdersStatusPanel', {
       region: 'center',
       store: store,
       columns: [
-        { header: '<?= lang('table_heading_date_added'); ?>', dataIndex: 'date_added', width: 120, align: 'center'},
-        { header: '<?= lang('table_heading_status'); ?>', dataIndex: 'status', width: 120, align: 'center'},
-        { header: '<?= lang('table_heading_comments'); ?>', dataIndex: 'comments', align: 'center', flex: 1},
-        { header: '<?= lang('table_heading_customer_notified'); ?>', dataIndex: 'customer_notified',  width: 120, align: 'center'}
+        { header: '<?php echo lang('table_heading_date_added'); ?>', dataIndex: 'date_added', width: 120, align: 'center'},
+        { header: '<?php echo lang('table_heading_status'); ?>', dataIndex: 'status', width: 120, align: 'center'},
+        { header: '<?php echo lang('table_heading_comments'); ?>', dataIndex: 'comments', align: 'center', flex: 1},
+        { header: '<?php echo lang('table_heading_customer_notified'); ?>', dataIndex: 'customer_notified',  width: 120, align: 'center'}
       ]
     });
     
@@ -115,12 +115,12 @@ Ext.define('Toc.orders.OrdersStatusPanel', {
         labelWidth: 200
       },
       items: [
-        {xtype: 'combobox', fieldLabel: '<?= lang('field_status'); ?>', store: dsStatus, displayField: 'status_name', valueField: 'status_id', name: 'status', editable: false, queryMode: 'local', allowBlank: false},                        
-        {xtype: 'textareafield', fieldLabel: '<?= lang('field_add_comment'); ?>', name: 'comment', anchor: '97%'},
-        {xtype: 'checkboxfield', fieldLabel: '<?= lang('field_notify_customer'); ?>', name: 'notify_customer'},
-        {xtype: 'checkboxfield', fieldLabel: '<?= lang('field_notify_customer_with_comments'); ?>', name: 'notify_with_comments'}
+        {xtype: 'combobox', fieldLabel: '<?php echo lang('field_status'); ?>', store: dsStatus, displayField: 'status_name', valueField: 'status_id', name: 'status', editable: false, queryMode: 'local', allowBlank: false},                        
+        {xtype: 'textareafield', fieldLabel: '<?php echo lang('field_add_comment'); ?>', name: 'comment', anchor: '97%'},
+        {xtype: 'checkboxfield', fieldLabel: '<?php echo lang('field_notify_customer'); ?>', name: 'notify_customer'},
+        {xtype: 'checkboxfield', fieldLabel: '<?php echo lang('field_notify_customer_with_comments'); ?>', name: 'notify_with_comments'}
       ],
-      buttons: [{text: '<?= lang('button_update');?>', iconCls:'refresh', handler: this.submitForm, scope: this}]
+      buttons: [{text: '<?php echo lang('button_update');?>', iconCls:'refresh', handler: this.submitForm, scope: this}]
     });
     
     return this.frmOrdersStatus;

@@ -21,7 +21,7 @@ Ext.define('Toc.reviews.ReviewsEditDialog', {
     config = config || {};
     
     config.id = 'reviews-dialog-win';
-    config.title = '<?= lang("action_heading_new_special"); ?>';
+    config.title = '<?php echo lang("action_heading_new_special"); ?>';
     config.layout = 'fit';
     config.width = 525;
     config.autoHeight = true;
@@ -73,14 +73,14 @@ Ext.define('Toc.reviews.ReviewsEditDialog', {
               },
               border: false,
               items: [
-                {xtype: 'label', text: '<?= lang("field_detailed_rating"); ?>'},
-                {xtype: 'label', text: '<?= lang("rating_bad"); ?>', style: 'padding-left: 70px;padding-right: 10px;'}, 
+                {xtype: 'label', text: '<?php echo lang("field_detailed_rating"); ?>'},
+                {xtype: 'label', text: '<?php echo lang("rating_bad"); ?>', style: 'padding-left: 70px;padding-right: 10px;'}, 
                 {xtype: 'radio', name: 'detailed_rating', inputValue: '1', checked: action.result.data.detailed_rating == 1},
                 {xtype: 'radio', name: 'detailed_rating', inputValue: '2', checked: action.result.data.detailed_rating == 2},
                 {xtype: 'radio', name: 'detailed_rating', inputValue: '3', checked: action.result.data.detailed_rating == 3},
                 {xtype: 'radio', name: 'detailed_rating', inputValue: '4', checked: action.result.data.detailed_rating == 4},
                 {xtype: 'radio', name: 'detailed_rating', inputValue: '5', checked: action.result.data.detailed_rating == 5},
-                {xtype: 'label', text: '<?= lang("rating_good"); ?>', style: 'padding-left: 10px;'}
+                {xtype: 'label', text: '<?php echo lang("rating_good"); ?>', style: 'padding-left: 10px;'}
               ]
             });
             
@@ -92,13 +92,13 @@ Ext.define('Toc.reviews.ReviewsEditDialog', {
               var name = "ratings_value" + n;
               
               items.push({xtype: 'displayfield', value: action.result.data.ratings[i].name});
-              items.push({xtype: 'displayfield', value: '<?= lang("rating_bad"); ?>'}); 
+              items.push({xtype: 'displayfield', value: '<?php echo lang("rating_bad"); ?>'}); 
               items.push({xtype: 'radio', name: name, inputValue: '1', checked: action.result.data.ratings[i].value == 1, style: 'padding-left: 10px'});
               items.push({xtype: 'radio', name: name, inputValue: '2', checked: action.result.data.ratings[i].value == 2, style: 'padding-left: 10px'});
               items.push({xtype: 'radio', name: name, inputValue: '3', checked: action.result.data.ratings[i].value == 3, style: 'padding-left: 10px'});
               items.push({xtype: 'radio', name: name, inputValue: '4', checked: action.result.data.ratings[i].value == 4, style: 'padding-left: 10px'});
               items.push({xtype: 'radio', name: name, inputValue: '5', checked: action.result.data.ratings[i].value == 5, style: 'padding-left: 10px'});
-              items.push({xtype: 'displayfield', value: '<?= lang("rating_good"); ?>'});
+              items.push({xtype: 'displayfield', value: '<?php echo lang("rating_good"); ?>'});
             }
             
             var pnlDetailedRatings = Ext.create('Ext.Panel', {
@@ -145,13 +145,13 @@ Ext.define('Toc.reviews.ReviewsEditDialog', {
         labelSeparator: '' 
       },
       items: [
-        {xtype: 'displayfield', fieldLabel: '<?= lang("field_product"); ?>', name: 'products_name'},
-        {xtype: 'displayfield', fieldLabel: '<?= lang("field_author"); ?>', name: 'customers_name'},
-        {xtype: 'displayfield', fieldLabel: '<?= lang("field_summary_rating"); ?>', name: 'reviews_rating'}
+        {xtype: 'displayfield', fieldLabel: '<?php echo lang("field_product"); ?>', name: 'products_name'},
+        {xtype: 'displayfield', fieldLabel: '<?php echo lang("field_author"); ?>', name: 'customers_name'},
+        {xtype: 'displayfield', fieldLabel: '<?php echo lang("field_summary_rating"); ?>', name: 'reviews_rating'}
       ]
     });
     
-    this.txtRating = {xtype: 'textarea', fieldLabel: '<?= lang("field_review"); ?>', name: 'reviews_text', height: 150, allowBlank: false};
+    this.txtRating = {xtype: 'textarea', fieldLabel: '<?php echo lang("field_review"); ?>', name: 'reviews_text', height: 150, allowBlank: false};
     
     return this.frmReviews;
   },
@@ -169,9 +169,9 @@ Ext.define('Toc.reviews.ReviewsEditDialog', {
             {
               xtype: 'radio', 
               name: 'reviews_status', 
-              fieldLabel: '<?= lang('field_review_status'); ?>', 
+              fieldLabel: '<?php echo lang('field_review_status'); ?>', 
               inputValue: '1', 
-              boxLabel: '<?= lang('field_status_enabled'); ?>', 
+              boxLabel: '<?php echo lang('field_status_enabled'); ?>', 
               checked: true,
               anchor: '',
               checked: status == 1
@@ -187,7 +187,7 @@ Ext.define('Toc.reviews.ReviewsEditDialog', {
               hideLabel: true, 
               name: 'reviews_status', 
               inputValue: '0', 
-              boxLabel: '<?= lang('field_status_disabled'); ?>', 
+              boxLabel: '<?php echo lang('field_status_disabled'); ?>', 
               width: 150,
               checked: status == 0
             }

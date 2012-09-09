@@ -21,7 +21,7 @@ Ext.define('Toc.orders_status.OrdersStatusDialog', {
     config = config || {};
     
     config.id = 'orders_status-dialog-win';
-    config.title = '<?= lang('action_heading_new_order_status'); ?>';
+    config.title = '<?php echo lang('action_heading_new_order_status'); ?>';
     config.layout = 'fit';
     config.width = 450;
     config.autoHeight = true;
@@ -107,7 +107,7 @@ Ext.define('Toc.orders_status.OrdersStatusDialog', {
           name: 'name[<?php echo $l['id']; ?>]',
           fieldLabel: '<?php echo $i != 1 ? '&nbsp;' : lang('field_name'); ?>',
           allowBlank: false,
-          labelStyle: '<?= worldflag_url($l['country_iso']); ?>'
+          labelStyle: '<?php echo worldflag_url($l['country_iso']); ?>'
         });
         
         this.frmOrdersStatus.add(txtLang<?php echo $l['id']; ?>);
@@ -118,12 +118,12 @@ Ext.define('Toc.orders_status.OrdersStatusDialog', {
     
     this.chkDefault = Ext.create('Ext.form.Checkbox', {
       name: 'default',
-      fieldLabel: '<?= lang('field_set_as_default'); ?>'
+      fieldLabel: '<?php echo lang('field_set_as_default'); ?>'
     });
     
     this.frmOrdersStatus.add(this.chkDefault);
     
-    this.frmOrdersStatus.add({xtype: 'checkbox', name: 'public_flag', fieldLabel: '<?= lang('field_public_flag'); ?>'});
+    this.frmOrdersStatus.add({xtype: 'checkbox', name: 'public_flag', fieldLabel: '<?php echo lang('field_public_flag'); ?>'});
     
     return this.frmOrdersStatus;
   },

@@ -21,7 +21,7 @@ Ext.define('Toc.products.ProductDialog', {
     config = config || {};
     
     config.id = 'products-dialog-win';
-    config.title = '<?= lang('action_heading_new_product'); ?>';
+    config.title = '<?php echo lang('action_heading_new_product'); ?>';
     config.layout = 'fit';
     config.width = 870;
     config.height = 540;
@@ -169,7 +169,7 @@ Ext.define('Toc.products.ProductDialog', {
         scope: this
       });  
     } else {
-      Ext.MessageBox.alert(TocLanguage.msgErrTitle, '<?= lang('msg_select_default_variants_records'); ?>');
+      Ext.MessageBox.alert(TocLanguage.msgErrTitle, '<?php echo lang('msg_select_default_variants_records'); ?>');
     }
   }
 });

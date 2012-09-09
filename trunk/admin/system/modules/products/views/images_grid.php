@@ -20,9 +20,9 @@ Ext.define('Toc.products.ImagesGrid', {
   statics: {
     renderAction: function(value) {
       if(value == 1) {
-        return '<img class="img-button btn-default" style="cursor: pointer" src="<?= icon_url('default.png'); ?>" />&nbsp;<img class="img-button btn-delete" style="cursor: pointer" src="<?= icon_url('delete.png'); ?>" />';
+        return '<img class="img-button btn-default" style="cursor: pointer" src="<?php echo icon_url('default.png'); ?>" />&nbsp;<img class="img-button btn-delete" style="cursor: pointer" src="<?php echo icon_url('delete.png'); ?>" />';
       }else {
-        return '<img class="img-button btn-set-default" style="cursor: pointer" src="<?= icon_url('default_grey.png'); ?>" />&nbsp;<img class="img-button btn-delete" style="cursor: pointer" src="<?= icon_url('delete.png'); ?>" />';
+        return '<img class="img-button btn-set-default" style="cursor: pointer" src="<?php echo icon_url('default_grey.png'); ?>" />&nbsp;<img class="img-button btn-delete" style="cursor: pointer" src="<?php echo icon_url('delete.png'); ?>" />';
       }
     }
   }, 
@@ -57,7 +57,7 @@ Ext.define('Toc.products.ImagesGrid', {
     
     config.columns =[
       { header: '&nbsp;', dataIndex: 'image', align: 'center'},
-      { header: '<?= lang('subsection_images'); ?>', dataIndex: 'name', flex: 1},
+      { header: '<?php echo lang('subsection_images'); ?>', dataIndex: 'name', flex: 1},
       { header: '&nbsp;', dataIndex: 'size'},
       { header: '&nbsp;', dataIndex: 'default', renderer: statics.renderAction, align: 'center', width:50}
     ];

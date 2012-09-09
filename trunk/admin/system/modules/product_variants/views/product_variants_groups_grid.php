@@ -44,12 +44,12 @@ Ext.define('Toc.product_variants.ProductVariantsGroupsGrid', {
     });
     
     config.columns = [
-      { header: '<?= lang('table_heading_variant_groups'); ?>', dataIndex: 'products_variants_groups_name', flex: 1},
-      { header: '<?= lang('table_heading_total_entries'); ?>', align: 'center', dataIndex: 'total_entries'},
+      { header: '<?php echo lang('table_heading_variant_groups'); ?>', dataIndex: 'products_variants_groups_name', flex: 1},
+      { header: '<?php echo lang('table_heading_total_entries'); ?>', align: 'center', dataIndex: 'total_entries'},
       {
         xtype:'actioncolumn', 
         width: 60,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           iconCls: 'icon-action icon-edit-record',
           tooltip: TocLanguage.tipEdit,

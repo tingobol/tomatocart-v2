@@ -50,12 +50,12 @@ Ext.define('Toc.specials.SpecialsGrid', {
     
     config.selModel = Ext.create('Ext.selection.CheckboxModel');
     config.columns =[
-      {header: '<?= lang('table_heading_products'); ?>', dataIndex: 'products_name', flex: 1},
-      {header: '<?= lang('table_heading_price'); ?>', dataIndex: 'specials_new_products_price', width: 180},
+      {header: '<?php echo lang('table_heading_products'); ?>', dataIndex: 'products_name', flex: 1},
+      {header: '<?php echo lang('table_heading_price'); ?>', dataIndex: 'specials_new_products_price', width: 180},
       {
         xtype: 'actioncolumn', 
         width: 80,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           tooltip: TocLanguage.tipEdit,
           iconCls: 'icon-action icon-edit-record',
@@ -105,7 +105,7 @@ Ext.define('Toc.specials.SpecialsGrid', {
       store: dsManufacturers,
       valueField: 'manufacturers_id', 
       displayField: 'manufacturers_name',
-      emptyText: '<?= lang('top_manufacturers'); ?>',
+      emptyText: '<?php echo lang('top_manufacturers'); ?>',
       triggerAction: 'all',
       listeners: {
         select: this.onSearch,
@@ -141,7 +141,7 @@ Ext.define('Toc.specials.SpecialsGrid', {
           return '<div style="margin-left: {margin}px">{text}</div>';
         }
       },
-      emptyText: '<?= lang("top_category"); ?>',
+      emptyText: '<?php echo lang("top_category"); ?>',
       store: dsCategories,
       queryMode: 'remote',
       valueField: 'id',

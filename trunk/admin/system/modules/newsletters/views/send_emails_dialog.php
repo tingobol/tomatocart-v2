@@ -21,7 +21,7 @@ Ext.define('Toc.newsletters.SendEmailsDialog', {
     config = config || {};
   
     config.id = 'send-emails-dialog-win';
-    config.title = '<?= lang('heading_newsletters_title'); ?>';
+    config.title = '<?php echo lang('heading_newsletters_title'); ?>';
     config.width = 600;
     config.height = 350;
     config.layout = 'fit';
@@ -31,7 +31,7 @@ Ext.define('Toc.newsletters.SendEmailsDialog', {
     
     config.buttons = [
       {
-        text: '<?= lang('button_ok') ?>',
+        text: '<?php echo lang('button_ok') ?>',
         id: 'btn-send-emails',
         handler: this.onAction,
         scope: this
@@ -59,7 +59,7 @@ Ext.define('Toc.newsletters.SendEmailsDialog', {
   onAction: function() {
     text = Ext.getCmp('btn-send-emails').getText();
     
-    if (text == '<?= lang('button_ok') ?>') {
+    if (text == '<?php echo lang('button_ok') ?>') {
       this.showConfirmation();
     } else {
       this.sendEmails();
@@ -69,7 +69,7 @@ Ext.define('Toc.newsletters.SendEmailsDialog', {
   sendEmails: function() {
     var batch = Ext.JSON.encode(this.selAudience.getValue());
   
-    this.pnlSendEmail.el.mask('<?= lang('sending_please_wait') ?>', 'x-mask-loading');
+    this.pnlSendEmail.el.mask('<?php echo lang('sending_please_wait') ?>', 'x-mask-loading');
     
     Ext.Ajax.request({
       url: Toc.CONF.CONN_URL,
@@ -120,7 +120,7 @@ Ext.define('Toc.newsletters.SendEmailsDialog', {
           this.pnlSendEmail.removeAll();
           
           this.pnlSendEmail.update(result.confirmation);
-          Ext.getCmp('btn-send-emails').setText('<?= lang('button_send') ?>');
+          Ext.getCmp('btn-send-emails').setText('<?php echo lang('button_send') ?>');
         } else {
           Ext.MessageBox.alert(TocLanguage.msgErrTitle, result.feedback);
         }
@@ -161,7 +161,7 @@ Ext.define('Toc.newsletters.SendEmailsDialog', {
       name: 'customers',
       width: 550,
       height: 250,
-      legend: '<?= lang('newsletter_customer'); ?>',
+      legend: '<?php echo lang('newsletter_customer'); ?>',
       displayField: 'text',
       valueField: 'id'
     });

@@ -44,12 +44,12 @@ Ext.define('Toc.tax_classes.TaxClassesGrid', {
     });
     
     config.columns = [
-      { header: '<?= lang('table_heading_tax_classes'); ?>', dataIndex: 'tax_class_title', flex: 1},
-      { header: '<?= lang('table_heading_total_rates'); ?>', align: 'center', dataIndex: 'tax_total_rates', width: 150},
+      { header: '<?php echo lang('table_heading_tax_classes'); ?>', dataIndex: 'tax_class_title', flex: 1},
+      { header: '<?php echo lang('table_heading_total_rates'); ?>', align: 'center', dataIndex: 'tax_total_rates', width: 150},
       {
         xtype:'actioncolumn', 
         width: 60,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           iconCls: 'icon-action icon-edit-record',
           tooltip: TocLanguage.tipEdit,

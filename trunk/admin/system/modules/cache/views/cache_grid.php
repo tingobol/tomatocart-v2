@@ -48,13 +48,13 @@ Ext.define('Toc.cache.CacheGrid', {
     
     config.selModel = Ext.create('Ext.selection.CheckboxModel');
     config.columns =[
-      {header: '<?= lang('table_heading_cache_blocks'); ?>', dataIndex: 'code', flex: 1},
-      {header: '<?= lang('table_heading_total'); ?>', align: 'center', dataIndex: 'total', width: 80},
-      {header: '<?= lang('table_heading_date_last_modified'); ?>', align: 'center', dataIndex: 'last_modified', width: 140},
+      {header: '<?php echo lang('table_heading_cache_blocks'); ?>', dataIndex: 'code', flex: 1},
+      {header: '<?php echo lang('table_heading_total'); ?>', align: 'center', dataIndex: 'total', width: 80},
+      {header: '<?php echo lang('table_heading_date_last_modified'); ?>', align: 'center', dataIndex: 'last_modified', width: 140},
       {
         xtype: 'actioncolumn', 
         width: 80,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           iconCls: 'icon-action icon-delete-record',
           tooltip: TocLanguage.tipDelete,

@@ -34,13 +34,13 @@ Ext.define('Toc.reports_customers.BestOrdersPanel', {
     config.dateStart = Ext.create('Ext.form.DateField', {
       width: 150, 
       format: 'Y-m-d', 
-      emptyText: '<?= lang("field_start_date"); ?>'
+      emptyText: '<?php echo lang("field_start_date"); ?>'
     });
     
     config.dateEnd = Ext.create('Ext.form.DateField', {
       width: 150, 
       format: 'Y-m-d', 
-      emptyText: '<?= lang("field_end_date"); ?>'
+      emptyText: '<?php echo lang("field_end_date"); ?>'
     });
     
     config.tbar = [
@@ -101,7 +101,7 @@ Ext.define('Toc.reports_customers.BestOrdersPanel', {
           label: {
             renderer: statics.formatCurrency
           },
-          title: '<?= lang('table_heading_total'); ?>',
+          title: '<?php echo lang('table_heading_total'); ?>',
           grid: true,
           minimum: 0
         }, 
@@ -109,7 +109,7 @@ Ext.define('Toc.reports_customers.BestOrdersPanel', {
           type: 'Category',
           position: 'left',
           fields: ['customers_name'],
-          title: '<?= lang('table_heading_customers'); ?>'
+          title: '<?php echo lang('table_heading_customers'); ?>'
         }
       ],
       series: [

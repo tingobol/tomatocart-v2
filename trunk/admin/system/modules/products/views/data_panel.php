@@ -20,7 +20,7 @@ Ext.define('Toc.products.DataPanel', {
   constructor: function(config) {
     config = config || {};
     
-    config.title = '<?= lang('section_data'); ?>';
+    config.title = '<?php echo lang('section_data'); ?>';
     config.activeTab = 0;
     config.productsType = 1;
     config.tabExtraOptions = null;
@@ -34,12 +34,12 @@ Ext.define('Toc.products.DataPanel', {
     var dsProductsType = Ext.create('Ext.data.Store', {
       fields: ['id', 'text'],
       data:[
-        {id: '<?= PRODUCT_TYPE_SIMPLE; ?>', text: '<?= lang('products_type_simple'); ?>'}
+        {id: '<?php echo PRODUCT_TYPE_SIMPLE; ?>', text: '<?php echo lang('products_type_simple'); ?>'}
       ]
     });
     
     this.cboProductsType = Ext.create('Ext.form.ComboBox', {
-      fieldLabel: '<?= lang('field_products_type'); ?>',
+      fieldLabel: '<?php echo lang('field_products_type'); ?>',
       labelWidth: 120,
       width: 335,
       store: dsProductsType, 
@@ -49,7 +49,7 @@ Ext.define('Toc.products.DataPanel', {
       valueField: 'id', 
       editable: false,
       forceSelection: true,      
-      value: '<?= PRODUCT_TYPE_SIMPLE; ?>',
+      value: '<?php echo PRODUCT_TYPE_SIMPLE; ?>',
       listeners: {
         select: this.onProductsTypeSelect,
         scope: this
@@ -79,7 +79,7 @@ Ext.define('Toc.products.DataPanel', {
     });
     
     this.cboManufacturers = Ext.create('Ext.form.ComboBox', {
-      fieldLabel: '<?= lang('field_manufacturer'); ?>',
+      fieldLabel: '<?php echo lang('field_manufacturer'); ?>',
       width: 335,
       labelWidth: 120, 
       store: dsManufacturers,
@@ -107,7 +107,7 @@ Ext.define('Toc.products.DataPanel', {
         }
       },
       listeners: {
-        load: function() {this.cboWeightClasses.setValue('<?= SHIPPING_WEIGHT_UNIT; ?>');},
+        load: function() {this.cboWeightClasses.setValue('<?php echo SHIPPING_WEIGHT_UNIT; ?>');},
         scope: this
       },
       autoLoad: true
@@ -115,7 +115,7 @@ Ext.define('Toc.products.DataPanel', {
     
     this.cboWeightClasses = Ext.create('Ext.form.ComboBox', {
       width: 95,
-      fieldLabel: '<?= lang('field_manufacturer'); ?>', 
+      fieldLabel: '<?php echo lang('field_manufacturer'); ?>', 
       store: dsWeightClasses,
       queryMode: 'local', 
       name: 'products_weight_class', 
@@ -127,7 +127,7 @@ Ext.define('Toc.products.DataPanel', {
     });
     
     this.fsStatus = Ext.create('Ext.form.FieldSet', {
-      title: '<?= lang('subsection_data'); ?>', 
+      title: '<?php echo lang('subsection_data'); ?>', 
       layout: 'column', 
       width: 750,
       autoHeight: true,
@@ -151,19 +151,19 @@ Ext.define('Toc.products.DataPanel', {
                   labelSeparator: ' ',
                   border: false,
                   items:[
-                    {xtype:'radio', fieldLabel: '<?= lang('field_status'); ?>', labelWidth: 120, name: 'products_status', boxLabel: '<?= lang('status_enabled'); ?>', inputValue: '1', checked: true}
+                    {xtype:'radio', fieldLabel: '<?php echo lang('field_status'); ?>', labelWidth: 120, name: 'products_status', boxLabel: '<?php echo lang('status_enabled'); ?>', inputValue: '1', checked: true}
                   ]
                 },
                 {
                   width: 80,
                   border: false,
                   items: [
-                    {xtype:'radio', fieldLabel: '<?= lang('status_disabled'); ?>', labelWidth: 120, boxLabel: '<?= lang('status_disabled'); ?>', name: 'products_status', hideLabel: true, inputValue: '0'}
+                    {xtype:'radio', fieldLabel: '<?php echo lang('status_disabled'); ?>', labelWidth: 120, boxLabel: '<?php echo lang('status_disabled'); ?>', name: 'products_status', hideLabel: true, inputValue: '0'}
                   ]
                 }
               ]
             },
-            {xtype: 'datefield', fieldLabel: '<?= lang('field_date_available'); ?>', labelWidth: 120, name: 'products_date_available', format: 'Y-m-d', anchor: '100%', width: 335}         
+            {xtype: 'datefield', fieldLabel: '<?php echo lang('field_date_available'); ?>', labelWidth: 120, name: 'products_date_available', format: 'Y-m-d', anchor: '100%', width: 335}         
           ]
         },
         {
@@ -174,8 +174,8 @@ Ext.define('Toc.products.DataPanel', {
             anchor: '97%'
           },              
           items: [
-            {fieldLabel: '<?= lang('field_sku'); ?>', labelWidth: 120, xtype:'textfield', name: 'products_sku', width: 335},
-            {fieldLabel: '<?= lang('field_model'); ?>', labelWidth: 120, xtype:'textfield', name: 'products_model', width: 335},
+            {fieldLabel: '<?php echo lang('field_sku'); ?>', labelWidth: 120, xtype:'textfield', name: 'products_sku', width: 335},
+            {fieldLabel: '<?php echo lang('field_model'); ?>', labelWidth: 120, xtype:'textfield', name: 'products_model', width: 335},
             this.cboManufacturers,
             {
               layout: 'column',
@@ -187,7 +187,7 @@ Ext.define('Toc.products.DataPanel', {
                   labelSeparator: ' ',
                   border: false,
                   items:[
-                    {fieldLabel: '<?= lang('field_weight'); ?>', labelWidth: 120, xtype:'textfield', name: 'products_weight', width: 235}
+                    {fieldLabel: '<?php echo lang('field_weight'); ?>', labelWidth: 120, xtype:'textfield', name: 'products_weight', width: 235}
                   ]
                 },
                 {
@@ -224,7 +224,7 @@ Ext.define('Toc.products.DataPanel', {
     });
     
     this.cboTaxClass = Ext.create('Ext.form.ComboBox', {
-      fieldLabel: '<?= lang('field_tax_class'); ?>',
+      fieldLabel: '<?php echo lang('field_tax_class'); ?>',
       labelWidth: 120,
       store: this.dsTaxClasses,
       queryMode: 'local', 
@@ -239,7 +239,7 @@ Ext.define('Toc.products.DataPanel', {
     });
     
     this.txtPriceNet = Ext.create('Ext.form.TextField', {
-      fieldLabel: '<?= lang('field_price_net'); ?>',
+      fieldLabel: '<?php echo lang('field_price_net'); ?>',
       labelWidth: 120, 
       name: 'products_price',
       value: '0',
@@ -250,7 +250,7 @@ Ext.define('Toc.products.DataPanel', {
     });
     
     this.txtPriceGross = Ext.create('Ext.form.TextField', {
-      fieldLabel: '<?= lang('field_price_gross'); ?>',
+      fieldLabel: '<?php echo lang('field_price_gross'); ?>',
       labelWidth: 120, 
       name: 'products_price_gross',
       value: '0',
@@ -279,7 +279,7 @@ Ext.define('Toc.products.DataPanel', {
     });
     
     this.cboPriceDiscountGroups = Ext.create('Ext.form.ComboBox', {
-      fieldLabel: '<?= lang('field_price_discount_groups'); ?>',
+      fieldLabel: '<?php echo lang('field_price_discount_groups'); ?>',
       labelWidth: 120, 
       store: dsQuantityDiscountGroup,
       queryMode: 'local', 
@@ -291,7 +291,7 @@ Ext.define('Toc.products.DataPanel', {
     });
     
     this.fsPrice = Ext.create('Ext.form.FieldSet', {
-      title: '<?= lang('subsection_price'); ?>',
+      title: '<?php echo lang('subsection_price'); ?>',
       layout: 'anchor', 
       defaults: {
         anchor: '98%'
@@ -318,14 +318,14 @@ Ext.define('Toc.products.DataPanel', {
         }
       },
       listeners: {
-        load: function() {this.cboUnitClasses.setValue('<?= DEFAULT_UNIT_CLASSES; ?>');},
+        load: function() {this.cboUnitClasses.setValue('<?php echo DEFAULT_UNIT_CLASSES; ?>');},
         scope: this
       },
       autoLoad: true
     });
     
     this.cboUnitClasses = Ext.create('Ext.form.ComboBox', {
-      fieldLabel: '<?= lang('field_quantity_unit'); ?>',
+      fieldLabel: '<?php echo lang('field_quantity_unit'); ?>',
       labelWidth: 120, 
       store: dsUnitClass,
       queryMode: 'local', 
@@ -337,7 +337,7 @@ Ext.define('Toc.products.DataPanel', {
     });
     
     this.fsInformation = Ext.create('Ext.form.FieldSet', {
-      title: '<?= lang('subsection_information'); ?>',
+      title: '<?php echo lang('subsection_information'); ?>',
       layout: 'anchor', 
       height: 205,
       labelSeparator: ' ',
@@ -348,16 +348,16 @@ Ext.define('Toc.products.DataPanel', {
       },
       items:[
         this.txtQuantity = Ext.create('Ext.form.NumberField', {
-          fieldLabel: '<?= lang('field_quantity'); ?>', 
+          fieldLabel: '<?php echo lang('field_quantity'); ?>', 
           labelWidth: 120, 
           name: 'products_quantity', 
           allowDecimals: false, value: 0
         }), 
-        {fieldLabel: '<?= lang('field_minimum_order_quantity'); ?>', labelWidth: 120, xtype:'numberfield', name: 'products_moq', allowDecimals: false, value: 1},
-        {fieldLabel: '<?= lang('field_increment'); ?>', labelWidth: 120, xtype:'numberfield', name: 'order_increment', allowDecimals: false, value: 1},
+        {fieldLabel: '<?php echo lang('field_minimum_order_quantity'); ?>', labelWidth: 120, xtype:'numberfield', name: 'products_moq', allowDecimals: false, value: 1},
+        {fieldLabel: '<?php echo lang('field_increment'); ?>', labelWidth: 120, xtype:'numberfield', name: 'order_increment', allowDecimals: false, value: 1},
         this.cboUnitClasses,
         this.txtMaxOrderQuantity = Ext.create('Ext.form.NumberField', {
-          fieldLabel: '<?= lang('field_Maximum_order_quantity'); ?>', 
+          fieldLabel: '<?php echo lang('field_Maximum_order_quantity'); ?>', 
           labelWidth: 120, 
           name: 'products_max_order_quantity', 
           allowDecimals: false, 
@@ -367,7 +367,7 @@ Ext.define('Toc.products.DataPanel', {
         this.chkUnlimited = Ext.create('Ext.form.Checkbox', {
           fieldLabel: '',
           labelWidth: 120,
-          boxLabel: '<?= lang('field_unlimited'); ?>',
+          boxLabel: '<?php echo lang('field_unlimited'); ?>',
           name: 'unlimited',
           checked: true,
           listeners: {
@@ -379,7 +379,7 @@ Ext.define('Toc.products.DataPanel', {
     });
     
     var pnlGeneral = Ext.create('Ext.Panel', {
-      title: '<?= lang('section_general'); ?>',
+      title: '<?php echo lang('section_general'); ?>',
       style: 'padding: 10px',
       items: [
         this.fsStatus,

@@ -101,7 +101,7 @@ Ext.override(Toc.desktop.ProductsWindow, {
         if ( this.groupIds.sort().toString() != ids.sort().toString()) {
           Ext.MessageBox.confirm(
             TocLanguage.msgWarningTitle, 
-            '<?= lang('msg_warning_variants_groups_changed'); ?>',
+            '<?php echo lang('msg_warning_variants_groups_changed'); ?>',
             function(btn) {
               if (btn == 'yes') {
                 this.deleteVariants();

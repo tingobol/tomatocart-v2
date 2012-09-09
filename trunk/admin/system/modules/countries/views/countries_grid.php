@@ -44,13 +44,13 @@ Ext.define('Toc.countries.CountriesGrid', {
     });
     
     config.columns = [
-      { header: '<?= lang('table_heading_countries'); ?>', dataIndex: 'countries_name', flex: 1},
-      { header: '<?= lang('table_heading_code'); ?>', align: 'left', dataIndex: 'countries_iso_code', width: 100},
-      { header: '<?= lang('table_heading_total_zones'); ?>', width: 100, align: 'center', dataIndex: 'total_zones'},
+      { header: '<?php echo lang('table_heading_countries'); ?>', dataIndex: 'countries_name', flex: 1},
+      { header: '<?php echo lang('table_heading_code'); ?>', align: 'left', dataIndex: 'countries_iso_code', width: 100},
+      { header: '<?php echo lang('table_heading_total_zones'); ?>', width: 100, align: 'center', dataIndex: 'total_zones'},
       {
         xtype:'actioncolumn', 
         width: 60,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           iconCls: 'icon-action icon-edit-record',
           tooltip: TocLanguage.tipEdit,

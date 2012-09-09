@@ -66,7 +66,7 @@ Ext.define('Toc.languages.LanguagesEditDialog', {
           if ( !action.result.data['default'] ) {
             this.frmEditLanguage.add({
               xtype: 'checkbox', 
-              fieldLabel: '<?= lang('field_set_default'); ?>', 
+              fieldLabel: '<?php echo lang('field_set_default'); ?>', 
               name: 'default', 
               inputValue: 'on'
             });
@@ -155,31 +155,31 @@ Ext.define('Toc.languages.LanguagesEditDialog', {
       items: [ 
         {
           xtype: 'textfield', 
-          fieldLabel: '<?= lang('field_name'); ?>', 
+          fieldLabel: '<?php echo lang('field_name'); ?>', 
           name: 'name', 
           allowBlank: false
         },
         {
           xtype: 'textfield', 
-          fieldLabel: '<?= lang('field_code'); ?>', 
+          fieldLabel: '<?php echo lang('field_code'); ?>', 
           name: 'code', 
           allowBlank: false
         },
         {
           xtype: 'textfield', 
-          fieldLabel: '<?= lang('field_locale'); ?>', 
+          fieldLabel: '<?php echo lang('field_locale'); ?>', 
           name: 'locale', 
           allowBlank: false
         },
         {
           xtype: 'textfield', 
-          fieldLabel: '<?= lang('field_character_set'); ?>', 
+          fieldLabel: '<?php echo lang('field_character_set'); ?>', 
           name: 'charset', 
           allowBlank: false
         },
         {
           xtype: 'combo',
-          fieldLabel: '<?= lang('field_text_direction'); ?>',
+          fieldLabel: '<?php echo lang('field_text_direction'); ?>',
           name: 'text_id',
           id: 'text_direction', 
           queryMode: 'local', 
@@ -191,19 +191,19 @@ Ext.define('Toc.languages.LanguagesEditDialog', {
         },
         {
           xtype: 'textfield', 
-          fieldLabel: '<?= lang('field_date_format_short'); ?>', 
+          fieldLabel: '<?php echo lang('field_date_format_short'); ?>', 
           name: 'date_format_short', 
           allowBlank: false
         },
         {
           xtype: 'textfield', 
-          fieldLabel: '<?= lang('field_date_format_long'); ?>', 
+          fieldLabel: '<?php echo lang('field_date_format_long'); ?>', 
           name: 'date_format_long', 
           allowBlank: false
         },
         {
           xtype: 'textfield', 
-          fieldLabel: '<?= lang('field_time_format'); ?>', 
+          fieldLabel: '<?php echo lang('field_time_format'); ?>', 
           name: 'time_format', 
           allowBlank: false
         },
@@ -211,7 +211,7 @@ Ext.define('Toc.languages.LanguagesEditDialog', {
           xtype: 'combo',
           name: 'currencies_id',
           queryMode: 'local',
-          fieldLabel: '<?=  lang('field_currency'); ?>', 
+          fieldLabel: '<?php echo  lang('field_currency'); ?>', 
           store: this.dsCurrencies,
           displayField: 'text',
           valueField: 'currencies_id',
@@ -220,13 +220,13 @@ Ext.define('Toc.languages.LanguagesEditDialog', {
         },
         {
           xtype: 'textfield', 
-          fieldLabel: '<?= lang('field_currency_separator_decimal'); ?>', 
+          fieldLabel: '<?php echo lang('field_currency_separator_decimal'); ?>', 
           name: 'numeric_separator_decimal', 
           allowBlank: false
         },
         {
           xtype: 'textfield', 
-          fieldLabel: '<?= lang('field_currency_separator_thousands'); ?>', 
+          fieldLabel: '<?php echo lang('field_currency_separator_thousands'); ?>', 
           name: 'numeric_separator_thousands', 
           allowBlank: false
         },
@@ -234,7 +234,7 @@ Ext.define('Toc.languages.LanguagesEditDialog', {
           xtype: 'combo',
           name: 'parent_id',
           queryMode: 'local',
-          fieldLabel: '<?= lang('field_parent_language'); ?>', 
+          fieldLabel: '<?php echo lang('field_parent_language'); ?>', 
           store: this.dsParentLanguages,
           displayField: 'text',
           valueField: 'parent_id',
@@ -243,7 +243,7 @@ Ext.define('Toc.languages.LanguagesEditDialog', {
         },
         {
           xtype: 'numberfield', 
-          fieldLabel: '<?= lang('field_sort_order'); ?>', 
+          fieldLabel: '<?php echo lang('field_sort_order'); ?>', 
           name: 'sort_order'
         }
       ]

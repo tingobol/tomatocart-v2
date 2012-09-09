@@ -52,15 +52,15 @@ Ext.define('Toc.orders.OrdersDeleteComfirmDialog', {
     
     if (action == 'delete_order') {
       this.frmConfirm.baseParams['orders_id'] = ordersId; 
-      this.setTitle('<?= lang('introduction_delete_order'); ?>');
+      this.setTitle('<?php echo lang('introduction_delete_order'); ?>');
 
-      html = '<p class="form-info"><?= lang('introduction_delete_order'); ?></p><p class="form-info"><b>#' + orders + '</b></p>';
+      html = '<p class="form-info"><?php echo lang('introduction_delete_order'); ?></p><p class="form-info"><b>#' + orders + '</b></p>';
       this.pnlConfirmInfo.update(html);
     } else {
       this.frmConfirm.baseParams['batch'] = ordersId;
-      this.setTitle('<?= lang('introduction_batch_delete_orders'); ?>');
+      this.setTitle('<?php echo lang('introduction_batch_delete_orders'); ?>');
        
-      html = '<p class="form-info"><?= lang('introduction_batch_delete_orders'); ?></p><p class="form-info"><b>' + orders + '</b></p>';
+      html = '<p class="form-info"><?php echo lang('introduction_batch_delete_orders'); ?></p><p class="form-info"><b>' + orders + '</b></p>';
       this.pnlConfirmInfo.update(html);
     }
     
@@ -81,7 +81,7 @@ Ext.define('Toc.orders.OrdersDeleteComfirmDialog', {
           name: 'restock',
           fieldLabel: 'Checkbox',
           hideLabel: true,
-          boxLabel: '<?= lang('field_restock_product_quantity'); ?>'
+          boxLabel: '<?php echo lang('field_restock_product_quantity'); ?>'
         }
       ]
     });

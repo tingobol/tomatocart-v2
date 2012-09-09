@@ -34,7 +34,7 @@ Ext.override(Toc.desktop.CountriesWindow, {
 
       win = desktop.createWindow({
         id: 'slide_images-win',
-        title: '<?= lang('heading_countries_title'); ?>',
+        title: '<?php echo lang('heading_countries_title'); ?>',
         width: 800,
         height: 400,
         iconCls: 'icon-countries-win',

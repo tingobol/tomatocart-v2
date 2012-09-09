@@ -20,9 +20,9 @@ Ext.define('Toc.reviews.ReviewsGrid', {
   statics: {
     renderStatus : function(status) {
       if(status == 1) {
-        return '<img class="img-button" src="<?= icon_status_url('icon_status_green.gif'); ?>" />&nbsp;<img class="img-button btn-status-off" style="cursor: pointer" src="<?= icon_status_url('icon_status_red_light.gif'); ?>" />';
+        return '<img class="img-button" src="<?php echo icon_status_url('icon_status_green.gif'); ?>" />&nbsp;<img class="img-button btn-status-off" style="cursor: pointer" src="<?php echo icon_status_url('icon_status_red_light.gif'); ?>" />';
       }else {
-        return '<img class="img-button btn-status-on" style="cursor: pointer" src="<?= icon_status_url('icon_status_green_light.gif'); ?>" />&nbsp;<img class="img-button" src= "<?= icon_status_url('icon_status_red.gif'); ?>" />';
+        return '<img class="img-button btn-status-on" style="cursor: pointer" src="<?php echo icon_status_url('icon_status_green_light.gif'); ?>" />&nbsp;<img class="img-button" src= "<?php echo icon_status_url('icon_status_red.gif'); ?>" />';
       }
     }
   },
@@ -63,15 +63,15 @@ Ext.define('Toc.reviews.ReviewsGrid', {
     
     config.selModel = Ext.create('Ext.selection.CheckboxModel');
     config.columns =[
-      {header: '<?= lang('table_heading_products'); ?>', dataIndex: 'products_name', flex: 1},
-      {header: '<?= lang('table_heading_language'); ?>', align: 'center', dataIndex: 'code'},
-      {header: '<?= lang('table_heading_rating'); ?>', align: 'center', dataIndex: 'reviews_rating'},
-      {header: '<?= lang('table_heading_status'); ?>', align: 'center', dataIndex: 'reviews_status', renderer: statics.renderStatus, sortable: true, width: 100},
-      {header: '<?= lang('table_heading_date_added'); ?>', align: 'center', dataIndex: 'date_added'},
+      {header: '<?php echo lang('table_heading_products'); ?>', dataIndex: 'products_name', flex: 1},
+      {header: '<?php echo lang('table_heading_language'); ?>', align: 'center', dataIndex: 'code'},
+      {header: '<?php echo lang('table_heading_rating'); ?>', align: 'center', dataIndex: 'reviews_rating'},
+      {header: '<?php echo lang('table_heading_status'); ?>', align: 'center', dataIndex: 'reviews_status', renderer: statics.renderStatus, sortable: true, width: 100},
+      {header: '<?php echo lang('table_heading_date_added'); ?>', align: 'center', dataIndex: 'date_added'},
       {
         xtype: 'actioncolumn', 
         width: 80,
-        header: '<?= lang("table_heading_action"); ?>',
+        header: '<?php echo lang("table_heading_action"); ?>',
         items: [{
           tooltip: TocLanguage.tipEdit,
           iconCls: 'icon-action icon-edit-record',
