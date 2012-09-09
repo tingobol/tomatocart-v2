@@ -201,7 +201,7 @@
         <li><a href="<?php echo site_url('checkout/shopping_cart'); ?>"><?php echo lang('cart_contents'); ?></a><span>|</span></li>
         <li><a href="<?php echo site_url('checkout/checkout'); ?>"><?php echo lang('checkout'); ?></a><span>|</span></li>
         <li><a href="<?php echo site_url('contact_us'); ?>"><?php echo lang('contact_us'); ?></a><span>|</span></li>
-        <li><a href="<?php echo site_url('info/guestbooks'); ?>"><?php echo lang('guest_book'); ?></a><span>|</span></li>
+        <li><a href="<?php echo site_url('guestbooks'); ?>"><?php echo lang('guest_book'); ?></a><span>|</span></li>
         <li><a href="<?php echo site_url('rss'); ?>"><img src="images/rss16x16.png" border="0" alt="" /><span><?php echo lang('rss_heading'); ?></span></a></li>    
     </ul>
     <div style="clear:both"></div>
