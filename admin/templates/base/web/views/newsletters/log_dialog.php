@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource ./system/modules/newsletters/views/log_dialog.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -21,7 +23,7 @@ Ext.define('Toc.newsletters.LogDialog', {
     config = config || {};
     
     config.id = 'log-dialog-win';
-    config.title = '<?= lang('heading_newsletters_title'); ?>';
+    config.title = '<?php echo lang('heading_newsletters_title'); ?>';
     config.layout = 'fit';
     config.width = 600;
     config.height = 350;
@@ -58,11 +60,7 @@ Ext.define('Toc.newsletters.LogDialog', {
       pageSize: Toc.CONF.GRID_PAGE_SIZE,
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
-        extraParams: {
-          module: 'newsletters',
-          action: 'list_log'
-        },
+        url : '<?php echo site_url('newsletters/list_log'); ?>',
         reader: {
           type: 'json',
           root: Toc.CONF.JSON_READER_ROOT,
@@ -75,9 +73,9 @@ Ext.define('Toc.newsletters.LogDialog', {
       store: dsLog,
       border: false,
       columns: [
-        {header: '<?= lang('table_heading_email_addresses'); ?>', dataIndex: 'email_address', flex: 1},
-        {header: '<?= lang('table_heading_sent'); ?>', width: 100, align: 'center', dataIndex: 'sent'},
-        {header: '<?= lang('table_heading_date_sent'); ?>', width: 150, align: 'center', dataIndex: 'date_sent'},
+        {header: '<?php echo lang('table_heading_email_addresses'); ?>', dataIndex: 'email_address', flex: 1},
+        {header: '<?php echo lang('table_heading_sent'); ?>', width: 100, align: 'center', dataIndex: 'sent'},
+        {header: '<?php echo lang('table_heading_date_sent'); ?>', width: 150, align: 'center', dataIndex: 'date_sent'},
       ],
       dockedItems: [{
         xtype: 'pagingtoolbar',
@@ -92,4 +90,4 @@ Ext.define('Toc.newsletters.LogDialog', {
 });
 
 /* End of file log_dialog.php */
-/* Location: ./system/modules/newsletters/views/log_dialog.php */
+/* Location: ./templates/base/web/views/newsletters/log_dialog.php */

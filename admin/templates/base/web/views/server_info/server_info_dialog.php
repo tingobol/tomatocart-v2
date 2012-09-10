@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource ./system/modules/server_info/views/server_info_dialog.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -21,7 +23,7 @@ Ext.define('Toc.server_info.ServerInfoDialog', {
     config = config || {};
     
     config.id = 'server_info-win';
-    config.title = '<?= lang('heading_server_info_title'); ?>';
+    config.title = '<?php echo lang('heading_server_info_title'); ?>';
     config.width = 800;
     config.height = 400;
     config.iconCls = 'icon-server_info-win';
@@ -34,11 +36,7 @@ Ext.define('Toc.server_info.ServerInfoDialog', {
   
   show: function() {
     this.frmServerInfo.load({
-        url: Toc.CONF.CONN_URL,
-        params: {
-          module: 'server_info',
-          action: 'get_system_info'
-        },
+        url: '<?php echo site_url('server_info/get_system_info'); ?>',
         success: function(form, action) {
           Toc.server_info.ServerInfoDialog.superclass.show.call(this);
         },
@@ -76,17 +74,17 @@ Ext.define('Toc.server_info.ServerInfoDialog', {
                 {
                   name: 'server_host',
                   xtype: 'displayfield',
-                  fieldLabel: '<?= lang('field_server_host'); ?>'
+                  fieldLabel: '<?php echo lang('field_server_host'); ?>'
                 },
                 {
                   name: 'server_operating_system',
                   xtype: 'displayfield',
-                  fieldLabel: '<?= lang('field_server_operating_system'); ?>'
+                  fieldLabel: '<?php echo lang('field_server_operating_system'); ?>'
                 },
                 {
                   name: 'server_date',
                   xtype: 'displayfield',
-                  fieldLabel: '<?= lang('field_server_date'); ?>'
+                  fieldLabel: '<?php echo lang('field_server_date'); ?>'
                 }
               ]
             },
@@ -97,12 +95,12 @@ Ext.define('Toc.server_info.ServerInfoDialog', {
                 {
                   name: 'database_host',
                   xtype: 'displayfield',
-                  fieldLabel: '<?= lang('field_database_host'); ?>'
+                  fieldLabel: '<?php echo lang('field_database_host'); ?>'
                 },
                 {
                   name: 'database_version',
                   xtype: 'displayfield',
-                  fieldLabel: '<?= lang('field_database_version'); ?>'
+                  fieldLabel: '<?php echo lang('field_database_version'); ?>'
                 }
               ]
             }
@@ -111,13 +109,13 @@ Ext.define('Toc.server_info.ServerInfoDialog', {
         {
           name: 'http_server',
           xtype: 'displayfield',
-          fieldLabel: '<?= lang('field_http_server'); ?>',
+          fieldLabel: '<?php echo lang('field_http_server'); ?>',
           group: true
         },
         {
           name: 'php_version',
           xtype: 'displayfield',
-          fieldLabel: '<?= lang('field_php_version'); ?>'
+          fieldLabel: '<?php echo lang('field_php_version'); ?>'
         }
       ]
     });
@@ -127,4 +125,4 @@ Ext.define('Toc.server_info.ServerInfoDialog', {
 })
 
 /* End of file server_info_dialog.php */
-/* Location: ./system/modules/server_info/views/server_info_dialog.php */
+/* Location: ./templates/base/web/views/server_info/server_info_dialog.php */

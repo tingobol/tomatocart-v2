@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource .system/modules/ratings/views/ratings_dialog.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -21,7 +23,7 @@ Ext.define('Toc.ratings.RatingsDialog', {
     config = config || {};
     
     config.id = 'ratings-dialog-win';
-    config.title = '<?= lang('action_heading_new_rating'); ?>';
+    config.title = '<?php echo lang('action_heading_new_rating'); ?>';
     config.layout = 'fit';
     config.width = 440;
     config.modal = true;
@@ -58,11 +60,7 @@ Ext.define('Toc.ratings.RatingsDialog', {
       this.frmRatings.form.baseParams['ratings_id'] = ratingsId;
       
       this.frmRatings.load({
-        url: Toc.CONF.CONN_URL,
-        params:{
-          module: 'ratings',
-          action: 'load_ratings'
-        },
+        url: '<?php echo site_url('ratings/load_ratings'); ?>',
         success: function(form, action) {
           Toc.ratings.RatingsDialog.superclass.show.call(this);
         },
@@ -78,11 +76,8 @@ Ext.define('Toc.ratings.RatingsDialog', {
   
   buildForm: function() {
     this.frmRatings = Ext.create('Ext.form.Panel', {
-      url: Toc.CONF.CONN_URL,
-      baseParams: {  
-        module: 'ratings',
-        action: 'save_ratings'
-      },
+      url: '<?php echo site_url('ratings/save_ratings'); ?>',
+      baseParams: {},
       border: false,
       bodyPadding: 10,
       fieldDefaults: {
@@ -102,7 +97,7 @@ Ext.define('Toc.ratings.RatingsDialog', {
           name: 'ratings_text[<?php echo $l['id']; ?>]',
           fieldLabel: '<?php echo $i != 1 ? '&nbsp;' : lang('field_rating_name'); ?>',
           allowBlank: false,
-          labelStyle: '<?= worldflag_url($l['country_iso']); ?>'
+          labelStyle: '<?php echo worldflag_url($l['country_iso']); ?>'
         });
         
         this.frmRatings.add(txtLang<?php echo $l['id']; ?>);
@@ -123,9 +118,9 @@ Ext.define('Toc.ratings.RatingsDialog', {
             {
               xtype: 'radio', 
               name: 'status', 
-              fieldLabel: '<?= lang('field_rating_status'); ?>', 
+              fieldLabel: '<?php echo lang('field_rating_status'); ?>', 
               inputValue: '1', 
-              boxLabel: '<?= lang('field_status_enabled'); ?>', 
+              boxLabel: '<?php echo lang('field_status_enabled'); ?>', 
               checked: true
             }
           ]
@@ -139,7 +134,7 @@ Ext.define('Toc.ratings.RatingsDialog', {
               hideLabel: true, 
               name: 'status', 
               inputValue: '0', 
-              boxLabel: '<?= lang('field_status_disabled'); ?>', 
+              boxLabel: '<?php echo lang('field_status_disabled'); ?>', 
               width: 150
             }
           ]
@@ -170,4 +165,4 @@ Ext.define('Toc.ratings.RatingsDialog', {
 });
 
 /* End of file ratings_dialog.php */
-/* Location: ./system/modules/ratings/views/ratings_dialog.php */
+/* Location: ./templates/base/web/views/ratings/ratings_dialog.php */

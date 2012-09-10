@@ -60,11 +60,7 @@ Ext.define('Toc.images.ImagesResizeDialog', {
       pageSize: Toc.CONF.GRID_PAGE_SIZE,
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
-        extraParams: {
-          module: 'images',
-          action: 'get_image_groups'
-        },
+        url : '<?php echo site_url('images/get_image_groups'); ?>',
         reader: {
           type: 'json',
           root: Toc.CONF.JSON_READER_ROOT,
@@ -120,10 +116,8 @@ Ext.define('Toc.images.ImagesResizeDialog', {
         pageSize: Toc.CONF.GRID_PAGE_SIZE,
         proxy: {
           type: 'ajax',
-          url : Toc.CONF.CONN_URL,
+          url : '<?php echo site_url('images/list_images_resize_result'); ?>',
           extraParams: {
-            module: 'images',
-            action: 'list_images_resize_result',
             overwrite: overwrite,
             groups: groups
           },
@@ -148,4 +142,4 @@ Ext.define('Toc.images.ImagesResizeDialog', {
 });
 
 /* End of file images_resize_dialog.php */
-/* Location: ./system/modules/images/views/images_resize_dialog.php */
+/* Location: ./templates/base/web/views/images/images_resize_dialog.php */

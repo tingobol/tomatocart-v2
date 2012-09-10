@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource ./system/modules/newsletters/views/send_emails_dialog.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -21,9 +23,8 @@ Ext.define('Toc.newsletters.SendEmailsDialog', {
     config = config || {};
   
     config.id = 'send-emails-dialog-win';
-    config.title = '<?= lang('heading_newsletters_title'); ?>';
+    config.title = '<?php echo lang('heading_newsletters_title'); ?>';
     config.width = 600;
-    config.height = 350;
     config.layout = 'fit';
     config.modal = true;
     
@@ -31,7 +32,7 @@ Ext.define('Toc.newsletters.SendEmailsDialog', {
     
     config.buttons = [
       {
-        text: '<?= lang('button_ok') ?>',
+        text: '<?php echo lang('button_ok') ?>',
         id: 'btn-send-emails',
         handler: this.onAction,
         scope: this
@@ -59,7 +60,7 @@ Ext.define('Toc.newsletters.SendEmailsDialog', {
   onAction: function() {
     text = Ext.getCmp('btn-send-emails').getText();
     
-    if (text == '<?= lang('button_ok') ?>') {
+    if (text == '<?php echo lang('button_ok') ?>') {
       this.showConfirmation();
     } else {
       this.sendEmails();
@@ -69,13 +70,11 @@ Ext.define('Toc.newsletters.SendEmailsDialog', {
   sendEmails: function() {
     var batch = Ext.JSON.encode(this.selAudience.getValue());
   
-    this.pnlSendEmail.el.mask('<?= lang('sending_please_wait') ?>', 'x-mask-loading');
+    this.pnlSendEmail.el.mask('<?php echo lang('sending_please_wait') ?>', 'x-mask-loading');
     
     Ext.Ajax.request({
-      url: Toc.CONF.CONN_URL,
+      url: '<?php echo site_url('newsletters/send_emails'); ?>',
       params: {
-        module: 'newsletters',
-        action: 'send_emails',
         newsletters_id: this.newslettersId,
         batch: batch
       },
@@ -106,10 +105,8 @@ Ext.define('Toc.newsletters.SendEmailsDialog', {
     this.pnlSendEmail.el.mask(TocLanguage.formSubmitWaitMsg, 'x-mask-loading');
     
     Ext.Ajax.request({
-      url: Toc.CONF.CONN_URL,
+      url: '<?php echo site_url('newsletters/get_emails_confirmation'); ?>',
       params: {
-        module: 'newsletters',
-        action: 'get_emails_confirmation',
         newsletters_id: this.newslettersId,
         batch: batch
       },
@@ -120,7 +117,7 @@ Ext.define('Toc.newsletters.SendEmailsDialog', {
           this.pnlSendEmail.removeAll();
           
           this.pnlSendEmail.update(result.confirmation);
-          Ext.getCmp('btn-send-emails').setText('<?= lang('button_send') ?>');
+          Ext.getCmp('btn-send-emails').setText('<?php echo lang('button_send') ?>');
         } else {
           Ext.MessageBox.alert(TocLanguage.msgErrTitle, result.feedback);
         }
@@ -140,11 +137,7 @@ Ext.define('Toc.newsletters.SendEmailsDialog', {
       pageSize: Toc.CONF.GRID_PAGE_SIZE,
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
-        extraParams: {
-          module: 'newsletters',
-          action: 'get_emails_audience'
-        },
+        url : '<?php echo site_url('newsletters/get_emails_audience'); ?>',
         reader: {
           type: 'json',
           root: Toc.CONF.JSON_READER_ROOT,
@@ -161,7 +154,7 @@ Ext.define('Toc.newsletters.SendEmailsDialog', {
       name: 'customers',
       width: 550,
       height: 250,
-      legend: '<?= lang('newsletter_customer'); ?>',
+      legend: '<?php echo lang('newsletter_customer'); ?>',
       displayField: 'text',
       valueField: 'id'
     });
@@ -183,4 +176,4 @@ Ext.define('Toc.newsletters.SendEmailsDialog', {
 });
 
 /* End of file send_emails_dialog.php */
-/* Location: ./system/modules/newsletters/views/send_emails_dialog.php */
+/* Location: ./templates/base/web/views/newsletters/send_emails_dialog.php */

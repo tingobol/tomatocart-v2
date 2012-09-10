@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource ./system/modules/newsletters/views/newsletters_dialog.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -21,7 +23,7 @@ Ext.define('Toc.newsletters.NewslettersDialog', {
     config = config || {};
     
     config.id = 'newsletters-dialog-win';
-    config.title = '<?= lang('action_heading_new_newsletter'); ?>';
+    config.title = '<?php echo lang('action_heading_new_newsletter'); ?>';
     config.width = 700;
     config.height = 400;
     
@@ -56,11 +58,7 @@ Ext.define('Toc.newsletters.NewslettersDialog', {
       this.frmNewsletter.form.baseParams['newsletters_id'] = this.newslettersId;
       
       this.frmNewsletter.load({
-        url: Toc.CONF.CONN_URL,
-        params: {
-          module: 'newsletters',
-          action: 'load_newsletter'
-        },
+        url: '<?php echo site_url('newsletters/load_newsletter'); ?>',
         success: function(form, action) {
           Toc.newsletters.NewslettersDialog.superclass.show.call(this);
         },
@@ -83,11 +81,7 @@ Ext.define('Toc.newsletters.NewslettersDialog', {
       pageSize: Toc.CONF.GRID_PAGE_SIZE,
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
-        extraParams: {
-          module: 'newsletters',
-          action: 'get_modules'
-        },
+        url : '<?php echo site_url('newsletters/get_modules'); ?>',
         reader: {
           type: 'json',
           root: Toc.CONF.JSON_READER_ROOT,
@@ -98,11 +92,8 @@ Ext.define('Toc.newsletters.NewslettersDialog', {
     });
     
     this.frmNewsletter = Ext.create('Ext.form.Panel', {
-      url: Toc.CONF.CONN_URL,
-      baseParams: {  
-        module: 'newsletters',
-        action: 'save_newsletter'
-      },
+      url: '<?php echo site_url('newsletters/save_newsletter'); ?>',
+      baseParams: {},
       border: false,
       bodyPadding: 10,
       fieldDefaults: {
@@ -114,24 +105,24 @@ Ext.define('Toc.newsletters.NewslettersDialog', {
         {
           xtype: 'combo',
           name: 'newsletter_module',
-          fieldLabel: '<?= lang('field_module'); ?>', 
+          fieldLabel: '<?php echo lang('field_module'); ?>', 
           store: this.dsModules,
           queryMode: 'local',
           valueField: 'id',
           editable: false,
           displayField: 'text',
-          allowBlank: false
+          forceSelection: true  
         },
         {
           xtype: 'textfield', 
           name: 'title', 
-          fieldLabel: '<?= lang('field_title'); ?>', 
+          fieldLabel: '<?php echo lang('field_title'); ?>', 
           allowBlank: false
         },
         {
           xtype: 'htmleditor',
           name: 'content', 
-          fieldLabel: '<?= lang('field_content'); ?>', 
+          fieldLabel: '<?php echo lang('field_content'); ?>', 
           height: 250
         }
       ]
@@ -157,6 +148,5 @@ Ext.define('Toc.newsletters.NewslettersDialog', {
   }
 });
 
-
 /* End of file newsletters_dialog.php */
-/* Location: ./system/modules/newsletters/views/newsletters_dialog.php */
+/* Location: ./templates/base/web/views/newsletters/newsletters_dialog.php */

@@ -1,22 +1,26 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource ./system/modules/ratings/views/main.php
+ * @since   Version 2.0
+ * @filesource
  */
+
+// ------------------------------------------------------------------------
 
   echo 'Ext.namespace("Toc.ratings");';
   
-  require_once 'ratings_dialog.php';
-  require_once 'ratings_grid.php';
+  include 'ratings_dialog.php';
+  include 'ratings_grid.php';
 ?>
 
 Ext.override(Toc.desktop.RatingsWindow, {
@@ -34,7 +38,7 @@ Ext.override(Toc.desktop.RatingsWindow, {
       
       win = desktop.createWindow({
         id: 'ratings-win',
-        title: '<?= lang('heading_title_ratings'); ?>',
+        title: '<?php echo lang('heading_title_ratings'); ?>',
         width: 800,
         height: 400,
         iconCls: 'icon-ratings-win',
@@ -90,4 +94,5 @@ Ext.override(Toc.desktop.RatingsWindow, {
   }
 });
 
-
+/* End of file main.php */
+/* Location: ./templates/base/web/views/ratings/main.php */
