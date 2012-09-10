@@ -316,6 +316,19 @@ Class TOC_Image {
             @unlink(ROOTPATH . 'images/articles/' . $group['code'] . '/' . $image['articles_image']);
         }
     }
+    
+// ------------------------------------------------------------------------
+
+    /**
+     * Get the products images
+     *
+     * @access public
+     * @return mixed
+     */
+    public function get_products_images()
+    {
+        return $this->ci->image_model->get_products_images();
+    }
 }
 
 /* End of file image.php */
