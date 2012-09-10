@@ -1,152 +1,240 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource ./system/modules/ratings/models/ratings_model.php
+ * @since   Version 2.0
+ * @filesource
  */
 
+// ------------------------------------------------------------------------
+
+/**
+ * Ratings Model
+ *
+ * @package   TomatoCart
+ * @subpackage  tomatocart
+ * @category  template-module-model
+ * @author    TomatoCart Dev Team
+ * @link    http://tomatocart.com/wiki/
+ */
 class Ratings_Model extends CI_Model
 {
-  public function get_ratings($start, $limit)
-  {
-    $Qratings = $this->db
-    ->select('r.ratings_id, r.status, rd.ratings_text')
-    ->from('ratings r')
-    ->join('ratings_description rd', 'r.ratings_id = rd.ratings_id')
-    ->where('rd.languages_id', lang_id())
-    ->limit($limit, $start)
-    ->get();
-    
-    return $Qratings->result_array();
-  }
-  
-  public function set_status($id, $status)
-  {
-    $this->db->update('ratings', array('status' => $status), array('ratings_id' => $id));
-    
-    if ($this->db->affected_rows() > 0)
+    /**
+     * Constructor
+     *
+     * @access public
+     * @return void
+     */
+    public function __construct()
     {
-      return TRUE;
+        parent::__construct();
     }
     
-    return FALSE;
-  }
-  
-  public function save($id = NULL, $data)
-  {
-    $error = FALSE;
+// ------------------------------------------------------------------------
     
-    $this->db->trans_begin();
-    
-    if (is_numeric($id))
+    /**
+     * Get the ratings
+     *
+     * @access public
+     * @return mixed
+     */
+    public function get_ratings($start, $limit)
     {
-      $this->db->update('ratings', array('status' => $data['status']), array('ratings_id' => $id));
+        $result = $this->db
+        ->select('r.ratings_id, r.status, rd.ratings_text')
+        ->from('ratings r')
+        ->join('ratings_description rd', 'r.ratings_id = rd.ratings_id')
+        ->where('rd.languages_id', lang_id())
+        ->limit($limit, $start)
+        ->get();
+        
+        if ($result->num_rows() > 0)
+        {
+            return $result->result_array();
+        }
+        
+        return NULL;
     }
-    else
+    
+// ------------------------------------------------------------------------
+    
+    /**
+     * Set the status of the rating
+     *
+     * @access public
+     * @param $id
+     * @param $status
+     * @return boolean
+     */
+    public function set_status($id, $status)
     {
-      $this->db->insert('ratings', array('status' => $data['status']));
+        $this->db->update('ratings', array('status' => $status), array('ratings_id' => $id));
+        
+        if ($this->db->affected_rows() > 0)
+        {
+            return TRUE;
+        }
+        
+        return FALSE;
     }
     
-    if ($this->db->trans_status() === TRUE)
+// ------------------------------------------------------------------------
+    
+    /**
+     * Save the rating
+     *
+     * @access public
+     * @param $id
+     * @param $data
+     * @return boolean
+     */
+    public function save($id = NULL, $data)
     {
-      $ratings_id = is_numeric($id) ? $id : $this->db->insert_id();
-      
-      foreach(lang_get_all() as $l)
-      {
+        $error = FALSE;
+        
+        $this->db->trans_begin();
+        
         if (is_numeric($id))
         {
-          $this->db->update('ratings_description', 
-                            array('ratings_text' => $data['ratings_text'][$l['id']]), 
-                            array('ratings_id' => $id, 'languages_id' => $l['id']));
+            $this->db->update('ratings', array('status' => $data['status']), array('ratings_id' => $id));
         }
         else
         {
-          $this->db->insert('ratings_description', 
-                            array('ratings_id' => $ratings_id, 
-                                  'languages_id' => $l['id'], 
-                                  'ratings_text' => $data['ratings_text'][$l['id']]));
+            $this->db->insert('ratings', array('status' => $data['status']));
         }
         
-        if ($this->db->trans_status() === FALSE)
+        if ($this->db->trans_status() === TRUE)
         {
-          $error = TRUE;
-          break;
+            $ratings_id = is_numeric($id) ? $id : $this->db->insert_id();
+            
+            foreach(lang_get_all() as $l)
+            {
+                if (is_numeric($id))
+                {
+                    $this->db->update('ratings_description', 
+                                      array('ratings_text' => $data['ratings_text'][$l['id']]), 
+                                      array('ratings_id' => $id, 'languages_id' => $l['id']));
+                }
+                else
+                {
+                    $this->db->insert('ratings_description', 
+                                      array('ratings_id' => $ratings_id, 
+                                            'languages_id' => $l['id'], 
+                                            'ratings_text' => $data['ratings_text'][$l['id']]));
+                }
+                
+                if ($this->db->trans_status() === FALSE)
+                {
+                    $error = TRUE;
+                    break;
+                }
+            }
         }
-      }
+        
+        if ($error === FALSE)
+        {
+            $this->db->trans_commit();
+            
+            return TRUE;
+        }
+        
+        $this->db->trans_rollback();
+        
+        return FALSE;
     }
     
-    if ($error === FALSE)
+// ------------------------------------------------------------------------
+    
+    /**
+     * Delete the rating
+     *
+     * @access public
+     * @param $id
+     * @return boolean
+     */
+    public function delete($id)
     {
-      $this->db->trans_commit();
-      
-      return TRUE;
+        $error = FALSE;
+        
+        $this->db->trans_begin();
+        
+        $this->db->delete('ratings', array('ratings_id' => $id));
+        
+        if ($this->db->trans_status() === TRUE)
+        {
+            $this->db->delete('ratings_description', array('ratings_id' => $id));
+        }
+        
+        if ($this->db->trans_status() === TRUE)
+        {
+            $this->db->delete('categories_ratings', array('ratings_id' => $id));
+        }
+        
+        if ($this->db->trans_status() === TRUE)
+        {
+            $this->db->delete('customers_ratings', array('ratings_id' => $id));
+        }
+        
+        if ($this->db->trans_status() === TRUE)
+        {
+            $this->db->trans_commit();
+            
+            return TRUE;
+        }
+        
+        $this->db->trans_rollback();
+        
+        return FALSE;
     }
     
-    $this->db->trans_rollback();
+// ------------------------------------------------------------------------
     
-    return FALSE;
-  }
-  
-  public function delete($id)
-  {
-    $error = FALSE;
-    
-    $this->db->trans_begin();
-    
-    $this->db->delete('ratings', array('ratings_id' => $id));
-    
-    if ($this->db->trans_status() === TRUE)
+    /**
+     * Get the data of the ratings
+     *
+     * @access public
+     * @param $id
+     * @return mixed
+     */
+    public function get_data($id)
     {
-      $this->db->delete('ratings_description', array('ratings_id' => $id));
+        $result = $this->db
+        ->select('r.status, rd.ratings_text, rd.languages_id')
+        ->from('ratings r')
+        ->join('ratings_description rd', 'r.ratings_id = rd.ratings_id')
+        ->where('r.ratings_id', $id)
+        ->get();
+        
+        if ($result->num_rows() > 0)
+        {
+            return $result->result_array();
+        }
+        
+        return NULL;
     }
     
-    if ($this->db->trans_status() === TRUE)
+// ------------------------------------------------------------------------
+    
+    /**
+     * Get the total number of the ratings
+     *
+     * @access public
+     * @return int
+     */
+    public function get_total()
     {
-      $this->db->delete('categories_ratings', array('ratings_id' => $id));
+        return $this->db->count_all('ratings');
     }
-    
-    if ($this->db->trans_status() === TRUE)
-    {
-      $this->db->delete('customers_ratings', array('ratings_id' => $id));
-    }
-    
-    if ($this->db->trans_status() === TRUE)
-    {
-      $this->db->trans_commit();
-      
-      return TRUE;
-    }
-    
-    $this->db->trans_rollback();
-    
-    return FALSE;
-  }
-  
-  public function get_data($id)
-  {
-    $Qratings = $this->db
-    ->select('r.status, rd.ratings_text, rd.languages_id')
-    ->from('ratings r')
-    ->join('ratings_description rd', 'r.ratings_id = rd.ratings_id')
-    ->where('r.ratings_id', $id)
-    ->get();
-    
-    return $Qratings->result_array();
-  }
-  
-  public function get_total()
-  {
-    return $this->db->count_all('ratings');
-  }
 }
 
 /* End of file ratings_model.php */
-/* Location: ./system/modules/ratings/models/ratings_model.php */
+/* Location: ./system/models/ratings_model.php */

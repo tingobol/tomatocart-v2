@@ -170,6 +170,28 @@ class Image_Model extends CI_Model
         return NULL;
     }
     
+// ------------------------------------------------------------------------
+    
+    /**
+     * Get the products images
+     *
+     * @access public
+     * @return mixed
+     */
+    public function get_products_images()
+    {
+        $result = $this->db
+        ->select('image')
+        ->from('products_images')
+        ->get();
+        
+        if ($result->num_rows() > 0)
+        {
+            return $result->result_array();
+        }
+        
+        return NULL;
+    }
 }
 
 /* End of file image_model.php */
