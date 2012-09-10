@@ -515,7 +515,7 @@ INSERT INTO `toc_configuration` (`configuration_id`, `configuration_title`, `con
 (81, 'SMTP Username', 'SMTP_USERNAME', '', 'SMTP Username', 12, 5, NULL, '2011-08-31 09:16:23', NULL, NULL),
 (82, 'SMTP Password', 'SMTP_PASSWORD', '', 'SMTP Password', 12, 6, NULL, '2011-08-31 09:16:23', NULL, NULL),
 (83, 'Use MIME HTML When Sending Emails', 'EMAIL_USE_HTML', '-1', 'Send e-mails in HTML format', 12, 7, NULL, '2011-08-31 09:16:23', 'cfg_use_get_boolean_value', 'cfg_set_boolean_value(array(1, -1))'),
-(84, 'Verify E-Mail Addresses Through DNS', 'ENTRY_EMAIL_ADDRESS_CHECK', '-1', 'Verify e-mail address through a DNS server', 12, 8, NULL, '2011-08-31 09:16:23', 'cfg_use_get_boolean_value', 'cfg_set_boolean_value(array(1, -1))'),
+(84, 'Enable SSL Connection', 'EMAIL_SSL', '1', 'Connect the smtp server with ssl connection', 12, 8, NULL, '2011-08-31 09:16:23', 'cfg_use_get_boolean_value', 'cfg_set_boolean_value(array(1, -1))'),
 (85, 'Send E-Mails', 'SEND_EMAILS', 'True', 'Send out e-mails', 12, 9, '2011-08-31 09:19:30', '2011-08-31 09:16:23', 'cfg_use_get_boolean_value', 'cfg_set_boolean_value(array(1, -1))'),
 (86, 'Confirm Terms and Conditions During Checkout Procedure', 'DISPLAY_CONDITIONS_ON_CHECKOUT', '-1', 'Show the Terms and Conditions during the checkout procedure which the customer must agree to.', 16, 1, NULL, '2011-08-31 09:16:23', 'cfg_use_get_boolean_value', 'cfg_set_boolean_value(array(1, -1))'),
 (87, 'Confirm Privacy Notice During Account Creation Procedure', 'DISPLAY_PRIVACY_CONDITIONS', '1', 'Show the Privacy Notice during the account creation procedure which the customer must agree to.', 16, 2, NULL, '2011-08-31 09:16:23', 'cfg_use_get_boolean_value', 'cfg_set_boolean_value(array(1, -1))'),
