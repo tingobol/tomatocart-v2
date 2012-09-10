@@ -14,4 +14,4 @@
  */
 ?>
 
-access_newsletters_title = Newsletters
+access_newsletters_title = Newsletters Manager
