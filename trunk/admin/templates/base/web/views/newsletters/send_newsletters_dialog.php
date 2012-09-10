@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource ./system/modules/newsletters/views/send_newsletters_dialog.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -21,18 +23,17 @@ Ext.define('Toc.newsletters.SendNewslettersDialog', {
     config = config || {};
     
     config.id = 'send-newsletters-dialog-win';
-    config.title = '<?= lang('heading_newsletters_title'); ?>';
+    config.title = '<?php echo lang('heading_newsletters_title'); ?>';
     config.layout = 'fit';
     config.modal = true;
     config.width = 600;
-    config.height = 350;
     
     config.items = this.buildForm();
     
     config.buttons = [
       {
         id: 'btn-send-newsletters',
-        text: '<?= lang('button_send') ?>',
+        text: '<?php echo lang('button_send') ?>',
         handler: function() { 
           this.sendEmails();
         },
@@ -56,10 +57,8 @@ Ext.define('Toc.newsletters.SendNewslettersDialog', {
     this.newslettersId = newslettersId;
     
     Ext.Ajax.request({
-      url: Toc.CONF.CONN_URL,
+      url: '<?php echo site_url('newsletters/get_newsletters_confirmation'); ?>',
       params: {
-        module: 'newsletters',
-        action: 'get_newsletters_confirmation',
         newsletters_id: this.newslettersId
       },
       callback: function(options, success, response) {
@@ -69,7 +68,7 @@ Ext.define('Toc.newsletters.SendNewslettersDialog', {
           this.frmNewsletter.update(result.confirmation);
           
           if (result.execute == true) {
-            Ext.getCmp('btn-send-newsletters').setText('<?= lang('button_send') ?>');
+            Ext.getCmp('btn-send-newsletters').setText('<?php echo lang('button_send') ?>');
           } else {
             Ext.getCmp('btn-send-newsletters').hide();
           }
@@ -86,13 +85,11 @@ Ext.define('Toc.newsletters.SendNewslettersDialog', {
   },
   
   sendEmails: function() {
-    this.frmNewsletter.el.mask('<?= lang('sending_please_wait') ?>', 'x-mask-loading');
+    this.frmNewsletter.el.mask('<?php echo lang('sending_please_wait') ?>', 'x-mask-loading');
     
     Ext.Ajax.request({
-      url: Toc.CONF.CONN_URL,
+      url: '<?php echo site_url('newsletters/send_newsletters'); ?>',
       params: {
-        module: 'newsletters',
-        action: 'send_newsletters',
         newsletters_id: this.newslettersId
       },
       callback: function(options, success, response) {
@@ -122,4 +119,4 @@ Ext.define('Toc.newsletters.SendNewslettersDialog', {
 });
 
 /* End of file send_newsletters_dialog.php */
-/* Location: ./system/modules/newsletters/views/send_newsletters_dialog.php */
+/* Location: ./templates/base/web/views/newsletters/send_newsletters_dialog.php */

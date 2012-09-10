@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource ./system/modules/logo_upload/views/logo_upload_dialog.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -21,9 +23,8 @@ Ext.define('Toc.logo_upload.LogoUploadDialog', {
     config = config || {};
     
     config.id = 'logo_upload-win';
-    config.title = '<?= lang('heading_logo_upload_title'); ?>';
-    config.width = 400;
-    config.height = 250;
+    config.title = '<?php echo lang('heading_logo_upload_title'); ?>';
+    config.width = 500;
     config.iconCls = 'icon-logo_upload-win';
     config.layout = 'fit';
     
@@ -31,7 +32,7 @@ Ext.define('Toc.logo_upload.LogoUploadDialog', {
     
     config.buttons = [
       {
-        text: '<?= lang('button_save'); ?>',
+        text: '<?php echo lang('button_save'); ?>',
         handler: function() {
           this.submitForm();
         },
@@ -53,11 +54,7 @@ Ext.define('Toc.logo_upload.LogoUploadDialog', {
   
   show: function () {
     Ext.Ajax.request({
-      url: Toc.CONF.CONN_URL,
-      params: {
-        module: 'logo_upload',
-        action: 'get_logo'
-      },
+      url: '<?php echo site_url('logo_upload/get_logo'); ?>',
       callback: function(options, success, response) {
         result = Ext.decode(response.responseText);
         
@@ -74,13 +71,8 @@ Ext.define('Toc.logo_upload.LogoUploadDialog', {
   buildForm: function() {
     this.frmUpload = Ext.create('Ext.form.Panel', {
       fileUpload: true,
-      url: Toc.CONF.CONN_URL,
-      layout: 'border',
+      url: '<?php echo site_url('logo_upload/save_logo'); ?>',
       border: false,
-      baseParams: {  
-        module: 'logo_upload',
-        action : 'save_logo'
-      },
       fieldDefaults: {
         anchor: '97%',
         labelSeparator: ''
@@ -92,7 +84,7 @@ Ext.define('Toc.logo_upload.LogoUploadDialog', {
           border: false,
           bodyPadding: 10,
           items: [
-            {xtype: 'filefield', fieldLabel: '<?= lang('field_logo_image'); ?>', name: 'logo_image'}
+            {xtype: 'filefield', fieldLabel: '<?php echo lang('field_logo_image'); ?>', name: 'logo_image'}
           ]
         }
       ]
@@ -130,4 +122,4 @@ Ext.define('Toc.logo_upload.LogoUploadDialog', {
 });
 
 /* End of file logo_upload_dialog.php */
-/* Location: ./system/modules/logo_upload/views/logo_upload_dialog.php */
+/* Location: ./templates/base/web/views/logo_upload/logo_upload_dialog.php */
