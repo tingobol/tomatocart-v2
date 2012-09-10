@@ -119,6 +119,16 @@ if (defined('ENVIRONMENT'))
  * NO TRAILING SLASH!
  */
     $view_folder = 'system/views';
+    
+/*
+ *---------------------------------------------------------------
+ * PATH TO THE THIRD PARTY LIBRARY
+ *---------------------------------------------------------------
+ *
+ * This path is used to store the third party libraries
+ * 
+ */
+    $third_party_folder = 'system/3rdparty';
 
 /*
  *---------------------------------------------------------------
@@ -146,6 +156,13 @@ if (defined('ENVIRONMENT'))
  *---------------------------------------------------------------
  */
 	define('LOCALAPPPATH', $local_application_folder . '/');
+	
+/*
+ *---------------------------------------------------------------
+ * THIRD PARTY LIBRARY PATH CONSTANTS
+ *---------------------------------------------------------------
+ */
+  define('THIRDPARTY', $third_party_folder . '/');
 
 /*
  *---------------------------------------------------------------
