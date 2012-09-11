@@ -43,7 +43,7 @@ class Faqs extends TOC_Controller {
      *
      * @access public
      */
-    public function index()
+    public function index($id = NULL)
     {
         //set page title
         $this->template->set_title(lang('info_faqs_heading'));
@@ -53,6 +53,12 @@ class Faqs extends TOC_Controller {
         
         //setup view data
         $data['faqs'] = $this->info_model->get_faqs(lang_id());
+        
+        //Which faq should be actived
+        if (is_numeric($id))
+        {
+            $data['active'] = $id;
+        }
         
         //setup view
         $this->template->build('info/faqs', $data);
