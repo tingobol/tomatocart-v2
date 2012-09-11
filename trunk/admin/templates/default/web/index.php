@@ -30,13 +30,13 @@
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>templates/base/web/javascript/extjs/resources/css/ext-all.css" />
     <?php echo $template['stylesheets'];?>
 
-		<script src="<?php echo base_url();?>/templates/base/web/javascript/extjs/ext-all-debug.js"></script> 
+		<script src="<?php echo base_url();?>templates/base/web/javascript/extjs/ext-all-debug.js"></script> 
     <?php echo $template['javascripts'];?>
     
     <style type="text/css">
     <?php 
       foreach (lang_get_all() as $l) {
-        echo ".icon-" . $l['country_iso'] . "-win {background-image: url(../../images/worldflags/" . $l['country_iso'] . ".png) !important;}";
+        echo ".icon-" . $l['country_iso'] . "-win {background-image: url(/images/worldflags/" . $l['country_iso'] . ".png) !important;}";
       }
     ?>
     </style>
