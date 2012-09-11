@@ -15,6 +15,8 @@
  * @filesource
  */
 
+// ------------------------------------------------------------------------
+
   echo 'Ext.namespace("Toc.articles");';
   
   include 'articles_grid.php';
