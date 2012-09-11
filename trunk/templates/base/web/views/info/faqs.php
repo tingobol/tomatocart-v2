@@ -26,11 +26,11 @@
       	?>
       	<ul>
             <li class="question"><?php echo $faq['faqs_question']?></li>
-            <li class="answer hidden"><?php echo $faq['faqs_answer']?></li>
+            <li class="answer<?php echo (isset($active) && ($active == $faq['faqs_id'])) ? '' : ' hidden'; ?>"><?php echo $faq['faqs_answer']?></li>
             <?php
                 if (!empty($faq['faqs_url'])) :
             ?>
-            <li class="url hidden"><a href="<?php echo $faq['faqs_url']; ?>"><?php echo $faq['faqs_url']; ?></a></li>
+            <li class="url<?php echo (isset($active) && ($active == $faq['faqs_id'])) ? '' : ' hidden'; ?>"><a href="<?php echo $faq['faqs_url']; ?>"><?php echo $faq['faqs_url']; ?></a></li>
             <?php
                 endif;
             ?>
@@ -54,7 +54,7 @@
     $(document).ready(function(){
     	$('.question').bind('click', function() {
     		  $(this).next('.answer').toggle();
-    		  $('#faqs .url').toggle();
+    		  $(this).next('.answer').next('.url').toggle();
     	});
     });
 </script>
