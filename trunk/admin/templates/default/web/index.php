@@ -20,7 +20,7 @@
 <html dir="<?php echo lang_get_text_direction(); ?>" xml:lang="<?php echo lang_get_code(); ?>" lang="<?php echo lang_get_code(); ?>">
   <head>
     <title><?php echo lang('administration_title'); ?></title>
-    <link rel="shortcut icon" href="<?php echo base_url();?>images/tomatocart.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="<?php echo base_url();?>templates/base/web/images/favicon.ico" type="image/x-icon" />
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta http-equiv="pragma" content="no-cache" />
     <meta http-equiv="cache-control" content="no-cache" />
