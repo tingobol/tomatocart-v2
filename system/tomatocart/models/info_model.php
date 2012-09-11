@@ -61,7 +61,7 @@ class Info_Model extends CI_Model
 
         if ($result->num_rows() > 0)
         {
-            return $result->row_array();
+            return $result->result_array();
         }
 
         return NULL;
