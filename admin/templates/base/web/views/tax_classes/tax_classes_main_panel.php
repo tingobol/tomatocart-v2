@@ -46,7 +46,7 @@ Ext.define('Toc.tax_classes.TaxClassesMainPanel', {
   },
   
   onGrdTaxClassesSelectChange: function(record) {
-    this.grdTaxRates.setTitle('<?= lang('heading_tax_classes_title'); ?>: '+ record.get('tax_class_title'));
+    this.grdTaxRates.setTitle('<?php echo lang('heading_tax_classes_title'); ?>: '+ record.get('tax_class_title'));
     this.grdTaxRates.iniGrid(record);
   },
   
