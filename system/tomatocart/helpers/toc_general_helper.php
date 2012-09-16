@@ -198,8 +198,8 @@ if( ! function_exists('address_format'))
                           '/\:state\b/',
                           '/\:zone_code\b/',
                           '/\:country\b/');
-        
-        if (isset($address['name'])) 
+
+        if (isset($address['name']))
         {
             $name = $address['name'];
         }
@@ -207,16 +207,16 @@ if( ! function_exists('address_format'))
         {
             $name = $address['firstname'] . ' ' . $address['lastname'];
         }
-        
+
 
         $replace_array = array($name,
-            $address['street_address'],
-            $address['suburb'],
-            $address['city'],
-            $address['postcode'],
-            $address['state'],
-            $address['zone_code'],
-            $address['countries_name']);
+        $address['street_address'],
+        $address['suburb'],
+        $address['city'],
+        $address['postcode'],
+        $address['state'],
+        $address['zone_code'],
+        $address['countries_name']);
 
         $formated = preg_replace($find_array, $replace_array, $address['address_format']);
 
@@ -234,6 +234,27 @@ if( ! function_exists('address_format'))
 
         return $formated;
     }
+
+
+    /**
+     * Execute service module
+     *
+     * @access public
+     * @param $module
+     * @return void
+     */
+    if( ! function_exists('run_service'))
+    {
+        function run_service($module)
+        {
+            //get instance
+            $ci = get_instance();
+            
+            //run service
+            $ci->service->run($module);
+        }
+    }
+
 }
 
 /* End of file general_helper.php */
