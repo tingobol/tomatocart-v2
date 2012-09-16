@@ -84,7 +84,7 @@ Ext.application({
                         this.up('formpanel').submit({
                             url: base_url + 'index.php/login/process',
                             success: function (form, result) {
-                                window.location = '<?= site_url('index'); ?>';
+                                window.location = '<?php echo site_url('index'); ?>';
                               },
                               failure: function (form, result) {
                                   Ext.Msg.alert(result.error, result.error);
@@ -101,12 +101,12 @@ Ext.application({
                     xtype : 'button',
                     text : '<?php echo lang("label_forget_password"); ?>',
                     handler : function() {
-                        Ext.Msg.prompt('<?= lang('label_forget_password'); ?>', '<?= lang("ms_forget_password_text"); ?>', function(btn, email){
+                        Ext.Msg.prompt('<?php echo lang('label_forget_password'); ?>', '<?php echo lang("ms_forget_password_text"); ?>', function(btn, email){
                             if (btn = 'ok' && !Ext.isEmpty(email)) {
                                 Ext.Viewport.mask();
                               
                               Ext.Ajax.request({
-                                  url: '<?= site_url('login/get_password'); ?>',
+                                  url: '<?php echo site_url('login/get_password'); ?>',
                                   params: {
                                       email_address: email
                                   },
@@ -115,7 +115,7 @@ Ext.application({
                                 
                                       result = Ext.decode(response.responseText);
                                   
-                                      Ext.Msg.alert('<?= lang('ms_feedback'); ?>', result.feedback);
+                                      Ext.Msg.alert('<?php echo lang('ms_feedback'); ?>', result.feedback);
                                   },
                                   scope: this
                               }); 
