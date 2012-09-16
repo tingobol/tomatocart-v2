@@ -65,6 +65,60 @@ class TOC_Service_debug extends TOC_Service_Module
               'description' => 'Show the page execution time.',
               'values' => array(
     array('id' => '1', 'text' => 'True'),
+    array('id' => '-1', 'text' => 'False'))),
+    array('name' => 'SERVICE_DEBUG_LOG_DB_QUERIES',
+              'title' => 'Log Database Queries', 
+              'type' => 'combobox',
+              'mode' => 'local',
+		  	  'value' => '-1',
+              'description' => 'Log all database queries in the page execution time log file.',
+              'values' => array(
+    array('id' => '1', 'text' => 'True'),
+    array('id' => '-1', 'text' => 'False'))),
+    array('name' => 'SERVICE_DEBUG_OUTPUT_DB_QUERIES',
+              'title' => 'Show Database Queries', 
+              'type' => 'combobox',
+              'mode' => 'local',
+		  	  'value' => '-1',
+              'description' => 'Show all database queries made.',
+              'values' => array(
+    array('id' => '1', 'text' => 'True'),
+    array('id' => '-1', 'text' => 'False'))),
+    array('name' => 'SERVICE_DEBUG_SHOW_DEVELOPMENT_WARNING',
+              'title' => 'Show Development Version Warning', 
+              'type' => 'combobox',
+              'mode' => 'local',
+		  	  'value' => '1',
+              'description' => 'Show an TomatoCart development version warning message.',
+              'values' => array(
+    array('id' => '1', 'text' => 'True'),
+    array('id' => '-1', 'text' => 'False'))),
+    array('name' => 'SERVICE_DEBUG_CHECK_LOCALE',
+              'title' => 'Check Language Locale', 
+              'type' => 'combobox',
+              'mode' => 'local',
+		  	  'value' => '1',
+              'description' => 'Show a warning message if the set language locale does not exist on the server.',
+              'values' => array(
+    array('id' => '1', 'text' => 'True'),
+    array('id' => '-1', 'text' => 'False'))),
+    array('name' => 'SERVICE_DEBUG_CHECK_INSTALLATION_MODULE',
+              'title' => 'Check Installation Module', 
+              'type' => 'combobox',
+              'mode' => 'local',
+		  	  'value' => '1',
+              'description' => 'Show a warning message if the installation module exists.',
+              'values' => array(
+    array('id' => '1', 'text' => 'True'),
+    array('id' => '-1', 'text' => 'False'))),
+    array('name' => 'SERVICE_DEBUG_CHECK_DOWNLOAD_DIRECTORY',
+              'title' => 'Check Download Directory', 
+              'type' => 'combobox',
+              'mode' => 'local',
+		  	  'value' => '1',
+              'description' => 'Show a warning if the digital product download directory does not exist.',
+              'values' => array(
+    array('id' => '1', 'text' => 'True'),
     array('id' => '-1', 'text' => 'False'))));
      
     /**
@@ -78,5 +132,16 @@ class TOC_Service_debug extends TOC_Service_Module
 
         $this->title = lang('services_debug_title');
         $this->description = lang('services_debug_description');
+    }
+
+    function run()
+    {
+        if ($this->config['SERVICE_DEBUG_SHOW_DEVELOPMENT_WARNING'] == '1') {
+            echo '<p class="messageStack">
+            		<ul>
+            			<li>This is a development version of TomatoCart (' . PROJECT_VERSION . ') - please use it for testing purposes only! [' . __CLASS__ . ']</li>
+            		</ul>
+            	  </p>';
+        }
     }
 }

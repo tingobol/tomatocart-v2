@@ -45,11 +45,11 @@ class TOC_Service_Google_Analytics extends TOC_Service_Module
      * @var array
      */
     var $params = array(
-    array('name' => 'SERVICES_GOOGLE_ANALYTICS_CODE',
-              'title' => 'Google Analytics Code', 
-              'type' => 'textarea',
-              'value' => '',
-              'description' => 'Google Analytics Code.'));
+        array('name' => 'SERVICES_GOOGLE_ANALYTICS_CODE',
+                  'title' => 'Google Analytics Code', 
+                  'type' => 'textarea',
+                  'value' => '',
+                  'description' => 'Google Analytics Code.'));
 
     /**
      * Constructor
@@ -63,5 +63,12 @@ class TOC_Service_Google_Analytics extends TOC_Service_Module
         $this->title = lang('services_google_analytics_title');
         $this->description = lang('services_google_analytics_description');
     }
+    
+    /**
+     * 
+     */
+    function run()
+    {
+        echo $this->config['SERVICES_GOOGLE_ANALYTICS_CODE'];
+    }
 }
-?>
