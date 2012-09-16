@@ -33,7 +33,7 @@ Ext.override(Toc.desktop.ProductsExpectedWindow, {
       
       win = desktop.createWindow({
         id: 'products_expected-win',
-        title: '<?= lang('heading_products_expected_title'); ?>',
+        title: '<?php echo lang('heading_products_expected_title'); ?>',
         width: 800,
         height: 400,
         iconCls: 'icon-products_expected-win',
