@@ -78,7 +78,7 @@ $autoload['packages'] = array();
 |	$autoload['libraries'] = array('database', 'session', 'xmlrpc');
 */
 
-$autoload['libraries'] = array('database', 'session', 'configuration', 'registry', 'customer', 'shopping_cart', 'currencies', 'message_stack', 'user_agent', 'navigation_history');
+$autoload['libraries'] = array('database', 'session', 'configuration', 'registry', 'customer', 'shopping_cart', 'currencies', 'message_stack', 'user_agent', 'navigation_history', 'service');
 
 /*
 | -------------------------------------------------------------------
