@@ -26,7 +26,7 @@
  * @author		TomatoCart Dev Team
  * @link		http://tomatocart.com/wiki/
  */
-class Cpath extends TOC_Controller 
+class Cpath extends TOC_Controller
 {
 
     /**
@@ -35,7 +35,7 @@ class Cpath extends TOC_Controller
      * @access public
      * @param string
      */
-    public function __construct() 
+    public function __construct()
     {
         parent::__construct();
     }
@@ -46,98 +46,115 @@ class Cpath extends TOC_Controller
      * @access public
      * @param string
      */
-    public function index($cpath = FALSE)
+    public function index()
     {
-        //page title
-        $this->template->set_title(sprintf(lang('index_heading'), config('STORE_NAME')));
+        //get function arguments
+        $arguments = func_get_args();
 
-        //check whether cpath is exist
-        if (isset($cpath) && !empty($cpath))
+        //cnnect arguments to cpath
+        $cpath = implode('/', $arguments);
+
+        //if has arguments
+        if ($cpath != NULL)
         {
-            //get current category id
-            $categories = explode('_', $cpath);
-            $current_category_id = end($categories);
+            //compile cpath from friendly url
+            $cpath = $this->category_tree->parse_cpath($cpath);
 
-            //set global variable
-            $this->registry->set('cpath', $cpath);
-            $this->registry->set('current_category_id', $current_category_id);
+            //page title
+            $this->template->set_title(sprintf(lang('index_heading'), config('STORE_NAME')));
 
-            //model
-            $this->load->model('categories_model');
-            $this->load->model('products_model');
-
-            //breadcrumb
-            $categories = $this->category_tree->get_full_cpath_info($cpath);
-            foreach ($categories as $categories_id => $categories_name)
+            //check whether cpath is exist
+            if (isset($cpath) && !empty($cpath))
             {
-                $this->template->set_breadcrumb($categories_name, site_url('cpath/' . $categories_id));
-            }
+                //get current category id
+                $categories = explode('_', $cpath);
+                $current_category_id = end($categories);
 
-            //load the category object
-            $this->load->library('category', $current_category_id);
+                //set global variable
+                $this->registry->set('cpath', $cpath);
+                $this->registry->set('current_category_id', $current_category_id);
 
-            //set page title
-            $data['title'] = $this->category->get_title();
-            $this->set_page_title($this->category->get_title());
+                //model
+                $this->load->model('categories_model');
+                $this->load->model('products_model');
 
-            //set page keywords
-            $meta_keywords = $this->category->get_meta_keywords();
-            if (!empty($meta_keywords)) {
-                $this->template->add_meta_tags('keywords', $meta_keywords);
-            }
+                //breadcrumb
+                $categories = $this->category_tree->get_full_cpath_info($cpath);
+                foreach ($categories as $categories_id => $categories_name)
+                {
+                    $this->template->set_breadcrumb($categories_name, site_url('cpath/' . $categories_id));
+                }
 
-            //set meta description
-            $meta_description = $this->category->get_meta_description();
-            if (!empty($meta_description))
-            {
-                $this->template->add_meta_tags('description', $meta_description);
-            }
+                //load the category object
+                $this->load->library('category', $current_category_id);
 
-            //check whether this category has products
-            if ($this->categories_model->has_products($current_category_id))
-            {
-                //get page
-                $page = $this->uri->segment(4);
-                $filter = array(
+                //set page title
+                $data['title'] = $this->category->get_title();
+                $this->set_page_title($this->category->get_title());
+
+                //set page keywords
+                $meta_keywords = $this->category->get_meta_keywords();
+                if (!empty($meta_keywords)) {
+                    $this->template->add_meta_tags('keywords', $meta_keywords);
+                }
+
+                //set meta description
+                $meta_description = $this->category->get_meta_description();
+                if (!empty($meta_description))
+                {
+                    $this->template->add_meta_tags('description', $meta_description);
+                }
+
+                //check whether this category has products
+                if ($this->categories_model->has_products($current_category_id))
+                {
+                    //get page
+                    $page = $this->uri->segment(4);
+                    $filter = array(
                     'categories_id' => $current_category_id,
                     'page' => (isset($page) && is_numeric($page)) ? ($page - 1) : 0,
                     'per_page' => config('MAX_DISPLAY_SEARCH_RESULTS'));
 
-                $products = $this->products_model->get_products($filter);
+                    $products = $this->products_model->get_products($filter);
 
-                //initialize pagination parameters
-                $pagination['base_url'] = site_url('cpath/' . $cpath . '/page');
-                $pagination['total_rows'] = $this->products_model->count_products($filter);
-                $pagination['per_page'] = config('MAX_DISPLAY_SEARCH_RESULTS');
-                $pagination['use_page_numbers'] = TRUE;
-                $pagination['uri_segment'] = 4;
+                    //initialize pagination parameters
+                    $pagination['base_url'] = site_url('cpath/' . $cpath . '/page');
+                    $pagination['total_rows'] = $this->products_model->count_products($filter);
+                    $pagination['per_page'] = config('MAX_DISPLAY_SEARCH_RESULTS');
+                    $pagination['use_page_numbers'] = TRUE;
+                    $pagination['uri_segment'] = 4;
 
-                //load pagination library
-                $this->load->library('pagination');
-                $this->pagination->initialize($pagination);
-                $data['links'] = $this->pagination->create_links();
+                    //load pagination library
+                    $this->load->library('pagination');
+                    $this->pagination->initialize($pagination);
+                    $data['links'] = $this->pagination->create_links();
 
-                $data['products'] = array();
-                foreach ($products as $product)
-                {
-                    $data['products'][] = array(
+                    $data['products'] = array();
+                    foreach ($products as $product)
+                    {
+                        $data['products'][] = array(
                       'products_id' => $product['products_id'],
                       'product_name' => $product['products_name'],
                       'product_price' => $product['products_price'],
                       'product_image' => $product['image'],
                       'short_description' => $product['products_short_description']);
+                    }
+
+                    $this->template->build('index/product_listing', $data);
                 }
+                else
+                {
+                    $children = array();
 
-                $this->template->build('index/product_listing', $data);
+                    $data['categories'] = $this->category_tree->get_children($current_category_id, $children);
+
+                    $this->template->build('index/category_listing', $data);
+                }
             }
-            else
-            {
-                $children = array();
-
-                $data['categories'] = $this->category_tree->get_children($current_category_id, $children);
-
-                $this->template->build('index/category_listing', $data);
-            }
+        }
+        else
+        {
+            redirect('index');
         }
     }
 }
