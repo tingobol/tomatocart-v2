@@ -26,7 +26,9 @@
  * @author		TomatoCart Dev Team
  * @link		http://tomatocart.com/wiki/
  */
-class TOC_Config extends CI_Config {
+class TOC_Config extends CI_Config 
+{
+    
     /**
      * Constructor
      *
@@ -35,10 +37,53 @@ class TOC_Config extends CI_Config {
     public function __construct()
     {
         parent::__construct();
-
+        
         $this->_config_paths = array(LOCALAPPPATH, APPPATH);
 
         log_message('debug', 'CI_Config Class Initialized');
+    }
+
+    // --------------------------------------------------------------------
+
+    /**
+     * Site URL
+     * Returns base_url . index_page [. uri_string]
+     *
+     * @param	mixed	the URI string or an array of segments
+     * @return	string
+     */
+    public function ci_site_url($uri = '')
+    {
+        return parent::site_url($uri);
+    }
+
+    // --------------------------------------------------------------------
+
+    /**
+     * Site URL
+     * Returns base_url . index_page [. uri_string]
+     *
+     * @param	mixed	the URI string or an array of segments
+     * @return	string
+     */
+    public function site_url($uri = '')
+    {
+        //get ci instance
+        $ci = get_instance();
+        
+        //check whether sef service is installed
+        if ($ci->service->is_installed('sef')) 
+        {
+            //get service
+            $sef = $ci->service->get_service('sef');
+            
+            //process the search friendly url
+            return $sef->site_url($uri);
+        }
+        else
+        {
+            return parent::site_url($uri);
+        }
     }
 }
 // END Language Class
