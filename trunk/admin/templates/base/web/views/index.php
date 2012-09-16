@@ -21,7 +21,7 @@
     <div class="x-loading-panel-mask-indicator" style="border:1px solid #c1d1d6;color:#666;background:white;padding:10px;margin:0;padding-left: 20px;height:130px;text-align:left;">
       <img class="x-loading-panel-logo" style="display:block;margin-bottom:15px;" src="<?php echo base_url();?>templates/base/web/images/tomatocart.jpg" />
       <img src="<?php echo base_url();?>templates/base/web/images/loading.gif" style="width:16px;height:16px;vertical-align:middle" />&#160;
-      <span id="load-status"><?= lang('init_system'); ?></span>
+      <span id="load-status"><?php echo lang('init_system'); ?></span>
       <div style="font-size:10px; font-weight:normal; margin-top:15px;">Copyright &copy; 2012 TomatoCart Shopping Cart Solution</div>
     </div>
   </div>
@@ -31,13 +31,13 @@
     
     Toc.CONF = {
       TEMPLATE: 'default',
-      CONN_URL: '<?= site_url('index'); ?>',
-      LOAD_URL: '<?= site_url('index/load_module_view'); ?>',
-      PDF_URL: '<?= site_url('pdf'); ?>',
-      GRID_PAGE_SIZE : <?= MAX_DISPLAY_SEARCH_RESULTS; ?>,
-      GRID_STEPS : <?= EXT_GRID_STEPS; ?>,
-      JSON_READER_ROOT: '<?= EXT_JSON_READER_ROOT; ?>',
-      JSON_READER_TOTAL_PROPERTY: '<?= EXT_JSON_READER_TOTAL; ?>'
+      CONN_URL: '<?php echo site_url('index'); ?>',
+      LOAD_URL: '<?php echo site_url('index/load_module_view'); ?>',
+      PDF_URL: '<?php echo site_url('pdf'); ?>',
+      GRID_PAGE_SIZE : <?php echo MAX_DISPLAY_SEARCH_RESULTS; ?>,
+      GRID_STEPS : <?php echo EXT_GRID_STEPS; ?>,
+      JSON_READER_ROOT: '<?php echo EXT_JSON_READER_ROOT; ?>',
+      JSON_READER_TOTAL_PROPERTY: '<?php echo EXT_JSON_READER_TOTAL; ?>'
     };
     
     Toc.Languages = [];
@@ -48,7 +48,7 @@
     ?>
   
     var TocLanguage = {};
-    TocLanguage = <?= json_encode($definitions); ?>;
+    TocLanguage = <?php echo json_encode($definitions); ?>;
     
     Ext.BLANK_IMAGE_URL = '<?php echo base_url(); ?>templates/base/web/images/s.gif';
   </script>
@@ -77,4 +77,4 @@
   <script type="text/javascript" src="<?php echo base_url(); ?>templates/base/web/javascript/desktop/ux/notification.js"></script>
   
   <!-- GNERATING TOC DESKTOP -->
-  <script type="text/javascript" src="<?= site_url('index/desktop'); ?>"></script>
+  <script type="text/javascript" src="<?php echo site_url('index/desktop'); ?>"></script>
