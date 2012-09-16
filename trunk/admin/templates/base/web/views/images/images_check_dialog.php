@@ -67,8 +67,8 @@ Ext.define('Toc.images.ImagesCheckDialog', {
       border: false,
       
       columns: [
-        {header: '<?= lang('images_check_table_heading_groups'); ?>', dataIndex: 'group', flex: 1},
-        {header: '<?= lang('images_check_table_heading_results'); ?>', dataIndex: 'count', align: 'center', width: 200},
+        {header: '<?php echo lang('images_check_table_heading_groups'); ?>', dataIndex: 'group', flex: 1},
+        {header: '<?php echo lang('images_check_table_heading_results'); ?>', dataIndex: 'count', align: 'center', width: 200},
       ],
       
       tbar: [
