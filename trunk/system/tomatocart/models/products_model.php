@@ -39,6 +39,41 @@ class Products_Model extends CI_Model
     {
         parent::__construct();
     }
+    
+    /**
+     * Check whether the product id is valid or not
+     * 
+     * @access public
+     * @param $id
+     * @return mixed
+     */
+    public function parse_products_id($id)
+    {
+        if (is_numeric($id)) 
+        {
+            $result = $this->db->select('products_id')->from('products')->where('products_id', $id)->where('products_status', '1')->get();
+        }
+        else
+        {
+            $result = $this->db->select('p.products_id')
+            ->from('products as p')
+            ->join('products_description as pd', 'p.products_id = pd.products_id', 'inner')
+            ->where('pd.products_friendly_url', $id)
+            ->where('p.products_status', '1')
+            ->where('pd.language_id', lang_id())
+            ->get();
+        }
+        
+        //return products id if product is found
+        if ($result->num_rows() > 0)
+        {
+            $row = $result->row_array();
+            
+            return $row['products_id'];
+        }
+        
+        return NULL;
+    }
 
     /**
      * Get product data
@@ -53,17 +88,17 @@ class Products_Model extends CI_Model
 
         //get products & products description data
         $result = $this->db->select('p.products_id, p.products_model as model, p.products_sku as sku, p.products_type as type, p.products_quantity as quantity, p.products_max_order_quantity as max_order_quantity, p.products_moq as moq, p.order_increment as order_increment, p.products_price as price, p.products_tax_class_id as tax_class_id, p.products_date_added as date_added, p.products_date_available as date_available, p.manufacturers_id, p.quantity_discount_groups_id, p.quantity_unit_class, p.quantity_discount_groups_id as quantity_discount_groups_id, p.products_weight as products_weight, p.products_weight_class as products_weight_class, pd.products_name as name, pd.products_short_description as short_description, pd.products_description as description, pd.products_page_title as page_title, pd.products_meta_keywords as meta_keywords, pd.products_meta_description as meta_description, pd.products_keyword as keyword, pd.products_tags as tags, pd.products_url as url, quc.quantity_unit_class_title as unit_class, m.manufacturers_name, i.image as default_image')
-        ->from('products as p')
-        ->join('products_description as pd', 'p.products_id = pd.products_id', 'inner')
-        ->join('manufacturers as m', 'p.manufacturers_id = m.manufacturers_id', 'left')
-        ->join('products_images as i', 'p.products_id = i.products_id', 'left')
-        ->join('quantity_unit_classes as quc', 'p.quantity_unit_class = quc.quantity_unit_class_id', 'left')
-        ->where('p.products_id', $id)
-        ->where('p.products_status', '1')
-        ->where('i.default_flag', '1')
-        ->where('pd.language_id', lang_id())
-        ->where('quc.language_id = pd.language_id')
-        ->get();
+            ->from('products as p')
+            ->join('products_description as pd', 'p.products_id = pd.products_id', 'inner')
+            ->join('manufacturers as m', 'p.manufacturers_id = m.manufacturers_id', 'left')
+            ->join('products_images as i', 'p.products_id = i.products_id', 'left')
+            ->join('quantity_unit_classes as quc', 'p.quantity_unit_class = quc.quantity_unit_class_id', 'left')
+            ->where('p.products_id', $id)
+            ->where('p.products_status', '1')
+            ->where('i.default_flag', '1')
+            ->where('pd.language_id', lang_id())
+            ->where('quc.language_id = pd.language_id')
+            ->get();
 
         if ($result->num_rows() > 0)
         {
@@ -511,31 +546,31 @@ class Products_Model extends CI_Model
     {
         if ($category_id < 1) {
             $result = $this->db->select('p.products_id, p.products_tax_class_id, p.products_price, pd.products_name, pd.products_keyword, pf.sort_order, i.image')
-                ->from('products p')
-                ->join('products_images i', 'p.products_id = i.products_id', 'left')
-                ->join('products_description pd', 'p.products_id = pd.products_id', 'inner')
-                ->join('products_frontpage pf', 'p.products_id = pf.products_id', 'inner')
-                ->where('p.products_status = 1')
-                ->where('pd.language_id', lang_id())
-                ->where('i.default_flag = 1')
-                ->order_by('pf.sort_order desc')
-                ->limit(config('MODULE_CONTENT_FEATURE_PRODUCTS_MAX_DISPLAY'))
-                ->get();
+            ->from('products p')
+            ->join('products_images i', 'p.products_id = i.products_id', 'left')
+            ->join('products_description pd', 'p.products_id = pd.products_id', 'inner')
+            ->join('products_frontpage pf', 'p.products_id = pf.products_id', 'inner')
+            ->where('p.products_status = 1')
+            ->where('pd.language_id', lang_id())
+            ->where('i.default_flag = 1')
+            ->order_by('pf.sort_order desc')
+            ->limit(config('MODULE_CONTENT_FEATURE_PRODUCTS_MAX_DISPLAY'))
+            ->get();
         } else {
             $result = $this->db->select('distinct p.products_id, p.products_tax_class_id, p.products_price, pd.products_name, pf.sort_order, pd.products_keyword, i.image')
-                ->from('products p')
-                ->join('products_images i', 'p.products_id = i.products_id', 'left')
-                ->join('products_description pd', 'p.products_id = pd.products_id', 'inner')
-                ->join('products_to_categories p2c', 'p2c.products_id = p.products_id', 'inner')
-                ->join('categories c', 'c.categories_id = p2c.categories_id', 'inner')
-                ->join('products_frontpage pf', 'p.products_id = pf.products_id', 'inner')
-                ->where('c.parent_id = ' . $category_id)
-                ->where('p.products_status = 1')
-                ->where('pd.language_id', lang_id())
-                ->where('i.default_flag = 1')
-                ->order_by('pf.sort_order desc')
-                ->limit(config('MODULE_CONTENT_FEATURE_PRODUCTS_MAX_DISPLAY'))
-                ->get();
+            ->from('products p')
+            ->join('products_images i', 'p.products_id = i.products_id', 'left')
+            ->join('products_description pd', 'p.products_id = pd.products_id', 'inner')
+            ->join('products_to_categories p2c', 'p2c.products_id = p.products_id', 'inner')
+            ->join('categories c', 'c.categories_id = p2c.categories_id', 'inner')
+            ->join('products_frontpage pf', 'p.products_id = pf.products_id', 'inner')
+            ->where('c.parent_id = ' . $category_id)
+            ->where('p.products_status = 1')
+            ->where('pd.language_id', lang_id())
+            ->where('i.default_flag = 1')
+            ->order_by('pf.sort_order desc')
+            ->limit(config('MODULE_CONTENT_FEATURE_PRODUCTS_MAX_DISPLAY'))
+            ->get();
         }
 
         if ($result->num_rows() > 0)
@@ -556,17 +591,17 @@ class Products_Model extends CI_Model
     public function get_special_products($filter)
     {
         $result = $this->db->select('p.products_id, p.products_price, p.products_tax_class_id, pd.products_name, pd.products_keyword,s.specials_new_products_price, i.image')
-            ->from('products p')
-            ->join('products_images i', 'p.products_id = i.products_id', 'left')
-            ->join('products_description pd', 'p.products_id = pd.products_id', 'inner')
-            ->join('specials s', 's.products_id = p.products_id', 'inner')
-            ->where('p.products_status = 1')
-            ->where('pd.language_id', lang_id())
-            ->where('i.default_flag', 1)
-            ->where('s.status', 1)
-            ->order_by('s.specials_date_added', 'desc')
-            ->limit($filter['per_page'], $filter['page'])
-            ->get();
+        ->from('products p')
+        ->join('products_images i', 'p.products_id = i.products_id', 'left')
+        ->join('products_description pd', 'p.products_id = pd.products_id', 'inner')
+        ->join('specials s', 's.products_id = p.products_id', 'inner')
+        ->where('p.products_status = 1')
+        ->where('pd.language_id', lang_id())
+        ->where('i.default_flag', 1)
+        ->where('s.status', 1)
+        ->order_by('s.specials_date_added', 'desc')
+        ->limit($filter['per_page'], $filter['page'])
+        ->get();
 
         if ($result->num_rows() > 0)
         {
@@ -576,7 +611,7 @@ class Products_Model extends CI_Model
         return NULL;
     }
 
-    public function count_special_products() 
+    public function count_special_products()
     {
         $result = $this->db->select('count(p.products_id) as total')
         ->from('products p')
@@ -707,6 +742,28 @@ class Products_Model extends CI_Model
         }
 
         return $ratings;
+    }
+
+    /**
+     * Get product name
+     *
+     * @access public
+     * @param $id
+     * @return array
+     */
+    public function get_product_friendly_url($id)
+    {
+        //get products & products description data
+        $result = $this->db->select('products_friendly_url')->from('products_description')->where('products_id', $id)->where('language_id', lang_id())->get();
+        
+        if ($result->num_rows() > 0) 
+        {
+            $row = $result->row_array();
+            
+            return $row['products_friendly_url'];
+        }
+        
+        return NULL;
     }
 }
 /* End of file settings_model.php */
