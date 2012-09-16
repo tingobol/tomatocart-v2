@@ -21,7 +21,7 @@
     <div class="x-loading-panel-mask-indicator" style="border:1px solid #c1d1d6;color:#666;background:white;padding:10px;margin:0;padding-left: 20px;height:130px;text-align:left;">
       <img class="x-loading-panel-logo" style="display:block;margin-bottom:15px;" src="<?php echo base_url();?>templates/base/web/images/tomatocart.jpg" />
       <img src="<?php echo base_url();?>templates/base/web/images/loading.gif" style="width:16px;height:16px;vertical-align:middle" />&#160;
-      <span id="load-status"><?= lang('init_system'); ?></span>
+      <span id="load-status"><?php echo lang('init_system'); ?></span>
       <div style="font-size:10px; font-weight:normal; margin-top:15px;">Copyright &copy; 2012 TomatoCart Shopping Cart Solution</div>
     </div>
   </div> 
@@ -43,7 +43,7 @@
       <a href="http://www.opera.com/download/" target="_blank">Opera 9+</a>
     </span>
   
-    <div id="x-login-form" class="x-login-form abs-position"><a id="forget-password"><?= lang("label_forget_password"); ?></a></div>
+    <div id="x-login-form" class="x-login-form abs-position"><a id="forget-password"><?php echo lang("label_forget_password"); ?></a></div>
   </div>
 
   <script type="text/javascript">
@@ -68,7 +68,7 @@
           fields: ['id', 'text'],
           data : Toc.Languages
         }),
-        fieldLabel: '<?= lang("field_language"); ?>',
+        fieldLabel: '<?php echo lang("field_language"); ?>',
         name: 'language',
         hiddenName: 'language',
         displayField: 'text',
@@ -84,7 +84,7 @@
         style: 'background-color: transparent;',
         listeners: {
           select: function() {
-            document.location = '<?= site_url('index'); ?>?admin_language=' + cboLanguage.getValue();
+            document.location = '<?php echo site_url('index'); ?>?admin_language=' + cboLanguage.getValue();
           }
         }
       });
@@ -93,7 +93,7 @@
       var frmlogin = Ext.create('Ext.form.Panel', {
         bodyPadding: 5,
         width: 335,
-        url: '<?= site_url('login/process'); ?>',
+        url: '<?php echo site_url('login/process'); ?>',
         layout: 'anchor',
         defaults: {
           anchor: '100%'
@@ -103,7 +103,7 @@
           cboLanguage,
           txtUserName = new Ext.form.TextField({
             name: 'user_name', 
-            fieldLabel: '<?= lang("field_username"); ?>', 
+            fieldLabel: '<?php echo lang("field_username"); ?>', 
             labelSeparator: ' ', 
             allowBlank:false,
             listeners: {
@@ -116,7 +116,7 @@
           }),
           {
             name: 'user_password', 
-            fieldLabel: '<?= lang("field_password"); ?>', 
+            fieldLabel: '<?php echo lang("field_password"); ?>', 
             inputType: 'password', 
             labelSeparator: ' ', 
             allowBlank:false, 
@@ -130,7 +130,7 @@
           }
         ],
         buttons: [{
-          text: '<?= lang("button_login"); ?>',
+          text: '<?php echo lang("button_login"); ?>',
           handler: login, 
           scope: this
         }],
@@ -152,11 +152,11 @@
       function login() {
         frmlogin.form.submit({
           success: function (form, action) {
-            window.location = '<?= site_url('index'); ?>';
+            window.location = '<?php echo site_url('index'); ?>';
           },
           failure: function (form, action) {
             if (action.failureType != 'client') {
-              Ext.Msg.alert('<?= lang('ms_error'); ?>', action.result.feedback);
+              Ext.Msg.alert('<?php echo lang('ms_error'); ?>', action.result.feedback);
             }
           },
           scope: this
@@ -197,12 +197,12 @@
     });  
     
     function forgetPassword() {
-      Ext.Msg.prompt('<?= lang('label_forget_password'); ?>', '<?= lang("ms_forget_password_text"); ?>', function(btn, email){
+      Ext.Msg.prompt('<?php echo lang('label_forget_password'); ?>', '<?php echo lang("ms_forget_password_text"); ?>', function(btn, email){
         if (btn = 'ok' && !Ext.isEmpty(email)) {
-          Ext.get('x-login-panel').mask('<?= lang("ms_sending_email"); ?>'); 
+          Ext.get('x-login-panel').mask('<?php echo lang("ms_sending_email"); ?>'); 
           
           Ext.Ajax.request({
-            url: '<?= site_url('login/get_password'); ?>',
+            url: '<?php echo site_url('login/get_password'); ?>',
             params: {
               email_address: email
             },
@@ -211,7 +211,7 @@
             
               result = Ext.decode(response.responseText);
               
-              Ext.Msg.alert('<?= lang('ms_feedback'); ?>', result.feedback);
+              Ext.Msg.alert('<?php echo lang('ms_feedback'); ?>', result.feedback);
             },
             scope: this
           }); 
