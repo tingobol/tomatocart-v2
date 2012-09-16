@@ -67,12 +67,16 @@
 $route['default_controller'] = "index";
 $route['404_override'] = '';
 
-$route['index/(:any)'] = "index/index/index/$1";
-$route['cpath/(:any)'] = "index/cpath/index/$1";
 $route['product/(:any)'] = "products/info/index/$1";
-$route['category/(:any)'] = "index/index/category/$1";
-$route['cart_add/(:any)'] = "checkout/cart_add/index/$1";
-$route['cart_delete/(:any)'] = "checkout/cart_delete/index/$1";
+$route['cpath/(:any)'] = "index/cpath/index/$1";
+$route['info/(:any)'] = "info/info/index/$1";
+
+$route['articles_categories/(:any)'] = "info/articles_categories/index/$1";
+$route['articles/(:any)'] = "info/articles/index/$1";
+
+$route['index/(:any)'] = "index/index/index/$1";
+$route['cart_add/(:num)'] = "checkout/cart_add/index/$1";
+$route['cart_delete/(:num)'] = "checkout/cart_delete/index/$1";
 $route['cart_update'] = "checkout/cart_update/index";
 $route['shopping_cart'] = "checkout/shopping_cart/index";
 
@@ -85,13 +89,9 @@ $route['account'] = "account/index";
 $route['checkout'] = "checkout/index";
 
 $route['search'] = "search/search/index";
-$route['search_post'] = 'search/search/search_with_post';
-$route['search/(:any)'] = "search/search/search_with_get";
 
-$route['articles_categories/(:num)'] = "info/articles_categories/index/$1";
-$route['articles/(:num)'] = "info/articles/index/$1";
-$route['info/(:num)'] = "info/info/index/$1";
 $route['contact_us'] = "info/contact_us";
+$route['sitemap'] = "info/sitemap";
 $route['contact_save'] = "info/contact_us/save";
 
 /* End of file routes.php */
