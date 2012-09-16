@@ -47,7 +47,9 @@ class Info extends TOC_Controller {
      */
     public function index($id, $manufacturers_id = FALSE, $tab = FALSE)
     {
-        if (is_numeric($id))
+        $id = $this->products_model->parse_products_id($id);
+        
+        if ($id != NULL)
         {
             $this->load->library('product', $id, 'product_' . $id);
             $product = $this->{'product_' . $id};
