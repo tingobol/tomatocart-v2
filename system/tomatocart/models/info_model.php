@@ -51,13 +51,13 @@ class Info_Model extends CI_Model
     public function get_faqs($languages_id)
     {
         $result = $this->db
-            ->select('f.faqs_id, fd.faqs_question, fd.faqs_answer, fd.faqs_url')
-            ->from('faqs f')
-            ->join('faqs_description fd', 'f.faqs_id = fd.faqs_id')
-            ->where('fd.language_id', lang_id())
-            ->where('f.faqs_status', 1)
-            ->order_by('f.faqs_order desc, fd.faqs_question')
-            ->get();
+        ->select('f.faqs_id, fd.faqs_question, fd.faqs_answer, fd.faqs_url')
+        ->from('faqs f')
+        ->join('faqs_description fd', 'f.faqs_id = fd.faqs_id')
+        ->where('fd.language_id', lang_id())
+        ->where('f.faqs_status', 1)
+        ->order_by('f.faqs_order desc, fd.faqs_question')
+        ->get();
 
         if ($result->num_rows() > 0)
         {
@@ -78,11 +78,11 @@ class Info_Model extends CI_Model
     public function get_article_category($categories_id)
     {
         $result = $this->db
-            ->select('articles_categories_name, articles_categories_page_title, articles_categories_meta_keywords, articles_categories_meta_description')
-            ->from('articles_categories_description')
-            ->where('language_id', lang_id())
-            ->where('articles_categories_id', $categories_id)
-            ->get();
+        ->select('articles_categories_name, articles_categories_page_title, articles_categories_meta_keywords, articles_categories_meta_description')
+        ->from('articles_categories_description')
+        ->where('language_id', lang_id())
+        ->where('articles_categories_id', $categories_id)
+        ->get();
 
         if ($result->num_rows() > 0)
         {
@@ -104,11 +104,11 @@ class Info_Model extends CI_Model
     public function get_articles($categories_id = NULL, $limit = NULL)
     {
         $this->db
-            ->select('a.articles_date_added, a.articles_last_modified, a.articles_image, a.articles_id, ad.articles_name, ad.articles_description')
-            ->from('articles a')
-            ->join('articles_description ad', 'a.articles_id = ad.articles_id')
-            ->where('ad.language_id', lang_id())
-            ->where('a.articles_status', 1);
+        ->select('a.articles_date_added, a.articles_last_modified, a.articles_image, a.articles_id, ad.articles_name, ad.articles_description')
+        ->from('articles a')
+        ->join('articles_description ad', 'a.articles_id = ad.articles_id')
+        ->where('ad.language_id', lang_id())
+        ->where('a.articles_status', 1);
 
         if (is_numeric($categories_id))
         {
@@ -141,12 +141,12 @@ class Info_Model extends CI_Model
     public function get_articles_categories($limit = NULL)
     {
         $this->db
-            ->select('cd.articles_categories_id, cd.articles_categories_name')
-            ->from('articles_categories c')
-            ->join('articles_categories_description cd', 'c.articles_categories_id = cd.articles_categories_id')
-            ->where('cd.language_id', lang_id())
-            ->where('c.articles_categories_status', 1)
-            ->order_by('c.articles_categories_order, cd.articles_categories_name');
+        ->select('cd.articles_categories_id, cd.articles_categories_name')
+        ->from('articles_categories c')
+        ->join('articles_categories_description cd', 'c.articles_categories_id = cd.articles_categories_id')
+        ->where('cd.language_id', lang_id())
+        ->where('c.articles_categories_status', 1)
+        ->order_by('c.articles_categories_order, cd.articles_categories_name');
 
         if (is_numeric($limit))
         {
@@ -174,17 +174,125 @@ class Info_Model extends CI_Model
     public function get_article($articles_id)
     {
         $result = $this->db
-            ->select('a.articles_categories_id, acd.articles_categories_name, a.articles_image, ad.articles_name, ad.articles_description, ad.articles_page_title as page_title, ad.articles_meta_keywords as meta_keywords, ad.articles_meta_description as meta_description')
-            ->from('articles a')
-            ->join('articles_description ad', 'a.articles_id = ad.articles_id', 'inner')
-            ->join('articles_categories_description acd', 'a.articles_categories_id = acd.articles_categories_id and ad.language_id = acd.language_id', 'inner')
-            ->where('ad.language_id', lang_id())
-            ->where('a.articles_id', $articles_id)
-            ->get();
+        ->select('a.articles_categories_id, acd.articles_categories_name, a.articles_image, ad.articles_name, ad.articles_description, ad.articles_page_title as page_title, ad.articles_meta_keywords as meta_keywords, ad.articles_meta_description as meta_description')
+        ->from('articles a')
+        ->join('articles_description ad', 'a.articles_id = ad.articles_id', 'inner')
+        ->join('articles_categories_description acd', 'a.articles_categories_id = acd.articles_categories_id and ad.language_id = acd.language_id', 'inner')
+        ->where('ad.language_id', lang_id())
+        ->where('a.articles_id', $articles_id)
+        ->get();
 
         if ($result->num_rows() > 0)
         {
             return $result->row_array();
+        }
+
+        return NULL;
+    }
+
+    /**
+     * Get article friendly url
+     *
+     * @access public
+     * @param $articles_id
+     * @return mixed
+     */
+    public function get_article_friendly_url($articles_id)
+    {
+        $result = $this->db->select('articles_url')->from('articles_description')->where('language_id', lang_id())->where('articles_id', $articles_id)->get();
+
+        if ($result->num_rows() > 0)
+        {
+            $row = $result->row_array();
+            return $row['articles_url'];
+        }
+
+        return NULL;
+    }
+
+    /**
+     * Get article id from friendly url
+     *
+     * @access public
+     * @param $id
+     * @return mixed
+     */
+    public function parse_articles_id($id)
+    {
+        if (is_numeric($id))
+        {
+            $result = $this->db->select('articles_id')->from('articles')->where('articles_id', $id)->get();
+        }
+        else
+        {
+            $result = $this->db->select('a.articles_id')
+            ->from('articles a')
+            ->join('articles_description ad', 'a.articles_id = ad.articles_id', 'inner')
+            ->where('ad.articles_url', $id)
+            ->where('ad.language_id', lang_id())
+            ->get();
+        }
+
+        //return products id if product is found
+        if ($result->num_rows() > 0)
+        {
+            $row = $result->row_array();
+
+            return $row['articles_id'];
+        }
+
+        return NULL;
+    }
+
+
+    /**
+     * Get article friendly url
+     *
+     * @access public
+     * @param $articles_id
+     * @return mixed
+     */
+    public function get_articles_categories_friendly_url($articles_category_id)
+    {
+        $result = $this->db->select('articles_categories_url')->from('articles_categories_description')->where('language_id', lang_id())->where('articles_categories_id', $articles_category_id)->get();
+
+        if ($result->num_rows() > 0)
+        {
+            $row = $result->row_array();
+            return $row['articles_categories_url'];
+        }
+
+        return NULL;
+    }
+
+    /**
+     * Get article id from friendly url
+     *
+     * @access public
+     * @param $id
+     * @return mixed
+     */
+    public function parse_articles_categories_id($id)
+    {
+        if (is_numeric($id))
+        {
+            $result = $this->db->select('articles_categories_id')->from('articles_categories_description')->where('articles_categories_id', $id)->get();
+        }
+        else
+        {
+            $result = $this->db->select('articles_categories_id')
+            ->from('articles_categories_description')
+            ->where('articles_categories_url', $id)
+            ->where('language_id', lang_id())
+            ->get();
+        }
+
+        //return products id if product is found
+        if ($result->num_rows() > 0)
+        {
+            $row = $result->row_array();
+
+            return $row['articles_categories_id'];
         }
 
         return NULL;

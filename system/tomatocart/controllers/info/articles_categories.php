@@ -36,6 +36,9 @@ class Articles_Categories extends TOC_Controller {
     public function __construct()
     {
         parent::__construct();
+        
+        //load model
+        $this->load->model('info_model');
     }
 
     /**
@@ -45,11 +48,10 @@ class Articles_Categories extends TOC_Controller {
      */
     public function index($articles_categories_id = NULL)
     {
+        var_dump($articles_categories_id);
+        $articles_categories_id = $this->info_model->parse_articles_categories_id($articles_categories_id);
         if ($articles_categories_id !== NULL)
         {
-            //load model
-            $this->load->model('info_model');
-
             //get the article category
             $article_category = $this->info_model->get_article_category($articles_categories_id);
 
@@ -79,7 +81,7 @@ class Articles_Categories extends TOC_Controller {
 
                 //setup view data
                 $data['articles_categories_name'] = $article_category['articles_categories_name'];
-                
+
                 //articles
                 $data['articles'] = $this->info_model->get_articles($articles_categories_id);
 

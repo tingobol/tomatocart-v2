@@ -36,6 +36,9 @@ class Articles extends TOC_Controller {
     public function __construct()
     {
         parent::__construct();
+        
+        //load model
+        $this->load->model('info_model');
     }
 
     /**
@@ -45,11 +48,9 @@ class Articles extends TOC_Controller {
      */
     public function index($articles_id = NULL)
     {
+        $articles_id = $this->info_model->parse_articles_id($articles_id);
         if ($articles_id !== NULL)
         {
-            //load model
-            $this->load->model('info_model');
-
             //get the article
             $article = $this->info_model->get_article($articles_id, lang_id());
 
