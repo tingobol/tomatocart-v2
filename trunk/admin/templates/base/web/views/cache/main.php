@@ -30,7 +30,7 @@ Ext.override(Toc.desktop.CacheWindow, {
       
       win = desktop.createWindow({
         id: 'cache-win',
-        title: '<?= lang('heading_cache_title'); ?>',
+        title: '<?php echo lang('heading_cache_title'); ?>',
         width: 800,
         height: 400,
         iconCls: 'icon-cache-win',
