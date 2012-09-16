@@ -208,6 +208,14 @@
     <p>
     	Copyright &copy; 2011 <a href="index.php">TomatoCart Demo Store</a><br />Powered by <a href="http://www.tomatocart.com" target="_blank">TomatoCart</a>
     </p>
+    
+    <?php 
+        run_service('google_analytics'); 
+    ?>
+    
+    <?php 
+        run_service('debug'); 
+    ?>
 </div>
   <!--  END: page footer -->
 </body>
