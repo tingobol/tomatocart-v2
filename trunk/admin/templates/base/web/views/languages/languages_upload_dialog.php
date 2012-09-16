@@ -21,7 +21,7 @@ Ext.define('Toc.languages.LanguagesUploadDialog', {
     config = config || {};
   
     config.id = 'languages-upload-dialog-win';
-    config.title = '<?= lang('action_heading_upload_language'); ?>';
+    config.title = '<?php echo lang('action_heading_upload_language'); ?>';
     config.width = 400;
     config.height = 200;
     config.modal = true;
@@ -70,7 +70,7 @@ Ext.define('Toc.languages.LanguagesUploadDialog', {
         {
           xtype: 'filefield', 
           layout: 'anchor', 
-          fieldLabel: '<?= lang('field_language_zip_file'); ?>', 
+          fieldLabel: '<?php echo lang('field_language_zip_file'); ?>', 
           name: 'file'
         },
         {
@@ -78,7 +78,7 @@ Ext.define('Toc.languages.LanguagesUploadDialog', {
           border: false,
           style: 'padding: 16px 0;',
           hideLabel: true,
-          value:'<?= lang('introduction_upload_language'); ?>'
+          value:'<?php echo lang('introduction_upload_language'); ?>'
         }
       ]
     });
