@@ -199,5 +199,10 @@ define('INFORMATION_IMPRINT', 5);
 
 define('EXT', '.php');
 
+//project version
+define('PROJECT_VERSION', 'TomatoCart v2.0');
+
+//class
+define('__CLASS__', 'TomatoCart v2.0');
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
