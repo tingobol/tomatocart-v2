@@ -21,7 +21,7 @@ Ext.define('Toc.languages.TranslationAddDialog', {
     config = config || {};
     
     config.id = 'translation-add-dialog-win';
-    config.title = '<?= lang('action_heading_add_definition'); ?>';
+    config.title = '<?php echo lang('action_heading_add_definition'); ?>';
     config.width = 500;
     config.modal = true;
     config.iconCls = 'icon-languages-win';
@@ -89,7 +89,7 @@ Ext.define('Toc.languages.TranslationAddDialog', {
     });
     
     this.cboGroups = Ext.create('Ext.form.ComboBox', {
-      fieldLabel: '<?= lang('field_group_selection'); ?>',
+      fieldLabel: '<?php echo lang('field_group_selection'); ?>',
       name: 'definition_group',
       store: this.dsGroups,
       queryMode: 'local',
@@ -116,12 +116,12 @@ Ext.define('Toc.languages.TranslationAddDialog', {
         this.cboGroups,
         {
           xtype: 'textfield', 
-          fieldLabel: '<?= lang('field_definition_key'); ?>', 
+          fieldLabel: '<?php echo lang('field_definition_key'); ?>', 
           name: 'definition_key'
         },
         {
           xtype: 'textarea',
-          fieldLabel: '<?= lang("field_definition_value"); ?>',
+          fieldLabel: '<?php echo lang("field_definition_value"); ?>',
           name: 'definition_value'
         }
       ]

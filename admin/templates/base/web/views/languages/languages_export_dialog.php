@@ -29,7 +29,7 @@ Ext.define('Toc.languages.LanguagesExportDialog', {
     
     config.buttons = [
       {
-        text: '<?= lang('button_export') ?>',
+        text: '<?php echo lang('button_export') ?>',
         handler: function() {
           this.exportLanguage();
         },
@@ -83,7 +83,7 @@ Ext.define('Toc.languages.LanguagesExportDialog', {
     });
     
     this.lstGroups = Ext.create('Ext.ux.form.MultiSelect', {
-      fieldLabel: '<?= lang('table_heading_definition_groups'); ?>',
+      fieldLabel: '<?php echo lang('table_heading_definition_groups'); ?>',
       store: this.dsGroups,
       name: 'export_id',
       width: 580,
@@ -94,7 +94,7 @@ Ext.define('Toc.languages.LanguagesExportDialog', {
     
     this.chkData = Ext.create('Ext.form.Checkbox', {
       name: 'include_data', 
-      fieldLabel: '<?= lang('field_export_with_data'); ?>', 
+      fieldLabel: '<?php echo lang('field_export_with_data'); ?>', 
       inputValue: 'on', 
       checked: true
     });
@@ -113,7 +113,7 @@ Ext.define('Toc.languages.LanguagesExportDialog', {
         labelWidth: 200
       },
       items: [ 
-        {html: '<?= lang('introduction_export_language'); ?>', border: false, style: 'padding: 10px 0;'},
+        {html: '<?php echo lang('introduction_export_language'); ?>', border: false, style: 'padding: 10px 0;'},
         this.lstGroups,
         this.chkData
       ]
@@ -128,7 +128,7 @@ Ext.define('Toc.languages.LanguagesExportDialog', {
     var data = this.chkData.getRawValue();
     var params = "height=600px, width=640px, top= 50px, left=165px, staus=yes, toolbar=no, menubar=no, location=no, scrollbars=yes";
     
-    window.open('<?= site_url('index/ajax'); ?>' + '?module=languages&action=export&languages_id=' + languagesId + '&export=' + groups + '&include_data=' + data, '<?= lang('button_export'); ?>', params);
+    window.open('<?php echo site_url('index/ajax'); ?>' + '?module=languages&action=export&languages_id=' + languagesId + '&export=' + groups + '&include_data=' + data, '<?php echo lang('button_export'); ?>', params);
   }
 });
 

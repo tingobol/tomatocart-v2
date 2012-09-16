@@ -20,7 +20,7 @@ Ext.define('Toc.languages.TranslationsEditDialog', {
   constructor: function(config) {
     config = config || {};
     
-    config.title = '<?= lang('heading_translations_title'); ?>';
+    config.title = '<?php echo lang('heading_translations_title'); ?>';
     config.id = 'translations-win';
     config.layout = 'border';
     config.border = false;

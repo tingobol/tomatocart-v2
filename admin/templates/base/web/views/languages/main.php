@@ -45,7 +45,7 @@ Ext.override(Toc.desktop.LanguagesWindow, {
       
       win = desktop.createWindow({
         id: 'articles-win',
-        title: '<?= lang('heading_languages_title'); ?>',
+        title: '<?php echo lang('heading_languages_title'); ?>',
         width: 800,
         height: 400,
         iconCls: 'icon-languages-win',
