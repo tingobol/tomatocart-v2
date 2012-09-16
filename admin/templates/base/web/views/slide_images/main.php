@@ -33,7 +33,7 @@ Ext.override(Toc.desktop.SlideImagesWindow, {
 
       win = desktop.createWindow({
         id: 'slide_images-win',
-        title: '<?= lang('heading_slide_images_title'); ?>',
+        title: '<?php echo lang('heading_slide_images_title'); ?>',
         width: 800,
         height: 400,
         iconCls: 'icon-slide_images-win',
@@ -47,7 +47,7 @@ Ext.override(Toc.desktop.SlideImagesWindow, {
   
   onCreateSlideImage: function(grd) {
     var dlg = this.createSlideImagesDialog();
-    dlg.setTitle('<?= lang('heading_title_new_slide_image'); ?>');
+    dlg.setTitle('<?php echo lang('heading_title_new_slide_image'); ?>');
     
     this.onSaveSuccess(dlg, grd);
     
@@ -67,7 +67,7 @@ Ext.override(Toc.desktop.SlideImagesWindow, {
   
   onEditSlideImage: function(grd, record) {
     var dlg = this.createSlideImagesDialog();
-    dlg.setTitle('<?= lang('heading_title_edit_slide_image'); ?>');
+    dlg.setTitle('<?php echo lang('heading_title_edit_slide_image'); ?>');
     
     this.onSaveSuccess(dlg, grd);
     
