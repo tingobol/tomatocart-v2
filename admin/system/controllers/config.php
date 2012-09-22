@@ -42,7 +42,7 @@ class Config extends TOC_Controller
     // --------------------------------------------------------------------
 
     /**
-     * List customers
+     * List available tax classes
      *
      * @access public
      * @return string
@@ -67,7 +67,7 @@ class Config extends TOC_Controller
     // --------------------------------------------------------------------
 
     /**
-     * List customers
+     * List available order status
      *
      * @access public
      * @return string
@@ -92,7 +92,7 @@ class Config extends TOC_Controller
     // --------------------------------------------------------------------
 
     /**
-     * List customers
+     * List available shipping zones
      *
      * @access public
      * @return string
@@ -113,6 +113,30 @@ class Config extends TOC_Controller
         }
         
         $this->output->set_output(json_encode($tax_classes));
+    }
+    
+    /**
+     * List weight classes
+     *
+     * @access public
+     * @return string
+     */
+    public function get_weight_classes()
+    {
+    	$this->load->model('weight_model');
+    
+    	$weight_classes = array();
+    	$classes = $this->weight_model->get_classes();
+    
+    	if ($classes !== NULL)
+    	{
+    		foreach ($classes as $class)
+    		{
+    			$weight_classes[] = array('id' => $class['weight_class_id'], 'text' => $class['weight_class_title']);
+    		}
+    	}
+    
+    	$this->output->set_output(json_encode($weight_classes));
     }
 }
 
