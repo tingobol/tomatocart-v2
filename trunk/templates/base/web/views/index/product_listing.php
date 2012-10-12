@@ -25,23 +25,25 @@
         <?php 
             foreach($products as $product):
         ?>
-        <div class="product">
-            <a class="image" href="<?php echo site_url('product/' . $product['products_id']); ?>">
+        <div class="row-fluid clearfix">
+            <a class="image span2" href="<?php echo site_url('product/' . $product['products_id']); ?>">
     			<img alt="<?php echo $product['product_name']; ?>" title="<?php echo $product['product_name']; ?>" src="<?php echo product_image_url($product['product_image']); ?>" />
             </a>
-            <div class="info">
+            <div class="info span6">
                 <a href="<?php echo site_url('product/' . $product['products_id']); ?>"><?php echo $product['product_name']; ?></a>
                 <p class="description">
                     <?php echo $product['short_description']; ?>
                 </p>
             </div>  
-            <span class="price"><?php echo currencies_format($product['product_price']); ?></span>
-            <div class="buttons">
-                <a class="button small" href="<?php echo site_url('cart_add/' . $product['products_id']); ?>"><span><?php echo lang('button_add_to_cart'); ?></span></a><br />
+            <span class="price center span2"><?php echo currencies_format($product['product_price']); ?></span>
+            <div class="buttons span2">
+                <a class="btn btn-small btn-small btn-info" href="<?php echo site_url('cart_add/' . $product['products_id']); ?>">
+                	<i class="icon-shopping-cart icon-white "></i> 
+                	<?php echo lang('button_add_to_cart'); ?>
+                </a><br />
                 <a class="wishlist" href="javascript:void(0);"><?php echo lang('add_to_wishlist'); ?></a><br />
                 <a class="compare" href="javascript:void(0);"><?php echo lang('add_to_compare'); ?></a>
             </div>
-            <div class="clear"></div>
         </div>
         <?php
             endforeach;
@@ -49,7 +51,7 @@
         <div class="clear"></div>
     </div>
     
-    <div class="paginate">
+    <div class="pagination">
     	<?php  echo $links; ?>
     </div>
 <?php 
