@@ -21,11 +21,11 @@
 <?php 
     if (count($categories) > 0):
 ?>
-    <div class="category_listing">
+    <div class="col3 clearfix">
         <?php 
             foreach($categories as $category) :
         ?>
-        <div class="category">
+        <div class="pull-left center">
             <a href="<?php echo site_url('cpath/' . $category['id']); ?>">
                 <img src="<?php echo image_url('categories/' . $category['info']['image']); ?>" alt="<?php echo $category['info']['name']; ?>" title="<?php echo $category['info']['name']; ?>" />
                 <br/>
@@ -35,7 +35,6 @@
         <?php 
             endforeach; 
         ?>
-        <div style="clear: both;"></div>
     </div
 <?php 
     else:
