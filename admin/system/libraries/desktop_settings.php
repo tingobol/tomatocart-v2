@@ -165,7 +165,7 @@ class TOC_Desktop_Settings {
         return json_encode($styles);
     }
 
-    public function output_module3s()
+    public function output_modules()
     {
         $output = '';
 
