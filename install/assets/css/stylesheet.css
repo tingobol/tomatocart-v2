@@ -15,7 +15,6 @@
  */
 
 body {
-    background-color: #FAFAFA;
     font-size: 13px;
 }
 #header {
@@ -28,7 +27,11 @@ body {
     margin-top: 30px;
 }
 h1 {
-    font-size: 28px
+    font-size: 28px;
+    line-height: 50px;
+}
+h2 {
+    color: #777;
 }
 hr {
     margin: 5px 0;
@@ -37,6 +40,9 @@ hr {
     text-align: center;
 }
 
+form label, .form-horizontal .control-label {
+    font-weight: bold;
+}
 #header ul.languages {
     list-style: none outside none;
 }
@@ -54,10 +60,10 @@ hr {
     background-color: #FFFFFF;
     border-radius: 6px 6px 6px 6px;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.067);
-    margin: 30px 0 0;
+    margin: 0 0 0;
     padding: 0;
     width: 218px;
-    top: 40px;
+    top: 0px;
 }
 .nav > li > a {
     border: 1px solid #E5E5E5;
@@ -102,14 +108,12 @@ hr {
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2);
 }
 .content {
-    background: url("//s3.amazonaws.com/wrapbootstrap/live/imgs/content_inner_bg.png") repeat scroll 0 0 #FFFFFF;
     border: 1px solid #D6D6D6;
     border-radius: 4px 4px 4px 4px;
     box-shadow: 0 0 3px #DDDDDD;
     display: block;
-    padding: 8px;
     width: 600px;
-    padding: 20px;
+    padding: 0 20px 20px 20px;
 }
 
 .license {
@@ -122,4 +126,21 @@ hr {
     text-align: left;
     width: 99%;
     border-radius: 5px;
+}
+
+.info {
+    background-color: #F6F7FB;
+    border: 1px solid #00CCFF;
+    margin: 20px auto;
+    padding: 10px;
+}
+.description {
+    color: #666;
+}
+.form-horizontal .description {
+    margin-left: 180px;
+}
+
+#installForm input {
+    margin-bottom: 0;
 }
