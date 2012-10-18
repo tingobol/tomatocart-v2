@@ -80,7 +80,7 @@ if( ! function_exists('get_languages'))
  * Display language flag
  *
  * @access public
- * @param 
+ * @param $code language code
  * @return array languages
  */
 if( ! function_exists('get_language_flag'))
@@ -88,11 +88,24 @@ if( ! function_exists('get_language_flag'))
     function get_language_flag($code)
     {
         $flag = strtolower(substr($code, 3));
-
-        return '../images/worldflags/' . $flag . '.png';
+        
+        return store_url() . '/images/worldflags/' . $flag . '.png';
     }
 }
 
+/**
+ * Get store url
+ *
+ * @access public
+ * @return string
+ */
+if( ! function_exists('store_url'))
+{
+    function store_url()
+    {
+        return trim(base_url(), 'install/');
+    }
+}
 
 /* End of file general_helper.php */
 /* Location: ./install/helpers/toc_general_helper.php */
