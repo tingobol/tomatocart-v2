@@ -50,29 +50,31 @@
           
           	<p><?php echo lang('text_web_server'); ?></p>
           	
-            <form name="install" id="installForm" action="index.php?step=5" method="post" onsubmit="prepareWork(); return false;" class="form-horizontal">
-                <div class="control-group">
-                    <label class="control-label" for="HTTP_WWW_ADDRESS"><?php echo lang('param_web_address'); ?></label>
-                    <div class="controls">
-                    	<input type="text" id="HTTP_WWW_ADDRESS" name="HTTP_WWW_ADDRESS" value="<?php echo $www_location; ?>" />
+            <form name="install" id="installForm" action="index.php?step=5" method="post" onsubmit="prepareWork(); return false;">
+                <div class="info">
+                    <div class="control-group">
+                        <label class="control-label" for="HTTP_WWW_ADDRESS"><?php echo lang('param_web_address'); ?></label>
+                        <div class="controls">
+                        	<input type="text" id="HTTP_WWW_ADDRESS" name="HTTP_WWW_ADDRESS" value="<?php echo $www_location; ?>" class="input-xxlarge" />
+                        </div>
+                        <div class="description"><?php echo lang('param_web_address_description'); ?></div>
                     </div>
-                    <div class="description"><?php echo lang('param_web_address_description'); ?></div>
-                </div>
-                
-                <div class="control-group">
-                    <label class="control-label" for="DIR_FS_DOCUMENT_ROOT"><?php echo lang('param_web_root_directory'); ?></label>
-                    <div class="controls">
-                    	<input type="text" id="DIR_FS_DOCUMENT_ROOT" name="DIR_FS_DOCUMENT_ROOT" value="<?php echo $dir_fs_www_root; ?>" />
+                    
+                    <div class="control-group">
+                        <label class="control-label" for="DIR_FS_DOCUMENT_ROOT"><?php echo lang('param_web_root_directory'); ?></label>
+                        <div class="controls">
+                        	<input type="text" id="DIR_FS_DOCUMENT_ROOT" name="DIR_FS_DOCUMENT_ROOT" value="<?php echo $dir_fs_www_root; ?>" class="input-xxlarge" />
+                        </div>
+                        <div class="description"><?php echo lang('param_web_root_directory_description'); ?></div>
                     </div>
-                    <div class="description"><?php echo lang('param_web_root_directory_description'); ?></div>
-                </div>
-                
-                <div class="control-group">
-                    <label class="control-label" for="HTTP_WORK_DIRECTORY"><?php echo lang('param_web_work_directory'); ?></label>
-                    <div class="controls">
-                    	<input type="text" id="HTTP_WORK_DIRECTORY" name="HTTP_WORK_DIRECTORY" value="<?php echo $dir_fs_www_root . 'includes/work'; ?>" />
+                    
+                    <div class="control-group">
+                        <label class="control-label" for="HTTP_WORK_DIRECTORY"><?php echo lang('param_web_work_directory'); ?></label>
+                        <div class="controls">
+                        	<input type="text" id="HTTP_WORK_DIRECTORY" name="HTTP_WORK_DIRECTORY" value="<?php echo $dir_fs_www_root . 'includes/work'; ?>" class="input-xxlarge" />
+                        </div>
+                        <div class="description"><?php echo lang('param_web_work_directory_description'); ?></div>
                     </div>
-                    <div class="description"><?php echo lang('param_web_work_directory_description'); ?></div>
                 </div>
                 
                 <div class="control-group">

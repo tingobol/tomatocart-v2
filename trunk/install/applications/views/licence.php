@@ -27,13 +27,6 @@
                 <li class="<?php echo ($step == 5) ? 'active' : ''; ?>"><a href="javascript:void(0);" title="<?php echo lang('nav_menu_step_5_text'); ?>"><i class="icon-chevron-right"></i> <?php echo lang('nav_menu_step_5_text'); ?></a></li>
                 <li class="<?php echo ($step == 6) ? 'active' : ''; ?>"><a href="javascript:void(0);" title="<?php echo lang('nav_menu_step_6_text'); ?>"><i class="icon-chevron-right"></i> <?php echo lang('nav_menu_step_6_text'); ?></a></li>
 			</ul>
-      	  	<div id="mBox">
-      	    	<div id="mBoxContents"></div>
-  	  		</div>  
-    
-            <div id="mainBlock">
-            </div>
-  	  		
     	</div>
     	<div class="span9 content">
         	<h1><?php echo lang('page_title_welcome'); ?></h1>
