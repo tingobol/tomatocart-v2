@@ -144,11 +144,11 @@ class Cpath extends TOC_Controller
                     foreach ($products as $product)
                     {
                         $data['products'][] = array(
-                      'products_id' => $product['products_id'],
-                      'product_name' => $product['products_name'],
-                      'product_price' => $product['products_price'],
-                      'product_image' => $product['image'],
-                      'short_description' => $product['products_short_description']);
+                            'products_id' => $product['products_id'],
+                            'product_name' => $product['products_name'],
+                            'product_price' => $product['products_price'],
+                            'product_image' => $product['image'],
+                            'short_description' => $product['products_short_description']);
                     }
 
                     $this->template->build('index/product_listing', $data);
