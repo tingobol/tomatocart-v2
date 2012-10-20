@@ -28,6 +28,14 @@
  */
 
 class Search extends TOC_Controller {
+
+    /**
+     * Search query string
+     *
+     * @access private
+     */
+    private $searh_query_string = array();
+
     /**
      * Constructor
      *
@@ -45,16 +53,12 @@ class Search extends TOC_Controller {
      */
     public function index()
     {
-        //set page title
-        $this->template->set_title(lang('search_heading'));
+        //page title
+        $this->set_page_title(lang('search_heading'));
 
         $filters = $this->get_search_filters();
 
-        //print_r($filters);
-        //print_r($this->message_stack->output('search'));
-        //exit;
-
-        if (($filters != NULL) && ($this->message_stack->size('search') > 0))
+        if (($filters == NULL) && ($this->message_stack->size('search') > 0))
         {
             $this->load_advanced_search_form();
         }
@@ -63,6 +67,46 @@ class Search extends TOC_Controller {
             //load model
             $this->load->model('search_model');
 
+            //
+            $page = $this->input->get('p');
+            $filters['page'] = (isset($page) && is_numeric($page)) ? ($page - 1) : 0;
+            $filters['per_page'] = config('MAX_DISPLAY_SEARCH_RESULTS');
+
+            //initialize pagination parameters
+            $pagination['base_url'] = site_url('search?' . implode('&', $this->search_query_string));
+            $pagination['total_rows'] = $this->search_model->count_products($filters);
+            $pagination['per_page'] = config('MAX_DISPLAY_SEARCH_RESULTS');
+            $pagination['use_page_numbers'] = TRUE;
+            $pagination['page_query_string'] = TRUE;
+            $pagination['query_string_segment'] = 'p';
+            
+            $pagination['full_tag_open'] = '<ul>';
+            $pagination['full_tag_close'] = '</ul>';
+            
+            $pagination['first_tag_open'] = '<li>';
+            $pagination['first_tag_close'] = '</li>';
+            
+            $pagination['last_tag_open'] = '<li>';
+            $pagination['last_tag_close'] = '</li>';
+            
+            $pagination['cur_tag_open'] = '<li class="current"><a href="javascript:void(0);">';
+            $pagination['cur_tag_close'] = '</a></li>';
+            
+            $pagination['next_tag_open'] = '<li>';
+            $pagination['next_tag_close'] = '</li>';
+            
+            $pagination['prev_tag_open'] = '<li>';
+            $pagination['prev_tag_close'] = '</li>';
+            
+            $pagination['num_tag_open'] = '<li>';
+            $pagination['num_tag_close'] = '</li>';
+
+            //load pagination library
+            $this->load->library('pagination');
+            $this->pagination->initialize($pagination);
+            $data['links'] = $this->pagination->create_links();
+
+            //get products
             $data['products'] = $this->search_model->get_result($filters);
 
             //setup view
@@ -84,6 +128,8 @@ class Search extends TOC_Controller {
         if ($keywords != NULL)
         {
             $filters['keywords'] = $keywords;
+
+            $this->search_query_string[] = 'keywords=' . $keywords;
         }
 
         //pfrom
@@ -97,6 +143,8 @@ class Search extends TOC_Controller {
             else
             {
                 $filters['price_from'] = $pfrom;
+
+                $this->search_query_string[] = 'pfrom=' . $pfrom;
             }
         }
 
@@ -111,6 +159,8 @@ class Search extends TOC_Controller {
             else
             {
                 $filters['price_to'] = $pto;
+
+                $this->search_query_string[] = 'pto=' . $pto;
             }
         }
 
@@ -125,6 +175,8 @@ class Search extends TOC_Controller {
         if ($cpath != NULL)
         {
             $filters['category'] = $cpath;
+
+            $this->search_query_string[] = 'cPath=' . $cpath;
 
             $recursive = $this->get_search_filter('recursive');
             if ($recursive != NULL)
@@ -166,14 +218,16 @@ class Search extends TOC_Controller {
         if (($manufacturers != NULL) && is_numeric($manufacturers) && ($manufacturers > 0))
         {
             $filters['manufacturer'] = $manufacturers;
+            
+            $this->search_query_string[] = 'manufacturer=' . $manufacturers;
         }
 
         if (is_array($filters) && !empty($filters))
         {
             return $filters;
         }
-        
-            //must enter a search condition
+
+        //must enter a search condition
         if (($pfrom == NULL) && ($pto == NULL) && ($keywords == NULL) && ($manufacturers == NULL))
         {
             $this->message_stack->add('search', lang('error_search_at_least_one_input'));
@@ -237,171 +291,6 @@ class Search extends TOC_Controller {
 
         //setup view
         $this->template->build('search/advanced_search', $data);
-    }
-
-    /**
-     * search with the conditions in the post request
-     *
-     * @access public
-     */
-    public function search_with_post()
-    {
-        //load library
-        $this->load->library('search');
-
-        //validate the price to search from
-        $pfrom = $this->input->post('pfrom');
-        if (!empty($pfrom))
-        {
-            if (settype($pfrom, 'double'))
-            {
-                $this->search->price_from = $pfrom;
-            }
-            else
-            {
-                $this->message_stack->add('search', lang('error_search_price_from_not_numeric'));
-            }
-        }
-
-        //validate the max price to search
-        $pto = $this->input->post('pto');
-        if (!empty($pto))
-        {
-            if (settype($pto, 'double'))
-            {
-                $this->search->price_to = $pto;
-            }
-            else
-            {
-                $this->message_stack->add('search', lang('error_search_price_to_not_numeric'));
-            }
-        }
-
-        //validate the price range
-        if (!empty($this->search->price_from) && !empty($this->search->price_to) && ($this->search->price_from >= $this->search->price_to))
-        {
-            $this->message_stack->add('search', lang('error_search_price_to_less_than_price_from'));
-        }
-
-        //validate the search keywords
-        $keywords = $this->input->post('keywords');
-        if (!empty($keywords) && is_string($keywords))
-        {
-            $this->search->set_keywords(urldecode($keywords));
-
-            if (empty($this->search->keywords))
-            {
-                $this->message_stack->add('search', lang('error_search_invalid_keywords'));
-            }
-        }
-
-        //must enter a search condition
-        if (empty($this->search->keywords) && empty($this->search->price_from) && empty($this->search->price_to))
-        {
-            $this->message_stack->add('search', lang('error_search_at_least_one_input'));
-        }
-
-        //set the category
-        $cpath = $this->input->post('cPath');
-        if (!empty($cpath) && is_numeric($cpath) && ($cpath > 0))
-        {
-            $this->search->category = $cpath;
-
-            $recursive = $this->input->post('recursive');
-            if (!empty($recursive))
-            {
-                $this->search->recursive = $recursive == '1' ? TRUE : FALSE;
-            }
-        }
-
-        //set the manufacturer
-        $manufacturers = $this->input->post('manufacturers');
-        if (!empty($manufacturers) && is_numeric($manufacturers) && ($manufacturers > 0))
-        {
-            $this->search->manufacturer = $manufacturers;
-        }
-
-        //validate faily
-        if ($this->message_stack->size('search') > 0)
-        {
-            //setup view
-            $this->template->build('search/search', $this->get_view_data());
-        }
-        else
-        {
-            //set the view data
-            $data['products'] = $this->search->get_search_results();
-
-            //setup view
-            $this->template->build('search/results', $data);
-        }
-    }
-
-    /**
-     * search with the conditions in the get request
-     *
-     * @access public
-     */
-    public function search_with_get()
-    {
-        //load library
-        $this->load->library('search');
-
-        //get the url segments
-        $segments = $this->uri->uri_to_assoc(2);
-
-        //validate the price to search from
-        if (isset($segments['pfrom']) && is_numeric($segments['pfrom']) && ($segments['pfrom'] > 0))
-        {
-            if (settype($segments['pfrom'], 'double'))
-            {
-                $this->search->price_from = $segments['pfrom'];
-            }
-            else
-            {
-                $this->message_stack->add('search', lang('error_search_price_from_not_numeric'));
-            }
-        }
-
-        //validate the max price to search
-        if (isset($segments['pto']) && is_numeric($segments['pfrom']) && ($segments['pto'] > 0))
-        {
-            if (settype($segments['pto'], 'double'))
-            {
-                $this->search->price_to = $segments['pto'];
-            }
-            else
-            {
-                $this->message_stack->add('search', lang('error_search_price_to_not_numeric'));
-            }
-        }
-
-        //validate the price range
-        if (!empty($this->search->price_from) && !empty($this->search->price_to) && ($this->search->price_from >= $this->search->price_to))
-        {
-            $this->message_stack->add('search', lang('error_search_price_to_less_than_price_from'));
-        }
-
-        //validate manufactuers
-        if (isset($segments['manufacturers']) && is_numeric($segments['manufacturers']) && ($segments['manufacturers'] > 0))
-        {
-            $this->search->manufacturer = $segments['manufacturers'];
-        }
-
-        //validate faily
-        if ($this->message_stack->size('search') > 0)
-        {
-            //setup view
-            $this->template->build('search/search', $this->get_view_data());
-        }
-        else
-        {
-            //set the view data
-            $data['products'] = $this->search->get_search_results();
-
-            //setup view
-            $this->template->build('search/results', $data);
-        }
     }
 }
 
