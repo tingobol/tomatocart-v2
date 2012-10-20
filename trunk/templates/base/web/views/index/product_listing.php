@@ -37,7 +37,7 @@
             </div>  
             <span class="price center span2"><?php echo currencies_format($product['product_price']); ?></span>
             <div class="buttons span2">
-                <a class="btn btn-small btn-small btn-info" href="<?php echo site_url('cart_add/' . $product['products_id']); ?>">
+                <a class="btn btn-small btn-info" href="<?php echo site_url('cart_add/' . $product['products_id']); ?>">
                 	<i class="icon-shopping-cart icon-white "></i> 
                 	<?php echo lang('button_add_to_cart'); ?>
                 </a><br />
