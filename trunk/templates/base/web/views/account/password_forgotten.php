@@ -20,24 +20,18 @@
 
 <form name="password_forgotten" action="<?php echo site_url('password_forgotten/process');?>" method="post">
 
-    <div class="box">
+    <div class="module-box">
         <h6 class="title"><?php echo lang('password_forgotten_heading'); ?></h6>
         
-        <div class="content">
-            <p><?php echo lang('password_forgotten'); ?></p>
-            
-            <ol>
-                <li>
-                    <label for="email_address"><?php echo lang('field_customer_email_address'); ?></label>
-                    <input type="text" id="email_address" name="email_address">
-                </li>
-            </ol>
-        </div>
+        <p><?php echo lang('password_forgotten'); ?></p>
+		
+		<label for="email_address"><?php echo lang('field_customer_email_address'); ?></label>
+        <input type="text" id="email_address" name="email_address">
     </div>
     
-    <div class="submitFormButtons">
-        <a class="button" href="<?php echo site_url('account/login'); ?>"><?php echo lang('button_back'); ?></a>
-        <button type="submit" class="button continue"><?php echo lang('button_continue'); ?></button>
+    <div class="row-fluid">
+        <div class="span6"><a class="btn btn-small btn-info" href="<?php echo site_url('account/login'); ?>"><i class="icon-chevron-left icon-white"></i> <?php echo lang('button_back'); ?></a></div>
+        <div class="span6"><button type="submit" class="btn btn-small btn-info pull-right"><i class="icon-chevron-right icon-white"></i> <?php echo lang('button_continue'); ?></button></div>
     </div>
 
 </form>

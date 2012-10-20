@@ -18,23 +18,23 @@
 
 <h1><?php echo lang('info_faqs_heading'); ?></h1>
 
-<div id="faqs" class="moduleBox clearfix">
+<div id="faqs" class="module-box clearfix">
     <div class="content">
       	<?php
             if (!empty($faqs)) :
                 foreach($faqs as $faq) :
       	?>
-      	<ul>
-            <li class="question"><?php echo $faq['faqs_question']?></li>
-            <li class="answer<?php echo (isset($active) && ($active == $faq['faqs_id'])) ? '' : ' hidden'; ?>"><?php echo $faq['faqs_answer']?></li>
+      	<dt>
+            <dt class="question"><?php echo $faq['faqs_question']?></dt>
+            <dd class="answer<?php echo (isset($active) && ($active == $faq['faqs_id'])) ? '' : ' hidden'; ?>"><?php echo $faq['faqs_answer']?></dd>
             <?php
                 if (!empty($faq['faqs_url'])) :
             ?>
-            <li class="url<?php echo (isset($active) && ($active == $faq['faqs_id'])) ? '' : ' hidden'; ?>"><a href="<?php echo $faq['faqs_url']; ?>"><?php echo $faq['faqs_url']; ?></a></li>
+            <dd class="url<?php echo (isset($active) && ($active == $faq['faqs_id'])) ? '' : ' hidden'; ?>"><a href="<?php echo $faq['faqs_url']; ?>"><?php echo $faq['faqs_url']; ?></a></dd>
             <?php
                 endif;
             ?>
-        </ul>
+        </dt>
       	<?php
                 endforeach;
             else :
@@ -46,8 +46,8 @@
     </div>
 </div>
 
-<div class="submitFormButtons clearfix">
-  <a href="<?php echo site_url('index'); ?>" class="button fr"><?php echo lang('button_continue'); ?></a>
+<div class="controls clearfix">
+	<a href="<?php echo site_url(); ?>" class="btn btn-small btn-info pull-right"><i class="icon-chevron-right icon-white"></i><?php echo lang('button_continue'); ?></a>
 </div>
 
 <script language="javascript" type="text/javascript">

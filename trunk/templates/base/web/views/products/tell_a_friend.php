@@ -16,7 +16,7 @@
 */
 ?>
       
-<div style="float: right;"><a href="<?php echo $product_link;?>"><img src="<?php echo $product_img_src; ?>" alt="<?php echo $product_name; ?>" title="<?php echo $product_name; ?>" class="productImage" hspace="5" border="0" vspace="5"></a></div>
+<div style="float: right;"><a href="<?php echo $product_link;?>"><img src="<?php echo $product_img_src; ?>" alt="<?php echo $product_name; ?>" title="<?php echo $product_name; ?>" class="productImage" hspace="5" vspace="5"></a></div>
 
 <h1><?php echo $title;?></h1>
 

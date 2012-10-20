@@ -20,59 +20,55 @@ $step = 1;
 
 <h1><?php echo lang('checkout')?></h1>
 
-<ul id="checkoutForm"> 
-  <li id="checkoutMethodForm">
-    <h3 class="formHeader">
-       <?php echo $step++ . '<a onclick="javascript:void(0);">' . lang('checkout_method') . '</a>';?>
-    </h3>
-    <div class="formBody"></div>
-  </li>
+<div class="accordion" id="checkoutForm"> 
+  <div class="accordion-group" id="checkoutMethodForm">
+    <div class="accordion-heading">
+       <?php echo '<a onclick="javascript:void(0);">' . $step++ . ' ' . $step++ . ' ' . lang('checkout_method') . '</a>';?>
+    </div>
+    <div class="accordion-body collapse"></div>
+  </div>
   
-  <li id="billingInformationForm">
-    <h3 class="formHeader">
-       <?php echo $step++ . '<a onclick="javascript:void(0);">' . lang('checkout_billing_information') . '</a>'; ?>
-    </h3>
-    <div class="formBody"></div>
-  </li>  
+  <div class="accordion-group" id="billingInformationForm">
+    <div class="accordion-heading">
+       <?php echo '<a onclick="javascript:void(0);">' . $step++ . ' ' . lang('checkout_billing_information') . '</a>'; ?>
+    </div>
+    <div class="accordion-body collapse"></div>
+  </div>  
   
-  <li id="shippingInformationForm">
-    <h3 class="formHeader">
-       <?php echo $step++ . '<a onclick="javascript:void(0);">' . lang('checkout_shipping_information') . '</a>';?>
-    </h3>
-    <div class="formBody"></div>
-  </li>
+  <div class="accordion-group" id="shippingInformationForm">
+    <div class="accordion-heading">
+       <?php echo '<a onclick="javascript:void(0);">' . $step++ . ' ' . lang('checkout_shipping_information') . '</a>';?>
+    </div>
+    <div class="accordion-body collapse"></div>
+  </div>
   
-  <li id="shippingMethodForm">
-    <h3 class="formHeader">
-       <?php echo $step++ . '<a onclick="javascript:void(0);">' . lang('checkout_shipping_method') . '</a>'; ?>
-    </h3>
-    <div class="formBody"></div>
-  </li>
+  <div class="accordion-group" id="shippingMethodForm">
+    <div class="accordion-heading">
+       <?php echo '<a onclick="javascript:void(0);">' . $step++ . ' ' . lang('checkout_shipping_method') . '</a>'; ?>
+    </div>
+    <div class="accordion-body collapse"></div>
+  </div>
   
-  <li id="paymentInformationForm">
-    <h3 class="formHeader">
-       <?php echo $step++ . '<a onclick="javascript:void(0);">' . lang('checkout_payment_information') . '</a>'; ?>
-    </h3>
-    <div class="formBody"></div>
-  </li>
+  <div class="accordion-group" id="paymentInformationForm">
+    <div class="accordion-heading">
+       <?php echo '<a onclick="javascript:void(0);">' . $step++ . ' ' . lang('checkout_payment_information') . '</a>'; ?>
+    </div>
+    <div class="accordion-body collapse"></div>
+  </div>
   
-  <li id="orderConfirmationForm">
-    <h3 class="formHeader">
-       <?php echo $step++ . '<a onclick="javascript:void(0);">' . lang('checkout_order_review') . '</a>'; ?>
-    </h3>
-    <div class="formBody"></div>
-  </li>
-</ul>
+  <div class="accordion-group" id="orderConfirmationForm">
+    <div class="accordion-heading">
+       <?php echo '<a onclick="javascript:void(0);">' . $step++ . ' ' . lang('checkout_order_review') . '</a>'; ?>
+    </div>
+    <div class="accordion-body collapse"></div>
+  </div>
+</div>
 
 <script type="text/javascript" src="<?php echo base_url();?>templates/base/web/javascript/checkout.js"></script>
 <script>
+<!--
 var checkout = new jQuery.Toc.Checkout({
   logged_on: <?php echo ($logged_on == true)? 'true' : 'false';?>
 });
+//-->
 </script>
-
-<style>
-#checkoutForm li > label:first-child {display: inline-block; width: 130px;}
-#checkoutForm .formBody {display: none;}
-#checkoutForm li {display: block; padding: 1px;}
-</style>

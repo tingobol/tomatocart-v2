@@ -22,7 +22,7 @@
     echo toc_validation_errors('guestbook');
 ?>
 
-<div class="moduleBox">
+<div id="guestbooks" class="module-box">
     <h6 class="title"><?php echo lang('guestbook_heading'); ?></h6>
     
     <div class="content">
@@ -34,7 +34,7 @@
                 foreach($guestbooks as $index => $guestbook) : 
             ?>
             <dt>
-                <span><?php echo  mdate('%Y/%m/%d - %h:%i %a', human_to_unix($guestbook['date_added'])); ?></span>
+                <span class="pull-right"><?php echo  mdate('%Y/%m/%d - %h:%i %a', human_to_unix($guestbook['date_added'])); ?></span>
                 <span><?php echo  $guestbook['title']; ?></span>
             </dt>
             <?php 
@@ -61,9 +61,8 @@
         <?php 
             endif; 
         ?>
-        
-        <p align="right">
-        	<a href="<?php echo site_url('info/guestbooks/add'); ?>" class="button"><?php echo lang('button_write_message'); ?></a>
-        </p>
     </div>
+</div>
+<div class="controls clearfix">
+	<a href="<?php echo site_url('info/guestbooks/add'); ?>" class="btn btn-small btn-success pull-right"><i class="icon-plus icon-white"></i> <?php echo lang('button_write_message'); ?></a>
 </div>

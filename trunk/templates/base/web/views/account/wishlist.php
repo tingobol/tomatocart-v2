@@ -26,7 +26,7 @@
 	<form name="update_wishlist" method="post"
 		action="<?php echo site_url($link_wishlist); ?>">
 
-		<table border="0" width="100%" cellspacing="0" cellpadding="10"
+		<table width="100%" cellspacing="0" cellpadding="10"
 			class="productListing">
 			<thead>
 				<tr>

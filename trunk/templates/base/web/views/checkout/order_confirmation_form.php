@@ -18,7 +18,7 @@
 
 <div class="moduleBox">
 	<div class="content">
-    	<table border="0" width="100%" cellspacing="0" cellpadding="2">
+    	<table width="100%" cellspacing="0" cellpadding="2">
 			<tr>
 				<td width="50%" valign="top">
 					<p><b><?php echo lang('order_delivery_address_title'); ?></b></p>
@@ -49,7 +49,7 @@
             <tr>
             	<td width="100%" colspan="2" valign="top">
 					<div style="border: 1px; border-style: solid; border-color: #CCCCCC; background-color: #FBFBFB; padding: 5px;">
-						<table border="0" width="100%" cellspacing="0" cellpadding="2">
+						<table width="100%" cellspacing="0" cellpadding="2">
                         <?php
                             if ($number_of_tax_groups > 1) :
                         ?>
@@ -97,7 +97,7 @@
                             ?>
                         </table>
             
-                        <table border="0" width="100%" cellspacing="0" cellpadding="2">
+                        <table width="100%" cellspacing="0" cellpadding="2">
                         <?php
                             foreach ($order_totals as $module) :
                         ?>
@@ -150,7 +150,7 @@
       if (isset($confirmation['fields'])) {
 ?>
 
-    <table border="0" cellspacing="3" cellpadding="2">
+    <table cellspacing="3" cellpadding="2">
 
 <?php
         for ($i=0, $n=sizeof($confirmation['fields']); $i<$n; $i++) {
@@ -193,5 +193,5 @@
     endif;
   
 ?>
-	<div style="text-align:right;"><button type="submit" class="small button" id="btn-confirm-order"><?php echo lang('button_continue'); ?></button></div></form>
+	<div style="text-align:right;"><button type="submit" class="btn btn-small btn-small" id="btn-confirm-order"><?php echo lang('button_continue'); ?></button></div></form>
 </div>

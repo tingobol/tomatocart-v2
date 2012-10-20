@@ -46,7 +46,7 @@
         </li>
     </ul>
     <a href="<?php echo base_url(); ?>" id="siteLogo">
-    	<img src="<?php echo image_url('store_logo.png'); ?>" border="0" alt="<?php echo config('STORE_NAME'); ?>" title="<?php echo config('STORE_NAME'); ?>" />
+    	<img src="<?php echo image_url('store_logo.png'); ?>" alt="<?php echo config('STORE_NAME'); ?>" title="<?php echo config('STORE_NAME'); ?>" />
     </a>  
 </div>
 <!-- End: Header -->
@@ -90,7 +90,7 @@
         foreach ($languages as $language) : 
     ?>
         <a href="<?php echo $language['url']; ?>">
-        	<img src="<?php echo $language['image']; ?>" border="0" alt="<?php echo $language['name']; ?>" title="<?php echo $language['name']; ?>" width="16" height="10" />
+        	<img src="<?php echo $language['image']; ?>" alt="<?php echo $language['name']; ?>" title="<?php echo $language['name']; ?>" width="16" height="10" />
         </a>
     <?php 
         endforeach; 

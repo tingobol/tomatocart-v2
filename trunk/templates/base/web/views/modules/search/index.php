@@ -21,9 +21,9 @@
     
     <div class="contents">
         <form method="post" action="<?php echo site_url('search');?>" name="search">
-        	<input type="text" maxlength="30" style="width: 80%;" name="keywords">&nbsp;
+        	<input type="text" maxlength="30" style="width: 90%;" name="keywords">&nbsp;
         	<p>
-        	  <button class="button small"><?php echo lang('button_search'); ?></button>
+        	  <button class="btn btn-small btn-small btn-inverse btn-small"><?php echo lang('button_search'); ?></button>
         	</p>
         	
         	<?php echo sprintf(lang('box_search_text'), site_url('search')); ?>

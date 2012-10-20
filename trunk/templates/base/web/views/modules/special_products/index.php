@@ -17,25 +17,24 @@
 ?>
 
 <div class="box">
-    <h4><?php echo $title; ?></h4>
+    <h4><?php echo lang('box_specials_heading'); ?></h4>
     
-    <div class="contents">
+    <div class="contents clearfix col3">
     <?php 
       foreach($products as $product):
     ?>
-        <div class="product col3">
+        <div class="center" style="height: 180px">
             <div>
                 <a href="<?php echo site_url('product/' . $product['products_id']); ?>">
-                    <img border="0" title="<?php echo $product['products_name']; ?>" alt="<?php echo $product['products_name']; ?>" src="<?php echo product_image_url($product['products_image'], 'thumbnails'); ?>">
+                    <img title="<?php echo $product['products_name']; ?>" alt="<?php echo $product['products_name']; ?>" src="<?php echo product_image_url($product['products_image'], 'thumbnails'); ?>" />
                 </a>
             </div>
             <div><a href="<?php echo site_url('product/' . $product['products_id']); ?>"><?php echo $product['products_name']; ?></a></div>
             <div><s><?php echo currencies_format($product['products_price']); ?></s>&nbsp;&nbsp;<span><?php echo currencies_format($product['special_price']);?></span></div>
-            <div><a href="<?php echo site_url('cart_add/' . $product['products_id']); ?>" class="button small"><span><?php echo lang('button_add_to_cart'); ?></span></a></div>
+            <div><a href="<?php echo site_url('cart_add/' . $product['products_id']); ?>" class="btn btn-small btn-small btn-small btn-info"><i class="icon-shopping-cart icon-white "></i><?php echo lang('button_add_to_cart'); ?></a></div>
         </div>
     <?php 
       endforeach;
     ?>
-        <div style="clear: both">&nbsp;</div>
     </div>
 </div>

@@ -27,7 +27,7 @@
         <li><a href="<?php echo $checkout_link; ?>"><?php echo $checkout_text; ?></a><span>|</span></li>
         <li><a href="<?php echo $contact_us_link; ?>"><?php echo $contact_us_text; ?></a><span>|</span></li>
         <li><a href="<?php echo $guest_book_link; ?>"><?php echo $guest_book_text; ?></a><span>|</span></li>
-        <li><a href="<?php echo $rss_link; ?>"><img src="images/rss16x16.png" border="0" alt="" /><span><?php echo $rss_text; ?></span></a></li>    
+        <li><a href="<?php echo $rss_link; ?>"><img src="images/rss16x16.png" alt="" /><span><?php echo $rss_text; ?></span></a></li>    
     </ul>
     <div style="clear:both"></div>
     <p>

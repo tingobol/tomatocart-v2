@@ -27,7 +27,7 @@
         <div class="control-group">
             <div class="controls">
             	<input type="text" name="keywords" class="keywords" value="<?php set_value('keywords'); ?>" />
-            	<button class="btn btn-info"><i class="icon-search icon-white"></i> <?php echo lang('button_search'); ?></button>
+            	<button class="btn btn-small btn-info"><i class="icon-search icon-white"></i> <?php echo lang('button_search'); ?></button>
             </div>
         </div>
     </div>

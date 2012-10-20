@@ -17,14 +17,14 @@
 ?>
 
 <div class="box">
-    <h4><?php echo lang('box_shop_by_price_heading'); ?></h4>
+    <h4><?php echo $title; ?></h4>
     
     <div class="contents">
         <ul>
         <?php 
-            foreach($prices as $price):
+            foreach($articles as $article) :
         ?>
-			<li><a href="<?php echo $price['link_href']; ?>"><?php echo $price['link_text']; ?></a></li>
+            <li><a href="<?php echo site_url('info/' . $article['articles_id']); ?>"><?php echo $article['articles_name']; ?></a></li>
         <?php 
             endforeach;
         ?>

@@ -22,44 +22,46 @@
     echo toc_validation_errors('login');
 ?>
 
-<div class="register-box">
-    <h3><?php echo lang('login_new_customer_heading'); ?></h3>
-    
-    <p><?php echo lang('login_new_customer_text'); ?></p>
-    
-    <p align="right">
-    	<a class="button" href="<?php echo site_url('account/create'); ?>"><?php echo lang('button_continue'); ?></a>
-    </p>
-</div>
-
-<div class="login-box">
-    <h3><?php echo lang('login_returning_customer_heading'); ?></h3>
-    
-    <div class="contents">
-        <form id="login" name="login" action="<?php echo site_url('account/login/process');?>" method="post">
+<div class="module-box clearfix">
+	<div class="row-fluid">
+        <div class="span6">
+            <h3><?php echo lang('login_new_customer_heading'); ?></h3>
+            
+            <p><?php echo lang('login_new_customer_text'); ?></p>
+            
+            <a class="btn btn-small btn-small btn-info pull-right" href="<?php echo site_url('account/create'); ?>"><i class="icon-chevron-right icon-white"></i> <?php echo lang('button_continue'); ?></a>
+        </div>
+        
+        <div class="span6">
+            <h3><?php echo lang('login_returning_customer_heading'); ?></h3>
             
             <p><?php echo lang('login_returning_customer_text'); ?></p>
             
-            <ul>
-                <li>
+            <form id="login" name="login" action="<?php echo site_url('account/login/process');?>" method="post">
+                <div class="control-group">
                     <label for="email_address"><?php echo lang('field_customer_email_address');?><span class="required">*</span></label>
-                    <input type="text" id="email_address" name="email_address" value="<?php echo set_value('email_address');?>" />
-                </li>
-                <li>
+                    <div class="controls">
+                    	<input class="input-large" type="text" id="email_address" name="email_address" value="<?php echo set_value('email_address');?>" />
+                    </div>
+                </div>
+                
+                <div class="control-group">
                     <label for="password"><?php echo lang('field_customer_password');?><em>*</em></label>
-                    <input type="password" id="password" name="password" value="<?php echo set_value('password');?>" />
-                </li>
-            </ul>
-            
-            <p>
-	            <?php echo sprintf(lang('login_returning_customer_password_forgotten'), site_url('account/password_forgotten'));?>
-            </p>
-            
-            <p align="right">
-            	<button type="submit" class="button"><?php echo lang('button_sign_in'); ?></button>
-            </p>
-        </form>
+                    <div class="controls">
+                    	<input class="input-large" type="password" id="password" name="password" value="<?php echo set_value('password');?>" />
+                    </div>
+                </div>
+                
+                <p>
+    	            <?php echo sprintf(lang('login_returning_customer_password_forgotten'), site_url('account/password_forgotten'));?>
+                </p>
+    
+                <div class="control-group">
+                    <div class="controls">
+                        <button type="submit" class="btn btn-small btn-small btn-success pull-right"><i class="icon-ok-sign icon-white"></i> <?php echo lang('button_sign_in'); ?></button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
-
-<div class="clear"></div>

@@ -18,12 +18,15 @@
 
 <h1><?php echo lang('new_products_heading'); ?></h1>
 
-<div class="products-list">
+<?php 
+    if (sizeof($products) > 0): 
+?>
+<div class="module-box col3 clearfix">
 <?php 
     foreach($products as $product):
 ?>
-    <div class="product">
-        <a class="image" href="<?php echo site_url('product/' . $product['products_id']); ?>">
+    <div class="center">
+        <a href="<?php echo site_url('product/' . $product['products_id']); ?>">
         	<img alt="<?php echo $product['product_name']; ?>" title="<?php echo $product['product_name']; ?>" src="<?php echo product_image_url($product['product_image']); ?>">
         </a>
         <div class="info">
@@ -34,17 +37,19 @@
         </div>  
         <span class="price"><?php echo currencies_format($product['product_price']); ?></span>
         <div class="buttons">
-          	<a class="button small" href="<?php echo site_url('cart_add/' . $product['products_id']); ?>"><span><?php echo lang('button_add_to_cart'); ?></span></a><br />
-        	<a class="wishlist" href="javascript:void(0);"><?php echo lang('add_to_wishlist'); ?></a><br />
-        	<a class="compare" href="javascript:void(0);"><?php echo lang('add_to_compare'); ?></a>
+          	<a class="btn btn-small btn-small btn-small btn-info" href="<?php echo site_url('cart_add/' . $product['products_id']); ?>">
+            	<i class="icon-shopping-cart icon-white "></i> 
+            	<?php echo lang('button_add_to_cart'); ?>
+          	</a>
         </div>
-        <div class="clear"></div>
     </div>
 <?php
     endforeach;
 ?>
-    <div class="paginate">
-        <?php  echo $links; ?>
-    </div>
-    <div class="clear"></div>
 </div>
+<div class="pagination clearfix">
+    <?php  echo $links; ?>
+</div>
+<?php 
+    endif; 
+?>

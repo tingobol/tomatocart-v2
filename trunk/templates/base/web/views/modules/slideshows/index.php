@@ -16,31 +16,48 @@
  */
 ?>
 
-<div class="box">
-    <div id="<?php echo $mid; ?>" class="slides">
-        <div class="slides_container">
-        <?php 
-          foreach($images as $image):
+<div class="box slideshows">
+    <div id="<?php echo $mid; ?>" class="carousel slide">
+        <div class="carousel-inner">
+        <?php
+            $active = 'active'; 
+            foreach($images as $image):
         ?>
-            <div class="slide">
-            	<a href="<?php echo $image['image_link']; ?>"><img src="<?php echo image_url($image['image_src']); ?>" border="0" alt="<?php echo $image['image_info']; ?>" title="<?php echo $image['image_info']; ?>" /></a>
+            <div class="<?php echo $active; ?> item">
+            	<a href="<?php echo $image['image_link']; ?>"><img src="<?php echo image_url($image['image_src']); ?>" alt="<?php echo $image['image_info']; ?>" title="<?php echo $image['image_info']; ?>" /></a>
+            	
+                <?php 
+                    if ($display_slide_info == 'true'):
+                ?>
+            	<div class="carousel-caption">
+                  <p><?php echo $image['image_info']; ?></p>
+                </div>
+                <?php 
+                    endif;
+                ?>
             </div>
         <?php 
-          endforeach;
+                $active = ''; 
+            endforeach;
         ?>
         </div>
+        <?php 
+            if ($display_carousel_control == 'true'):
+        ?>
+        <!-- Carousel nav -->
+        <a class="carousel-control left" href="#<?php echo $mid; ?>" data-slide="prev">&lsaquo;</a>
+        <a class="carousel-control right" href="#<?php echo $mid; ?>" data-slide="next">&rsaquo;</a>
+        <?php 
+            endif;
+        ?>
     </div>
 </div>
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#<?php echo $mid; ?>').slides({
-            preload: true,
-            generatePagination: false,
-            play: <?php echo $play_interval; ?>,
-            pause: <?php echo $pause_interval; ?>,
-            hoverPause: <?php echo $hover_pause; ?>,
-            start: 1
+        $('#<?php echo $mid; ?>').carousel({
+            interval: <?php echo $play_interval; ?>,
+			pause: 'hover'
         });
     });
 </script>

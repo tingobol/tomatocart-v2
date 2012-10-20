@@ -22,34 +22,51 @@
     echo toc_validation_errors('guestbook');
 ?>
 
-<div class="moduleBox">
+<div class="module-box">
     <h6 class="title"><?php echo lang('guestbook_new_heading'); ?></h6>
     
-    <div class="content">
-		    <form id="guestbooks_edit" name="guestbooks_edit" action="<?php echo site_url('info/guestbooks/save');?>" method="post">
-            <ul>  
-                <li>
-                    <label class="field_label" for="title"><?php echo lang('field_title');?><em>*</em></label>
-                    <input type="text" id="title" name="title" value="<?php echo set_value('title');?>" />
-                </li>
-                <li>
-                    <label class="field_label" for="email"><?php echo lang('field_email');?><em>*</em></label>
-                    <input type="text" id="email" name="email" value="<?php echo set_value('email');?>" />
-                </li>  
-                <li>
-                    <label class="field_label" for="url"><?php echo lang('field_url');?></label>
-                    <input type="text" id="url" name="url" value="<?php echo set_value('url');?>" />
-                </li>  
-                <li>
-                    <label class="field_label" for="content"><?php echo lang('field_content');?><em>*</em></label>
-                    <textarea rows="5" cols="29" id="content" name="content"><?php echo set_value('content'); ?></textarea>
-                </li>
-            </ul>
-            
-            <div class="submitFormButtons clearfix">
-                <button class="button fr"><?php echo lang('button_continue'); ?></button>
-                <a href="<?php echo site_url('info/guestbooks'); ?>" class="button"><?php echo lang('button_back'); ?></a>
-            </div>
-        </form>
-    </div>
+	<form id="guestbooks_edit" name="guestbooks_edit" action="<?php echo site_url('info/guestbooks/save');?>" method="post">
+		<div class="row-fluid">
+			<div class="span6">
+                <div class="control-group">
+                    <label class="control-label" for="title"><?php echo lang('field_title'); ?><em>*</em></label>
+                    <div class="controls">
+                    	<input type="text" id="title" name="title" value="<?php echo set_value('title'); ?>" />
+                    </div>
+                </div>
+			</div>
+			<div class="span6">
+                <div class="control-group">
+                    <label class="control-label" for="email"><?php echo lang('field_email'); ?><em>*</em></label>
+                    <div class="controls">
+                    	<input type="text" id="email" name="email" value="<?php echo set_value('field_email'); ?>" />
+                    </div>
+                </div>
+			</div>
+		</div>
+		<div class="row-fluid">
+			<div class="span6">
+                <div class="control-group">
+                    <label class="control-label" for="url"><?php echo lang('field_url'); ?><em>*</em></label>
+                    <div class="controls">
+                    	<input type="text" id="url" name="url" value="<?php echo set_value('url'); ?>" />
+                    </div>
+                </div>
+			</div>
+		</div>
+		<div class="row-fluid">
+			<div class="span6">
+                <div class="control-group">
+                    <label class="control-label" for="content"><?php echo lang('field_content'); ?><em>*</em></label>
+                    <div class="controls">
+                    	<textarea rows="5" cols="29" id="content" name="content"><?php echo set_value('content'); ?></textarea>
+                    </div>
+                </div>
+			</div>
+		</div>
+    </form>
+</div>
+<div class="control-group clearfix">
+    <button class="btn btn-small btn-info pull-right"><i class="icon-chevron-right icon-white"></i> <?php echo lang('button_continue'); ?></button>
+    <a class="btn btn-small btn-info" href="<?php echo site_url('info/guestbooks'); ?>"><i class="icon-chevron-left icon-white"></i> <?php echo lang('button_back'); ?></a>
 </div>

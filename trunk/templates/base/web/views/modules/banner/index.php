@@ -16,18 +16,6 @@
 */
 ?>
 
-<div class="box">
-    <h4><?php echo lang('box_shop_by_price_heading'); ?></h4>
-    
-    <div class="contents">
-        <ul>
-        <?php 
-            foreach($prices as $price):
-        ?>
-			<li><a href="<?php echo $price['link_href']; ?>"><?php echo $price['link_text']; ?></a></li>
-        <?php 
-            endforeach;
-        ?>
-        </ul>
-    </div>
+<div class="box" style="width: <?php echo $width; ?>px; height: <?php echo $height; ?>px; overflow: hidden">
+	<img alt="<?php echo $description; ?>" title="<?php echo $description; ?>" src="<?php echo image_url($image); ?>" />
 </div>

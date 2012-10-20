@@ -18,6 +18,10 @@
 
 <h1><?php echo lang('info_contact_heading'); ?></h1>
 
-<p><?php echo lang('contact_email_sent_successfully'); ?></p>
+<div class="module-box">
+    <div class="content"><?php echo lang('contact_email_sent_successfully'); ?></div>
+</div>
 
-<a href="<?php echo site_url('contact_us'); ?>" class="button fr"><?php echo lang('button_continue'); ?></a>
+<div class="controls clearfix">
+	<a href="<?php echo site_url('contact_us'); ?>" class="btn btn-small btn-info pull-right"><i class="icon-chevron-right icon-white"></i><?php echo lang('button_continue'); ?></a>
+</div>
