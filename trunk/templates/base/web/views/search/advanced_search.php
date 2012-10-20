@@ -20,55 +20,80 @@
 
 <?php echo toc_validation_errors('search'); ?>
 
-<form name="search" action="<?php echo site_url('search'); ?>" method="post">
-    <div class="moduleBox searchBox">
+<form name="search" action="<?php echo site_url('search'); ?>" method="post" class="form-inline">
+    <div class="module-box">
         <h6><?php echo lang('search_criteria_title'); ?></h6>
         
-        <div class="content">
-            <input type="text" name="keywords" class="keywords" value="<?php set_value('keywords'); ?>" />
+        <div class="control-group">
+            <div class="controls">
+            	<input type="text" name="keywords" class="keywords" value="<?php set_value('keywords'); ?>" />
+            	<button class="btn btn-info"><i class="icon-search icon-white"></i> <?php echo lang('button_search'); ?></button>
+            </div>
         </div>
     </div>
     
-    <div class="submitFormButtons clearfix">
-        <button class="fr button"><?php echo lang('button_search'); ?></button>
-    </div>
-    
-    <div class="moduleBox">
+    <div class="module-box">
         <h6><?php echo lang('advanced_search_heading'); ?></h6>
-        <div class="content">
-            <ul>
-                <li>
-                    <label class="field_label"><?php echo lang('field_search_categories'); ?></label>
-                    <?php
-                        echo form_dropdown('cPath', $categories);
-                    ?>
-                </li>
-                <li>
-                    <input type="checkbox" name="recursive" id="recursive" value="1" <?php echo set_checkbox('recursive', '1', TRUE);?> />
-                    <label for="recursive"><?php echo lang('field_search_recursive'); ?></label>
-                </li>
-                <li>
-                    <label class="field_label"><?php echo lang('field_search_manufacturers'); ?></label>
-                    <select name="manufacturers">
-                        <?php
-                            foreach($manufacturers as $manufacturer) :
-                        ?>
-                        <option value="<?php echo $manufacturer['id']; ?>" <?php echo set_select('manufacturers', $manufacturer['id']); ?>><?php echo $manufacturer['text']; ?></option>
-                        <?php
-                            endforeach;
-                        ?>
-                    </select>
-                </li>
-                <li>
-                    <label for="pfrom" class="field_label"><?php echo lang('field_search_price_from'); ?></label>
-                    <input type="text" name="pfrom" id="pfrom" value="<?php echo set_value('pfrom'); ?>" />
-                </li>
-                <li>
-                    <label for="pto" class="field_label"><?php echo lang('field_search_price_to'); ?></label>
-                    <input type="text" name="pto" id="pto" value="<?php echo set_value('pto'); ?>" />
-                </li>
-            </ul>
-            
-        </div>
+        
+        <div class="row-fluid">
+			<div class="span6">
+                <div class="control-group">
+                    <label class="control-label" for="cPath"><?php echo lang('field_search_categories'); ?><em>*</em></label>
+                    <div class="controls">
+                        <select id="cPath" name="cPath">
+                        
+                            <?php
+                                foreach($categories as $categories_id => $categories_name) :
+                            ?>
+                            <option value="<?php echo $categories_id; ?>"><?php echo $categories_name; ?></option>
+                            <?php
+                                endforeach;
+                            ?>
+                        
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label checkbox" for="recursive"><input type="checkbox" name="recursive" id="recursive" value="1" <?php echo set_checkbox('recursive', '1', TRUE);?> /> <?php echo lang('field_search_recursive'); ?></label>
+                    </div>
+                </div>
+			</div>
+			<div class="span6">
+                <div class="control-group">
+                    <label class="control-label" for="manufacturers"><?php echo lang('field_search_manufacturers'); ?><em>*</em></label>
+                    <div class="controls">
+                        <select id="manufacturers" name="manufacturers">
+                        
+                            <?php
+                                foreach($manufacturers as $manufacturer) :
+                            ?>
+                            <option value="<?php echo $manufacturer['id']; ?>" <?php echo set_select('manufacturers', $manufacturer['id']); ?>><?php echo $manufacturer['text']; ?></option>
+                            <?php
+                                endforeach;
+                            ?>
+                        
+                        </select>
+                    </div>
+                </div>
+			</div>
+		</div>
+		
+        <div class="row-fluid">
+			<div class="span6">
+                <div class="control-group">
+                    <label class="control-label" for="pfrom"><?php echo lang('field_search_price_from'); ?><em>*</em></label>
+                    <div class="controls">
+                    	<input type="text" name="pfrom" id="pfrom" value="<?php echo set_value('pfrom'); ?>" />
+                    </div>
+                </div>
+			</div>
+			<div class="span6">
+                <div class="control-group">
+                    <label class="control-label" for="pto"><?php echo lang('field_search_price_to'); ?><em>*</em></label>
+                    <div class="controls">
+                    	<input type="text" name="pto" id="pto" value="<?php echo set_value('pto'); ?>" />
+                    </div>
+                </div>
+			</div>
+		</div>
     </div>
 </form>
