@@ -16,6 +16,10 @@
 	    <Group>left</Group>
 	    <Group>right</Group>
 	    <Group>slideshow</Group>
+	    <Group>footer-col-1</Group>
+	    <Group>footer-col-2</Group>
+	    <Group>footer-col-3</Group>
+	    <Group>footer-col-4</Group>
 	  </ContentGroups>
 	  <Modules>
       <Module code="categories" sort-order="100" page="*" Group="left">

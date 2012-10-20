@@ -14,24 +14,34 @@
  * @since        Version 2.0
  * @filesource
 */
+
+require_once 'helpers/general_helper.php';
 ?>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" xml:lang="en_US" lang="en_US">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta charset="utf-8">
     <link rel="shortcut icon" href="images/tomatocart.ico" type="image/x-icon" />
     <title><?php echo $template['title'];?></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    
     <?php echo $template['meta_tags'];?>
     
     <base href="<?php echo base_url();?>" />
+    <link rel="stylesheet" href="<?php echo base_url();?>templates/base/web/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>templates/default/web/css/stylesheet.css" />
-    <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>templates/default/web/css/ui-lightness/jquery-ui-1.8.14.custom.css" />
     <?php echo $template['stylesheets'];?>
     
-    <script type="text/javascript" src="<?php echo base_url();?>templates/base/web/javascript/jquery-1.5.1.min.js"></script>
+    <script type="text/javascript" src="<?php echo base_url();?>templates/base/web/javascript/jquery/jquery-1.8.2.min.js"></script>
+    <script type="text/javascript" src="<?php echo base_url();?>templates/base/web/javascript/jquery/jquery.loadmask.min.js"></script>
+    <script type="text/javascript" src="<?php echo base_url();?>templates/base/web/javascript/bootstrap/bootstrap.min.js"></script>
     <script type="text/javascript" src="<?php echo base_url();?>templates/base/web/javascript/toc.js"></script>
-    <script type="text/javascript" src="<?php echo base_url();?>templates/base/web/javascript/jquery.loadmask.min.js"></script>
     <?php echo $template['javascripts'];?>
 	<script type="text/javascript">
 		var base_url = '<?php echo base_url(); ?>';
@@ -39,184 +49,238 @@
 </head>
 <body>
   <!--  page header  -->
-    <!-- Begin: Header -->
+    <!-- BEGIN: Header -->
     <div id="header">
-        <ul>
-            <li><a href="<?php echo site_url('account/wishlist'); ?>"><?php echo lang('my_wishlist'); ?></a></li>
-            
-        <?php 
-            if ($is_logged_on) : 
-        ?>
-            <li><a href="<?php echo site_url('account/logoff'); ?>"><?php echo lang('logoff'); ?></a></li>
-        <?php 
-            else : 
-        ?>
-            <li><a href="<?php echo site_url('account/login'); ?>"><?php echo lang('login'); ?></a></li>
-            <li><a href="<?php echo site_url('account/create'); ?>"><?php echo lang('create_account'); ?></a></li>
-        <?php 
-            endif; 
-        ?>
-            
-            <li id="bookmark"></li>    
-            <li class="cart">
-                <a href="<?php echo site_url('shopping_cart'); ?>">
-                    <span id="popupCart">
-                        <img src="images/shopping_cart_icon.png" />
-                        <span id="popupCartItems"><?php echo $items_num; ?></span><span><?php echo lang('text_items'); ?></span>
-                    </span>
-                </a>
-            </li>
-        </ul>
-        <a href="<?php echo base_url(); ?>" id="siteLogo">
-        	<img src="<?php echo image_url('store_logo.png'); ?>" border="0" alt="<?php echo config('STORE_NAME'); ?>" title="<?php echo config('STORE_NAME'); ?>" />
-        </a>  
-    </div>
-    <!-- End: Header -->
-    
-    <!-- Begin: Navigation -->
-    <div id="nav">
-        <div id="navigation">
-            <ul>
-                <li class="current"><a href="<?php echo base_url(); ?>"><?php echo lang('home'); ?></a></li>
-                <li><a href="<?php echo site_url('latest'); ?>"><?php echo lang('new_products'); ?></a></li>
-                <li><a href="<?php echo site_url('specials'); ?>"><?php echo lang('specials'); ?></a></li>
-                <li><a href="<?php echo site_url('account'); ?>"><?php echo lang('my_account'); ?></a></li>
-                <li><a href="<?php echo site_url('checkout'); ?>"><?php echo lang('checkout'); ?></a></li>
-                <li><a href="<?php echo site_url('contact_us'); ?>"><?php echo lang('contact_us'); ?></a></li>      
-            </ul>
-            <div style="float: right; width: 206px">
-                <form name="search_post" method="post" action="<?php echo site_url('search'); ?>">
-                    <p class="keywords">
-                        <input type="text" name="keywords" id="keywords" />
-                        <img id="quickSearch" class="search" src="images/button_quick_find.png" title="search" alt="search" />
-                    </p>
-                </form>
-                
+        <div class="container">
+        	<div class="row-fluid">
+        		<div class="span4">
+                    <a href="<?php echo base_url(); ?>">
+                    	<img src="<?php echo image_url('store_logo.png'); ?>" alt="<?php echo config('STORE_NAME'); ?>" title="<?php echo config('STORE_NAME'); ?>" />
+                    </a>  
+        		</div>
+        		<div class="span8">
+                    <div class="top-nav row-fluid clearfix">
+                    	<div class="pull-right">
+                            <a class="popup-cart" href="javascript:void(0);">
+                                <i class="icon-shopping-cart"></i>
+                                <span id="popup-cart-items"><?php echo $items_num; ?></span>&nbsp;<span><?php echo lang('text_items'); ?></span>
+                            </a>
+                        </div>
+                        <div class="dropdown pull-right">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="javascrip:void(0);"><?php echo currency_title(); ?> (<?php echo currency_symbol_left(); ?>)<b class="caret"></b></a>
+                            <ul class="dropdown-menu" role="menu">
+                            <?php 
+                                foreach (get_currencies() as $code => $currency) : 
+                            ?>
+                                <li role="menuitem">
+                                	<a href="<?php echo current_url() . '?currency=' . $code; ?>"><?php echo $currency['title']; ?> (<?php echo $currency['symbol_left']; ?>)</a>
+                                </li>
+                            <?php 
+                                endforeach; 
+                            ?>
+                            </ul>
+                        </div>
+                        <div class="dropdown pull-right">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="javascrip:void(0);">
+                            	<img src="<?php echo lang_image(); ?>" alt="<?php echo lang_name(); ?>" title="<?php echo lang_name(); ?>" width="16" height="10" /> <?php echo lang_name(); ?><b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                            <?php 
+                                foreach (get_languages() as $lang) : 
+                            ?>
+                                <li role="menuitem">
+                                	<a href="<?php echo current_url() . '?language=' . $lang['code']; ?>"><img src="<?php echo image_url('worldflags/' . strtolower(substr($lang['code'], 3)) . '.png'); ?>" alt="<?php echo $lang['name']; ?>" title="<?php echo $lang['name']; ?>" width="16" height="10" /> <?php echo $lang['name']; ?></a>
+                                </li>
+                            <?php 
+                                endforeach; 
+                            ?>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="main-nav">
+                        <a href="<?php echo base_url(); ?>"><?php echo lang('home'); ?></a>&nbsp;&nbsp;|&nbsp;&nbsp;
+                        <a href="<?php echo site_url('account'); ?>"><?php echo lang('my_account'); ?></a>&nbsp;&nbsp;|&nbsp;&nbsp;
+                    	<a href="<?php echo site_url('checkout/shopping_cart'); ?>"><?php echo lang('cart_contents'); ?></a>&nbsp;&nbsp;|&nbsp;&nbsp;
+                        <a href="<?php echo site_url('checkout'); ?>"><?php echo lang('checkout'); ?></a>&nbsp;&nbsp;|&nbsp;&nbsp;
+                    <?php 
+                        if ($is_logged_on) : 
+                    ?>
+                        <a href="<?php echo site_url('account/logoff'); ?>"><?php echo lang('logoff'); ?></a>
+                    <?php 
+                        else : 
+                    ?>
+                        <a href="<?php echo site_url('account/login'); ?>"><?php echo lang('login'); ?></a>
+                    <?php 
+                        endif; 
+                    ?>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <!-- End: Navigation -->
+    <!-- END: Header -->
     
-    <!-- Begin: Breadcrumb -->
-    <div id="breadcrumb">
-    <?php 
-        foreach($template['breadcrumbs'] as $breadcrumb) : 
-    ?>
-        <a href="<?php echo $breadcrumb['uri']; ?>"><?php echo $breadcrumb['name']; ?></a> &raquo; 
-    <?php 
-        endforeach; 
-    ?>        
-        
-        <div id="languages">
-        <?php 
-            foreach ($languages as $language) : 
-        ?>
-            <a href="<?php echo $language['url']; ?>">
-            	<img src="<?php echo $language['image']; ?>" border="0" alt="<?php echo $language['name']; ?>" title="<?php echo $language['name']; ?>" width="16" height="10" />
-            </a>
-        <?php 
-            endforeach; 
-        ?>
+    <!-- BEGIN: Navigation -->
+    <div class="container">
+    	<div class="navbar navbar-inverse">
+    		<div class="navbar-inner">
+    			<?php echo build_categories_dropdown_menu(); ?>
+                <form name="search_post" method="post" action="<?php echo site_url('search'); ?>" class="navbar-search pull-right">
+                    <input type="text" name="keywords" class="search-query" placeholder="Search" />
+                    <div class="icon-search"></div>
+                </form>
+            </div>
         </div>
     </div>
-    <!-- End: Breadcrumb -->
-    <script type="text/javascript">
-        $('#quickSearch').bind('click', function() {
-            $('#navigation form').submit();
-        });
-    </script>
-  <!--  END: page header  -->
-  
-  <!--  slideshow  -->
-  <?php 
-    if (isset($template['module_groups']['slideshow'])) {
-  ?>
-  <div class="wrapper">
-    <?php echo $template['module_groups']['slideshow']; ?>
-  </div>
-  <?php 
-    }
-  ?>
-  <!--  END: slideshow  -->
-  
-  <div class="wrapper">
-    <div id="col-left">
-      <div class="box-group">
-         <!--  left module group  -->
-         <?php 
-          if (isset($template['module_groups']['left'])) {
-            echo $template['module_groups']['left']; 
-          }  
-         ?>
-         <!--  END: left module group  -->
-      </div>
+    <!-- END: Navigation -->
+    
+    <!-- BEGIN: Breadcrumb -->
+    <div class="container">
+        <ul class="breadcrumb">
+        <?php 
+            foreach($template['breadcrumbs'] as $breadcrumb) : 
+        ?>
+            <li><a href="<?php echo $breadcrumb['uri']; ?>"><?php echo $breadcrumb['name']; ?></a><span class="divider">/</span></li>
+        <?php 
+            endforeach; 
+        ?> 
+        </ul>       
     </div>
-
-    <div id="main">
-        <!--  before module group  -->
+    <!-- END: Breadcrumb -->
+<!--  END: page header  -->
+  
+    <!--  slideshow  -->
+    <?php 
+        if (isset($template['module_groups']['slideshow'])) {
+    ?>
+        <div id="slideshows" class="container">
+        <?php echo $template['module_groups']['slideshow']; ?>
+        </div>
+    <?php 
+        }
+    ?>
+    <!--  END: slideshow  -->
+    <div class="container">
+    	<div class="row-fluid">
+        <!--  left module group  -->
         <?php 
-          if (isset($template['module_groups']['before'])) {
-            echo $template['module_groups']['before']; 
-          }  
+            if (isset($template['module_groups']['left'])) 
+            {
         ?>
-        <!--  END: before module group  -->
-        
-        <!--  page body  -->
+            <div id="content-left" class="span<?php echo isset($template['module_groups']['left']) ? 3 : 0; ?>"><?php echo $template['module_groups']['left']; ?></div> 
         <?php 
-          if (isset($template['body'])) {
-            echo $template['body']; 
-          }  
-        ?>
-        <!--  END: page body  -->
-        
-        <!--  after module group  -->
-        <?php 
-          if (isset($template['module_groups']['after'])) {
-            echo $template['module_groups']['after']; 
-          }  
-        ?>
-        <!--  END: after module group  -->
-    </div>
-    <div id="col-right">
-      <div class="box-group">
-          <!--  right module group  -->
-          <?php 
-            if (isset($template['module_groups']['right'])) {
-              echo $template['module_groups']['right']; 
             }  
-          ?>
-          <!--  END: right module group  -->
-      </div>
+        ?>
+        <!--  END: left module group  -->
+    
+        <div  id="content-center" class="span<?php echo 12 - (isset($template['module_groups']['left']) ? 3 : 0) - (isset($template['module_groups']['right']) ? 3 : 0); ?>">
+            <!--  before module group  -->
+            <?php 
+              if (isset($template['module_groups']['before'])) {
+                echo $template['module_groups']['before']; 
+              }  
+            ?>
+            <!--  END: before module group  -->
+            
+            <!--  page body  -->
+            <?php 
+              if (isset($template['body'])) {
+                echo $template['body']; 
+              }  
+            ?>
+            <!--  END: page body  -->
+            
+            <!--  after module group  -->
+            <?php 
+              if (isset($template['module_groups']['after'])) {
+                echo $template['module_groups']['after']; 
+              }  
+            ?>
+            <!--  END: after module group  -->
+        </div>
+    
+        <!--  right module group  -->
+        <?php 
+            if (isset($template['module_groups']['right'])) 
+            {
+        ?>
+            <div id="content-right" class="span<?php echo isset($template['module_groups']['right']) ? 3 : 0; ?>"><?php echo $template['module_groups']['right']; ?></div> 
+        <?php 
+            }  
+        ?>
+        <!--  END: right module group  -->
+    	</div>
     </div>
-  </div>
   
-  <!--  page footer -->
-<div id="footer">
-    <ul>
-        <li><a href="<?php echo site_url(); ?>"><?php echo lang('home'); ?></a><span>|</span></li>
-        <li><a href="<?php echo site_url('specials'); ?>"><?php echo lang('specials'); ?></a><span>|</span></li>
-        <li><a href="<?php echo site_url('latest'); ?>"><?php echo lang('new_products'); ?></a><span>|</span></li>
-        <li><a href="<?php echo site_url('account'); ?>"><?php echo lang('my_account'); ?></a><span>|</span></li>
-        <li><a href="<?php echo site_url('account/wishlist'); ?>"><?php echo lang('my_wishlist'); ?></a><span>|</span></li>
-        <li><a href="<?php echo site_url('checkout/shopping_cart'); ?>"><?php echo lang('cart_contents'); ?></a><span>|</span></li>
-        <li><a href="<?php echo site_url('checkout/checkout'); ?>"><?php echo lang('checkout'); ?></a><span>|</span></li>
-        <li><a href="<?php echo site_url('contact_us'); ?>"><?php echo lang('contact_us'); ?></a><span>|</span></li>
-        <li><a href="<?php echo site_url('guestbooks'); ?>"><?php echo lang('guest_book'); ?></a><span>|</span></li>
-        <li><a href="<?php echo site_url('rss'); ?>"><img src="images/rss16x16.png" border="0" alt="" /><span><?php echo lang('rss_heading'); ?></span></a></li>    
-    </ul>
-    <div style="clear:both"></div>
-    <p>
+<!--  BEGIN: Page Footer -->
+<div class="container">
+	<div id="footer" class="row-fluid clearfix">
+    	<div class="span3">
+            <?php 
+                if (isset($template['module_groups']['footer-col-1'])):
+                    echo $template['module_groups']['footer-col-1']; 
+                endif;
+            ?>
+    	</div>
+    	<div class="span3">
+            <?php 
+                if (isset($template['module_groups']['footer-col-2'])):
+                    echo $template['module_groups']['footer-col-2']; 
+                endif;
+            ?>
+    	</div>
+    	<div class="span3">
+            <?php 
+                if (isset($template['module_groups']['footer-col-3'])):
+                    echo $template['module_groups']['footer-col-3']; 
+                endif;
+            ?>
+    	</div>
+    	<div class="span3">
+            <?php 
+                if (isset($template['module_groups']['footer-col-4'])):
+                    echo $template['module_groups']['footer-col-4']; 
+                endif;
+            ?>
+    	</div>
+    </div>
+    <p class="copyright pull-right">
     	Copyright &copy; 2011 <a href="index.php">TomatoCart Demo Store</a><br />Powered by <a href="http://www.tomatocart.com" target="_blank">TomatoCart</a>
     </p>
-    
-    <?php 
-        run_service('google_analytics'); 
-    ?>
-    
-    <?php 
-        run_service('debug'); 
-    ?>
 </div>
+<!--  END: Page Footer -->
+
+<!--  BEGIN: Run Service -->
+<?php 
+    run_service('google_analytics'); 
+?>
+
+<?php 
+    run_service('debug'); 
+?>
+<!--  END: Run Service -->
+  
+<script type="text/javascript">
+	$original = $('.nav > li.active');
+	$('.nav > li').mouseenter(function() {
+		$(this).parent().find('li').removeClass('active');
+		$(this).addClass('active');
+    });
+	$('.nav').mouseleave(function() {
+		$(this).parent().find('li').removeClass('active');
+		$original.addClass('active');
+    });
+
+	$('.dropdown-toggle').dropdown();
+	$('.popup-cart').popover({
+	    animation: true,
+	    trigger: 'hover',
+	    placement: 'bottom',
+	    html: true,
+	    title: '<b><?php echo lang('cart_contents'); ?></b>',
+	    content: '<?php echo get_shopping_cart_contents(); ?>'
+	});
+</script>
   <!--  END: page footer -->
 </body>
 </html>
