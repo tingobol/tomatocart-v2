@@ -32,7 +32,7 @@
   <h6 class="title"><?php echo $text_global; ?></h6>
 
   <div class="content">
-    <table border="0" width="100%" cellspacing="0" cellpadding="2">
+    <table width="100%" cellspacing="0" cellpadding="2">
       <tr>
         <td width="30"><input type="checkbox" value="1"  id="<?php echo $value_global; ?>" name="<?php echo $value_global; ?>"></td>
         <td><b><label for="product_global"><?php echo $text_global_notifications; ?></label></b></td>
@@ -56,7 +56,7 @@
   <?php
     if (is_array($notifications_products) && !empty($notifications_products)):
   ?>
-    <table border="0" width="100%" cellspacing="0" cellpadding="2">
+    <table width="100%" cellspacing="0" cellpadding="2">
       <tr>
         <td colspan="2"><?php echo $text_product_notifications_products_description; ?></td>
       </tr>

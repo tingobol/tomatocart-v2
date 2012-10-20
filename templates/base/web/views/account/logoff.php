@@ -16,20 +16,20 @@
 */
 ?>
 
-<div class="moduleBox">
-    <h1><?php echo lang('sign_out_heading'); ?></h1>
-    
-    <div class="content clearfix">
-        <div style="float: left;">
+<h1><?php echo lang('sign_out_heading'); ?></h1>
+
+<div class="module-box">
+	<div class="row-fluid">
+        <div class="span3">
             <img src="<?php echo image_url('account_successs.png'); ?>" />
         </div>
         
-        <div style="padding-top: 30px;">
+        <div class="span9">
           <p><?php echo lang('sign_out_text'); ?></p>
         </div>
     </div>
 </div>
 
-<div class="submitFormButtons clearfix">
-    <a class="button fr" href="<?php echo base_url(); ?>"><?php echo lang('button_continue'); ?></a>
+<div class="control-group clearfix">
+    <a class="btn btn-small btn-info pull-right" href="<?php echo base_url(); ?>"><i class="icon-chevron-right icon-white"></i> <?php echo lang('button_continue'); ?></a>
 </div>

@@ -38,7 +38,7 @@
             <p><?php echo sprintf(lang('login_returning_customer_password_forgotten'), site_url('account/password_forgotten'));?></p>
 
             <p align="right">
-                <button type="submit" class="small button" id="btn-login"><?php echo lang('button_sign_in'); ?></button>
+                <button type="submit" class="btn btn-small btn-small" id="btn-login"><?php echo lang('button_sign_in'); ?></button>
             </p>
         </div>
     </form>
@@ -64,7 +64,7 @@
         <p><?php echo lang('login_new_customer_text');?></p>
 
         <p align="right">
-            <button type="submit" class="small button" id="btn-new-customer"><?php echo lang('button_continue'); ?></button>
+            <button type="submit" class="btn btn-small btn-small" id="btn-new-customer"><?php echo lang('button_continue'); ?></button>
         </p>
     </div>
 </div>

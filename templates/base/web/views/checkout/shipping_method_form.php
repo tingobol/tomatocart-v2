@@ -39,7 +39,7 @@
         endif;
     ?>
     
-    	<table border="0" width="100%" cellspacing="0" cellpadding="2">
+    	<table width="100%" cellspacing="0" cellpadding="2">
     
             <?php
                 $radio_buttons = 0;
@@ -47,7 +47,7 @@
             ?>
             <tr>
                 <td>
-                	<table border="0" width="100%" cellspacing="0" cellpadding="2">
+                	<table width="100%" cellspacing="0" cellpadding="2">
                         <tr>
                             <td width="10">&nbsp;</td>
                             <td colspan="3">
@@ -71,7 +71,7 @@
                     <?php
                         else :
                             foreach ($quote['methods'] as $methods) :
-                                if ($quote['id'] . '_' . $methods['id'] == $selected_shipping_method_id) :
+                                if ($quote['id'] . '-' . $methods['id'] == $selected_shipping_method_id) :
                     ?>
 						 <tr id="defaultSelected" class="moduleRowSelected">
                     <?php 
@@ -87,7 +87,7 @@
                             if ( (count($quotes) > 1) || (sizeof($quote['methods']) > 1) ) :
                         ?>
                             <td><?php echo currencies_display_price($methods['cost'], $quote['tax_class_id']); ?></td>
-                            <td align="right"><?php echo form_radio('shipping_mod_sel', $quote['id'] . '_' . $methods['id'], ($quote['id'] . '_' . $methods['id'] == $selected_shipping_method_id) ? TRUE : FALSE); ?></td>
+                            <td align="right"><?php echo form_radio('shipping_mod_sel', $quote['id'] . '-' . $methods['id'], ($quote['id'] . '_' . $methods['id'] == $selected_shipping_method_id) ? TRUE : FALSE); ?></td>
                         <?php
                             else :
                         ?>
@@ -117,5 +117,5 @@
 ?>
 
 <p align="right">
-    <button type="submit" class="small button" id="btn-save-shipping-method"><?php echo lang('button_continue'); ?></button>
+    <button type="submit" class="btn btn-small btn-small" id="btn-save-shipping-method"><?php echo lang('button_continue'); ?></button>
 </p>

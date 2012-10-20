@@ -21,25 +21,26 @@
 <?php 
     if (sizeof($products) > 0): 
 ?>
-<div id="specials" class="content">
+<div class="module-box col3 clearfix">
     <?php 
         foreach($products as $product):
     ?>
-    <div class="product col3">
+    <div class="center">
         <p class="name"><a href="<?php echo site_url('product/' . $product['products_id']); ?>"><?php echo $product['product_name']; ?></a></p>
         <a href="<?php echo site_url('product/' . $product['products_id']); ?>"><img src="<?php echo product_image_url($product['product_image']); ?>" title="<?php echo $product['product_name']; ?>" alt="<?php echo $product['product_name']; ?>"/></a>     
         <p class="price"><s><?php echo currencies_format($product['product_price']); ?></s><span class="special"><?php echo currencies_format($product['special_price']); ?></span></p>
-        <a class="button small"><?php echo lang('button_add_to_cart'); ?></a>
+        <a class="btn btn-small btn-small btn-small btn-info" href="<?php echo site_url('cart_add/' . $product['products_id']); ?>">
+        	<i class="icon-shopping-cart icon-white "></i> 
+            <?php echo lang('button_add_to_cart'); ?>
+        </a>
     </div>
     <?php 
         endforeach;
     ?>
-    <div class="paginate">
-        <?php echo $links; ?>
-    </div>
-    <div class="clear"></div>
+</div>
+<div class="pagination clearfix">
+    <?php echo $links; ?>
 </div>
 <?php 
     endif; 
 ?>
-  

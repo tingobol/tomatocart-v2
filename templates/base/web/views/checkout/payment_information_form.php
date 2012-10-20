@@ -52,7 +52,7 @@
         endif;
     ?>
     
-    	<table id="payment_methods" border="0" width="100%" cellspacing="0" cellpadding="2">
+    	<table id="payment_methods" width="100%" cellspacing="0" cellpadding="2">
         <?php
             $radio_buttons = 0;
             for ($i = 0, $n = sizeof($selection); ($i < $n); $i++) :
@@ -60,7 +60,7 @@
 
 			<tr id="payment_method_<?php echo $selection[$i]['id']; ?>">
 				<td colspan="2">
-					<table border="0" width="100%" cellspacing="0" cellpadding="2">
+					<table width="100%" cellspacing="0" cellpadding="2">
                     <?php
                         if ( ($n == 1) || ($has_billing_method && ($selection[$i]['id'] == $selected_billing_method_id)) ) :
                     ?>
@@ -102,7 +102,7 @@
                         <tr>
                         	<td width="10">&nbsp;</td>
                         	<td colspan="4">
-                        		<table border="0" cellspacing="0" cellpadding="2">
+                        		<table cellspacing="0" cellpadding="2">
                                 <?php
                                     for ($j=0, $n2=sizeof($selection[$i]['fields']); $j<$n2; $j++) :
                                 ?>
@@ -145,5 +145,5 @@
 <br />
     
 <p align="right">
-	<button type="submit" class="small button" id="btn-save-payment-form"><?php echo lang('button_continue'); ?></button>
+	<button type="submit" class="btn btn-small btn-small" id="btn-save-payment-form"><?php echo lang('button_continue'); ?></button>
 </p>

@@ -16,18 +16,16 @@
 */
 ?>
 
-<h1 class="title"><?php echo lang('create_account_success_heading'); ?></h1>
+<h1><?php echo lang('create_account_success_heading'); ?></h1>
 
-<div class="moduleBox">
-    <div class="content clearfix">
-        <div style="float: left;"><img src="<?php echo image_url('account_successs.png'); ?>" /></div>
-        
-        <div style="padding-top: 30px;">
-          	<p><?php echo sprintf(lang('success_account_created'), site_url('contact_us')); ?></p>
-        </div>
+<div class="module-box row-fluid">
+    <div class="span3"><img src="<?php echo image_url('account_successs.png'); ?>" /></div>
+    
+    <div class="span9">
+      	<p><?php echo sprintf(lang('success_account_created'), site_url('contact_us')); ?></p>
     </div>
 </div>
 
-<div class="submitFormButtons clearfix">
-	<a class="button fr" href="<?php echo site_url('index'); ?>"><?php echo lang('button_continue'); ?></a>
+<div class="controls clearfix">
+	<a href="<?php echo site_url('account'); ?>" class="btn btn-small btn-info pull-right"><i class="icon-chevron-right icon-white"></i> <?php echo lang('button_continue'); ?></a>
 </div>

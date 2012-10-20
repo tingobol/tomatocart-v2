@@ -18,9 +18,9 @@
 
 <h1><?php echo lang('info_sitemap_heading'); ?></h1>
 
-<div class="moduleBox sitemapBox">
-    <div class="content clearfix">
-        <ul class="fr sitemapLinks">
+<div class="module-box sitemapBox">
+    <div class="row-fluid clearfix">
+        <ul class="span6 sitemapLinks">
             <li>
                 <a href="<?php echo site_url('account'); ?>"><?php echo lang('sitemap_account'); ?></a>
                 <ul>
@@ -42,6 +42,8 @@
             </li>
         </ul>
         
-        <div class="sitemapCategoryTree"><?php echo $category_tree; ?></div>
+        <div class="span6 sitemapCategoryTree">
+            <?php echo $category_tree; ?>
+        </div>
     </div>
 </div>

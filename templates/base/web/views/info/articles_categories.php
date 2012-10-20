@@ -22,10 +22,10 @@
     if (!empty($articles)) :
         foreach ($articles as $article) :
 ?>
-<div class="moduleBox">
-    <h6><span class="fr"><?php echo get_date_short($article['articles_date_added']); ?></span><a href="<?php echo site_url('articles/' . $article['articles_id']); ?>"><?php echo $article['articles_name']; ?></a></h6>
+<div class="module-box clearfix">
+    <h6><span class="pull-right"><?php echo get_date_short($article['articles_date_added']); ?></span><a href="<?php echo site_url('articles/' . $article['articles_id']); ?>"><?php echo $article['articles_name']; ?></a></h6>
     
-    <div class="content clearfix">
+    <div class="content">
         <p>
             <?php
                 $description = strip_tags($article['articles_description']);
@@ -40,12 +40,12 @@
     else:
 ?>
 
-<div class="moduleBox">
+<div class="module-box">
     <div class="content"><?php echo lang('no_article_in_this_category'); ?></div>
 </div>
 
-<div class="submitFormButtons clearfix">
-    <a href="<?php echo site_url(); ?>" class="button fr"><?php echo lang('button_continue'); ?></a>
+<div class="controls clearfix">
+	<a href="<?php echo site_url(); ?>" class="btn btn-small btn-info pull-right"><i class="icon-chevron-right icon-white"></i><?php echo lang('button_continue'); ?></a>
 </div>
 
 <?php    

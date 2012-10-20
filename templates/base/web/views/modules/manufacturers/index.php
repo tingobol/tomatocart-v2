@@ -27,7 +27,7 @@
         <?php 
             foreach ($manufacturers as $manufacturer):
         ?>
-            <li class="center">
+            <li>
             	<a href="<?php echo site_url('search?manufacturers=' . $manufacturer['manufacturers_id']); ?>">
             		<img src="<?php echo image_url('manufacturers/' .  $manufacturer['manufacturers_image']); ?>" title="<?php echo $manufacturer['manufacturers_name']; ?>" />
             	</a>

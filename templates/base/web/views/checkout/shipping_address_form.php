@@ -174,7 +174,7 @@
         </ol>
         
         <p align="right">
-          	<button type="submit" class="small button" id="btn-save-shipping-form"><?php echo lang('button_continue'); ?></button>
+          	<button type="submit" class="btn btn-small btn-small" id="btn-save-shipping-form"><?php echo lang('button_continue'); ?></button>
         </p>
     </div>
 </div>

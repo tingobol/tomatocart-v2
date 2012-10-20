@@ -18,8 +18,10 @@
 
 <h1><?php echo $information['articles_name']; ?></h1>
 
-<p><?php echo $information['articles_description']; ?></p>
+<div class="module-box">
+    <div class="content"><?php echo $information['articles_description']; ?></div>
+</div>
 
-<div class="submitFormButtons clearfix">
-	<a href="<?php echo site_url('index'); ?>" class="button fr"><?php echo lang('button_continue'); ?></a>
+<div class="controls clearfix">
+	<a href="<?php echo site_url(); ?>" class="btn btn-small btn-info pull-right"><i class="icon-chevron-right icon-white"></i><?php echo lang('button_continue'); ?></a>
 </div>

@@ -21,12 +21,12 @@
 <?php 
     if ($has_contents == TRUE) :
 ?>
-<form name="shopping_cart" action="<?php echo site_url('cart_update'); ?>" method="post">
-    <div class="box">
+<form name="shopping_cart" action="<?php echo site_url('cart_update'); ?>" method="post" class="clearfix">
+    <div class="module-box">
 		<h6 class="title"><?php echo lang('shopping_cart_heading'); ?></h6>
     
         <div class="content">
-            <table border="0" width="100%" cellspacing="5" cellpadding="2">
+            <table width="100%" cellspacing="5" cellpadding="2">
             
             <?php
                 $_cart_date_added = null;
@@ -47,7 +47,7 @@
                     <td valign="top" width="30" align="center">
                         <!--Delete Icon-->
                         <a href="<?php echo site_url('cart_delete/' . encode_product_id_string($product['id'])); ?>">
-                        	<img border="0" title="<?php echo lang('button_delete');?>" alt="<?php echo lang('button_delete');?>" src="<?php echo image_url('small_delete.gif');?>">
+                        	<i title="<?php echo lang('button_delete');?>" class="icon-trash"></i>
                         </a>
                         <!--END: Delete Icon-->
                     </td>
@@ -78,7 +78,7 @@
             ?>
             </table>
         </div>
-        <table border="0" width="100%" cellspacing="0" cellpadding="2">
+        <table width="100%" cellspacing="0" cellpadding="2">
         <?php
             foreach ($order_totals as $module) :
         ?>
@@ -107,11 +107,11 @@
     </div>
     
     <div class="submitFormButtons">
-        <span style="float: right;"><a class="button" href="<?php echo site_url('checkout'); ?>"><?php echo lang('button_checkout');?></a></span>
+        <div class="span4"><a href="<?php echo base_url(); ?>" class="btn btn-small btn-small"><i class="icon-chevron-right"></i> <?php echo lang('button_continue_shopping'); ?></a></div>
         
-        <a href="<?php echo base_url(); ?>" class="button"><?php echo lang('button_continue_shopping'); ?></a>
-        
-        <span><input type="submit" class="button" value="<?php echo lang('button_update_cart'); ?>" /></span>
+        <div class="span5"><button type="submit" class="btn btn-small btn-small"><i class="icon-refresh"></i> <?php echo lang('button_update_cart'); ?></button></div>
+
+        <div class="span3"><a class="btn btn-small btn-small btn-info pull-right" href="<?php echo site_url('checkout'); ?>"><i class="icon-ok-sign icon-white"></i> <?php echo lang('button_checkout');?></a></div>
     </div>
 </form>
 <?php 
@@ -121,7 +121,7 @@
 <p><?php echo lang('shopping_cart_empty'); ?></p>
 
 <div class="submitFormButtons" style="text-align: right;">
-	<a href="<?php echo base_url(); ?>" class="button"><?php echo lang('button_continue'); ?></a>
+	<a href="<?php echo base_url(); ?>" class="btn btn-small btn-small"><i class="icon-chevron-right"></i> <?php echo lang('button_continue'); ?></a>
 </div>
 
 <?php 

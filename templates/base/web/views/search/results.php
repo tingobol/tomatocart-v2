@@ -38,7 +38,7 @@
             </div>  
             <span class="price center span2"><?php echo currencies_format($product['products_price']); ?></span>
             <div class="buttons span2">
-                <a class="btn btn-small btn-small btn-info" href="<?php echo site_url('cart_add/' . $product['products_id']); ?>">
+                <a class="btn btn-small btn-small btn-small btn-info" href="<?php echo site_url('cart_add/' . $product['products_id']); ?>">
                 	<i class="icon-shopping-cart icon-white "></i> 
                 	<?php echo lang('button_add_to_cart'); ?>
                 </a><br />
@@ -57,7 +57,6 @@
 <?php 
     endif; 
 ?>
-
-<div class="submitFormButtons clearfix">
-    <a class="button fl" href="<?php echo site_url('search'); ?>"><?php echo lang('button_back'); ?></a>
+<div class="controls clearfix">
+    <a class="btn btn-small btn-info pull-right" href="<?php echo site_url('search'); ?>"><i class="icon-chevron-left icon-white"></i> <?php echo lang('button_back'); ?></a>
 </div>
