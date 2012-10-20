@@ -28,6 +28,21 @@
  */
 class Cpath extends TOC_Controller
 {
+    /**
+     * Page number
+     * 
+     * @access private
+     * @var number
+     */
+    private $page_num = 1;
+    
+    /**
+     * Pagination url segment
+     * 
+     * @access private
+     * @var number
+     */
+    private $uri_segment = 0;
 
     /**
      * Constructor
@@ -51,9 +66,9 @@ class Cpath extends TOC_Controller
         //get function arguments
         $arguments = func_get_args();
 
-        //cnnect arguments to cpath
-        $cpath = implode('/', $arguments);
-
+        //connect arguments to cpath
+        $cpath = $this->parse_cpath();
+        
         //if has arguments
         if ($cpath != NULL)
         {
@@ -109,23 +124,19 @@ class Cpath extends TOC_Controller
                 if ($this->categories_model->has_products($current_category_id))
                 {
                     //get page
-                    $page = $this->uri->segment(4);
                     $filter = array(
-                    'categories_id' => $current_category_id,
-                    'page' => (isset($page) && is_numeric($page)) ? ($page - 1) : 0,
-                    'per_page' => config('MAX_DISPLAY_SEARCH_RESULTS'));
+                        'categories_id' => $current_category_id,
+                        'page' => $this->page_num - 1,
+                        'per_page' => config('MAX_DISPLAY_SEARCH_RESULTS'));
 
                     $products = $this->products_model->get_products($filter);
 
                     //initialize pagination parameters
-                    $pagination['base_url'] = site_url('cpath/' . $cpath . '/page');
-                    $pagination['total_rows'] = $this->products_model->count_products($filter);
-                    $pagination['per_page'] = config('MAX_DISPLAY_SEARCH_RESULTS');
-                    $pagination['use_page_numbers'] = TRUE;
-                    $pagination['uri_segment'] = 4;
+                    $pagination = $this->get_pagination_config($cpath, $filter);
 
                     //load pagination library
-                    $this->load->library('pagination');
+                    $this->load->library('pagination', $pagination);
+
                     $this->pagination->initialize($pagination);
                     $data['links'] = $this->pagination->create_links();
 
@@ -156,6 +167,72 @@ class Cpath extends TOC_Controller
         {
             redirect('index');
         }
+    }
+    
+    /**
+     * Get pagination configurations
+     * 
+     * @access private
+     * @return array
+     */
+    private function get_pagination_config($cpath, $filter) 
+    {
+        //initialize pagination parameters
+        $pagination['base_url'] = site_url('cpath/' . $cpath) . '/page';
+        $pagination['total_rows'] = $this->products_model->count_products($filter);
+        $pagination['per_page'] = config('MAX_DISPLAY_SEARCH_RESULTS');
+        $pagination['use_page_numbers'] = TRUE;
+        $pagination['uri_segment'] = $this->uri_segment;
+        
+        $pagination['full_tag_open'] = '<ul>';
+        $pagination['full_tag_close'] = '</ul>';
+        
+        $pagination['first_tag_open'] = '<li>';
+        $pagination['first_tag_close'] = '</li>';
+        
+        $pagination['last_tag_open'] = '<li>';
+        $pagination['last_tag_close'] = '</li>';
+        
+        $pagination['cur_tag_open'] = '<li class="current"><a href="javascript:void(0);">';
+        $pagination['cur_tag_close'] = '</a></li>';
+        
+        $pagination['next_tag_open'] = '<li>';
+        $pagination['next_tag_close'] = '</li>';
+        
+        $pagination['prev_tag_open'] = '<li>';
+        $pagination['prev_tag_close'] = '</li>';
+        
+        $pagination['num_tag_open'] = '<li>';
+        $pagination['num_tag_close'] = '</li>';
+        
+        return $pagination;
+    }
+    
+    /**
+     * Parse cpath from url segments
+     * 
+     * @access private
+     * @return string
+     */
+    private function parse_cpath() 
+    {
+        $segments = $this->uri->segment_array();
+        
+        foreach($segments as $i => $segment) 
+        {
+            if ( ($segment == 'page') && (isset($segments[$i + 1])) && (is_numeric($segments[$i + 1])) ) 
+            {
+                $this->page_num = $segments[$i + 1];
+                $this->uri_segment = $i + 1;
+                break;
+            }
+            else if (($segment != 'cpath') && ($segment != 'page'))
+            {
+                $cpaths[] = $segment;
+            }
+        }
+        
+        return implode('/', $cpaths);
     }
 }
 
