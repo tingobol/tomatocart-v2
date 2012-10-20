@@ -48,10 +48,9 @@
         <?php
             endforeach;
         ?>
-        <div class="clear"></div>
     </div>
     
-    <div class="pagination">
+    <div class="pagination clearfix">
     	<?php  echo $links; ?>
     </div>
 <?php 
