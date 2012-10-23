@@ -107,9 +107,9 @@
     </div>
     
     <div class="submitFormButtons">
-        <div class="span4"><a href="<?php echo base_url(); ?>" class="btn btn-small btn-small"><i class="icon-chevron-right"></i> <?php echo lang('button_continue_shopping'); ?></a></div>
+        <div class="span4"><a href="<?php echo base_url(); ?>" class="btn btn-small btn-info"><i class="icon-chevron-right icon-white"></i> <?php echo lang('button_continue_shopping'); ?></a></div>
         
-        <div class="span5"><button type="submit" class="btn btn-small btn-small"><i class="icon-refresh"></i> <?php echo lang('button_update_cart'); ?></button></div>
+        <div class="span5"><button type="submit" class="btn btn-small btn-info"><i class="icon-refresh icon-white"></i> <?php echo lang('button_update_cart'); ?></button></div>
 
         <div class="span3"><a class="btn btn-small btn-small btn-info pull-right" href="<?php echo site_url('checkout'); ?>"><i class="icon-ok-sign icon-white"></i> <?php echo lang('button_checkout');?></a></div>
     </div>
@@ -121,7 +121,7 @@
 <p><?php echo lang('shopping_cart_empty'); ?></p>
 
 <div class="submitFormButtons" style="text-align: right;">
-	<a href="<?php echo base_url(); ?>" class="btn btn-small btn-small"><i class="icon-chevron-right"></i> <?php echo lang('button_continue'); ?></a>
+	<a href="<?php echo base_url(); ?>" class="btn btn-small btn-info"><i class="icon-chevron-right icon-white"></i> <?php echo lang('button_continue'); ?></a>
 </div>
 
 <?php 
