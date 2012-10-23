@@ -95,8 +95,8 @@ if( ! function_exists('get_date_short'))
             return strftime($CI->lang->get_date_format_short(), mktime($hour, $minute, $second, $month, $day, $year));
         }
         else
-        {
-            return ereg_replace('2037', $year, strftime($CI->lang->get_date_format_short(), mktime($hour, $minute, $second, $month, $day, 2037)));
+        {            
+            return preg_replace('/2037/', $year, strftime($CI->lang->get_date_format_short(), mktime($hour, $minute, $second, $month, $day, 2037)));
         }
     }
 }
@@ -134,7 +134,7 @@ if( ! function_exists('get_date_long'))
         }
         else
         {
-            return ereg_replace('2037', $year, strftime($CI->lang->get_date_format_long(), mktime($hour, $minute, $second, $month, $day, 2037)));
+            return preg_replace('/2037/', $year, strftime($CI->lang->get_date_format_long(), mktime($hour, $minute, $second, $month, $day, 2037)));
         }
     }
 }
