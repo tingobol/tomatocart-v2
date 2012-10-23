@@ -27,14 +27,12 @@
  * @link		http://tomatocart.com/wiki/
  */
 
-// ------------------------------------------------------------------------
-
 /**
- * Gets a translation
+ * Gets a configuration option value
  *
  * @access public
- * @param $key The key to the translation
- * @return string translation
+ * @param $key The configuration name
+ * @return string
  */
 if( ! function_exists('config'))
 {
@@ -44,41 +42,6 @@ if( ! function_exists('config'))
         $line = $CI->configuration->line($key);
 
         return $line;
-    }
-}
-
-/**
- * Gets a translation
- *
- * @access public
- * @param $key The key to the translation
- * @return string translation
- */
-if( ! function_exists('lang'))
-{
-    function lang($key)
-    {
-        $CI =& get_instance();
-        $line = $CI->lang->line($key);
-
-        return $line;
-    }
-}
-
-/**
- * Get current lang id
- *
- * @access public
- * @return int
- */
-if ( ! function_exists('lang_id'))
-{
-    function lang_id()
-    {
-        $CI =& get_instance();
-        $lang_id = $CI->lang->get_id();
-
-        return $lang_id;
     }
 }
 
@@ -234,7 +197,6 @@ if( ! function_exists('address_format'))
 
         return $formated;
     }
-
 
     /**
      * Execute service module
