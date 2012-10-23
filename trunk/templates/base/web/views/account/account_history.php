@@ -39,7 +39,7 @@
 		<?php echo '<b>' . lang('order_products') . '</b> ' . $order['number_of_products'] . '<br /><b>' . lang('order_cost') . '</b> ' . strip_tags($order['order_total']); ?>
 	</div>
 	<div class="span4">
-		<a class="btn btn-small btn-mini btn-success pull-right" href="<?php echo site_url('account/orders/view/' . $order['orders_id']); ?>" class="button"><i class="icon-list-alt icon-white"></i> <?php echo lang('button_view'); ?></a>
+		<a class="btn btn-small btn-mini btn-info pull-right" href="<?php echo site_url('account/orders/view/' . $order['orders_id']); ?>" class="button"><i class="icon-list-alt icon-white"></i> <?php echo lang('button_view'); ?></a>
 	</div>
 </div>
 <?php
@@ -52,5 +52,5 @@
 ?>
 
 <div class="control-group clearfix">
-	<a href="<?php echo site_url('account'); ?>" class="btn btn-small btn-small pull-left"><i class="icon-chevron-left"></i> <?php echo lang('button_back'); ?></a>
+	<a href="<?php echo site_url('account'); ?>" class="btn btn-small btn-info pull-left"><i class="icon-chevron-left icon-white"></i> <?php echo lang('button_back'); ?></a>
 </div>
