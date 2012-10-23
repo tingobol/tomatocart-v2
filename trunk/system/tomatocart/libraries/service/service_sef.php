@@ -140,8 +140,10 @@ class TOC_Service_Sef extends TOC_Service_Module
                 return $ci->config->slash_item('base_url').$ci->config->item('index_page').'/articles_categories/'.$friendly_url;
             }
         }
-
+        
         //if no regex is matched then we use the normal site url
-        return $this->ci->config->ci_site_url($uri);
+        $site_url = $this->ci->config->ci_site_url($uri);
+        
+        return str_replace('&', '&amp;', $site_url); 
     }
 }
