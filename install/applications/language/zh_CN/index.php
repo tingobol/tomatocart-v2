@@ -62,7 +62,7 @@ param_web_address_description = 在线网店系统网址
 param_web_root_directory = 网络服务器根目录
 param_web_root_directory_description = 服务器上，在线网店安装的根目录
 param_web_work_directory = 工作目录
-param_web_work_directory_description = 工作目录用于存储零时文件。出于安全考虑，该目录不应位于公共服务器的根目录下。 (共享服务器不应该使用 /tmp/ 目录)
+param_web_work_directory_description = 工作目录用于存储临时文件。出于安全考虑，该目录不应位于公共服务器的根目录下。 (共享服务器不应该使用 /tmp/ 目录)
 
 param_store_name = 店名
 param_store_name_description = 公开的在线网店的名称。

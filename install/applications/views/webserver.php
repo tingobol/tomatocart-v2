@@ -59,7 +59,7 @@
                         </div>
                         <div class="description"><?php echo lang('param_web_address_description'); ?></div>
                     </div>
-                    
+                    <!-- 
                     <div class="control-group">
                         <label class="control-label" for="DIR_FS_DOCUMENT_ROOT"><?php echo lang('param_web_root_directory'); ?></label>
                         <div class="controls">
@@ -75,12 +75,13 @@
                         </div>
                         <div class="description"><?php echo lang('param_web_work_directory_description'); ?></div>
                     </div>
+                     -->
                 </div>
                 
                 <div class="control-group">
                     <div class="controls pull-right">
-                    	<a href="<?php echo site_url(); ?>" class="btn"><i class="icon-remove"></i> &nbsp;<?php echo lang('image_button_cancel'); ?></a>
-                    	<a href="<?php echo site_url('index/index/setting'); ?>" class="btn"><i class="icon-ok"></i> &nbsp;<?php echo lang('image_button_continue'); ?></a>
+                    	<a href="<?php echo site_url(); ?>" class="btn btn-info"><i class="icon-remove icon-white"></i> &nbsp;<?php echo lang('image_button_cancel'); ?></a>
+                    	<a href="<?php echo site_url('index/index/setting'); ?>" class="btn btn-info"><i class="icon-ok icon-white"></i> &nbsp;<?php echo lang('image_button_continue'); ?></a>
                     </div>
                 </div>
             </form>
