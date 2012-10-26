@@ -31,6 +31,7 @@
     
     <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/stylesheet.css">
+    <script src="<?php echo base_url()?>assets/js/jquery-1.8.2.min.js" type="text/javascript"></script>
 </head>
 <body>
 

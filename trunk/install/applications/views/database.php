@@ -43,33 +43,34 @@
           	<p><?php echo lang('text_database_server_setup'); ?></p>
                   	
             
-                <form name="install" id="installForm" action="<?php echo site_url('index/index/save_db'); ?>" method="post" onsubmit="prepareDB(); return false;" class="form-horizontal">
+                <form name="install" id="installForm" action="<?php echo site_url('index/index/db_create'); ?>" method="post" onsubmit="prepareDB(); return false;" class="form-horizontal">
                     <div class="info">
                         <div class="control-group">
                             <label class="control-label" for="DB_SERVER"><?php echo lang('param_database_server'); ?>:</label>
                             <div class="controls">
-                            	<input type="text" id="DB_SERVER" name="DB_SERVER" />
+                            	<input type="text" id="DB_SERVER" name="DB_SERVER" <?php if(!empty($DB_SERVER)){echo "value='$DB_SERVER'";} ?> />
                             </div>
                             <div class="description"><?php echo lang('param_database_server_description'); ?></div>
                         </div>
                         <div class="control-group">
                             <label class="control-label" for="DB_SERVER_USERNAME"><?php echo lang('param_database_username'); ?>:</label>
                             <div class="controls">
-                            	<input type="text" id="DB_SERVER_USERNAME" name="DB_SERVER_USERNAME" />
+                            	<input type="text" id="DB_SERVER_USERNAME" name="DB_SERVER_USERNAME" <?php if(!empty($DB_SERVER_USERNAME)){echo "value='$DB_SERVER_USERNAME'";} ?> />
                             </div>
                             <div class="description"><?php echo lang('param_database_username_description'); ?></div>
                         </div>
                         <div class="control-group">
                             <label class="control-label" for="DB_SERVER_PASSWORD"><?php echo lang('param_database_password'); ?>:</label>
                             <div class="controls">
-                            	<input type="password" id="DB_SERVER_PASSWORD" name="DB_SERVER_PASSWORD" />
+                            	<input type="password" id="DB_SERVER_PASSWORD" name="DB_SERVER_PASSWORD" <?php if(!empty($DB_SERVER_PASSWORD)){echo "value='$DB_SERVER_PASSWORD'";} ?> />
                             </div>
                             <div class="description"><?php echo lang('param_database_password_description'); ?></div>
                         </div>
-                        <div class="control-group">
+                        <div class="control-group <?php echo (!empty($warn_msg) && $warn_msg=='db_exist') ? 'error':''; ?>">
                             <label class="control-label" for="DB_DATABASE"><?php echo lang('param_database_name'); ?>:</label>
                             <div class="controls">
-                            	<input type="password" id="DB_DATABASE" name="DB_DATABASE" />
+                            	<input type="text" id="DB_DATABASE" name="DB_DATABASE" <?php if(!empty($DB_DATABASE)){echo "value='$DB_DATABASE'";} ?> />
+                            	<span class="help-inline"><?php echo (!empty($warn_msg) && $warn_msg=='db_exist') ? lang('error_duplicate_db'):''; ?></span>
                             </div>
                             <div class="description"><?php echo lang('param_database_name_description'); ?></div>
                         </div>
@@ -77,7 +78,11 @@
                             <label class="control-label" for="DB_DATABASE_CLASS"><?php echo lang('param_database_type'); ?>:</label>
                             <div class="controls">
                             	<?php 
-                            	    echo form_dropdown('DB_DATABASE_CLASS', $db_table_types);
+                            	    if(empty($DB_DATABASE_CLASS)){
+                                	    echo form_dropdown('DB_DATABASE_CLASS', $db_table_types);
+                            	    }else{
+                                	    echo form_dropdown('DB_DATABASE_CLASS', $db_table_types,$DB_DATABASE_CLASS);                            	        
+                            	    }
                             	?>
                             </div>
                             <div class="description"><?php echo lang('param_database_type_description'); ?></div>
@@ -85,19 +90,95 @@
                         <div class="control-group">
                             <label class="control-label" for="DB_TABLE_PREFIX"><?php echo lang('param_database_prefix'); ?>:</label>
                             <div class="controls">
-                            	<input type="text" id="DB_TABLE_PREFIX" name="DB_TABLE_PREFIX" value="toc_" />
+                            	<input type="text" id="DB_TABLE_PREFIX" name="DB_TABLE_PREFIX" <?php if(!empty($DB_TABLE_PREFIX)){echo "value='$DB_TABLE_PREFIX'";}else{echo "value='toc_'";} ?> />
                             </div>
                             <div class="description"><?php echo lang('param_database_prefix_description'); ?></div>
                         </div>
                     </div>
-                    <div class="control-group">
-                        <div class="controls pull-right">
-                        	<a href="javascript:void(0);" class="btn btn-info" href="<?php echo site_url(); ?>"><i class="icon-remove icon-white"></i> &nbsp;<?php echo lang('image_button_cancel'); ?></a>
-                			<a href="<?php echo site_url('index/index/webserver'); ?>" class="btn btn-info"><i class="icon-ok icon-white"></i> &nbsp;<?php echo lang('image_button_continue'); ?></a>
-                        </div>
+                    <div>
+                        <span class="span7" id="alert_msg_panel">
+                                <?php if(!empty($error_msg)):?>
+                                <span class="alert alert-error"><?php echo lang($error_msg); ?></span>
+                                <?php elseif (!empty($warn_msg)):?>
+                                <span class="alert alert-block"><?php echo lang($warn_msg); ?></span>                                
+                                <?php elseif ($create_db_success):?>
+                                <span class="alert alert-success"><?php echo lang('msg_create_db_success'); ?></span>                                
+                                <?php endif;?>        
+                        </span>
+                          
+                        <span id="btns_checks" <?php echo (!empty($warn_msg) && $warn_msg=='db_exist') ? '':'style="display: none;"'; ?>>
+                           <span class="span2 pull-right" style="margin:0 0 0 0; width: 75px;">
+                        	   <a id="btn_retain" class="btn btn-info"><i class="icon-ok icon-white"></i> &nbsp;<?php echo lang('image_button_retain'); ?></a>
+                           </span>
+                           <span class="span2 pull-right" style="margin:0 0 0 0; width: 75px;">
+                        	   <button type="submit" class="btn btn-warning"><i class="icon-ok icon-white"></i> &nbsp;<?php echo lang('image_button_rebuild'); ?></button>
+                               <?php if(!empty($warn_msg) && $warn_msg=='db_exist'):?>
+                        	       <input type="hidden" name="rebuild" value="yes"/>
+                        	   <?php endif;?>
+                           </span>
+                        </span>
+                        <?php if(!empty($warn_msg) && $warn_msg=='db_exist'):?>
+                        <?php else:?>
+                            
+                        <?php endif?>
+                        <span id="btns_db" <?php echo (!empty($warn_msg) && $warn_msg=='db_exist') ? 'style="display: none;"':''; ?>>
+                            <?php if($create_db_success):?>
+                                <span class="span2 pull-right" style="margin:0 0 0 0; width: 110px;">
+                                	<a href="<?php echo site_url('index/index/webserver'); ?>" class="btn btn-info"><i class="icon-ok icon-white"></i> &nbsp;<?php echo lang('image_button_continue'); ?></a>
+                                </span>
+                                <span class="span2 pull-right" style="margin-top: 0px;">                        
+                                   	<a href="javascript:void(0);" class="btn btn-info" href="<?php echo site_url(); ?>"><i class="icon-remove icon-white"></i> &nbsp;<?php echo lang('image_button_cancel'); ?></a>
+                                </span>
+                                <?php else:?>
+                                <span class="span2 pull-right" style="margin:0 0 0 0;width: 125px;">
+                                	<button type="submit" class="btn btn-info disabled" disabled="true"><i class="icon-plus icon-white"></i> &nbsp;<?php echo lang('image_button_create_db'); ?></button>
+                                </span>
+                                <span class="span2 pull-right" style="margin-top: 0px;">                        
+                                   	<a href="javascript:void(0);" class="btn btn-info" href="<?php echo site_url(); ?>"><i class="icon-remove icon-white"></i> &nbsp;<?php echo lang('image_button_cancel'); ?></a>
+                                </span>
+                            <?php endif;?>
+                       </span>
                     </div>
                 </form>
             </div>
     	</div>
-	</div>
 </div>
+<script type="text/javascript">
+        (function($){
+            
+            $('#installForm').delegate('input','keyup blur',function(){
+                var is_fill=false;
+            	var flds = $('#installForm').find('input');
+                var size = flds.size();
+                for(var i=0;i<size;i++){
+                    if(!$(flds[i]).val()){
+                        is_fill = false;
+                        break;
+                    }
+                    if(i==size-1){
+                        is_fill = true;
+                    }
+                }
+                //console.log(is_fill);
+                if(!is_fill){
+                    $('button[type="submit"]').addClass('disabled');
+                    $('button[type="submit"]').attr('disabled',true);
+                }else{
+                    $('button[type="submit"]').removeClass('disabled');
+                    $('button[type="submit"]').removeAttr('disabled');
+                }
+             });
+
+
+            $('#btn_retain').on('click',function(){
+               $('#btns_checks').hide(); 
+               $('#btns_db').show();
+
+               $('#alert_msg_panel').children('span').html('<?php echo lang('msg_change_db_name')?>');
+            });
+                
+        })($);
+</script>
+
+
+
