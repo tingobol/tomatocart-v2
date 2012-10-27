@@ -57,7 +57,7 @@ param_database_prefix_description = The prefix to use for the database tables.
 param_database_import_sample_data = Import Sample Data
 param_database_import_sample_data_description = Inserting sample data into the database is recommended for first time installations.
 
-param_web_address = WWW Address
+param_web_address = WWW Address:
 param_web_address_description = The web address to the online store.
 param_web_root_directory = Webserver Root Directory
 param_web_root_directory_description = The directory where the online store is installed on the server.
