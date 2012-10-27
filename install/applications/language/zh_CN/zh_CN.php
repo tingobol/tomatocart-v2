@@ -25,6 +25,12 @@ image_button_retain = 否
 
 error_cant_connect = 数据库无法连接，检查请检查填写配置项
 error_duplicate_db = 数据库已存在，更改数据库名称
+error_email_format = 电子邮箱格式错误
+error_name_is_null = 管理员用户名不能为空
+error_pwd_is_null = 密码不能为空，长度大于4
+error_pwd_not_match = 两次输入密码不一致
+error_msg_form = 请检查表单错误信息
+
 msg_change_db_name = 修改数据库名称
 msg_create_db_success = 数据库创建完成，点击继续
 db_exist = 数据库已存在，是否清除数据，重建数据库？

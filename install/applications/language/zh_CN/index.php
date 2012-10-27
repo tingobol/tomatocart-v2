@@ -57,7 +57,7 @@ param_database_prefix_description = 用于数据库表的前缀。
 param_database_import_sample_data = 导入简单数据
 param_database_import_sample_data_description = 建议在首次安装时导入示例数据到数据库中。
 
-param_web_address = WWW服务地址
+param_web_address = WWW服务地址：
 param_web_address_description = 在线网店系统网址
 param_web_root_directory = 网络服务器根目录
 param_web_root_directory_description = 服务器上，在线网店安装的根目录

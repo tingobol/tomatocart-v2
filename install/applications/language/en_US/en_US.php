@@ -25,6 +25,11 @@ image_button_retain = No
 
 error_cant_connect = can't create mysql connection, please check config field.
 error_duplicate_db = database exist, please change the database name.
+error_email_format = email format error
+error_name_is_null = administrator name can't be null.
+error_pwd_is_null = password can't be empty, and the length is greater than 4
+error_pwd_not_match = two passwords do not match
+error_msg_form = please check form field's error tips
 
 msg_change_db_name = change the database name
 
