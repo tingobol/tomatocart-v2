@@ -29,5 +29,6 @@ error_duplicate_db = database exist, please change the database name.
 msg_change_db_name = change the database name
 
 msg_create_db_success = database is created, click continue.
+db_exist = database exist, whether drop all data and rebuild database?
 
 foot_copy_text = Copyright &copy; 2012 <a href="http://www.tomatocart.com" target="_blank">TomatoCart Open Source Shopping Cart Solution</a> <br />TomatoCart provides no warranty and is redistributable under the <a href="http://www.fsf.org/licenses/gpl.txt" target="_blank">GNU General Public License</a><hr />Powered by <a href="http://www.tomatocart.com" target="_blank">TomatoCart</a>
