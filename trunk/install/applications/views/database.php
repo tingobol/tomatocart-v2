@@ -95,6 +95,38 @@
                             <div class="description"><?php echo lang('param_database_prefix_description'); ?></div>
                         </div>
                     </div>
+
+                    <div>
+                        <span class="pull-left" id="alert_msg_panel">
+                                <?php if(!empty($error_msg)):?>
+                                <span class="alert alert-error"><?php echo lang($error_msg); ?></span>
+                                <?php elseif (!empty($warn_msg)):?>
+                                <span class="alert alert-block"><?php echo lang($warn_msg); ?></span>                                
+                                <?php elseif ($create_db_success):?>
+                                <span class="alert alert-success"><?php echo lang('msg_create_db_success'); ?></span>                                
+                                <?php endif;?>        
+                        </span>
+                          
+                        <span id="btns_checks" class="pull-right" <?php echo (!empty($warn_msg) && $warn_msg=='db_exist') ? '':'style="display: none;"'; ?>>
+                       	   <a id="btn_retain" class="btn btn-info"><i class="icon-ok icon-white"></i> &nbsp;<?php echo lang('image_button_retain'); ?></a>
+                           <button type="submit" class="btn btn-warning"><i class="icon-ok icon-white"></i> &nbsp;<?php echo lang('image_button_rebuild'); ?></button>
+                           <?php if(!empty($warn_msg) && $warn_msg=='db_exist'):?>
+                        	   <input type="hidden" name="rebuild" value="yes"/>
+                           <?php endif;?>
+                        </span>
+                        
+                        <span id="btns_db" class="pull-right" <?php echo (!empty($warn_msg) && $warn_msg=='db_exist') ? 'style="display: none;"':''; ?>>
+                            <?php if($create_db_success):?>
+                               	<a href="<?php echo site_url(); ?>" class="btn btn-info" href="<?php echo site_url(); ?>"><i class="icon-remove icon-white"></i> &nbsp;<?php echo lang('image_button_cancel'); ?></a>
+                               	<a href="<?php echo site_url('index/index/setting'); ?>" class="btn btn-info"><i class="icon-ok icon-white"></i> &nbsp;<?php echo lang('image_button_continue'); ?></a>
+                                <?php else:?>
+                               	<a href="<?php echo site_url(); ?>" class="btn btn-info" href="<?php echo site_url(); ?>"><i class="icon-remove icon-white"></i> &nbsp;<?php echo lang('image_button_cancel'); ?></a>
+                               	<button type="submit" class="btn btn-info disabled" disabled="true"><i class="icon-plus icon-white"></i> &nbsp;<?php echo lang('image_button_create_db'); ?></button>
+                            <?php endif;?>
+                       </span>
+                    </div>                    
+                    
+                    <!-- 
                     <div>
                         <span class="span7" id="alert_msg_panel">
                                 <?php if(!empty($error_msg)):?>
@@ -139,6 +171,7 @@
                             <?php endif;?>
                        </span>
                     </div>
+                     -->
                 </form>
             </div>
     	</div>

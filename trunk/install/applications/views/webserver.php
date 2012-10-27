@@ -50,12 +50,12 @@
           
           	<p><?php echo lang('text_web_server'); ?></p>
           	
-            <form name="install" id="installForm" action="index.php?step=5" method="post" onsubmit="prepareWork(); return false;">
+            <form name="install" id="installForm" action="<?php echo site_url('index/index/setting')?>" method="post">
                 <div class="info">
                     <div class="control-group">
                         <label class="control-label" for="HTTP_WWW_ADDRESS"><?php echo lang('param_web_address'); ?></label>
                         <div class="controls">
-                        	<input type="text" id="HTTP_WWW_ADDRESS" name="HTTP_WWW_ADDRESS" value="<?php echo $www_location; ?>" class="input-xxlarge" />
+                        	<input type="text" id="HTTP_WWW_ADDRESS" name="HTTP_WWW_ADDRESS" value="<?php echo empty($HTTP_WWW_ADDRESS) ? $www_location : $HTTP_WWW_ADDRESS; ?>" class="input-xxlarge" />
                         </div>
                         <div class="description"><?php echo lang('param_web_address_description'); ?></div>
                     </div>
@@ -81,7 +81,7 @@
                 <div class="control-group">
                     <div class="controls pull-right">
                     	<a href="<?php echo site_url(); ?>" class="btn btn-info"><i class="icon-remove icon-white"></i> &nbsp;<?php echo lang('image_button_cancel'); ?></a>
-                    	<a href="<?php echo site_url('index/index/setting'); ?>" class="btn btn-info"><i class="icon-ok icon-white"></i> &nbsp;<?php echo lang('image_button_continue'); ?></a>
+                    	<button type="submit" class="btn btn-info"><i class="icon-ok icon-white"></i> &nbsp;<?php echo lang('image_button_continue'); ?></button>
                     </div>
                 </div>
             </form>
