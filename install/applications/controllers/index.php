@@ -48,6 +48,12 @@ class Index extends TOC_Controller
      */
     public function index($view = null)
     {
+    	if(empty($view)){
+    		if($this->has_installed()){
+		        redirect('http://'.$_SERVER['HTTP_HOST'].'/admin');
+    			return;
+    		}
+    	}
         //load header
         $this->load->view('modules/header');
         
@@ -72,7 +78,13 @@ class Index extends TOC_Controller
             case 'finish':
                 $this->write_cfg();
                 $this->load->view('finish', array('step' => 6));
-                break;
+            	break;
+            case 'import_data':
+				$this->import_sample_data();
+// 				$this->remove_install_dir();
+				$dt['import_dt'] = true;
+            	$this->output->set_content_type('application/json')->set_output(json_encode($dt));
+            	return;
             case 'db_create':
                 $reback = $this->create_db();
                 $reback['step'] = 3; 
@@ -89,6 +101,79 @@ class Index extends TOC_Controller
         
         //load footer
         $this->load->view('modules/footer');
+    }
+    
+    
+    private function has_installed(){
+    	$cfg = $this->read_cfg();
+    	if(!empty($cfg['admin_user_name']) && !empty($cfg['admin_pwd'])){
+    		return TRUE;
+    	}
+    	return FALSE;
+    }
+    
+    private function import_sample_data(){
+    	$import = $this->input->get_post('DB_INSERT_SAMPLE_DATA');
+// 		$import = true;
+    	if($import){
+    		
+    		$db = $this->read_db_config();
+    		$con = @mysql_connect($db['DB_SERVER'],$db['DB_SERVER_USERNAME'],$db['DB_SERVER_PASSWORD']);
+    		
+    		if($con){
+    			
+	    		$sql_str = file_get_contents(realpath(dirname(__FILE__) . '/../../../').'/install/install.sql');
+	    		
+	    		$sql_str = str_replace('`toc_', '`'.$db['DB_TABLE_PREFIX'], $sql_str);
+	    		
+	    		$sql_str = str_replace('ENGINE=MyISAM', 'ENGINE='.$db['DB_DATABASE_CLASS'], $sql_str);
+	    		
+	    		@mysql_select_db($db['DB_DATABASE'],$con);
+	    		
+	    		$sqls = preg_split("/;[\n\t]/", $sql_str) ;
+	    		$errors = array();
+	    		foreach ($sqls as $sql){
+	    			//echo $sql , '<br/><br/>','<hr><br/>';
+	    			if(!empty($sql)){
+		    			$result = @mysql_query($sql,$con);
+		    			if(!$result){
+		    				$errors[] = array(mysql_error(),$sql);
+		    			}
+	    			}
+	    		}
+// 	    		foreach ($errors as $e){
+	    			//echo json_encode($e) , '<br/><hr>';
+// 	    		}
+	    		mysql_close($con);
+	    		return $errors;
+    		}
+    	}
+    	
+    }
+    
+    private function remove_install_dir(){
+    	$install_dir = realpath(dirname(__FILE__) . '/../../../').'/install/';
+    	if(is_writable($install_dir)){
+    		$this->deleteDir($install_dir);
+    	}
+    }
+    
+    
+    private function deleteDir($dir){
+    	if (rmdir($dir)==false && is_dir($dir)) {
+    		if ($dp = opendir($dir)) {
+    			while (($file=readdir($dp)) != false) {
+    				if (is_dir($file) && $file!='.' && $file!='..') {
+    					deleteDir($file);
+    				} else {
+    					unlink($file);
+    				}
+    			}
+    			closedir($dp);
+    		} else {
+//     			exit('Not permission');
+    		}
+    	}
     }
     
     private function read_cfg(){
@@ -117,25 +202,23 @@ class Index extends TOC_Controller
         $admin_cfm_pwd = $this->input->post('CFG_CONFIRM_PASSWORD');
         
         $config_file = realpath(dirname(__FILE__) . '/../../../').'/local/config/config.php';
-        var_dump($this->input->post());
-        exit();
-        if(is_writable($config_file)){
+        if(is_writable($config_file) && !empty($admin_user_name) && !empty($admin_pwd)){
             $conf_str = file_get_contents($config_file);
             //$conf_str = preg_replace("/config\['base_url'\] = '.*';/", "config['base_url'] = '".$www_address."';" , $conf_str);
             
             $conf_str = preg_replace(array("/base_url'\] = .*;/"
-//                             ,"/store_name'\] = .*;/"
-//                             ,"/store_owner_name'\] = .*;/"
-//                             ,"/store_owner_email'\] = .*;/"
-//                             ,"/admin_user_name'\] = .*;/"
-//                             ,"/admin_pwd'\] = .*;/"
+                            ,"/store_name'\] = .*;/"
+                            ,"/store_owner_name'\] = .*;/"
+                            ,"/store_owner_email'\] = .*;/"
+                            ,"/admin_user_name'\] = .*;/"
+                            ,"/admin_pwd'\] = .*;/"
                             ), array(
-                                            "base_url'] = '$www_address';"
-//                                             "store_name'] = '$store_name';",
-//                                             "store_owner_name'] = '$store_owner_name';",
-//                                             "store_owner_email'] = '$store_owner_email';",
-//                                             "admin_user_name'] = '$admin_user_name';",
-//                                             "admin_pwd'] = '$admin_pwd';"
+                                            "base_url'] = '$www_address';",
+                                            "store_name'] = '$store_name';",
+                                            "store_owner_name'] = '$store_owner_name';",
+                                            "store_owner_email'] = '$store_owner_email';",
+                                            "admin_user_name'] = '$admin_user_name';",
+                                            "admin_pwd'] = '$admin_pwd';"
                                             ), $conf_str);
             
             file_put_contents($config_file, $conf_str);
