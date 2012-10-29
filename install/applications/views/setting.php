@@ -105,14 +105,15 @@
                         </div>
                         <div class="description"><?php echo lang('param_administrator_password_description'); ?></div>
                     </div>
+                    <!-- 
                 	<div class="control-group clearfix" style="margin-top: 8px;">
                     	<label class="checkbox control-label pull-left" for="license"><?php echo lang('param_database_import_sample_data'); ?>&nbsp;&nbsp;<input type="checkbox" id="DB_INSERT_SAMPLE_DATA" name="DB_INSERT_SAMPLE_DATA" checked="checked" /></label>
                     	<div class="description"><?php echo lang('param_database_import_sample_data_description'); ?></div>
                     </div>
-                </div>
-            
+		             -->
+        	    </div>
                 <div class="">
-                    <div id="alert_error_panel" class="pull-left alert" style="margin-bottom: 5px;display: none;">
+                    <div id="alert_error_panel" class="pull-left alert alert-error" style="margin-bottom: 5px;display: none;">
                     </div>
                     <div class="controls pull-right">
                     	<a href="<?php echo site_url(); ?>" class="btn btn-info"><i class="icon-remove icon-white"></i> &nbsp;<?php echo lang('image_button_cancel'); ?></a>
@@ -127,77 +128,62 @@
 <script type="text/javascript">
 (function($){
 	$('#btn_continue').on('click',function(){
+
+		var input = $('#CFG_ADMINISTRATOR_USERNAME');
+		var reg = /^([a-zA-Z0-9_])+$/;
+		checkValue(input,"<?php echo lang('error_name_is_null');?>",!input.val() || !reg.test(input.val()));
+		
+		input = $('#CFG_ADMINISTRATOR_PASSWORD');
+		checkValue(input,"<?php echo lang('error_pwd_is_null');?>",!input.val() || input.val().length < 4);
+		var cpwd = $('#CFG_CONFIRM_PASSWORD');
+		checkValue(cpwd,"<?php echo lang('error_pwd_not_match');?>",input.val() != cpwd.val());
+		
 		var errors = $('#installForm').find('.error');
 		if(errors.size() > 0){
 			$('#alert_error_panel').show();
 			$('#alert_error_panel').html("<?php echo lang('error_msg_form'); ?>");
 		}else{
 			$('#alert_error_panel').hide();
+	    	$('#installForm').submit();
 		}
-		alert(errors.size());
-	    //$('#installForm').submit();
+
+		
 	});
 
 	function checkValue(obj,info,is_error){
+		//alert(info +'  '+ is_error);
 		if(is_error){
 			obj.parent().parent().addClass('error');
-			obj.parent().find('.help-inline').html("<?php echo lang(info);?>");
+			obj.parent().find('.help-inline').html(info);
 		}else{
 			obj.parent().parent().removeClass('error');
 			obj.parent().find('.help-inline').html('');
 		}
+		return is_error;
 	}
 
 	$('#CFG_STORE_OWNER_EMAIL_ADDRESS').on('blur',function(){
 		var v = $(this).val();
 		var reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/;
-		checkValue($(this),'error_email_format',v&&reg.test(v));
-		/*
-		if(v){
-			if(!reg.test(v)){
-				$(this).parent().parent().addClass('error');
-				$(this).parent().find('.help-inline').html("<?php echo lang('error_email_format');?>");
-			}else{
-				$(this).parent().parent().removeClass('error');
-				$(this).parent().find('.help-inline').html('');
-			}
-		}
-		*/
+		checkValue($(this),"<?php echo lang('error_email_format');?>",v&&!reg.test(v));
 	});
 
 	$('#CFG_ADMINISTRATOR_USERNAME').on('blur',function(){
 		var v = $(this).val();
-		if(!v){
-				$(this).parent().parent().addClass('error');
-				$(this).parent().find('.help-inline').html("<?php echo lang('error_name_is_null');?>");			
-		}else{
-				$(this).parent().parent().removeClass('error');
-				$(this).parent().find('.help-inline').html('');
-		}
+		var reg = /^([a-zA-Z0-9_])+$/;
+		checkValue($(this),"<?php echo lang('error_name_is_null');?>",!v || !reg.test(v));
 	});
 
 
 	$('#CFG_ADMINISTRATOR_PASSWORD').on('blur',function(){
 		var v = $(this).val();
-		if(v && v.length < 4){
-				$(this).parent().parent().addClass('error');
-				$(this).parent().find('.help-inline').html("<?php echo lang('error_pwd_is_null');?>");			
-		}else{
-				$(this).parent().parent().removeClass('error');
-				$(this).parent().find('.help-inline').html('');
-		}		
+		checkValue($(this),"<?php echo lang('error_pwd_is_null');?>",!v || v.length < 4);
 	});
 
 	$('#CFG_CONFIRM_PASSWORD').on('blur',function(){
 		var v = $(this).val();
 		var fpwd = $('#CFG_ADMINISTRATOR_PASSWORD').val();
-		if(v != fpwd){
-				$(this).parent().parent().addClass('error');
-				$(this).parent().find('.help-inline').html("<?php echo lang('error_pwd_not_match');?>");			
-		}else{
-				$(this).parent().parent().removeClass('error');
-				$(this).parent().find('.help-inline').html('');
-		}		
+		checkValue($(this),"<?php echo lang('error_pwd_not_match');?>",v != fpwd);
 	});
 	
 })($);

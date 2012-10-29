@@ -44,8 +44,41 @@
             </div>
             
             <div class="control-group clearfix">
-            	<a href="<?php echo site_url('index/index/check'); ?>" onclick="javascript: return checkLicense();" class="btn btn-info pull-right"><i class="icon-ok icon-white"></i>&nbsp;&nbsp;<?php echo lang('image_button_continue'); ?></a>
+            	<button id="btn_next" href="<?php echo site_url('index/index/check'); ?>" class="btn btn-info pull-right disabled" disabled="disabled"><i class="icon-ok icon-white"></i>&nbsp;&nbsp;<?php echo lang('image_button_continue'); ?></button>
             </div>
     	</div>
     </div>
 </div>
+
+<script type="text/javascript">
+(function($){
+
+	var _btn = $('#btn_next');
+
+	if($('#license').attr('checked')){
+			_btn.removeClass('disabled');
+			_btn.removeAttr('disabled');
+	}else{
+			_btn.addClass('disabled');
+			_btn.attr('disabled',true);
+	}
+	
+	$('#license').on('change',function(){
+		//alert($(this).attr('checked'));
+		if($(this).attr('checked')){
+			_btn.removeClass('disabled');
+			_btn.removeAttr('disabled');
+		}else{
+			_btn.addClass('disabled');
+			_btn.attr('disabled',true);
+		}
+	});
+
+	_btn.on('click',function(){
+		window.location.href = "<?php echo site_url('index/index/check'); ?>";
+		//alert('abcde');
+	});
+
+	
+})($);
+</script>

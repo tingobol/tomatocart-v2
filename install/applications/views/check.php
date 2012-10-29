@@ -150,7 +150,20 @@
         				<a class="btn btn-info" href="javascript:void(0);" onclick="javascript: history.go(-1);"><i class="icon-remove icon-white"></i> &nbsp;<?php echo lang('image_button_cancel'); ?></a>
         				<a class="btn btn-info" href="<?php echo site_url('index/index/database'); ?>"><i class="icon-ok icon-white"></i> &nbsp;<?php echo lang('image_button_continue'); ?></a>
                     </div>
+                    <div id="msg_alert" class="pull-left alert alert-error" style="margin-bottom: 0px;display: none;"><?php echo lang('error_msg_check');?></div>
                 </div>
     	</div>
 	</div>
 </div>
+
+<script type="text/javascript">
+(function($){
+	var v = $('img[src="<?php echo base_url(); ?>assets/img/error.png"]');
+	if(v.size()>0){
+		$('#msg_alert').show();
+	}else{
+		$('#msg_alert').hide();
+	}
+})($);
+
+</script>

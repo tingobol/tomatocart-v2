@@ -38,7 +38,9 @@ text_pre_installation_check = Before proceeding to installation please make sure
 text_database_server_setup = The database server stores the content of the online store such as product information, customer information, and the orders that have been made. Please consult your server administrator if your database server parameters are not yet known.
 text_web_server = <p>The web server takes care of serving the pages of the online store to the visitors and customers. The web server parameters make sure the links to the pages point to the correct location.</p><p>Temporary files such as session data and cache files are stored in the work directory. It is important that this directory is located outside the web server root directory and is protected from public access.</p>
 text_online_store_settings = <p>Here you can define the name of your online store, and the contact information for the store owner.</p><p>The administrator username and password are used to log into the protected administration tool section.</p>
-text_finished = <p>Congratulations on installing and configuring TomatoCart as your online store solution!</p><p>We hope you all the best with your online store and welcome you to join and participate in our community.</p><p align="right">- The TomatoCart Team</p>
+text_finished_title = finish install
+text_remove_install_dir = Click on the finish install button, the system will remove the initial installation directory, and complete system installation, if you need to modify the system configuration, please enter the administration platform for operation.
+text_finished = <p>Congratulations on configuring TomatoCart as your online store solution!</p><p>We hope you all the best with your online store and welcome you to join and participate in our community.</p><p align="right">- The TomatoCart Team</p>
 
 
 param_database_server = Database Server

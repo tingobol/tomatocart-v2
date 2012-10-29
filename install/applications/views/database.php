@@ -15,8 +15,8 @@
  * @filesource
  */
 
-  $db_table_types = array('mysql'=> 'MySQL - MyISAM (Default)',
-                          'mysql_innodb'=> 'MySQL - InnoDB (Transaction-Safe)',
+  $db_table_types = array('MyISAM'=> 'MySQL - MyISAM (Default)',
+                          'InnoDB'=> 'MySQL - InnoDB (Transaction-Safe)',
                           'mysqli'=> 'MySQLi (PHP 5 / MySQL 4.1)');
 ?>
 <div class="container clearfix">

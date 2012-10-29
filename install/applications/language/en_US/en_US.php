@@ -22,14 +22,17 @@ image_button_cancel = Cancel
 image_button_retry = Retry
 image_button_rebuild = Yes
 image_button_retain = No
+image_install_finished = Install Finished
+image_button_admin = Go to Admin Page
 
 error_cant_connect = can't create mysql connection, please check config field.
 error_duplicate_db = database exist, please change the database name.
 error_email_format = email format error
-error_name_is_null = administrator name can't be null.
+error_name_is_null = user name can't be null, and only contain letters, number and underscores(_)
 error_pwd_is_null = password can't be empty, and the length is greater than 4
 error_pwd_not_match = two passwords do not match
-error_msg_form = please check form field's error tips
+error_msg_form = please check form field's error
+error_msg_check = some settings may be restricted, do you want to continue?
 
 msg_change_db_name = change the database name
 
