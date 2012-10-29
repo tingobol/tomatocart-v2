@@ -646,7 +646,7 @@ INSERT INTO `toc_configuration` (`configuration_id`, `configuration_title`, `con
 (346, 'Homepage Meta Description For English', 'HOME_META_DESCRIPTION_EN_US', 'the meta description for the front page', 'the meta description for the front page', 6, 0, NULL, '2011-09-26 21:43:16', NULL, NULL),
 (347, 'Homepage Page Title For 中文简体', 'HOME_PAGE_TITLE_ZH_CN', '', 'the page title for the front page', 6, 0, NULL, '2012-08-20 05:50:15', NULL, NULL),
 (348, 'Homepage Meta Keywords For 中文简体', 'HOME_META_KEYWORD_ZH_CN', '', 'the meta keywords for the front page', 6, 0, NULL, '2012-08-20 05:50:15', NULL, NULL),
-(349, 'Homepage Meta Description For 中文简体', 'HOME_META_DESCRIPTION_ZH_CN', '', 'the meta description for the front page', 6, 0, NULL, '2012-08-20 05:50:15', NULL, NULL);
+(349, 'Homepage Meta Description For 中文简体', 'HOME_META_DESCRIPTION_ZH_CN', '', 'the meta description for the front page', 6, 0, NULL, '2012-08-20 05:50:15', NULL, NULL),
 (350, 'Max Cache Time', 'CACHE_MAX_TIME', '100', 'The max time that the cache file to be expired', 3, 10, '2012-09-03 15:06:52', '2012-09-03 15:06:59', NULL, NULL);
 
 -- --------------------------------------------------------

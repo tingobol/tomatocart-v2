@@ -38,7 +38,9 @@ text_pre_installation_check = 在进行安装之前，请确保您的系统满�
 text_database_server_setup = 数据库服务器存储了网店的信息，如产品信息，客户信息，以及订单历史记录。如果您还未获知数据库服务器参数信息，请咨询您的服务器管理员。
 text_web_server = <p>网络服务器负责为访客和客户提供网店页面。网络服务器参数确保页面链接指向正确的页面地址。<p>诸如会话数据、缓存文件这样的临时文件将被储存在工作目录中。重要的是该目录应位于网络服务器的根目录以外不能被外部访问。</p>
 text_online_store_settings = <p> 在这里，您可以定义您的网店名称，并提供店主联系信息。</ p> <p>管理员用户名和密码的作用是用来登录到受保护的管理界面。</ p>
-text_finished = <p>恭喜您，您已经成功安装和配置了TomatoCart的在线网店系统解决方案！</p><p>我们希望您在您的网店一切顺利，并欢迎您加入我们的中文社区。</p><p align="right">-  TomatoCart 团队</p>
+text_finished_title = 完成安装
+text_remove_install_dir = 点击安装完成，系统将移除初始安装目录，完成电商系统安装，如须修改电商系统配置信息，请您进入电商管理平台进行操作。
+text_finished = <p>恭喜您，您已经成功配置了TomatoCart的在线网店系统解决方案！</p><p>我们希望您在您的网店一切顺利，并欢迎您加入我们的中文社区。</p><p align="right">-  TomatoCart 团队</p>
 
 
 param_database_server = 数据库服务器

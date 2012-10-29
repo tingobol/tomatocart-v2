@@ -37,10 +37,57 @@
             </div>
     	</div>
     	<div class="span9 content">
-          	<h1><?php echo lang('page_title_online_store_settings'); ?></h1>
-          
-          	<p><?php echo lang('text_online_store_settings'); ?></p>
-          	
+    		<h1><?php echo lang('text_finished_title'); ?></h1>
+    		<div><?php echo lang('text_finished'); ?></div>
+    		<p class="well">
+    		<?php echo lang('text_remove_install_dir'); ?>
+    		</p>
+    		<form id="finish_form">
+               	<label class="checkbox">
+               	<input type="checkbox" id="DB_INSERT_SAMPLE_DATA" name="DB_INSERT_SAMPLE_DATA" checked="checked"/>
+               	<?php echo lang('param_database_import_sample_data'); ?>&nbsp;&nbsp;-->&nbsp;&nbsp;<?php echo lang('param_database_import_sample_data_description'); ?>
+               	</label>
+    			<button type="button" id="btn_finish" class="btn btn-primary btn-large"><?php echo lang('image_install_finished'); ?></button>
+    			<a id="btn_admin" href="/admin" style="display: none;" class="btn btn-primary btn-large"><?php echo lang('image_button_admin'); ?></a>
+    		</form>
+    		<div id="process_bar" class="progress progress-striped active" style="display: none;">
+		    	<div class="bar" style="width: 100%;"></div>
+    		</div>
     	</div>
 	</div>
 </div>
+
+<script type="text/javascript">
+	(function($){
+		var v = $('#DB_INSERT_SAMPLE_DATA').attr('checked');
+		
+			/*
+			var pct = 0;
+			setInterval(function(){
+				pct+=5;
+				$('#process_bar').find('div').width(pct%100 + '%');
+			},1000);
+			*/
+		$('#btn_finish').on('click',function(){
+			var _btn = $(this);
+			_btn.addClass('disabled');
+			_btn.attr('disabled',true);
+			var url = "<?php echo site_url('index/index/import_data')?>?st="+new Date().getTime();
+			if(v){
+				url = url+ '&DB_INSERT_SAMPLE_DATA=true';
+			}
+			$('#process_bar').show();
+			$.get(url,null,function(data){
+				if(data.import_dt){
+				}
+				$('#process_bar').hide();
+				_btn.hide();
+				_btn.removeClass('disabled');
+				_btn.removeAttr('disabled');
+				$('#btn_admin').show();
+			});
+		});
+		
+	})($);
+</script>
+
