@@ -44,7 +44,7 @@
             </div>
             
             <div class="control-group clearfix">
-            	<button id="btn_next" href="<?php echo site_url('index/index/check'); ?>" class="btn btn-info pull-right disabled" disabled="disabled"><i class="icon-ok icon-white"></i>&nbsp;&nbsp;<?php echo lang('image_button_continue'); ?></button>
+            	<a id="btn_next" href="<?php echo site_url('index/index/check'); ?>" class="btn btn-info pull-right disabled"><i class="icon-ok icon-white"></i>&nbsp;&nbsp;<?php echo lang('image_button_continue'); ?></a>
             </div>
     	</div>
     </div>
@@ -52,33 +52,24 @@
 
 <script type="text/javascript">
 (function($){
-
 	var _btn = $('#btn_next');
 
-	if($('#license').attr('checked')){
-			_btn.removeClass('disabled');
-			_btn.removeAttr('disabled');
-	}else{
-			_btn.addClass('disabled');
-			_btn.attr('disabled',true);
-	}
-	
-	$('#license').on('change',function(){
-		//alert($(this).attr('checked'));
+	//observe the checkbox event
+	$('#license').on('change',function() {
 		if($(this).attr('checked')){
 			_btn.removeClass('disabled');
-			_btn.removeAttr('disabled');
 		}else{
 			_btn.addClass('disabled');
-			_btn.attr('disabled',true);
 		}
 	});
 
-	_btn.on('click',function(){
-		window.location.href = "<?php echo site_url('index/index/check'); ?>";
-		//alert('abcde');
-	});
+	_btn.on('click',function() {
+		var $this = $(this);
 
-	
-})($);
+		//return false to disable link click
+		if ($this.hasClass('disabled')) {
+			return false;
+		}
+	});
+})(jQuery);
 </script>
