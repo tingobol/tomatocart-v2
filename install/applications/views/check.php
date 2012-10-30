@@ -14,11 +14,23 @@
  * @since		Version 2.0
  * @filesource
  */
-  //$root_dir = osc_realpath(dirname(__FILE__) . '/../../../');
 
-  $root_dir    = realpath(dirname(__FILE__) . '/../../../');
-  $files       = array('/local/config/config.php', '/local/config/database.php');
-  $directories = array('/local/cache', '/local/logs');
+    $root_dir    = realpath(dirname(__FILE__) . '/../../../');
+    $files       = array( '/local/config/config.php', 
+    					  '/local/config/database.php', 
+    					  '/admin/local/config/config.php', 
+    					  '/admin/local/config/database.php');
+    $directories = array( '/local/cache', '/local/logs', '/admin/local/cache',
+                          '/images',
+                          '/images/categories',
+                          '/images/manufacturers',
+                          '/images/products/_upload',
+                          '/images/products/large',
+                          '/images/products/mini',
+                          '/images/products/originals',
+                          '/images/products/product_info',
+                          '/images/products/thumbnails');
+  
 ?>
 <div class="container clearfix">
     <div class="row-fluid">
@@ -144,26 +156,26 @@
     	      		</table>
           		</div>
           	</div>
-                <div class="control-group">
-                    <div class="controls pull-right">
-                    	<a class="btn btn-info" href="javascript:void(0);" onclick="javascript: window.location.reload();"><i class="icon-refresh icon-white"></i> &nbsp;<?php echo lang('image_button_retry'); ?></a>
-        				<a class="btn btn-info" href="javascript:void(0);" onclick="javascript: history.go(-1);"><i class="icon-remove icon-white"></i> &nbsp;<?php echo lang('image_button_cancel'); ?></a>
-        				<a class="btn btn-info" href="<?php echo site_url('index/index/database'); ?>"><i class="icon-ok icon-white"></i> &nbsp;<?php echo lang('image_button_continue'); ?></a>
-                    </div>
-                    <div id="msg_alert" class="pull-left alert alert-error" style="margin-bottom: 0px;display: none;"><?php echo lang('error_msg_check');?></div>
+            <div id="msg_alert" class="alert alert-error" style="display: none;"><?php echo lang('error_msg_check');?></div>
+            <div class="control-group">
+                <div class="controls pull-right">
+                	<a class="btn btn-info" href="javascript:void(0);" onclick="javascript: window.location.reload();"><i class="icon-refresh icon-white"></i> &nbsp;<?php echo lang('image_button_retry'); ?></a>
+    				<a class="btn btn-info" href="javascript:void(0);" onclick="javascript: history.go(-1);"><i class="icon-remove icon-white"></i> &nbsp;<?php echo lang('image_button_cancel'); ?></a>
+    				<a class="btn btn-info" href="<?php echo site_url('index/index/database'); ?>"><i class="icon-ok icon-white"></i> &nbsp;<?php echo lang('image_button_continue'); ?></a>
                 </div>
+            </div>
     	</div>
 	</div>
 </div>
 
 <script type="text/javascript">
 (function($){
-	var v = $('img[src="<?php echo base_url(); ?>assets/img/error.png"]');
-	if(v.size()>0){
+	var errors = $('img[src="<?php echo base_url(); ?>assets/img/error.png"]');
+	
+	if (errors.size() > 0) {
 		$('#msg_alert').show();
-	}else{
+	} else {
 		$('#msg_alert').hide();
 	}
-})($);
-
+})(jQuery);
 </script>
