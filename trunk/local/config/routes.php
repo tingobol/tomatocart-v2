@@ -67,8 +67,16 @@
 $route['default_controller'] = "index";
 $route['404_override'] = '';
 
+$route['product/latest'] = "products/latest/index";
+$route['product/specials'] = "products/specials/index";
 $route['product/(:any)'] = "products/info/index/$1";
+
 $route['cpath/(:any)'] = "index/cpath/index/$1";
+
+$route['info/faqs'] = "info/faqs/index";
+$route['info/guestbooks'] = "info/guestbooks/index";
+$route['info/guestbooks/add'] = "info/guestbooks/add";
+$route['info/guestbooks/save'] = "info/guestbooks/save";
 $route['info/(:any)'] = "info/info/index/$1";
 
 $route['articles_categories/(:any)'] = "info/articles_categories/index/$1";
