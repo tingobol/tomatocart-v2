@@ -106,7 +106,7 @@
 ?>
     </div>
     
-    <div class="submitFormButtons">
+    <div class="row-fluid submitFormButtons">
         <div class="span4"><a href="<?php echo base_url(); ?>" class="btn btn-small btn-info"><i class="icon-chevron-right icon-white"></i> <?php echo lang('button_continue_shopping'); ?></a></div>
         
         <div class="span5"><button type="submit" class="btn btn-small btn-info"><i class="icon-refresh icon-white"></i> <?php echo lang('button_update_cart'); ?></button></div>

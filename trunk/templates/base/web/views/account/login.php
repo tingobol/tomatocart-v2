@@ -29,7 +29,7 @@
             
             <p><?php echo lang('login_new_customer_text'); ?></p>
             
-            <a class="btn btn-small btn-small btn-info pull-right" href="<?php echo site_url('account/create'); ?>"><i class="icon-chevron-right icon-white"></i> <?php echo lang('button_continue'); ?></a>
+            <a class="btn btn-small btn-info pull-right" href="<?php echo site_url('account/create'); ?>"><i class="icon-chevron-right icon-white"></i> <?php echo lang('button_continue'); ?></a>
         </div>
         
         <div class="span6">
