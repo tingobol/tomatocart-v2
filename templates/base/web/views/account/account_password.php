@@ -25,7 +25,7 @@
 <form name="account_password" action="<?php echo site_url('account/password/save'); ?>" method="post" class="form-horizontal">
 	<div class="module-box">
         <div class="control-group">
-            <label class="control-label" for="password"><?php echo lang('field_customer_password_current'); ?><em>*</em></label>
+            <label class="control-label" for="password_current"><?php echo lang('field_customer_password_current'); ?><em>*</em></label>
             <div class="controls">
             	<input type="password" id="password_current" name="password_current" value="<?php echo set_value('password_current'); ?>" />
             </div>
