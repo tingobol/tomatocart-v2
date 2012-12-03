@@ -39,7 +39,7 @@
 | path to your installation.
 |
 */
-$config['base_url'] = '';
+$config['base_url']	= '';
 
 /*
 |--------------------------------------------------------------------------
@@ -52,19 +52,6 @@ $config['base_url'] = '';
 |
 */
 $config['index_page'] = 'index.php';
-
-
-/*
- * online store setting
- * set online store configuration, include the username and the password to use for the adminstrator
- */
-
-$config['store_name'] = '';
-$config['store_owner_name'] = '';
-$config['store_owner_email'] = '';
-$config['admin_user_name'] = '';
-$config['admin_pwd'] = '';
-
 
 /*
 |--------------------------------------------------------------------------
