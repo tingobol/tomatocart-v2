@@ -38,10 +38,10 @@ class Orders_Status_Model extends CI_Model
     {
         parent::__construct();
     }
-    
-// ------------------------------------------------------------------------
 
-     /**
+    // ------------------------------------------------------------------------
+
+    /**
      * Get the orders_status
      *
      * @access public
@@ -57,7 +57,7 @@ class Orders_Status_Model extends CI_Model
         ->where('language_id', lang_id())
         ->limit($limit, $start)
         ->get();
-        
+
         if ($result->num_rows() > 0)
         {
             return $result->result_array();
@@ -66,9 +66,35 @@ class Orders_Status_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
-     /**
+    /**
+     * Get the orders_status
+     *
+     * @access public
+     * @param $start
+     * @param $limit
+     * @return mixed
+     */
+    public function get_order_status()
+    {
+        $result = $this->db
+        ->select('orders_status_id, orders_status_name, public_flag')
+        ->from('orders_status')
+        ->where('language_id', lang_id())
+        ->get();
+
+        if ($result->num_rows() > 0)
+        {
+            return $result->result_array();
+        }
+
+        return NULL;
+    }
+
+    // ------------------------------------------------------------------------
+
+    /**
      * Get data of the order status with the id
      *
      * @access public
@@ -82,7 +108,7 @@ class Orders_Status_Model extends CI_Model
         ->from('orders_status')
         ->where(array('orders_status_id' => $id, 'language_id' => lang_id()))
         ->get();
-        
+
         if ($result->num_rows() > 0)
         {
             return $result->row_array();
@@ -90,8 +116,8 @@ class Orders_Status_Model extends CI_Model
 
         return NULL;
     }
-    
-// ------------------------------------------------------------------------
+
+    // ------------------------------------------------------------------------
 
     /**
      * Get total number of the orders status
@@ -103,8 +129,8 @@ class Orders_Status_Model extends CI_Model
     {
         return $this->db->where('language_id', lang_id())->from('orders_status')->count_all_results();
     }
-    
-// ------------------------------------------------------------------------
+
+    // ------------------------------------------------------------------------
 
     /**
      * Set the status of the order status
@@ -117,7 +143,7 @@ class Orders_Status_Model extends CI_Model
     public function set_status($orders_status_id, $flag)
     {
         $this->db->update('orders_status', array('public_flag' => $flag),
-                                           array('orders_status_id' => $orders_status_id));
+        array('orders_status_id' => $orders_status_id));
          
         if ($this->db->affected_rows() > 0)
         {
@@ -126,8 +152,8 @@ class Orders_Status_Model extends CI_Model
 
         return FALSE;
     }
-    
-// ------------------------------------------------------------------------
+
+    // ------------------------------------------------------------------------
 
     /**
      * Save the orders_status
@@ -154,10 +180,10 @@ class Orders_Status_Model extends CI_Model
             select_max('orders_status_id')
             ->from('orders_status')
             ->get();
-            
+
             $status = $result->row_array();
             $orders_status_id = $status['orders_status_id'] + 1;
-            
+
             $result->free_result();
         }
 
@@ -166,9 +192,9 @@ class Orders_Status_Model extends CI_Model
             if (is_numeric($id))
             {
                 $this->db->update('orders_status',
-                                  array('orders_status_name' => $data['name'][$l['id']],
+                array('orders_status_name' => $data['name'][$l['id']],
                                         'public_flag' => $data['public_flag']), 
-                                  array('orders_status_id' => $orders_status_id,
+                array('orders_status_id' => $orders_status_id,
                                         'language_id' => $l['id']));
             }
             else
@@ -191,7 +217,7 @@ class Orders_Status_Model extends CI_Model
             if ($default === TRUE)
             {
                 $this->db->update('configuration', array('configuration_value' => $orders_status_id),
-                                                   array('configuration_key' => 'DEFAULT_ORDERS_STATUS_ID'));
+                array('configuration_key' => 'DEFAULT_ORDERS_STATUS_ID'));
                  
                 if ($this->db->trans_status() === FALSE)
                 {
@@ -211,8 +237,8 @@ class Orders_Status_Model extends CI_Model
 
         return FALSE;
     }
-  
-// ------------------------------------------------------------------------
+
+    // ------------------------------------------------------------------------
 
     /**
      * Load the orders_status
@@ -228,7 +254,7 @@ class Orders_Status_Model extends CI_Model
         ->from('orders_status')
         ->where('orders_status_id', $id)
         ->get();
-        
+
         if ($result->num_rows() > 0)
         {
             return $result->result_array();
@@ -236,8 +262,8 @@ class Orders_Status_Model extends CI_Model
 
         return NULL;
     }
-    
-// ------------------------------------------------------------------------
+
+    // ------------------------------------------------------------------------
 
     /**
      * Whether the order status is using in orders
@@ -250,8 +276,8 @@ class Orders_Status_Model extends CI_Model
     {
         return $this->db->where('orders_status', $id)->from('orders')->count_all_results();
     }
-    
-// ------------------------------------------------------------------------
+
+    // ------------------------------------------------------------------------
 
     /**
      * Whether the order status is using in order status history
@@ -264,8 +290,8 @@ class Orders_Status_Model extends CI_Model
     {
         return $this->db->where('orders_status_id', $id)->from('orders_status_history')->group_by('orders_id')->count_all_results();
     }
-    
-// ------------------------------------------------------------------------
+
+    // ------------------------------------------------------------------------
 
     /**
      * Delete the order status
