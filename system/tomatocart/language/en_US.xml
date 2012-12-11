@@ -3557,36 +3557,36 @@ Your friend, %s, thought that you would be interested in %s from %s.]]></value>
         <key>1</key>
         <articles_name><![CDATA[About Us]]></articles_name>
         <articles_description><![CDATA[Put here the required information.]]></articles_description>
-        <articles_head_desc_tag><![CDATA[]]></articles_head_desc_tag>
-        <articles_head_keywords_tag><![CDATA[]]></articles_head_keywords_tag>
+        <articles_meta_keywords><![CDATA[]]></articles_meta_keywords>
+        <articles_meta_description><![CDATA[]]></articles_meta_description>
       </definition>
       <definition>
         <key>2</key>
         <articles_name><![CDATA[Shipping & Returns]]></articles_name>
         <articles_description><![CDATA[Put here the required information.]]></articles_description>
-        <articles_head_desc_tag><![CDATA[]]></articles_head_desc_tag>
-        <articles_head_keywords_tag><![CDATA[]]></articles_head_keywords_tag>
+        <articles_meta_keywords><![CDATA[]]></articles_meta_keywords>
+        <articles_meta_description><![CDATA[]]></articles_meta_description>
       </definition>
       <definition>
         <key>3</key>
         <articles_name><![CDATA[Privacy Notice]]></articles_name>
         <articles_description><![CDATA[Put here the required information.]]></articles_description>
-        <articles_head_desc_tag><![CDATA[]]></articles_head_desc_tag>
-        <articles_head_keywords_tag><![CDATA[]]></articles_head_keywords_tag>
+        <articles_meta_keywords><![CDATA[]]></articles_meta_keywords>
+        <articles_meta_description><![CDATA[]]></articles_meta_description>
       </definition>
       <definition>
         <key>4</key>
         <articles_name><![CDATA[Conditions of Use]]></articles_name>
         <articles_description><![CDATA[Put here the required information.]]></articles_description>
-        <articles_head_desc_tag><![CDATA[]]></articles_head_desc_tag>
-        <articles_head_keywords_tag><![CDATA[]]></articles_head_keywords_tag>
+        <articles_meta_keywords><![CDATA[]]></articles_meta_keywords>
+        <articles_meta_description><![CDATA[]]></articles_meta_description>
       </definition>
       <definition>
         <key>5</key>
         <articles_name><![CDATA[Imprint]]></articles_name>
         <articles_description><![CDATA[Put here the required information.]]></articles_description>
-        <articles_head_desc_tag><![CDATA[]]></articles_head_desc_tag>
-        <articles_head_keywords_tag><![CDATA[]]></articles_head_keywords_tag>
+        <articles_meta_keywords><![CDATA[]]></articles_meta_keywords>
+        <articles_meta_description><![CDATA[]]></articles_meta_description>
       </definition>
     </table>
     <table>
