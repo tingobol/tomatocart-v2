@@ -22,38 +22,38 @@
 
 class Languages_Model extends CI_Model
 {
-  function __construct()
-  {
-    parent::__construct();
-  }
-
-
-  /**
-   * Get the settings
-   * Don't retrieves the language depending settings
-   *
-   * @return	The settings array
-   */
-  function load($group = 'general')
-  {
-    $definitions = array();
-    $this->db->select('*')->from('languages_definitions')->where('languages_id', lang_id())->where('content_group', $group);
-    $qry = $this->db->get();
-
-    foreach ($qry->result() as $key => $row){
-      $definitions[$row->definition_key] = $row->definition_value;
+    function __construct()
+    {
+        parent::__construct();
     }
-    
-    return $definitions;
-  }
 
-  function get_languages()
-  {
-    $qry = $this->db->select('*')->from('languages')->order_by(' sort_order, name')->get();
-    
-    $languages = array();
-    foreach ($qry->result_array() as $row){
-      $languages[$row['code']] = array( 'id' => $row['languages_id'],
+
+    /**
+     * Get the settings
+     * Don't retrieves the language depending settings
+     *
+     * @return	The settings array
+     */
+    function load($group = 'general')
+    {
+        $definitions = array();
+        $this->db->select('*')->from('languages_definitions')->where('languages_id', lang_id())->where('content_group', $group);
+        $qry = $this->db->get();
+
+        foreach ($qry->result() as $key => $row){
+            $definitions[$row->definition_key] = $row->definition_value;
+        }
+
+        return $definitions;
+    }
+
+    function get_languages()
+    {
+        $qry = $this->db->select('*')->from('languages')->order_by(' sort_order, name')->get();
+
+        $languages = array();
+        foreach ($qry->result_array() as $row){
+            $languages[$row['code']] = array( 'id' => $row['languages_id'],
                                         'code' => $row['code'],
                                         'country_iso' => strtolower(substr($row['code'], 3)),
                                         'name' => $row['name'],
@@ -67,11 +67,35 @@ class Languages_Model extends CI_Model
                                         'numeric_separator_decimal' => $row['numeric_separator_decimal'],
                                         'numeric_separator_thousands' => $row['numeric_separator_thousands'],
                                         'parent_id' => $row['parent_id']);
+        }
+
+        return $languages;
+    }
+
+    /**
+     * Insert definition
+     *
+     * @access public
+     * @param $definition
+     * @param $table
+     * @return boolean
+     */
+    function insert_definition ($definition, $table = 'languages_definitions') {
+        return $this->db->insert($table, $definition);
     }
     
-    return $languages;
-  }
 
+    /**
+     * Remove definition
+     *
+     * @access public
+     * @param $definition
+     * @param $table
+     * @return boolean
+     */
+    function remove_definition ($definition, $table = 'languages_definitions') {
+        return $this->db->delete($table, array('content_group' => $definition['content_group'], 'definition_key' => $definition['definition_key'], 'languages_id' => $definition['languages_id'])); 
+    }
 }
 /* End of file settings_model.php */
 /* Location: ./application/models/settings_model.php */
