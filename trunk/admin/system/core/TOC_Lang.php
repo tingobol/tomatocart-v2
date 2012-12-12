@@ -645,6 +645,76 @@ class TOC_Lang extends CI_Lang
 
         return image('images/worldflags/' . $imagecode . '.png', $this->languages[$code]['name'], $width, $height, $parameters);
     }
+
+    // --------------------------------------------------------------------
+
+    /**
+     * Import xml language resource file
+     *
+     * @access  public
+     * @param string the xml file
+     * @param int language id
+     * @return boolean
+     */
+    public function import_xml($xml_file, $languages_id) {
+        if ( file_exists($xml_file) ) {
+            $info = simplexml_load_file($xml_file);
+
+            if (($info !== FALSE) ) {
+                //insert definitions
+                foreach ($info->definitions->definition as $definition) {
+                    $entry = array(
+                    	'languages_id' => $languages_id,
+                        'content_group' => (string) $definition->group,
+                        'definition_key' => (string) $definition->key,
+                        'definition_value' => (string) $definition->value);
+
+                    $this->ci->languages_model->insert_definition($entry);
+                }
+
+                unset($info);
+
+                return TRUE;
+            }
+        }
+
+        return FALSE;
+    }
+
+    // --------------------------------------------------------------------
+
+    /**
+     * Remove the xml resource definition in the database
+     *
+     * @access  public
+     * @param string the xml file
+     * @param int language id
+     * @return boolean
+     */
+    public function remove_xml($xml_file, $languages_id) {
+        if ( file_exists($xml_file) ) {
+            $info = simplexml_load_file($xml_file);
+
+            if (($info !== FALSE) ) {
+                //insert definitions
+                foreach ($info->definitions->definition as $definition) {
+                    $entry = array(
+                    	'languages_id' => $languages_id,
+                        'content_group' => (string) $definition->group,
+                        'definition_key' => (string) $definition->key,
+                        'definition_value' => (string) $definition->value);
+
+                    $this->ci->languages_model->remove_definition($entry);
+                }
+
+                unset($info);
+
+                return TRUE;
+            }
+        }
+
+        return FALSE;
+    }
 }
 // END TOC_Lang Class
 
