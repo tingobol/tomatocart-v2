@@ -112,18 +112,7 @@ class Modules_Order_Total extends TOC_Controller
 
         $class = new $class();
         
-        $params = $class->get_params();
-
-        $config = array();
-        foreach($params as $param) 
-        {
-            $config[$param['name']] = $param['value'];
-        }
-        $data = array('title' => $class->get_title(), 'code' => $class->get_code(), 'author_name' => '', 'author_www' => '', 'modules_group' => 'order_total', 'params' => json_encode($config));
-
-        //find module class
-
-        if ($this->extensions_model->install($data)) {
+        if ($class->install()) {
             $response = array('success' => true, 'feedback' => lang('ms_success_action_performed'));
         } else {
             $response = array('success' => false, 'feedback' => lang('ms_error_action_not_performed'));
@@ -141,7 +130,12 @@ class Modules_Order_Total extends TOC_Controller
 
         $code = $this->input->post('code');
 
-        if ($this->extensions_model->uninstall('order_total', $code)) {
+        include_once '../system/tomatocart/libraries/order_total/order_total_' . $code . '.php';
+        $class = config_item('subclass_prefix') . 'Order_Total_'. $code;
+
+        $class = new $class();
+        
+        if ($class->uninstall()) {
             $response = array('success' => true, 'feedback' => lang('ms_success_action_performed'));
         } else {
             $response = array('success' => false, 'feedback' => lang('ms_error_action_not_performed'));
