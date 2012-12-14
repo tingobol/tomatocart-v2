@@ -20,7 +20,9 @@
     					  '/local/config/database.php', 
     					  '/admin/local/config/config.php', 
     					  '/admin/local/config/database.php');
-    $directories = array( '/local/cache', '/local/logs', '/admin/local/cache',
+    $directories = array( '/local/cache', 
+                          '/local/logs', 
+                          '/admin/local/cache',
                           '/images',
                           '/images/categories',
                           '/images/manufacturers',
@@ -41,7 +43,6 @@
                 <li class="<?php echo ($step == 3) ? 'active' : ''; ?>"><a href="javascript:void(0);" title="<?php echo lang('nav_menu_step_3_text'); ?>"><i class="icon-chevron-right"></i> <?php echo lang('nav_menu_step_3_text'); ?></a></li>
                 <li class="<?php echo ($step == 4) ? 'active' : ''; ?>"><a href="javascript:void(0);" title="<?php echo lang('nav_menu_step_4_text'); ?>"><i class="icon-chevron-right"></i> <?php echo lang('nav_menu_step_4_text'); ?></a></li>
                 <li class="<?php echo ($step == 5) ? 'active' : ''; ?>"><a href="javascript:void(0);" title="<?php echo lang('nav_menu_step_5_text'); ?>"><i class="icon-chevron-right"></i> <?php echo lang('nav_menu_step_5_text'); ?></a></li>
-                <li class="<?php echo ($step == 6) ? 'active' : ''; ?>"><a href="javascript:void(0);" title="<?php echo lang('nav_menu_step_6_text'); ?>"><i class="icon-chevron-right"></i> <?php echo lang('nav_menu_step_6_text'); ?></a></li>
 			</ul>
     	</div>
     	<div class="span9 content">
@@ -134,7 +135,7 @@
                         </tr>
                         <tr>
                           	<td><?php echo lang('box_server_openssl'); ?></td>
-                        	<td align="right"><img src="<?php echo base_url(); ?>assets/img/<?php echo (extension_loaded('openssl') ? 'ok.png' : 'error.png'); ?>" border="0" width="16" height="16"></td>
+                        	<td align="right"><img src="<?php echo base_url(); ?>assets/img/<?php echo (extension_loaded('openssl') ? 'ok.png' : 'warning.png'); ?>" border="0" width="16" height="16"></td>
                         </tr>
                     </table>
     
@@ -156,12 +157,12 @@
     	      		</table>
           		</div>
           	</div>
-            <div id="msg_alert" class="alert alert-error" style="display: none;"><?php echo lang('error_msg_check');?></div>
+            <div id="msg_alert" class="alert alert-error" style="display: none;"><?php echo lang('warning_msg_check');?></div>
             <div class="control-group">
                 <div class="controls pull-right">
                 	<a class="btn btn-info" href="javascript:void(0);" onclick="javascript: window.location.reload();"><i class="icon-refresh icon-white"></i> &nbsp;<?php echo lang('image_button_retry'); ?></a>
     				<a class="btn btn-info" href="javascript:void(0);" onclick="javascript: history.go(-1);"><i class="icon-remove icon-white"></i> &nbsp;<?php echo lang('image_button_cancel'); ?></a>
-    				<a class="btn btn-info" href="<?php echo site_url('index/index/database'); ?>"><i class="icon-ok icon-white"></i> &nbsp;<?php echo lang('image_button_continue'); ?></a>
+    				<a id="continue-button" class="btn btn-info" href="<?php echo site_url('index/index/database'); ?>"><i class="icon-ok icon-white"></i> &nbsp;<?php echo lang('image_button_continue'); ?></a>
                 </div>
             </div>
     	</div>
@@ -170,12 +171,25 @@
 
 <script type="text/javascript">
 (function($){
-	var errors = $('img[src="<?php echo base_url(); ?>assets/img/error.png"]');
-	
-	if (errors.size() > 0) {
-		$('#msg_alert').show();
+	var $errors = $('img[src="<?php echo base_url(); ?>assets/img/error.png"]');
+	var $info = $('#msg_alert');
+	var $button = $('#continue-button');
+
+	if ($errors.size() > 0) {
+		$info.fadeIn();
+		$button.addClass('disabled');
 	} else {
-		$('#msg_alert').hide();
+		$info.hide();
+		$button.removeClass('disabled');
 	}
+
+	$button.on('click',function() {
+		var $this = $(this);
+
+		//return false to disable link click
+		if ($this.hasClass('disabled')) {
+			return false;
+		}
+	});
 })(jQuery);
 </script>
