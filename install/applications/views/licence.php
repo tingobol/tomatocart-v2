@@ -25,7 +25,6 @@
                 <li class="<?php echo ($step == 3) ? 'active' : ''; ?>"><a href="javascript:void(0);" title="<?php echo lang('nav_menu_step_3_text'); ?>"><i class="icon-chevron-right"></i> <?php echo lang('nav_menu_step_3_text'); ?></a></li>
                 <li class="<?php echo ($step == 4) ? 'active' : ''; ?>"><a href="javascript:void(0);" title="<?php echo lang('nav_menu_step_4_text'); ?>"><i class="icon-chevron-right"></i> <?php echo lang('nav_menu_step_4_text'); ?></a></li>
                 <li class="<?php echo ($step == 5) ? 'active' : ''; ?>"><a href="javascript:void(0);" title="<?php echo lang('nav_menu_step_5_text'); ?>"><i class="icon-chevron-right"></i> <?php echo lang('nav_menu_step_5_text'); ?></a></li>
-                <li class="<?php echo ($step == 6) ? 'active' : ''; ?>"><a href="javascript:void(0);" title="<?php echo lang('nav_menu_step_6_text'); ?>"><i class="icon-chevron-right"></i> <?php echo lang('nav_menu_step_6_text'); ?></a></li>
 			</ul>
     	</div>
     	<div class="span9 content">
@@ -44,7 +43,7 @@
             </div>
             
             <div class="control-group clearfix">
-            	<a id="btn_next" href="<?php echo site_url('index/index/check'); ?>" class="btn btn-info pull-right disabled"><i class="icon-ok icon-white"></i>&nbsp;&nbsp;<?php echo lang('image_button_continue'); ?></a>
+            	<a id="continue-button" href="<?php echo site_url('index/index/check'); ?>" class="btn btn-info pull-right disabled"><i class="icon-ok icon-white"></i>&nbsp;&nbsp;<?php echo lang('image_button_continue'); ?></a>
             </div>
     	</div>
     </div>
@@ -52,18 +51,18 @@
 
 <script type="text/javascript">
 (function($){
-	var _btn = $('#btn_next');
+	var $button = $('#continue-button');
 
 	//observe the checkbox event
 	$('#license').on('change',function() {
-		if($(this).attr('checked')){
-			_btn.removeClass('disabled');
-		}else{
-			_btn.addClass('disabled');
+		if($(this).attr('checked')) {
+		    $button.removeClass('disabled');
+		} else {
+		    $button.addClass('disabled');
 		}
 	});
 
-	_btn.on('click',function() {
+	$button.on('click',function() {
 		var $this = $(this);
 
 		//return false to disable link click

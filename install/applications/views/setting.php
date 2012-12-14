@@ -15,17 +15,28 @@
  * @filesource
  */
 
-  $www_location = 'http://' . $_SERVER['HTTP_HOST'];
-
-  if (isset($_SERVER['REQUEST_URI']) && (empty($_SERVER['REQUEST_URI']) === false)) {
-    $www_location .= $_SERVER['REQUEST_URI'];
-  } else {
-    $www_location .= $_SERVER['SCRIPT_FILENAME'];
-  }
-
-  $www_location = substr($www_location, 0, strpos($www_location, 'install'));
-
-  $dir_fs_www_root = realpath(dirname(__FILE__) . '/../../../') . '/';
+    //get www location
+    $www_location = 'http://' . $_SERVER['HTTP_HOST'];
+    
+    if (isset($_SERVER['REQUEST_URI']) && (empty($_SERVER['REQUEST_URI']) === false)) {
+        $www_location .= $_SERVER['REQUEST_URI'];
+    } else {
+        $www_location .= $_SERVER['SCRIPT_FILENAME'];
+    }
+    
+    $www_location = substr($www_location, 0, strpos($www_location, 'install'));
+  
+    //messages
+    $messages = array(
+        'store_name' => array('icon' => 'failed.gif', 'message' => lang('rpc_store_setting_store_name_error')),
+        'store_owner' => array('icon' => 'failed.gif', 'message' => lang('rpc_store_setting_store_owner_error')),
+        'email' => array('icon' => 'failed.gif', 'message' => lang('rpc_store_setting_email_error')),
+        'username' => array('icon' => 'failed.gif', 'message' => lang('rpc_store_setting_username_error')),
+        'password' => array('icon' => 'failed.gif', 'message' => lang('rpc_store_setting_password_error')),
+        'confirm' => array('icon' => 'failed.gif', 'message' => lang('rpc_store_setting_confirm_error')),
+        'database_sample_data_importing' => array('icon' => 'progress.gif', 'message' => lang('rpc_database_sample_data_importing')),
+        'database_sample_data_imported' => array('icon' => 'success.gif', 'message' => lang('rpc_database_sample_data_imported')),
+        'database_sample_data_import_error' => array('icon' => 'failed.gif', 'message' => lang('rpc_database_sample_data_import_error')));
 ?>
 <div class="container clearfix">
     <div class="row-fluid">
@@ -36,7 +47,6 @@
                 <li class="<?php echo ($step == 3) ? 'active' : ''; ?>"><a href="javascript:void(0);" title="<?php echo lang('nav_menu_step_3_text'); ?>"><i class="icon-chevron-right"></i> <?php echo lang('nav_menu_step_3_text'); ?></a></li>
                 <li class="<?php echo ($step == 4) ? 'active' : ''; ?>"><a href="javascript:void(0);" title="<?php echo lang('nav_menu_step_4_text'); ?>"><i class="icon-chevron-right"></i> <?php echo lang('nav_menu_step_4_text'); ?></a></li>
                 <li class="<?php echo ($step == 5) ? 'active' : ''; ?>"><a href="javascript:void(0);" title="<?php echo lang('nav_menu_step_5_text'); ?>"><i class="icon-chevron-right"></i> <?php echo lang('nav_menu_step_5_text'); ?></a></li>
-                <li class="<?php echo ($step == 6) ? 'active' : ''; ?>"><a href="javascript:void(0);" title="<?php echo lang('nav_menu_step_6_text'); ?>"><i class="icon-chevron-right"></i> <?php echo lang('nav_menu_step_6_text'); ?></a></li>
 			</ul>
       	  	<div id="mBox">
       	    	<div id="mBoxContents"></div>
@@ -53,19 +63,21 @@
             <form name="install" id="installForm" action="<?php echo site_url('index/index/finish'); ?>" method="post" class="form-horizontal">
                 <div class="info">
                     <div class="control-group">
-                        <label class="control-label" for="HTTP_WWW_ADDRESS"><?php echo lang('param_web_address'); ?></label>
-                        <div class="controls">
-                        	<input type="text" id="HTTP_WWW_ADDRESS" name="HTTP_WWW_ADDRESS" value="<?php echo empty($HTTP_WWW_ADDRESS) ? $www_location : $HTTP_WWW_ADDRESS; ?>" />
-                        </div>
-                        <div class="description"><?php echo lang('param_web_address_description'); ?></div>
-                    </div>                
-                    <div class="control-group">
                         <label class="control-label" for="CFG_STORE_NAME"><?php echo lang('param_store_name'); ?>:</label>
                         <div class="controls">
                         	<input type="text" id="CFG_STORE_NAME" name="CFG_STORE_NAME" value="<?php echo empty($store_name) ? '' : $store_name; ?>" />
                         </div>
                         <div class="description"><?php echo lang('param_store_name_description'); ?></div>
                     </div>
+                    
+                    <div class="control-group">
+                        <label class="control-label" for="HTTP_WWW_ADDRESS"><?php echo lang('param_web_address'); ?></label>
+                        <div class="controls">
+                        	<input type="text" id="HTTP_WWW_ADDRESS" name="HTTP_WWW_ADDRESS" value="<?php echo empty($HTTP_WWW_ADDRESS) ? $www_location : $HTTP_WWW_ADDRESS; ?>" />
+                        </div>
+                        <div class="description"><?php echo lang('param_web_address_description'); ?></div>
+                    </div>                
+
                     <div class="control-group">
                         <label class="control-label" for="CFG_STORE_OWNER_NAME"><?php echo lang('param_store_owner_name'); ?>:</label>
                         <div class="controls">
@@ -73,6 +85,7 @@
                         </div>
                         <div class="description"><?php echo lang('param_store_owner_name_description'); ?></div>
                     </div>
+                    
                     <div class="control-group">
                         <label class="control-label" for="CFG_STORE_OWNER_EMAIL_ADDRESS"><?php echo lang('param_store_owner_email_address'); ?>:</label>
                         <div class="controls">
@@ -81,6 +94,7 @@
                         </div>
                         <div class="description"><?php echo lang('param_store_owner_email_address_description'); ?></div>
                     </div>
+                    
                     <div class="control-group">
                         <label class="control-label" for="CFG_ADMINISTRATOR_USERNAME"><?php echo lang('param_administrator_username'); ?>:</label>
                         <div class="controls">
@@ -89,6 +103,7 @@
                         </div>
                         <div class="description"><?php echo lang('param_administrator_username_description'); ?></div>
                     </div>
+                    
                     <div class="control-group">
                         <label class="control-label" for="CFG_ADMINISTRATOR_PASSWORD"><?php echo lang('param_administrator_password'); ?>:</label>
                         <div class="controls">
@@ -97,6 +112,7 @@
                         </div>
                         <div class="description"><?php echo lang('param_administrator_password_description'); ?></div>
                     </div>
+                    
                     <div class="control-group">
                         <label class="control-label" for="CFG_CONFIRM_PASSWORD"><?php echo lang('param_confirm_password'); ?>:</label>
                         <div class="controls">
@@ -105,19 +121,19 @@
                         </div>
                         <div class="description"><?php echo lang('param_administrator_password_description'); ?></div>
                     </div>
-                    <!-- 
-                	<div class="control-group clearfix" style="margin-top: 8px;">
-                    	<label class="checkbox control-label pull-left" for="license"><?php echo lang('param_database_import_sample_data'); ?>&nbsp;&nbsp;<input type="checkbox" id="DB_INSERT_SAMPLE_DATA" name="DB_INSERT_SAMPLE_DATA" checked="checked" /></label>
-                    	<div class="description"><?php echo lang('param_database_import_sample_data_description'); ?></div>
+                    
+                	<div class="control-group">
+                        <label class="control-label" for="DB_INSERT_SAMPLE_DATA"><?php echo lang('param_database_import_sample_data'); ?>:</label>
+                        <div class="controls">
+                        	<input type="checkbox" id="DB_INSERT_SAMPLE_DATA" name="DB_INSERT_SAMPLE_DATA" checked="checked" />
+                        </div>
+                        <div class="description"><?php echo lang('param_database_import_sample_data_description'); ?></div>
                     </div>
-		             -->
         	    </div>
-                <div class="">
-                    <div id="alert_error_panel" class="pull-left alert alert-error" style="margin-bottom: 5px;display: none;">
-                    </div>
+                <div class="control-group">
                     <div class="controls pull-right">
                     	<a href="<?php echo site_url(); ?>" class="btn btn-info"><i class="icon-remove icon-white"></i> &nbsp;<?php echo lang('image_button_cancel'); ?></a>
-                    	<a id="btn_continue" class="btn btn-info"><i class="icon-ok icon-white"></i> &nbsp;<?php echo lang('image_button_continue'); ?></a>
+                    	<a id="continue-button" class="btn btn-info"><i class="icon-ok icon-white"></i> &nbsp;<?php echo lang('image_button_continue'); ?></a>
                     </div>
                 </div>
             </form>
@@ -126,65 +142,108 @@
 </div>
 
 <script type="text/javascript">
-(function($){
-	$('#btn_continue').on('click',function(){
+    (function($){
+        var $mBox = $('#mBox');
+        var $mBoxContents = $('#mBoxContents');
+        var tpl_message = '<p style="width:180px;"><img src="<?php echo base_url(); ?>assets/img/{info_icon}" align="right" hspace="5" vspace="5" border="0" />{info_message}</p>';
+        var messages = <?php echo json_encode($messages); ?>;
 
-		var input = $('#CFG_ADMINISTRATOR_USERNAME');
-		var reg = /^([a-zA-Z0-9_])+$/;
-		checkValue(input,"<?php echo lang('error_name_is_null');?>",!input.val() || !reg.test(input.val()));
-		
-		input = $('#CFG_ADMINISTRATOR_PASSWORD');
-		checkValue(input,"<?php echo lang('error_pwd_is_null');?>",!input.val() || input.val().length < 4);
-		var cpwd = $('#CFG_CONFIRM_PASSWORD');
-		checkValue(cpwd,"<?php echo lang('error_pwd_not_match');?>",input.val() != cpwd.val());
-		
-		var errors = $('#installForm').find('.error');
-		if(errors.size() > 0){
-			$('#alert_error_panel').show();
-			$('#alert_error_panel').html("<?php echo lang('error_msg_form'); ?>");
-		}else{
-			$('#alert_error_panel').hide();
-	    	$('#installForm').submit();
+        /**
+		 * Display message
+		 */
+		function display_message(type, feedback) {
+			var data = messages[type];
+			var info = tpl_message.replace('{info_icon}', data.icon);
+
+			if (feedback == undefined) {
+			    info = info.replace('{info_message}', data.message);
+			} else {
+				feedback = data.message.replace('%s', feedback);
+				info = info.replace('{info_message}', feedback);
+		    }
+			    
+			$mBoxContents.html(info);
 		}
+        
+    	$('#continue-button').on('click',function() {
+            var $this = $(this);
 
-		
-	});
+            //disable continue button
+            if ($this.hasClass('disabled')) {
+				return;
+            }
 
-	function checkValue(obj,info,is_error){
-		//alert(info +'  '+ is_error);
-		if(is_error){
-			obj.parent().parent().addClass('error');
-			obj.parent().find('.help-inline').html(info);
-		}else{
-			obj.parent().parent().removeClass('error');
-			obj.parent().find('.help-inline').html('');
-		}
-		return is_error;
-	}
+            //show message box
+            $mBox.show();
+            
+            var error = false;
 
-	$('#CFG_STORE_OWNER_EMAIL_ADDRESS').on('blur',function(){
-		var v = $(this).val();
-		var reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/;
-		checkValue($(this),"<?php echo lang('error_email_format');?>",v&&!reg.test(v));
-	});
+            if(error == false && document.getElementById("CFG_STORE_NAME").value.length == 0) {
+                display_message('store_name');
+                
+              	error = true;
+            }
 
-	$('#CFG_ADMINISTRATOR_USERNAME').on('blur',function(){
-		var v = $(this).val();
-		var reg = /^([a-zA-Z0-9_])+$/;
-		checkValue($(this),"<?php echo lang('error_name_is_null');?>",!v || !reg.test(v));
-	});
+            if(error == false && document.getElementById("CFG_STORE_OWNER_NAME").value.length == 0) {
+                display_message('store_owner');
+                
+              	error = true;
+            }
 
+            if(error == false) {
+                var reg = /^[a-zA-Z0-9._-]+@([a-zA-Z0-9.-]+\.)+[a-zA-Z0-9.-]{2,4}$/;
+                if( !reg.test(document.getElementById('CFG_STORE_OWNER_EMAIL_ADDRESS').value) && document.getElementById("CFG_STORE_OWNER_EMAIL_ADDRESS").value.length > 0) {
+                    display_message('email');
+                    
+                  	error = true;
+                }
+            }  
+            
+            if(error == false && document.getElementById("CFG_ADMINISTRATOR_USERNAME").value.length == 0) {
+                display_message('username');
+                
+              	error = true;
+            }
+            
+            if(error == false && document.getElementById("CFG_ADMINISTRATOR_PASSWORD").value.length == 0) {
+                display_message('password');
+                
+              	error = true;
+            }
+            
+            if(error == false && document.getElementById("CFG_ADMINISTRATOR_PASSWORD").value != document.getElementById("CFG_CONFIRM_PASSWORD").value) {
+                display_message('confirm');
+                
+              	error = true;
+            }
 
-	$('#CFG_ADMINISTRATOR_PASSWORD').on('blur',function(){
-		var v = $(this).val();
-		checkValue($(this),"<?php echo lang('error_pwd_is_null');?>",!v || v.length < 4);
-	});
+    		if (error == false) {
+    		    display_message('database_sample_data_importing');
+    		    
+    		    $.ajax({
+                    type: 'post',
+                    url: '<?php echo site_url('setting/save') ?>',
+                    data: $('input[name=HTTP_WWW_ADDRESS], input[name=CFG_STORE_NAME], input[name=CFG_STORE_OWNER_NAME], input[name=CFG_STORE_OWNER_EMAIL_ADDRESS], input[name=CFG_ADMINISTRATOR_USERNAME], input[name=CFG_ADMINISTRATOR_PASSWORD], input[name=DB_INSERT_SAMPLE_DATA]'),
+                    dataType: 'json',
+                    success: function(result) {
+                        //if false then enable and button and retry
+                        if (result.success == false) {
+    						//enable the button
+                            $this.removeClass('disabled');
+                            
+                            display_message('database_sample_data_import_error', result.error);
+                        } 
+    					//if success start to import sql
+                        else {
+                            display_message('database_sample_data_imported');
 
-	$('#CFG_CONFIRM_PASSWORD').on('blur',function(){
-		var v = $(this).val();
-		var fpwd = $('#CFG_ADMINISTRATOR_PASSWORD').val();
-		checkValue($(this),"<?php echo lang('error_pwd_not_match');?>",v != fpwd);
-	});
-	
-})($);
+                            setTimeout(function() {
+                                window.location = '<?php echo site_url('index/index/finish'); ?>';
+                            }, 3000);
+                        }
+                    }
+                });
+        	}
+    	});
+    })($);
 </script>
