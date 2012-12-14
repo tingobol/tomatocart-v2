@@ -144,3 +144,38 @@ form label, .form-horizontal .control-label {
 #installForm input {
     margin-bottom: 0;
 }
+
+#mBox {
+    clear: both;
+    display: none;
+    float: left;
+    margin-top: 10px;
+    width: 218px;
+}
+
+#mBoxContents {
+    background: none repeat scroll 0 0 #FFEDD1;
+    border: 1px solid #F0A42A;
+    padding: 10px;
+    width: 198px;
+}
+
+div.large {
+    margin: 60px 0;
+}
+
+div.large a.btn {
+    width: 160px;
+}
+
+div.large div.span6 {
+    text-align: center;
+}
+
+div.large a.catalog {
+    width: 120px
+}
+
+div.large a.admin {
+    width: 180px
+}
