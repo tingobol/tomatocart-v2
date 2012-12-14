@@ -32,7 +32,8 @@ error_name_is_null = user name can't be null, and only contain letters, number a
 error_pwd_is_null = password can't be empty, and the length is greater than 4
 error_pwd_not_match = two passwords do not match
 error_msg_form = please check form field's error
-error_msg_check = Please be sure all the server configurations are correct!
+
+warning_msg_check = Please be sure all the server configurations are correct!
 
 msg_change_db_name = change the database name
 
