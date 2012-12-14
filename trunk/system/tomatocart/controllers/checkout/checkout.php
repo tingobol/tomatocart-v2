@@ -787,7 +787,7 @@ class Checkout extends TOC_Controller {
             $shipping_mod_sel = $this->input->post('shipping_mod_sel');
             if ($shipping_mod_sel !== FALSE)
             {
-                list($module, $method) = explode('_', $shipping_mod_sel);
+                list($module, $method) = explode('-', $shipping_mod_sel);
                 $module_class = strtolower('shipping_' . $module);
                 $this->load->library('shipping/' . $module_class);
 

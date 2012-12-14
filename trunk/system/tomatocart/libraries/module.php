@@ -122,6 +122,16 @@ class TOC_Module {
         //load module model
         $this->load_model($this->code);
     }
+    
+    /**
+     * Install Template Module
+     * 
+     * @access public
+     * @return boolean
+     */
+    public function install($templates_id, $medium, $group) {
+        
+    }
 
     /**
      * Load Template Module Model Class

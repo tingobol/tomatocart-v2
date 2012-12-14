@@ -26,7 +26,7 @@
  * @author		TomatoCart Dev Team
  * @link		http://tomatocart.com/wiki/
  */
-class TOC_Currencies 
+class TOC_Currencies
 {
 
     /**
@@ -60,13 +60,16 @@ class TOC_Currencies
         //initialize the currencies system
         $session_currency = $this->ci->session->userdata('currency');
         $post_currency = $this->ci->input->post('currency');
+        if ($post_currency == NULL) {
+            $post_currency = $this->ci->input->get('currency');
+        }
         if (($session_currency === NULL) || ($post_currency !== NULL) || ( (config('USE_DEFAULT_LANGUAGE_CURRENCY') == '1') && ($this->get_code($this->ci->lang->get_currency_id()) != $session_currency) ) )
         {
             if (isset($post_currency) && $this->exists($post_currency))
             {
                 $session_currency = $post_currency;
-            } 
-            else 
+            }
+            else
             {
                 $session_currency = (config('USE_DEFAULT_LANGUAGE_CURRENCY') == '1') ? $this->get_code($this->ci->lang->get_currency_id()) : config('DEFAULT_CURRENCY');
             }
@@ -249,6 +252,48 @@ class TOC_Currencies
     function get_data()
     {
         return $this->currencies;
+    }
+
+
+    /**
+     * Get all currencies
+     */
+    function get_currencies()
+    {
+        return $this->currencies;
+    }
+
+    /**
+     * Get currencies title by id
+     *
+     * @param $id
+     */
+    function get_title($id = '')
+    {
+        if (is_numeric($id))
+        {
+            foreach ($this->currencies as $key => $value)
+            {
+                if ($value['id'] == $id)
+                {
+                    return $value['title'];
+                }
+            }
+        }
+        else
+        {
+            $code = $this->ci->session->userdata('currency');
+
+            foreach ($this->currencies as $key => $value)
+            {
+                if ($key == $code)
+                {
+                    return $value['title'];
+                }
+            }
+        }
+        
+        return NULL;
     }
 
     /**

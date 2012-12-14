@@ -1,28 +1,42 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * Ionize, creative CMS
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * @package		Ionize
- * @author		Ionize Dev Team
- * @license		http://ionizecms.com/doc-license
- * @link		http://ionizecms.com
- * @since		Version 0.9.0
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
+ *
+ * @package   TomatoCart
+ * @author    TomatoCart Dev Team
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
+ * @link    http://tomatocart.com
+ * @since   Version 2.0
+ * @filesource
  */
 
 // ------------------------------------------------------------------------
 
 /**
- * Ionize, creative CMS Settings Model
+ * Extensions_Model
  *
- * @package		Ionize
- * @subpackage	Models
- * @category	Admin settings
- * @author		Ionize Dev Team
+ * @package   TomatoCart
+ * @subpackage  tomatocart
+ * @category  template-departments-model
+ * @author    TomatoCart Dev Team
+ * @link    http://tomatocart.com/wiki/
  */
 
 class Extensions_Model extends CI_Model
 {
-    function __construct()
+    
+    /**
+     * Constructor
+     *
+     * @access public
+     * @return void
+     */    
+    public function __construct()
     {
         parent::__construct();
     }
@@ -31,9 +45,11 @@ class Extensions_Model extends CI_Model
     /**
      * Get the installed modules of the specified groups
      *
+     * @access public
+     * @param $group
      * @return	The modules
      */
-    function get_modules($group)
+    public function get_modules($group)
     {
         $result = $this->db->select('code')->from('extensions')->where('modules_group', $group)->get();
 
@@ -45,26 +61,39 @@ class Extensions_Model extends CI_Model
 
         return $modules;
     }
-    
 
     /**
      * Get the installed modules of the specified groups
      *
-     * @return	The modules
+     * @access public
+     * @param $group
+     * @param $code
+     * @return mixed
      */
-    function get_module($group, $code)
+    public function get_module($group, $code)
     {
         $result = $this->db->select('params')->from('extensions')->where('modules_group', $group)->where('code', $code)->get();
 
-        if ($result->num_rows() > 0) 
+        if ($result->num_rows() > 0)
         {
             $data = $result->row_array();
-            
+
             return $data;
         }
 
-        return NULL;
+        return FALSE;
+    }
+
+    /**
+     * Install extension module
+     *
+     * @access public
+     * @param $data
+     * @return boolean
+     */
+    public function install($data) {
+        return $this->db->insert('extensions', $data);
     }
 }
-/* End of file settings_model.php */
-/* Location: ./application/models/settings_model.php */
+/* End of file extensions_model.php */
+/* Location: ./system/tomatocart/models/extensions_model.php */

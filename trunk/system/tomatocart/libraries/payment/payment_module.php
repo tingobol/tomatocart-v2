@@ -32,6 +32,14 @@
 class TOC_Payment_Module {
 
     /**
+     * Module group
+     * 
+     * @access private
+     * @var string
+     */
+    private $group = 'payment';
+    
+    /**
      * ci instance
      *
      * @access protected
@@ -134,7 +142,76 @@ class TOC_Payment_Module {
             $this->config = json_decode($data['params'], TRUE);
         }
     }
+    
+    /**
+     * Install module
+     * 
+     * @access public
+     * @return boolean
+     */
+    public function install() {
+        //load extensions model
+        $this->ci->load->model('extensions_model');
+        
+        //check whether the module is installed
+        $data = $this->ci->extensions_model->get_module($this->group, $this->code);
+        
+        if ($data == NULL) {
+            $data = array(
+                'title' => $this->title,
+                'code' => $this->code,
+                'author_name' => '',
+                'author_www' => '',
+                'modules_group' => $this->group,
+                'params' => json_encode($this->params));
+            
+            $result = $this->ci->extensions_model->install($data);
+            
+            //insert language definition
+            if ($result) {
+                $languages_all = $this->ci->lang->get_all();
+                
+                foreach ($languages_all as $l)
+                {
+                    $xml_file = '../system/tomatocart/language/' . $l['code'] . '/modules/' . $this->group . '/' . $this->code . '.xml';
+                    $this->ci->lang->import_xml($xml_file, $l['id']);
+                }
+            }
+            
+            return TRUE;
+        }
+        
+        return FALSE;
+    }
+    
+    /**
+     * Uninstall module
+     * 
+     * @access public
+     * @return boolean
+     */
+    public function uninstall() {
+        //load extensions model
+        $this->ci->load->model('extensions_model');
 
+        $result = $this->ci->extensions_model->uninstall($this->group, $this->code);
+        
+        //remove language definition
+        if ($result) {
+            $languages_all = $this->ci->lang->get_all();
+            
+            foreach ($languages_all as $l)
+            {
+                $xml_file = '../system/tomatocart/language/' . $l['code'] . '/modules/' . $this->group . '/' . $this->code . '.xml';
+                $this->ci->lang->remove_xml($xml_file, $l['id']);
+            }
+            
+            return TRUE;
+        }
+        
+        return FALSE;
+    }
+    
     /**
      * Get Payment Module Code
      *

@@ -34,7 +34,6 @@ class Guestbooks_Model extends CI_Model
      * Constructor
      *
      * @access public
-     *
      * @return void
      */
     public function __construct()
@@ -45,6 +44,7 @@ class Guestbooks_Model extends CI_Model
     /**
      * Get the list of guestbooks
      *
+     * @access public
      * @return array
      */
     public function get_listing()

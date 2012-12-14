@@ -1,23 +1,30 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * Ionize, creative CMS
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * @package   Ionize
- * @author    Ionize Dev Team
- * @license   http://ionizecms.com/doc-license
- * @link    http://ionizecms.com
- * @since   Version 0.9.0
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
+ *
+ * @package   TomatoCart
+ * @author    TomatoCart Dev Team
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
+ * @link    http://tomatocart.com
+ * @since   Version 2.0
+ * @filesource
  */
 
 // ------------------------------------------------------------------------
 
 /**
- * Ionize, creative CMS Settings Model
+ * Wishlist_Model
  *
- * @package   Ionize
- * @subpackage  Models
- * @category  Admin settings
- * @author    Ionize Dev Team
+ * @package   TomatoCart
+ * @subpackage  tomatocart
+ * @category  template-departments-model
+ * @author    TomatoCart Dev Team
+ * @link    http://tomatocart.com/wiki/
  */
 
 class Wishlist_Model extends CI_Model
@@ -25,7 +32,13 @@ class Wishlist_Model extends CI_Model
 
     const TB_WISHLIST='toc_wishlists';
     const TB_WISHLIST_PRODUCT = 'toc_wishlists_products';
-
+    
+    /**
+     * Constructor
+     *
+     * @access public
+     * @return void
+     */
     public function __construct()
     {
         parent::__construct();
@@ -33,14 +46,18 @@ class Wishlist_Model extends CI_Model
     
     /**
      * insert a new wishlist for a customers
+     * 
+     * @access public
      * @param int $customers_id
      * @param string $wishlists_token
+     * @return
      */
     public function insert_wishlist($customers_id,$wishlists_token)
     {
         $this->db->set('customers_id',$customers_id);
         $this->db->set('wishlists_token',$wishlists_token);
-        $this->db->insert(self::TB_WISHLIST);
+        $this->db->insert('toc_wishlists');
+        
         return ($this->db->affected_rows() ==1) ? $this->db->insert_id() : FALSE;
     }
     
@@ -51,7 +68,7 @@ class Wishlist_Model extends CI_Model
     public function get_wishlist_by_id($wishlist_id)
     {
         $this->db->where('wishlists_id', $wishlist_id);
-        $result = $this->db->get(self::TB_WISHLIST);
+        $result = $this->db->get('toc_wishlists');
         if($result->num_rows() > 0){
             return $result->first_row('array');
         }else{
@@ -67,7 +84,7 @@ class Wishlist_Model extends CI_Model
     public function get_wishlist_by_cid($customers_id)
     {
         $this->db->where('customers_id', $customers_id);
-        $result = $this->db->get(self::TB_WISHLIST);
+        $result = $this->db->get('toc_wishlists');
         if($result->num_rows() > 0){
             return $result->first_row('array');
         }else{
@@ -82,7 +99,7 @@ class Wishlist_Model extends CI_Model
     public function get_wishlist_by_token($token)
     {
         $this->db->where('wishlists_token', $token);
-        $result = $this->db->get(self::TB_WISHLIST);
+        $result = $this->db->get('toc_wishlists');
         if($result->num_rows() > 0){
             return $result->first_row('array');
         }else{
@@ -98,7 +115,7 @@ class Wishlist_Model extends CI_Model
     {
         $this->db->set('customers_id',$customers_id);
         $this->db->where('wishlists_id',$wishlist_id);
-        $this->db->update(self::TB_WISHLIST);
+        $this->db->update('toc_wishlists');
         return ($this->db->affected_rows() ==1) ? TRUE : FALSE;        
     }
     
@@ -116,7 +133,7 @@ class Wishlist_Model extends CI_Model
         if($comments){
             $this->db->set('comments',$comments);
         }
-        $this->db->insert(self::TB_WISHLIST_PRODUCT);
+        $this->db->insert('toc_wishlists'_PRODUCT);
         return ($this->db->affected_rows() ==1) ? $this->db->insert_id() : FALSE;
     }
     
@@ -128,7 +145,7 @@ class Wishlist_Model extends CI_Model
     public function get_wishlist_all_products($wishlist_id)
     {
         $this->db->where('wishlists_id',$wishlist_id);
-        $result = $this->db->get(self::TB_WISHLIST_PRODUCT);
+        $result = $this->db->get('toc_wishlists'_PRODUCT);
         if($result->num_rows() > 0){
             return $result->row_array();
         }else{
@@ -145,21 +162,21 @@ class Wishlist_Model extends CI_Model
     {
         $this->db->set('comments',$comments);
         $this->db->where('wishlists_products_id',$wishlist_product_id);
-        $this->db->update(self::TB_WISHLIST_PRODUCT);
+        $this->db->update('toc_wishlists'_PRODUCT);
         return ($this->db->affected_rows() ==1) ? TRUE : FALSE;
     }
     
     public function update_wishlist_belong($wishlists_id_old,$wishlist_id_new){
         $this->db->set('wishlists_id',$wishlist_id_new);
         $this->db->where('wishlists_id',$wishlists_id_old);
-        $this->db->update(self::TB_WISHLIST_PRODUCT);
+        $this->db->update('toc_wishlists'_PRODUCT);
         return ($this->db->affected_rows() >0) ? TRUE : FALSE;        
     }
     
     public function get_wishlist_product_by_id($wishlists_products_id)
     {
         $this->db->where('wishlists_products_id',$wishlists_products_id);
-        $result = $this->db->get(self::TB_WISHLIST_PRODUCT);
+        $result = $this->db->get('toc_wishlists'_PRODUCT);
         if($result->num_rows() > 0){
             return $result->first_row('array');
         }else{
@@ -171,7 +188,7 @@ class Wishlist_Model extends CI_Model
     {
         $this->db->where('wishlists_id',$wishlists_id);
         $this->db->where('products_id',$products_id);
-        $result = $this->db->get(self::TB_WISHLIST_PRODUCT);
+        $result = $this->db->get('toc_wishlists'_PRODUCT);
         if($result->num_rows() > 0){
             return $result->first_row('array');
         }else{
@@ -186,25 +203,25 @@ class Wishlist_Model extends CI_Model
         if($products_id){
             $this->db->where('products_id',$products_id);
         }
-        $this->db->delete(self::TB_WISHLIST_PRODUCT);
+        $this->db->delete('toc_wishlists'_PRODUCT);
         return ($this->db->affected_rows() >0) ? TRUE : FALSE;
     }
     
     public function delete_product_by_id($wishlist_product_id)
     {
         $this->db->where('wishlists_products_id',$wishlist_product_id);
-        $this->db->delete(self::TB_WISHLIST_PRODUCT);
+        $this->db->delete('toc_wishlists'_PRODUCT);
         return ($this->db->affected_rows() ==1) ? TRUE : FALSE;
     }
     
     public function delete_wishlist($wishlists_id)
     {
         $this->db->where('wishlists_id',$wishlists_id);
-        $this->db->delete(self::TB_WISHLIST);
+        $this->db->delete('toc_wishlists');
         return ($this->db->affected_rows() >0) ? TRUE : FALSE;
     }
     
 }
 
-/* End of file settings_model.php */
-/* Location: ./application/models/settings_model.php */
+/* End of file wishlist_model.php */
+/* Location: ./system/tomatocart/models/wishlist_model.php */

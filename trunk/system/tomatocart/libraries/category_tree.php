@@ -355,7 +355,7 @@ class TOC_Category_Tree
                     $link_title = $category['name'];
                 }
 
-                $result .= str_repeat($this->spacer_string, $this->spacer_multiplier * $level) . anchor(site_url('category/' . $category_link), $link_title);
+                $result .= str_repeat($this->spacer_string, $this->spacer_multiplier * $level) . anchor(site_url('cpath/' . $category_link), $link_title);
 
                 if ($this->show_category_product_count === TRUE) {
                     $result .= $this->category_product_count_start_string . $category['count'] . $this->category_product_count_end_string;
@@ -565,23 +565,30 @@ class TOC_Category_Tree
      * @param $id
      * @return array
      */
-    public function get_data($id)
+    public function get_data($id = NULL)
     {
-        foreach ($this->data as $parent => $categories)
+        if ($id == NULL)
         {
-            foreach ($categories as $category_id => $info)
+            return $this->data;
+        }
+        else
+        {
+            foreach ($this->data as $parent => $categories)
             {
-                if ($id == $category_id)
+                foreach ($categories as $category_id => $info)
                 {
-                    return array('id' => $id,
-                                 'name' => $info['name'],
-                                 'page_title' => $info['page_title'],
-                                 'meta_keywords' => $info['meta_keywords'],
-                                 'meta_description' => $info['meta_description'],
-                                 'parent_id' => $parent,
-                                 'image' => $info['image'],
-                                 'count' => $info['count']
-                    );
+                    if ($id == $category_id)
+                    {
+                        return array('id' => $id,
+                                     'name' => $info['name'],
+                                     'page_title' => $info['page_title'],
+                                     'meta_keywords' => $info['meta_keywords'],
+                                     'meta_description' => $info['meta_description'],
+                                     'parent_id' => $parent,
+                                     'image' => $info['image'],
+                                     'count' => $info['count']
+                        );
+                    }
                 }
             }
         }
@@ -979,7 +986,7 @@ class TOC_Category_Tree
 
             return implode('/', $data);
         }
-        
+
         return NULL;
     }
 
@@ -1005,16 +1012,16 @@ class TOC_Category_Tree
                 else
                 {
                     $cid = $this->get_cid_from_sef_url($url, $id);
-                    
+
                     //found
                     if (is_numeric($cid))
                     {
                         return $cid;
-                    } 
+                    }
                 }
             }
         }
-        
+
         return NULL;
     }
 
@@ -1036,23 +1043,23 @@ class TOC_Category_Tree
         else
         {
             $paths = explode('/', $cpath);
-            
+
             if (sizeof($paths) == 1)
             {
                 return $this->get_cid_from_sef_url($paths[0]);
             }
-            else 
+            else
             {
                 $cpath = array();
                 foreach ($paths as $path)
                 {
                     $cpath[] = $this->get_cid_from_sef_url($path);
                 }
-                
+
                 return implode('_', $cpath);
             }
         }
-        
+
         return NULL;
     }
 

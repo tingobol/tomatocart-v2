@@ -253,15 +253,17 @@ class Address_Book extends TOC_Controller {
         
         //validate primary option
         $primary = FALSE;
-        if (($this->customer->has_default_address() === FALSE) || (!empty($this->input->post('primary')) && ($this->input->post('primary') == 1)))
+        $chk_primary = $this->input->post('primary');
+        if (($this->customer->has_default_address() === FALSE) || (!empty($chk_primary) && ($chk_primary == 1)))
         {
             $primary = TRUE;
         }
         
         //save the address book
+        $address_book_id = $this->input->post('address_book_id');
         if ($this->message_stack->size('address_book') === 0)
         {
-            if ($this->address_book_model->save($data, $this->customer->get_id(), empty($this->input->post('address_book_id')) ? NULL : $this->input->post('address_book_id'), $primary))
+            if ($this->address_book_model->save($data, $this->customer->get_id(), empty($address_book_id) ? NULL : $address_book_id, $primary))
             {
                 $this->message_stack->add_session('address_book', lang('success_address_book_entry_updated'), 'success');
                 
@@ -278,14 +280,14 @@ class Address_Book extends TOC_Controller {
         $data['states'] = $this->address_model->get_states($this->input->post('country'));
         
         //editing the address book
-        if (!empty($this->input->post('address_book_id')))
+        if (!empty($address_book_id))
         {
             //set page title
             $this->template->set_title(lang('address_book_edit_entry_heading'));
                 
-            $data['address_book_id'] = $this->input->post('address_book_id');
+            $data['address_book_id'] = $address_book_id;
             
-            if ($this->customer->get_default_address_id() != $this->input->post('address_book_id'))
+            if ($this->customer->get_default_address_id() != $address_book_id)
             {
                 $data['display_primary'] = TRUE;
             }
