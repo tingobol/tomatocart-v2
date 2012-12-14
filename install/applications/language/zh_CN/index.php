@@ -12,7 +12,7 @@
 # @since		Version 2.0
 # @filesource
 
-page_title_welcome = 欢迎进入TomatoCart 1.0 Alpha 1安装界面!
+page_title_welcome = 欢迎进入TomatoCart 2.0 Alpha 5安装界面!
 page_title_pre_installation_check = 安装前检查
 page_title_database_server_setup = 数据库服务器配置
 page_title_web_server = Web 服务器
@@ -23,9 +23,8 @@ nav_menu_title = 步骤
 nav_menu_step_1_text = 1: 许可协议
 nav_menu_step_2_text = 2: 安装前检测
 nav_menu_step_3_text = 3: 数据库设置
-nav_menu_step_4_text = 4: Web服务器配置
-nav_menu_step_5_text = 5: 网店设置
-nav_menu_step_6_text = 6:完成
+nav_menu_step_4_text = 4: 网店设置
+nav_menu_step_5_text = 5:完成
 
 title_language = 语言:
 
@@ -33,7 +32,7 @@ box_title_license = 许可协议
 label_agree_to_the_license = 我同意许可协议
 warning_accept_license = 请单击同意选择框继续
 
-text_welcome = <p style="background-color: #ff6633; padding: 5px; border: 1px #000 solid;">请注意该版本是不提供任何技术支持的alpha版本，只用于测试以及评估目的，因此不适用于实际网店。</p><p>TomatoCart是由无锡市亿路科技有限公司开发的新一代开源在线电子商务解决方案；该软件是基于osCommerce 3 alpha 4 "Lebkuchen" 独立开发的分支项目。它使得网店店主在无需都很成本或很小的成本就能够安装、运行以及维护网店。</p><p>TomatoCart基于强大、自由、开放的开源解决方案，其中包括<i>强大的</i>PHP脚本语言，<i>稳定的</i>Apache 网络服务器，以及<i>高效的</i>MySQL数据库服务器。</p><p>没有任何限制条件和特殊需求，TomatoCart可以安装在任何支持PHP4或者PHP5的网络服务器上，可以安装在任何支持PHP以及MySQL的环境中，包括Linux、Solaris、BSD、和Microsoft Windows。</p>
+text_welcome = <p style="background-color: #ff6633; padding: 5px; border: 1px #000 solid;">请注意该版本是不提供任何技术支持的alpha版本，只用于测试以及评估目的，因此不适用于实际网店。</p><p>TomatoCart v2.0是新一代开源在线电子商务解决方案。</p><p>TomatoCart基于强大、自由、开放的开源解决方案，其中包括<i>强大的</i>PHP脚本语言，<i>稳定的</i>Apache 网络服务器，以及<i>高效的</i>MySQL数据库服务器。</p><p>没有任何限制条件和特殊需求，TomatoCart可以安装在任何支持PHP5的网络服务器上，可以安装在任何支持PHP以及MySQL的环境中，包括Linux、Solaris、BSD、和Microsoft Windows。</p>
 text_pre_installation_check = 在进行安装之前，请确保您的系统满足安装TomatoCart的最低要求。如果某些设置不被支持，请采取适当措施纠正这些错误。操作失误将可能导致TomatoCart运行不正常。
 text_database_server_setup = 数据库服务器存储了网店的信息，如产品信息，客户信息，以及订单历史记录。如果您还未获知数据库服务器参数信息，请咨询您的服务器管理员。
 text_web_server = <p>网络服务器负责为访客和客户提供网店页面。网络服务器参数确保页面链接指向正确的页面地址。<p>诸如会话数据、缓存文件这样的临时文件将被储存在工作目录中。重要的是该目录应位于网络服务器的根目录以外不能被外部访问。</p>
@@ -56,7 +55,7 @@ param_database_type_description = 使用的数据库服务器软件。
 param_database_prefix = 数据库表前缀
 param_database_prefix_description = 用于数据库表的前缀。
 
-param_database_import_sample_data = 导入简单数据
+param_database_import_sample_data = 导入示例数据
 param_database_import_sample_data_description = 建议在首次安装时导入示例数据到数据库中。
 
 param_web_address = WWW服务地址：
