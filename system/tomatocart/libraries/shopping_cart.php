@@ -136,7 +136,7 @@ class TOC_Shopping_Cart {
     {
         // Set the super object to a local variable for use later
         $this->ci =& get_instance();
-        
+
         // Set the super object to a local variable for use later
         $this->ci->load->model('shopping_cart_model');
 
@@ -191,7 +191,7 @@ class TOC_Shopping_Cart {
             'billing_method' => $this->billing_method,
             'shipping_quotes' => $this->shipping_quotes,
             'order_totals' => $this->order_totals);
-        
+
         log_message('error', json_encode($this->order_totals));
 
         $this->ci->session->set_userdata('cart_contents', $cart_contents);
@@ -982,7 +982,20 @@ class TOC_Shopping_Cart {
      *
      * Enter description here ...
      */
-    function get_order_totals() {
+    function get_order_totals($code = NULL) {
+        if ($code != NULL) {
+            if (is_array($this->order_totals)) {
+                foreach ($this->order_totals as $total) {
+                    if ($total['code'] == $code) {
+                        return $total;
+                    }
+                }
+            }
+            
+            //if specific order total is not there then return NULL
+            return NULL;
+        }
+
         return $this->order_totals;
     }
 

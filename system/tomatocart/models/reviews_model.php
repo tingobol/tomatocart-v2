@@ -29,6 +29,7 @@
 
 class Reviews_Model extends CI_Model
 {
+    
     /**
      * Constructor
      *
@@ -91,5 +92,6 @@ class Reviews_Model extends CI_Model
         }
     }
 }
-/* End of file settings_model.php */
-/* Location: ./application/models/settings_model.php */
+
+/* End of file reviews_model.php */
+/* Location: ./system/tomatocart/models/reviews_model.php */

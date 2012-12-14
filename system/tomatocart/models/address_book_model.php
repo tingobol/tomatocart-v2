@@ -18,7 +18,7 @@
 // ------------------------------------------------------------------------
 
 /**
- * Account Model
+ * Address_Book_Model
  *
  * @package   TomatoCart
  * @subpackage  tomatocart
@@ -29,6 +29,7 @@
 
 class Address_Book_Model extends CI_Model
 {
+    
     /**
      * Constructor
      *
@@ -43,10 +44,11 @@ class Address_Book_Model extends CI_Model
      * Save the address book
      *
      * @access public
-     * 
      * @param array
      * @param int
-     * @return bool
+     * @param int
+     * @param boolean
+     * @return boolean
      */
     public function save($data, $customers_id, $id = NULL, $primary = FALSE)
     {
@@ -89,9 +91,9 @@ class Address_Book_Model extends CI_Model
      * Set the primary address
      *
      * @access public
-     * 
      * @param int
-     * @return bool
+     * @param int
+     * @return boolean
      */
     public function set_primary_address($id, $customers_id)
     {
@@ -109,7 +111,7 @@ class Address_Book_Model extends CI_Model
      * @access public
      * @param int
      * @param int
-     * @return array
+     * @return mixed
      */
     public function get_address($customers_id, $address_book_id)
     {
@@ -189,11 +191,11 @@ class Address_Book_Model extends CI_Model
     public function get_addresses($customers_id) 
     {
         $result = $this->db->select('ab.address_book_id, ab.entry_gender as gender, ab.entry_firstname as firstname, ab.entry_lastname as lastname, ab.entry_company as company, ab.entry_street_address as street_address, ab.entry_suburb as suburb, ab.entry_postcode as postcode, ab.entry_city as city, ab.entry_zone_id as zone_id, ab.entry_telephone as telephone, z.zone_code as zone_code, z.zone_name as zone_name, ab.entry_country_id as country_id, c.countries_name as countries_name, c.countries_iso_code_2, c.countries_iso_code_3, c.address_format, ab.entry_state as state, ab.entry_fax as fax')
-        ->from('address_book as ab')
-        ->join('zones as z', 'ab.entry_zone_id = z.zone_id', 'left')
-        ->join('countries as c', 'ab.entry_country_id = c.countries_id', 'left')
-        ->where('ab.customers_id', $customers_id)
-        ->get();
+            ->from('address_book as ab')
+            ->join('zones as z', 'ab.entry_zone_id = z.zone_id', 'left')
+            ->join('countries as c', 'ab.entry_country_id = c.countries_id', 'left')
+            ->where('ab.customers_id', $customers_id)
+            ->get();
 
         $address_books = array();
         if ($result->num_rows() > 0)
@@ -284,7 +286,7 @@ class Address_Book_Model extends CI_Model
      * @access public
      * @param int
      * @param int
-     * @return bool
+     * @return boolean
      */
     public function check($address_book_id, $customers_id)
     {
@@ -303,4 +305,4 @@ class Address_Book_Model extends CI_Model
     }
 }
 /* End of file address_book_model.php */
-/* Location: ./application/models/address_book_model.php */
+/* Location: ./system/tomatocart/models/address_book_model.php */

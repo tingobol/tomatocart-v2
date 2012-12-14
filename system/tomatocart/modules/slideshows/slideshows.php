@@ -81,7 +81,7 @@ class Slideshows extends TOC_Module
         array('name' => 'MODULE_SLIDESHOW_SLIDE_WIDTH',
               'title' => 'Slideshow Width', 
               'type' => 'numberfield',
-              'value' => '960',
+              'value' => '940',
               'description' => 'Slideshow Wdith'),
         
         //MODULE_SLIDESHOW_SLIDE_HEIGHT
@@ -98,19 +98,24 @@ class Slideshows extends TOC_Module
               'value' => '3000',
               'description' => 'Slideshow Play Interval'),
     
-        //MODULE_SLIDESHOW_PAUSE_INTERVAL
-        array('name' => 'MODULE_SLIDESHOW_PAUSE_INTERVAL',
-              'title' => 'Slideshow Pause Interval', 
-              'type' => 'numberfield',
-              'value' => '2000',
-              'description' => 'Slideshow Pause Interval'),
-    
-        //MODULE_SLIDESHOW_HOVER_PAUSE
-        array('name' => 'MODULE_SLIDESHOW_HOVER_PAUSE',
-              'title' => 'Slideshow Hover Pause', 
+        //MODULE_SLIDESHOW_DISPLAY_CAROUSEL_CONTROL
+        array('name' => 'MODULE_SLIDESHOW_DISPLAY_CAROUSEL_CONTROL',
+              'title' => 'Display carousel control', 
               'type' => 'combobox',
               'mode' => 'local',
-              'description' => 'Stop slideshow when mouse hover',
+              'value' => 'true',
+              'description' => 'Display carousel control button',
+              'values' => array(
+                  array('id' => 'true', 'text' => 'True'), 
+                  array('id' => 'false', 'text' => 'False'))),
+                  
+        //MODULE_SLIDESHOW_DISPLAY_SLIDE_INFO
+        array('name' => 'MODULE_SLIDESHOW_DISPLAY_SLIDE_INFO',
+              'title' => 'Display slide info', 
+              'type' => 'combobox',
+              'mode' => 'local',
+              'value' => 'true',
+              'description' => 'Display slide info',
               'values' => array(
                   array('id' => 'true', 'text' => 'True'), 
                   array('id' => 'false', 'text' => 'False'))));
@@ -141,13 +146,10 @@ class Slideshows extends TOC_Module
      */
     public function index()
     {
-        //add jquery slide plugin
-        $this->ci->template->add_javascript_file(base_url() . 'templates/default/web/javascript/slides.min.jquery.js');
-        
         //Create a rand div id for slideshow
         $mid = 'slides_' . rand();
         //
-        $this->ci->template->add_stylesheet_block('#' . $mid . ' .slides_container {display: block; width: ' . $this->config['MODULE_SLIDESHOW_SLIDE_WIDTH'] . 'px; height: ' . $this->config['MODULE_SLIDESHOW_SLIDE_HEIGHT'] . 'px}');
+        $this->ci->template->add_stylesheet_block('#' . $mid . ' .carousel-inner {display: block; margin: 0 auto; width: ' . $this->config['MODULE_SLIDESHOW_SLIDE_WIDTH'] . 'px; height: ' . $this->config['MODULE_SLIDESHOW_SLIDE_HEIGHT'] . 'px}');
         
         //load products
         $slides = $this->slideshows->get_slides($this->config['MODULE_SLIDESHOW_IMAGE_GROUPS']);
@@ -155,9 +157,8 @@ class Slideshows extends TOC_Module
         {
             $data['mid'] = $mid;
             $data['play_interval'] = $this->config['MODULE_SLIDESHOW_PLAY_INTERVAL'];
-            $data['pause_interval'] = $this->config['MODULE_SLIDESHOW_PAUSE_INTERVAL'];
-            $data['hover_pause'] = $this->config['MODULE_SLIDESHOW_HOVER_PAUSE'];
-            
+            $data['display_carousel_control'] = $this->config['MODULE_SLIDESHOW_DISPLAY_CAROUSEL_CONTROL'];
+            $data['display_slide_info'] = $this->config['MODULE_SLIDESHOW_DISPLAY_SLIDE_INFO'];
             
             foreach($slides as $slide)
             {

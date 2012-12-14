@@ -83,6 +83,27 @@ class Specials extends TOC_Controller {
         $pagination['use_page_numbers'] = TRUE;
         $pagination['uri_segment'] = 2;
 
+        $pagination['full_tag_open'] = '<ul>';
+        $pagination['full_tag_close'] = '</ul>';
+        
+        $pagination['first_tag_open'] = '<li>';
+        $pagination['first_tag_close'] = '</li>';
+        
+        $pagination['last_tag_open'] = '<li>';
+        $pagination['last_tag_close'] = '</li>';
+        
+        $pagination['cur_tag_open'] = '<li class="current"><a href="javascript:void(0);">';
+        $pagination['cur_tag_close'] = '</a></li>';
+        
+        $pagination['next_tag_open'] = '<li>';
+        $pagination['next_tag_close'] = '</li>';
+        
+        $pagination['prev_tag_open'] = '<li>';
+        $pagination['prev_tag_close'] = '</li>';
+        
+        $pagination['num_tag_open'] = '<li>';
+        $pagination['num_tag_close'] = '</li>';
+
         $this->pagination->initialize($pagination);
         $data['links'] = $this->pagination->create_links();
 

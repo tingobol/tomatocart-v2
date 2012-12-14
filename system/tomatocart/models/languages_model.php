@@ -1,59 +1,81 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * Ionize, creative CMS
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * @package		Ionize
- * @author		Ionize Dev Team
- * @license		http://ionizecms.com/doc-license
- * @link		http://ionizecms.com
- * @since		Version 0.9.0
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
+ *
+ * @package   TomatoCart
+ * @author    TomatoCart Dev Team
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
+ * @link    http://tomatocart.com
+ * @since   Version 2.0
+ * @filesource
  */
 
 // ------------------------------------------------------------------------
 
 /**
- * Ionize, creative CMS Settings Model
+ * Languages_Model
  *
- * @package		Ionize
- * @subpackage	Models
- * @category	Admin settings
- * @author		Ionize Dev Team
+ * @package   TomatoCart
+ * @subpackage  tomatocart
+ * @category  template-departments-model
+ * @author    TomatoCart Dev Team
+ * @link    http://tomatocart.com/wiki/
  */
 
 class Languages_Model extends CI_Model
 {
-  function __construct()
-  {
-    parent::__construct();
-  }
-
-
-  /**
-   * Get the settings
-   * Don't retrieves the language depending settings
-   *
-   * @return	The settings array
-   */
-  function load($group = 'general')
-  {
-    $definitions = array();
-    $this->db->select('*')->from('languages_definitions')->where('languages_id', lang_id())->where('content_group', $group);
-    $qry = $this->db->get();
-
-    foreach ($qry->result() as $key => $row){
-      $definitions[$row->definition_key] = $row->definition_value;
+    
+    /**
+     * Constructor
+     *
+     * @access public
+     * @return void
+     */
+    function __construct()
+    {
+        parent::__construct();
     }
-    
-    return $definitions;
-  }
 
-  function get_languages()
-  {
-    $qry = $this->db->select('*')->from('languages')->order_by(' sort_order, name')->get();
-    
-    $languages = array();
-    foreach ($qry->result_array() as $row){
-      $languages[$row['code']] = array( 'id' => $row['languages_id'],
+
+    /**
+     * Get the settings
+     * Don't retrieves the language depending settings
+     *
+     * @access public
+     * @param $group
+     * @return	The settings array
+     */
+    function load($group = 'general')
+    {
+        $definitions = array();
+        $this->db->select('*')->from('languages_definitions')->where('languages_id', lang_id())->where('content_group', $group);
+        $qry = $this->db->get();
+
+        foreach ($qry->result() as $key => $row){
+            $definitions[$row->definition_key] = $row->definition_value;
+        }
+
+        return $definitions;
+    }
+
+    /**
+     * Get languages
+     * 
+     * @access public
+     * @return array
+     */
+    function get_languages()
+    {
+        $qry = $this->db->select('*')->from('languages')->order_by(' sort_order, name')->get();
+
+        $languages = array();
+        foreach ($qry->result_array() as $row){
+            $languages[$row['code']] = array( 'id' => $row['languages_id'],
                                         'code' => $row['code'],
                                         'country_iso' => strtolower(substr($row['code'], 3)),
                                         'name' => $row['name'],
@@ -67,11 +89,23 @@ class Languages_Model extends CI_Model
                                         'numeric_separator_decimal' => $row['numeric_separator_decimal'],
                                         'numeric_separator_thousands' => $row['numeric_separator_thousands'],
                                         'parent_id' => $row['parent_id']);
-    }
-    
-    return $languages;
-  }
+        }
 
+        return $languages;
+    }
+
+    /**
+     * Insert definition
+     *
+     * @access public
+     * @param $definition
+     * @param $table
+     * @return boolean
+     */
+    function insert_definition ($definition, $table = 'languages_definitions') {
+        return $this->db->insert($table, $definition);
+    }
 }
-/* End of file settings_model.php */
-/* Location: ./application/models/settings_model.php */
+
+/* End of file languages_model.php */
+/* Location: ./system/tomatocart/models/languages_model.php */

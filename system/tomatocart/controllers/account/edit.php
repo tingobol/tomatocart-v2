@@ -73,9 +73,10 @@ class Edit extends TOC_Controller {
       //validate gender
       if (config('ACCOUNT_GENDER') == '1')
       {
-          if (($this->input->post('gender') == 'm') || ($this->input->post('gender') == 'f'))
+          $gender = $this->input->post('gender');
+          if (($gender == 'm') || ($gender == 'f'))
           {
-              $data['customers_gender'] = $this->input->post('gender');
+              $data['customers_gender'] = $gender;
           }
           else
           {
@@ -84,13 +85,14 @@ class Edit extends TOC_Controller {
       }
       else
       {
-          $data['customers_gender'] = !empty($this->input->post('gender')) ? $this->input->post('gender') : '';
+          $data['customers_gender'] = !empty($gender) ? $gender : '';
       }
       
       //validate firstname
-      if (!empty($this->input->post('firstname')) || (strlen(trim($this->input->post('firstname'))) >= config('ACCOUNT_FIRST_NAME')))
+      $firstname = $this->input->post('firstname');
+      if (!empty($firstname) || (strlen(trim($firstname)) >= config('ACCOUNT_FIRST_NAME')))
       {
-          $data['customers_firstname'] = $this->security->xss_clean($this->input->post('firstname'));
+          $data['customers_firstname'] = $this->security->xss_clean($firstname);
       }
       else
       {
@@ -98,9 +100,10 @@ class Edit extends TOC_Controller {
       }
       
       //validate lastname
-      if (!empty($this->input->post('lastname')) || (strlen(trim($this->input->post('lastname'))) >= config('ACCOUNT_LAST_NAME')))
+      $lastname = $this->input->post('lastname');
+      if (!empty($lastname) || (strlen(trim($lastname)) >= config('ACCOUNT_LAST_NAME')))
       {
-          $data['customers_lastname'] = $this->security->xss_clean($this->input->post('lastname'));
+          $data['customers_lastname'] = $this->security->xss_clean($lastname);
       }
       else
       {
@@ -110,9 +113,10 @@ class Edit extends TOC_Controller {
       //validate dob days
       if (config('ACCOUNT_DATE_OF_BIRTH') == '1')
       {
-          if (!empty($this->input->post('dob_days')))
+          $dob_days = $this->input->post('dob_days');
+          if (!empty($dob_days))
           {
-              $data['customers_dob'] = $this->input->post('dob_days');
+              $data['customers_dob'] = $dob_days;
           }
           else
           {
@@ -121,13 +125,14 @@ class Edit extends TOC_Controller {
       }
       
       //email address
-      if ((!empty($this->input->post('email_address'))) && (strlen(trim($this->input->post('email_address'))) >= config('ACCOUNT_EMAIL_ADDRESS')))
+      $email_address = $this->input->post('email_address');
+      if ((!empty($email_address)) && (strlen(trim($email_address)) >= config('ACCOUNT_EMAIL_ADDRESS')))
       {
-          if (validate_email_address($this->input->post('email_address')))
+          if (validate_email_address($email_address))
           {
-              if ($this->account_model->check_duplicate_entry($this->input->post('email_address')) === FALSE)
+              if ($this->account_model->check_duplicate_entry($email_address) === FALSE)
               {
-                  $data['customers_email_address'] = $this->input->post('email_address');
+                  $data['customers_email_address'] = $email_address;
               }
               else
               {

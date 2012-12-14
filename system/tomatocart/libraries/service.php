@@ -68,7 +68,7 @@ class TOC_Service
 
         //get installed module
         $this->modules = $this->ci->extensions_model->get_modules('service');
-        
+
         //load module
         foreach ($this->modules as $module)
         {
@@ -77,8 +77,8 @@ class TOC_Service
     }
 
     /**
-     * Is installed 
-     * 
+     * Is installed
+     *
      * @access public
      * @param $service
      * @return boolean
@@ -90,40 +90,38 @@ class TOC_Service
         {
             return TRUE;
         }
-        
+
         return FALSE;
     }
-    
+
     /**
      * Get service module
-     * 
+     *
      * @access public
      * @param $module
      * @return mixed
      */
     public function get_service($module)
     {
-        $service = $this->ci->{'service_' . $module};
-        
-        if (isset($service) && is_object($service))
+        if (isset($this->ci->{'service_' . $module}))
         {
-            return $service;
+            return $this->ci->{'service_' . $module};
         }
-        
+
         return NULL;
     }
-    
+
     /**
      * Run service
-     * 
+     *
      * @param $module
      */
     public function run($module)
     {
         $service = $this->get_service($module);
-        
+
         //check whether
-        if (method_exists($service, 'run')) 
+        if (method_exists($service, 'run'))
         {
             $service->run();
         }

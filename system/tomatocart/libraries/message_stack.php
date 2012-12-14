@@ -159,7 +159,7 @@ class TOC_Message_Stack
             }
             $messages .= '</ul>';
 
-            return '<div class="messageStack">' . $messages . '</div>';
+            return '<div class="alert alert-info">' . $messages . '</div>';
         }
 
         return '';

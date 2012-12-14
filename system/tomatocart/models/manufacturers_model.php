@@ -29,6 +29,7 @@
 
 class Manufacturers_Model extends CI_Model
 {
+    
     /**
      * Constructor
      *

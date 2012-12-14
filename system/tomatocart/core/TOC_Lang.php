@@ -507,6 +507,35 @@ class TOC_Lang extends CI_Lang {
 
         return image('images/worldflags/' . $imagecode . '.png', $this->languages[$code]['name'], $width, $height, $parameters);
     }
+    
+    /**
+     * Import xml into database
+     * 
+     * @access public
+     * @param unknown_type $xml_file
+     * @param unknown_type $languages_id
+     * @return boolean
+     */
+    public function import_xml($xml_file, $languages_id) {
+        if ( file_exists($xml_file) ) {
+            $info = simplexml_load_file($xml_file);
+
+            //insert definitions
+            foreach ($info->definitions->definition as $definition) {
+                $entry = array(
+                	'languages_id' => $languages_id,
+                    'content_group' => (string) $definition->group,
+                    'definition_key' => (string) $definition->key,
+                    'definition_value' => (string) $definition->value);
+
+                $this->ci->languages_model->insert_definition($entry);
+            }
+            
+            unset($info);
+        }
+        
+        return FALSE;
+    }
 }
 // END Language Class
 

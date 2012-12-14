@@ -119,7 +119,7 @@ class TOC_Payment_cheque extends TOC_Payment_Module
                 $zones = $this->ci->address_model->get_zone_id_via_geo_zone($this->ci->shopping_cart->get_billing_address('country_id'), $this->config['MODULE_PAYMENT_CHEQUE_ZONE']);
 
                 $check_flag = FALSE;
-                if ($zone_id !== FALSE)
+                if ($zones !== FALSE)
                 {
                     foreach($zones as $zone_id)
                     {

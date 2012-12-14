@@ -18,7 +18,7 @@
 // ------------------------------------------------------------------------
 
 /**
- * Guestbooks Model
+ * Departments_Model
  *
  * @package   TomatoCart
  * @subpackage  tomatocart
@@ -29,11 +29,11 @@
 
 class Departments_Model extends CI_Model
 {
+    
     /**
      * Constructor
      *
      * @access public
-     * 
      * @return void
      */
     public function __construct()
@@ -44,17 +44,18 @@ class Departments_Model extends CI_Model
     /**
      * Get the list of departments
      *
+     * @access public
      * @return array
      */
     public function get_listing() 
     {
         $result = $this->db
-        ->select('d.departments_id, dd.departments_title, d.departments_email_address, dd.departments_description')
-        ->from('departments d')
-        ->join('departments_description dd', 'd.departments_id = dd.departments_id', 'inner')
-        ->where('dd.languages_id', lang_id())
-        ->order_by('dd.departments_title')
-        ->get();
+            ->select('d.departments_id, dd.departments_title, d.departments_email_address, dd.departments_description')
+            ->from('departments d')
+            ->join('departments_description dd', 'd.departments_id = dd.departments_id', 'inner')
+            ->where('dd.languages_id', lang_id())
+            ->order_by('dd.departments_title')
+            ->get();
         
         return $result->result_array();
     }

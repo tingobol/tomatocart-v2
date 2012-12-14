@@ -44,17 +44,18 @@ class Account_Model extends CI_Model
     /**
      * Get customer data via email address
      *
+     * @access public
      * @param $email
-     * @return array
+     * @return mixed
      */
     public function get_data($email)
     {
         $result = $this->db->select('c.*, ab.address_book_id, ab.entry_gender, ab.entry_company, ab.entry_firstname, ab.entry_lastname, ab.entry_street_address, ab.entry_suburb, ab.entry_postcode, ab.entry_city, ab.entry_state, ab.entry_country_id, ab.entry_zone_id, ab.entry_telephone, ab.entry_fax, cg.customers_groups_discount')
-        ->from('customers as c')
-        ->join('customers_groups as cg', 'c.customers_groups_id = cg.customers_groups_id', 'left')
-        ->join('address_book as ab', 'c.customers_id = ab.customers_id AND ab.address_book_id = c.customers_default_address_id', 'left')
-        ->where('customers_email_address', $email)
-        ->get();
+            ->from('customers as c')
+            ->join('customers_groups as cg', 'c.customers_groups_id = cg.customers_groups_id', 'left')
+            ->join('address_book as ab', 'c.customers_id = ab.customers_id AND ab.address_book_id = c.customers_default_address_id', 'left')
+            ->where('customers_email_address', $email)
+            ->get();
         
         $data = FALSE;
         if ($result->num_rows() > 0)
@@ -67,18 +68,19 @@ class Account_Model extends CI_Model
     
     /**
      * Check whether the emails have already been used by other customer
-     *
+     * 
+     * @access public
      * @param $email
-     * @return bool
+     * @return boolean
      */
     public function check_duplicate_entry($email)
     {
         $result = $this->db
-        ->select('customers_id')
-        ->from('customers')
-        ->where(array('customers_email_address' => $email, 'customers_id !=' => $this->customer->get_id()))
-        ->limit(1)
-        ->get();
+            ->select('customers_id')
+            ->from('customers')
+            ->where(array('customers_email_address' => $email, 'customers_id !=' => $this->customer->get_id()))
+            ->limit(1)
+            ->get();
         
         if ($result->num_rows() == 1)
         {
@@ -91,6 +93,7 @@ class Account_Model extends CI_Model
     /**
      * Check user account
      *
+     * @access public
      * @param $email email address
      * @param $password user password
      * @return boolean
@@ -117,6 +120,7 @@ class Account_Model extends CI_Model
     /**
      * check customer email status
      * 
+     * @access public
      * @param string
      * @return boolean
      */
@@ -130,6 +134,13 @@ class Account_Model extends CI_Model
         }
     }
 
+    /**
+     * Get store credit
+     * 
+     * @access public
+     * @param $customers_id
+     * @return mixed
+     */
     public function get_store_credit($customers_id)
     {
         $result = $this->db->select('customers_credits')->from('customers')->where('customers_id', $customers_id)->get();
@@ -144,6 +155,14 @@ class Account_Model extends CI_Model
         return $store_credit;
     }
 
+    /**
+     * Get customer address
+     * 
+     * @access public
+     * @param $customers_id
+     * @param $address_id
+     * @return mixed
+     */
     public function get_address($customers_id, $address_id)
     {
         $result = $this->db
@@ -164,8 +183,10 @@ class Account_Model extends CI_Model
 
     /**
      * Insert customer data
-     *
+     * 
+     * @access public
      * @param $data
+     * @return boolean
      */
     public function insert($data)
     {
@@ -174,8 +195,10 @@ class Account_Model extends CI_Model
     
     /**
      * Save customer data
-     *
+     * 
+     * @access public
      * @param $data
+     * @return boolean
      */
     public function save($data, $customers_id)
     {
@@ -187,7 +210,9 @@ class Account_Model extends CI_Model
     /**
      * Update customer last logon
      * 
+     * @access public
      * @param int $id
+     * @return boolean
      */
     public function update_last_logon($id) 
     {
@@ -197,8 +222,10 @@ class Account_Model extends CI_Model
     /**
      * Update customers newsletter
      * 
+     * @access public
      * @param string
      * @param int
+     * @return boolean
      */
     public function update_customers_newsletter($newsletter, $customers_id)
     {
