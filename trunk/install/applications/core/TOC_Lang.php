@@ -79,14 +79,14 @@ class TOC_Lang extends CI_Lang
         {
             $this->ci = &get_instance();
         }
-        
+
         //initialize the languages from the xml files
         $this->ini_languages();
 
         //check the language in the query language and set in the system
         $language = ($this->ci->input->get('language') !== FALSE) ? $this->ci->input->get('language') : '';
         $this->set($language);
-        
+
         //load default language
         $this->ini_load();
     }
@@ -100,12 +100,12 @@ class TOC_Lang extends CI_Lang
      */
     public function ini_languages()
     {
-        $languages = glob('../system/tomatocart/language/*.xml'); 
-        
+        $languages = glob('../system/tomatocart/language/*.xml');
+
         //
         foreach ($languages as $language) {
             $xml = @simplexml_load_file($language);
-            
+
             $this->languages[(string) $xml->data->code] = array(
             	'title' => (string) $xml->data->title,
                 'code' =>  (string) $xml->data->code,
@@ -120,7 +120,7 @@ class TOC_Lang extends CI_Lang
                 'numerical_thousands_separator' =>  (string) $xml->data->numerical_thousands_separator);
         }
     }
-    
+
     // --------------------------------------------------------------------
 
     /**
@@ -203,7 +203,7 @@ class TOC_Lang extends CI_Lang
         {
             $language_code = $this->code;
         }
-        
+
         //check if the language file is loaded
         if (in_array($filename, $this->is_loaded, TRUE))
         {
@@ -457,9 +457,9 @@ class TOC_Lang extends CI_Lang
     {
         return $this->languages[$this->code]['locale'];
     }
-    
+
     // --------------------------------------------------------------------
-    
+
     /**
      * Get the charset of the current language
      *
@@ -470,7 +470,7 @@ class TOC_Lang extends CI_Lang
     {
         return $this->languages[$this->code]['charset'];
     }
-    
+
     // --------------------------------------------------------------------
 
     /**
@@ -598,6 +598,65 @@ class TOC_Lang extends CI_Lang
         }
 
         return image('../images/worldflags/' . $imagecode . '.png', $this->languages[$code]['name'], $width, $height, $parameters);
+    }
+
+    // --------------------------------------------------------------------
+
+    /**
+     * Import xml file
+     * 
+     * @access public
+     * @param $xml_file
+     * @param $languages_id
+     * @return boolean
+     */
+    public function import_xml($xml_file, $languages_id) {
+        if ( file_exists($xml_file) ) {
+            $info = simplexml_load_file($xml_file);
+
+            if ($info !== FALSE) {
+                //insert definitions
+                foreach ($info->definitions->definition as $definition) {
+                    $entry = array(
+                    	'languages_id' => $languages_id,
+                        'content_group' => (string) $definition->group,
+                        'definition_key' => (string) $definition->key,
+                        'definition_value' => (string) $definition->value);
+    
+                    $this->ci->languages_model->insert_definition($entry);
+                }
+                
+                unset($info);
+                
+                return TRUE;
+            }
+        }
+        
+        return FALSE;
+    }
+
+    // --------------------------------------------------------------------
+    
+    /**
+     * Install language
+     *
+     * @access public
+     * @param $code
+     * @param $languages_id
+     * @return boolean
+     */
+    public function install($code, $languages_id) {
+        $this->ci->load->model('languages_model');
+        
+        $xml_file = '../system/tomatocart/language/' . $code . '.xml';
+        $this->import_xml($xml_file, $languages_id);
+
+        $files = traverse_hierarchy('../system/tomatocart/language/' . $code);
+        foreach ($files as $file) {
+            if (strpos($file, '.xml') !== FALSE) {
+                $this->import_xml($file, $languages_id);
+            }
+        }
     }
 }
 // END TOC_Lang Class
