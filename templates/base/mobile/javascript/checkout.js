@@ -276,7 +276,7 @@ jQuery.Toc.override(jQuery.Toc.Checkout, {
           data : data,
           success : function(response) {
             // close checkout method form
-            $('#paymentMethodForm .formBody').slideUp();
+            $('#paymentMethodForm .accordion-body').slideUp();
             // open billing information form
             scope.loadOrderConfirmationForm();
           }
@@ -289,9 +289,9 @@ jQuery.Toc.override(jQuery.Toc.Checkout, {
       url : base_url + 'checkout/checkout/load_payment_information_form',
       success : function(response) {
         // close checkout method form
-        $('#shippingMethodForm .formBody').trigger('collapse');
+        $('#shippingMethodForm .accordion-body').trigger('collapse');
         // open billing information form
-        $('#paymentInformationForm .formBody').html(response.form).trigger('create').show();
+        $('#paymentInformationForm .accordion-body').html(response.form).trigger('create').show();
         $('#paymentInformationForm').trigger('expand');
       }
     });
@@ -304,7 +304,7 @@ jQuery.Toc.override(jQuery.Toc.Checkout, {
     this.sendRequest({
       url : base_url + 'checkout/checkout/load_checkout_method_form',
       success : function(response) {
-        $('#checkoutMethodForm .formBody').html(response.form).trigger('create').show();
+        $('#checkoutMethodForm .accordion-body').html(response.form).trigger('create').show();
         $('#checkoutMethodForm').trigger('expand');
       }
     });
@@ -321,9 +321,9 @@ jQuery.Toc.override(jQuery.Toc.Checkout, {
       data: $('input[name=checkout_method]:checked'),
       success : function(response) {
         // close checkout method form
-        $('#checkoutMethodForm .formBody').trigger('collapse');
+        $('#checkoutMethodForm .accordion-body').trigger('collapse');
         // open billing information form
-        $('#billingInformationForm .formBody').html(response.form).trigger('create').show();
+        $('#billingInformationForm .accordion-body').html(response.form).trigger('create').show();
         $('#billingInformationForm').trigger('expand');
       }
     });
@@ -358,9 +358,9 @@ jQuery.Toc.override(jQuery.Toc.Checkout, {
       url : base_url + 'checkout/checkout/load_shipping_form',
       success : function(response) {
         // close checkout method form
-        $('#billingInformationForm .formBody').trigger('collapse');
+        $('#billingInformationForm .accordion-body').trigger('collapse');
         // open billing information form
-        $('#shippingInformationForm .formBody').html(response.form).trigger('create').show();
+        $('#shippingInformationForm .accordion-body').html(response.form).trigger('create').show();
         $('#shippingInformationForm').trigger('expand');
       }
     });
@@ -393,9 +393,9 @@ jQuery.Toc.override(jQuery.Toc.Checkout, {
       success : function(response) {
           if (response.success == true) {
               // close checkout method form
-              $('#shippingInformationForm .formBody').trigger('collapse');
+              $('#shippingInformationForm .accordion-body').trigger('collapse');
               // open billing information form
-              $('#shippingMethodForm .formBody').html(response.form).trigger('create').show();
+              $('#shippingMethodForm .accordion-body').html(response.form).trigger('create').show();
               $('#shippingMethodForm').trigger('expand');
           } else {
               alert(response.errors.join("\n"));
@@ -411,14 +411,14 @@ jQuery.Toc.override(jQuery.Toc.Checkout, {
       url : base_url + 'checkout/checkout/load_order_confirmation_form',
       success : function(response) {
         // close checkout method form
-        //$('#checkoutMethodForm .formBody').slideUp();
+        //$('#checkoutMethodForm .accordion-body').slideUp();
         // open billing information form
-        //$('#billingInformationForm .formBody').html(response.form).slideDown();
+        //$('#billingInformationForm .accordion-body').html(response.form).slideDown();
         if (response.success == true) {
           // close checkout method form
-          $('#paymentInformationForm .formBody').trigger('collapse');
+          $('#paymentInformationForm .accordion-body').trigger('collapse');
           // open billing information form
-          $('#orderConfirmationForm .formBody').html(response.form).trigger('create').show();
+          $('#orderConfirmationForm .accordion-body').html(response.form).trigger('create').show();
           $('#orderConfirmationForm').trigger('expand');
         } else {
           alert(response.errors.join("\n"));

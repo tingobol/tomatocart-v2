@@ -34,7 +34,9 @@ function build_categories_dropdown_menu($parents_id = 0, $categories = null, $da
         $ci = get_instance();
         
         $data = $ci->category_tree->get_data();
-        $categories = $data[0];
+        if (is_array($data) && !empty($data)) {
+            $categories = $data[0];
+        }
         $result = '<ul role="navigation" class="nav">';
     }
     else

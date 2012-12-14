@@ -563,3 +563,26 @@ left: 100%;
 
 #guestbooks dt{margin-bottom: 4px}
 #guestbooks dd {margin-bottom: 10px}
+
+#checkoutForm .accordion-heading a {
+    font-weight: bold;
+    color: #000;
+    text-decoration: none;
+}
+
+#checkoutForm .accordion-heading a.modify {
+    float: right;
+    color: #0088CC;
+    text-decoration: underline;
+}
+#checkoutForm .control-group {
+    margin-bottom: 5px;
+}
+.accordion-body {
+    padding: 10px 20px 20px 20px;
+    background: none repeat scroll 0 0 #F7F7F7;
+}
+
+.collapse {
+	padding: 0;
+}
