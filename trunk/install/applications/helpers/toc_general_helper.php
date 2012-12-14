@@ -88,7 +88,7 @@ if( ! function_exists('get_language_flag'))
     function get_language_flag($code)
     {
         $flag = strtolower(substr($code, 3));
-        
+
         return store_url() . '/images/worldflags/' . $flag . '.png';
     }
 }
@@ -104,6 +104,89 @@ if( ! function_exists('store_url'))
     function store_url()
     {
         return trim(base_url(), 'install/');
+    }
+}
+
+/**
+ * Encrypt password
+ *
+ * @access public
+ * @param $plian
+ * @return string
+ */
+if( ! function_exists('encrypt_string'))
+{
+    function encrypt_string($plain)
+    {
+        $password = '';
+
+        for ($i=0; $i<10; $i++)
+        {
+            $password .= mt_rand();
+        }
+
+        $salt = substr(md5($password), 0, 2);
+
+        $password = md5($salt . $plain) . ':' . $salt;
+
+        return $password;
+    }
+}
+
+/**
+ * Traverse recursively directory and return files
+ * 
+ * @access public
+ * @param $path
+ * @return array
+ */
+function traverse_hierarchy($path)
+{
+    $return_array = array();
+
+    $dir = opendir($path);
+    while(($file = readdir($dir)) !== false)
+    {
+        if($file[0] == '.') continue;
+
+        $fullpath = $path . '/' . $file;
+        if(is_dir($fullpath))
+        $return_array = array_merge($return_array, traverse_hierarchy($fullpath));
+        else // your if goes here: if(substr($file, -3) == "jpg") or something like that
+        $return_array[] = $fullpath;
+    }
+
+    return $return_array;
+}
+
+/**
+ * Copy complete directroy
+ * 
+ * @access public
+ * @param $source
+ * @param $target
+ * @return void
+ */
+function toc_copy($source, $target) {
+    if (is_dir($source)) {
+        $src_dir = dir($source);
+
+        while ( false !== ($file = $src_dir->read()) ) {
+            if ($file == '.' || $file == '..' || $file == '.svn') {
+                continue;
+            }
+
+            $src_file = $source . '/' . $file;
+            if (is_dir($src_file)) {
+                toc_copy($src_file, $target . '/' . $file );
+                continue;
+            }
+            copy( $src_file, $target . '/' . $file );
+        }
+
+        $src_dir->close();
+    }else {
+        copy($source, $target);
     }
 }
 
