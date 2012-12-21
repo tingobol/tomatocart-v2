@@ -20,4 +20,4 @@
 require LOCALAPPPATH . 'config/email.php';
 
 /* End of file config.php */
-/* Location: ./system/tomatocart/config/autoload.php */
+/* Location: ./system/tomatocart/config/email.php */
