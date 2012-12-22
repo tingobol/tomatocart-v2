@@ -57,9 +57,9 @@ class Tax_Model extends CI_Model
             ->from('tax_rates as tr')
             ->join('zones_to_geo_zones as za', 'tr.tax_zone_id = za.geo_zone_id', 'left')
             ->join('geo_zones as tz', 'tz.geo_zone_id = tr.tax_zone_id', 'left')
-            ->where('(za.zone_country_id is null or za.zone_country_id = 0 or za.zone_country_id = ' . $zone_country_id . ')')
-            ->where('(za.zone_id is null or za.zone_id = 0 or za.zone_id = ' . $zone_id . ')')
-            ->where('tr.tax_class_id', $tax_class_id)
+            ->where('(za.zone_country_id is null or za.zone_country_id = 0 or za.zone_country_id = ' . (int) $zone_country_id . ')')
+            ->where('(za.zone_id is null or za.zone_id = 0 or za.zone_id = ' . (int) $zone_id . ')')
+            ->where('tr.tax_class_id', (int) $tax_class_id)
             ->group_by('tr.tax_priority')
             ->get();
 
@@ -88,9 +88,9 @@ class Tax_Model extends CI_Model
             ->from('tax_rates as tr')
             ->join('zones_to_geo_zones as za', 'tr.tax_zone_id = za.geo_zone_id', 'left')
             ->join('geo_zones as tz', 'tz.geo_zone_id = tr.tax_zone_id', 'left')
-            ->where('(za.zone_country_id is null or za.zone_country_id = 0 or za.zone_country_id = ' . $zone_country_id . ')')
-            ->where('(za.zone_id is null or za.zone_id = 0 or za.zone_id = ' . $zone_id . ')')
-            ->where('tr.tax_class_id = ' . $tax_class_id)
+            ->where('(za.zone_country_id is null or za.zone_country_id = 0 or za.zone_country_id = ' . (int) $zone_country_id . ')')
+            ->where('(za.zone_id is null or za.zone_id = 0 or za.zone_id = ' . (int) $zone_id . ')')
+            ->where('tr.tax_class_id = ' . (int) $tax_class_id)
             ->group_by('tr.tax_priority')
             ->get();
 
