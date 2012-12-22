@@ -143,7 +143,7 @@ class Account_Model extends CI_Model
      */
     public function get_store_credit($customers_id)
     {
-        $result = $this->db->select('customers_credits')->from('customers')->where('customers_id', $customers_id)->get();
+        $result = $this->db->select('customers_credits')->from('customers')->where('customers_id', (int) $customers_id)->get();
 
         $store_credit = FALSE;
         if ($result->num_rows() > 0)
@@ -168,8 +168,8 @@ class Account_Model extends CI_Model
         $result = $this->db
         ->select('*')
         ->from('address_book')
-        ->where('customers_id', $customers_id)
-        ->where('address_book_id', $address_id)
+        ->where('customers_id', (int) $customers_id)
+        ->where('address_book_id', (int) $address_id)
         ->get();
 
         $data = FALSE;
@@ -204,7 +204,7 @@ class Account_Model extends CI_Model
     {
         $data['date_account_last_modified'] = now();
         
-        return $this->db->update('customers', $data, array('customers_id' => $customers_id));
+        return $this->db->update('customers', $data, array('customers_id' => (int) $customers_id));
     }
 
     /**
@@ -216,7 +216,7 @@ class Account_Model extends CI_Model
      */
     public function update_last_logon($id) 
     {
-        return $this->db->update('customers', array( 'date_last_logon' => 'now', 'number_of_logons' => 'number_of_logons+1'), array('customers_id' => $id));
+        return $this->db->update('customers', array( 'date_last_logon' => 'now', 'number_of_logons' => 'number_of_logons+1'), array('customers_id' => (int) $id));
     }
     
     /**
@@ -229,7 +229,7 @@ class Account_Model extends CI_Model
      */
     public function update_customers_newsletter($newsletter, $customers_id)
     {
-        return $this->db->update('customers', array('customers_newsletter' => $newsletter), array('customers_id' => $customers_id));
+        return $this->db->update('customers', array('customers_newsletter' => $newsletter), array('customers_id' => (int) $customers_id));
     }
 }
 

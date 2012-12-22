@@ -75,7 +75,7 @@ class Address_Model extends CI_Model
      */
     public function get_states($countries_id)
     {
-        $result = $this->db->select('zone_code, zone_name')->from('zones')->where('zone_country_id', $countries_id)->order_by('zone_name')->get();
+        $result = $this->db->select('zone_code, zone_name')->from('zones')->where('zone_country_id', (int) $countries_id)->order_by('zone_name')->get();
 
         $states = array();
         if ($result->num_rows() > 0)
@@ -98,7 +98,7 @@ class Address_Model extends CI_Model
      */
     public function check_zone_id($countries_id)
     {
-        $result = $this->db->select('zone_id')->from('zones')->where('zone_country_id', $countries_id)->get();
+        $result = $this->db->select('zone_id')->from('zones')->where('zone_country_id', (int) $countries_id)->get();
 
         return ($result->num_rows() > 0) ? TRUE : FALSE;
     }
@@ -115,13 +115,13 @@ class Address_Model extends CI_Model
     {
         $zone_id = FALSE;
 
-        $result = $this->db->select('zone_id')->from('zones')->where('zone_country_id', $countries_id)->where('zone_code', $state)->get();
+        $result = $this->db->select('zone_id')->from('zones')->where('zone_country_id', (int) $countries_id)->where('zone_code', $state)->get();
 
         if ($result->num_rows() > 0){
             $row = $result->row_array();
             $zone_id = $row['zone_id'];
         } else {
-            $result = $this->db->select('zone_id')->from('zones')->where('zone_country_id', $countries_id)->where('zone_code', $state, 'after')->get();
+            $result = $this->db->select('zone_id')->from('zones')->where('zone_country_id', (int) $countries_id)->where('zone_code', $state, 'after')->get();
 
             if ($result->num_rows() > 0){
                 $row = $result->row_array();
@@ -142,7 +142,7 @@ class Address_Model extends CI_Model
      */
     public function get_zone_id_via_geo_zone($country_id, $geo_zone_id)
     {
-        $result = $this->db->select('zone_id')->from('zones_to_geo_zones')->where('zone_country_id', $country_id)->where('geo_zone_id', $geo_zone_id)->get();
+        $result = $this->db->select('zone_id')->from('zones_to_geo_zones')->where('zone_country_id', (int) $country_id)->where('geo_zone_id', (int) $geo_zone_id)->get();
 
         $zones = FALSE;
         if ($result->num_rows() > 0)

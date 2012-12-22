@@ -111,7 +111,7 @@ class Info_Model extends CI_Model
 
         if (is_numeric($categories_id))
         {
-            $this->db->where('a.articles_categories_id', $categories_id);
+            $this->db->where('a.articles_categories_id', (int) $categories_id);
         }
 
         if (is_numeric($limit))
@@ -178,7 +178,7 @@ class Info_Model extends CI_Model
             ->join('articles_description ad', 'a.articles_id = ad.articles_id', 'inner')
             ->join('articles_categories_description acd', 'a.articles_categories_id = acd.articles_categories_id and ad.language_id = acd.language_id', 'inner')
             ->where('ad.language_id', lang_id())
-            ->where('a.articles_id', $articles_id)
+            ->where('a.articles_id', (int) $articles_id)
             ->get();
 
         if ($result->num_rows() > 0)
@@ -198,7 +198,7 @@ class Info_Model extends CI_Model
      */
     public function get_article_friendly_url($articles_id)
     {
-        $result = $this->db->select('articles_url')->from('articles_description')->where('language_id', lang_id())->where('articles_id', $articles_id)->get();
+        $result = $this->db->select('articles_url')->from('articles_description')->where('language_id', lang_id())->where('articles_id', (int) $articles_id)->get();
 
         if ($result->num_rows() > 0)
         {
@@ -220,14 +220,14 @@ class Info_Model extends CI_Model
     {
         if (is_numeric($id))
         {
-            $result = $this->db->select('articles_id')->from('articles')->where('articles_id', $id)->get();
+            $result = $this->db->select('articles_id')->from('articles')->where('articles_id', (int) $id)->get();
         }
         else
         {
             $result = $this->db->select('a.articles_id')
             ->from('articles a')
             ->join('articles_description ad', 'a.articles_id = ad.articles_id', 'inner')
-            ->where('ad.articles_url', $id)
+            ->where('ad.articles_url', (int) $id)
             ->where('ad.language_id', lang_id())
             ->get();
         }
@@ -275,13 +275,13 @@ class Info_Model extends CI_Model
     {
         if (is_numeric($id))
         {
-            $result = $this->db->select('articles_categories_id')->from('articles_categories_description')->where('articles_categories_id', $id)->get();
+            $result = $this->db->select('articles_categories_id')->from('articles_categories_description')->where('articles_categories_id', (int) $id)->get();
         }
         else
         {
             $result = $this->db->select('articles_categories_id')
                 ->from('articles_categories_description')
-                ->where('articles_categories_url', $id)
+                ->where('articles_categories_url', (int) $id)
                 ->where('language_id', lang_id())
                 ->get();
         }
