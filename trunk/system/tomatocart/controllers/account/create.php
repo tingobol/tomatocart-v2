@@ -27,7 +27,9 @@
  * @link		http://tomatocart.com/wiki/
  */
 
-class Create extends TOC_Controller {
+class Create extends TOC_Controller 
+{
+
     /**
      * Constructor
      *
@@ -169,13 +171,21 @@ class Create extends TOC_Controller {
         {
             $data['customers_status'] = 1;
 
-            $this->account_model->insert($data);
-
-            $this->customer->set_data($data['customers_email_address']);
+            //if create account success send email
+            if ($this->account_model->insert($data)) 
+            {
+                $this->customer->set_data($data['customers_email_address']);
+                
+                $this->load->library('email_template');
+                $email = $this->email_template->get_email_template('create_account_email');
+                $email->set_data($data['customers_password']);
+                $email->build_message();
+                $email->send_email();
+            }
 
             //set page title
             $this->template->set_title(lang('create_account_success_heading'));
-
+            
             //setup view
             $this->template->build('account/create_success');
         }
