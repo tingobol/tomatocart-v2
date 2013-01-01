@@ -156,7 +156,7 @@
           },
           failure: function (form, action) {
             if (action.failureType != 'client') {
-              Ext.Msg.alert('<?php echo lang('ms_error'); ?>', action.result.feedback);
+              Ext.Msg.alert('<?php echo lang('ms_error'); ?>', action.result.error);
             }
           },
           scope: this
