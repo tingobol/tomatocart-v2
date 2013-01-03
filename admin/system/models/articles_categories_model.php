@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-model
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com/
  */
 class Articles_Categories_Model extends CI_Model
 {
@@ -39,7 +39,7 @@ class Articles_Categories_Model extends CI_Model
         parent::__construct();
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get the articles categories
@@ -68,7 +68,7 @@ class Articles_Categories_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get total articles with the article category id
@@ -90,10 +90,10 @@ class Articles_Categories_Model extends CI_Model
         return $data['num_of_articles'];
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
-     * Delete an article category with its id
+     * Delete an article category
      *
      * @access public
      * @param $id
@@ -125,7 +125,7 @@ class Articles_Categories_Model extends CI_Model
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get the info of an article category
@@ -137,7 +137,10 @@ class Articles_Categories_Model extends CI_Model
      */
     public function get_data($id, $language_id = NULL)
     {
-        $language_id = empty($language_id) ? lang_id() : $language_id;
+        if ( ! (is_int($language_id) && $language_id > 0))
+        {
+            $language_id = lang_id();
+        }
         
         $result = $this->db
         ->select('c.*, cd.*')
@@ -154,10 +157,10 @@ class Articles_Categories_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
-     * Set the status of the article category with its id and flag
+     * Set the status of the article category
      *
      * @access public
      * @param $id
@@ -176,7 +179,7 @@ class Articles_Categories_Model extends CI_Model
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Insert or update an article category
@@ -249,7 +252,7 @@ class Articles_Categories_Model extends CI_Model
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * get the info of an article category
@@ -275,7 +278,7 @@ class Articles_Categories_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get total number of the articles categories
@@ -292,7 +295,7 @@ class Articles_Categories_Model extends CI_Model
         return $result->num_rows();
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * build the query
@@ -306,7 +309,8 @@ class Articles_Categories_Model extends CI_Model
         ->select('c.articles_categories_id, c.articles_categories_status, cd.articles_categories_name, c.articles_categories_order')
         ->from('articles_categories c')
         ->join('articles_categories_description cd', 'c.articles_categories_id = cd.articles_categories_id and c.articles_categories_id > 1')
-        ->where('cd.language_id', lang_id());
+        ->where('cd.language_id', lang_id())
+        ->order_by('c.articles_categories_order');
     }
 } 
 
