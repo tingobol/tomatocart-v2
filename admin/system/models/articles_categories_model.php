@@ -51,7 +51,12 @@ class Articles_Categories_Model extends CI_Model
      */
     public function get_articles_categories($start = NULL, $limit = NULL)
     {
-        $this->query();
+        $this->db
+            ->select('c.articles_categories_id, c.articles_categories_status, cd.articles_categories_name, c.articles_categories_order')
+            ->from('articles_categories c')
+            ->join('articles_categories_description cd', 'c.articles_categories_id = cd.articles_categories_id and c.articles_categories_id > 1')
+            ->where('cd.language_id', lang_id())
+            ->order_by('c.articles_categories_order');
         
         if ($start !== NULL && $limit !== NULL)
         {
@@ -80,10 +85,10 @@ class Articles_Categories_Model extends CI_Model
     public function get_articles($id)
     {
         $result = $this->db
-        ->select('count(articles_id) as num_of_articles')
-        ->from('articles')
-        ->where('articles_categories_id', $id)
-        ->get();
+            ->select('count(articles_id) as num_of_articles')
+            ->from('articles')
+            ->where('articles_categories_id', $id)
+            ->get();
         
         $data = $result->row_array();
         
@@ -103,24 +108,30 @@ class Articles_Categories_Model extends CI_Model
     {
         if (is_numeric($id))
         {
+            //start transaction
             $this->db->trans_begin();
             
+            //delete articles_categories table
             $this->db->delete('articles_categories', array('articles_categories_id' => $id));
             
             if ($this->db->trans_status() === TRUE)
             {
+                //delete articles_categories_description table
                 $this->db->delete('articles_categories_description', array('articles_categories_id' => $id));
             } 
-        }
-        
-        if ($this->db->trans_status() === TRUE)
-        {
-            $this->db->trans_commit();
             
-            return TRUE;
+            if ($this->db->trans_status() === TRUE)
+            {
+                //commit
+                $this->db->trans_commit();
+                
+                return TRUE;
+            }
+            
+            //rollback
+            $this->db->trans_rollback();
+            return FALSE;
         }
-        
-        $this->db->trans_rollback();
         
         return FALSE;
     }
@@ -137,17 +148,17 @@ class Articles_Categories_Model extends CI_Model
      */
     public function get_data($id, $language_id = NULL)
     {
-        if ( ! (is_int($language_id) && $language_id > 0))
+        if ($language_id === NULL)
         {
             $language_id = lang_id();
         }
         
         $result = $this->db
-        ->select('c.*, cd.*')
-        ->from('articles_categories c')
-        ->join('articles_categories_description cd', 'c.articles_categories_id = cd.articles_categories_id')
-        ->where(array('c.articles_categories_id' => $id, 'cd.language_id' => $language_id))
-        ->get();
+            ->select('c.*, cd.*')
+            ->from('articles_categories c')
+            ->join('articles_categories_description cd', 'c.articles_categories_id = cd.articles_categories_id')
+            ->where(array('c.articles_categories_id' => $id, 'cd.language_id' => $language_id))
+            ->get();
         
         if ($result->num_rows() > 0)
         {
@@ -194,8 +205,10 @@ class Articles_Categories_Model extends CI_Model
         $category_id = '';
         $error = FALSE;
         
+        //start transaction
         $this->db->trans_begin();
         
+        //article category
         $article_category = array('articles_categories_order' => $data['articles_order'], 
                                   'articles_categories_status' => $data['status']);
         if (is_numeric($id))
@@ -211,6 +224,7 @@ class Articles_Categories_Model extends CI_Model
         {
             $articles_category_id = (is_numeric($id)) ? $id : $this->db->insert_id();
             
+            //languages
             foreach(lang_get_all() as $l)
             {
                 $articles_category_description = array('articles_categories_name' => $data['name'][$l['id']], 
@@ -242,11 +256,13 @@ class Articles_Categories_Model extends CI_Model
         
         if ($error === FALSE)
         {
+            //commit transaction
             $this->db->trans_commit();
             
             return TRUE;
         }
         
+        //rollback
         $this->db->trans_rollback();
         
         return FALSE;
@@ -264,11 +280,11 @@ class Articles_Categories_Model extends CI_Model
     public function get_info($id)
     {
         $result = $this->db
-        ->select('c.*, cd.*')
-        ->from('articles_categories c')
-        ->join('articles_categories_description cd', 'c.articles_categories_id = cd.articles_categories_id')
-        ->where(array('c.articles_categories_id' => $id))
-        ->get();
+            ->select('c.*, cd.*')
+            ->from('articles_categories c')
+            ->join('articles_categories_description cd', 'c.articles_categories_id = cd.articles_categories_id')
+            ->where('c.articles_categories_id', $id)
+            ->get();
         
         if ($result->num_rows() > 0)
         {
@@ -288,29 +304,16 @@ class Articles_Categories_Model extends CI_Model
      */
     public function get_total()
     {
-        $this->query();
+        $this->db
+            ->select('c.articles_categories_id, c.articles_categories_status, cd.articles_categories_name, c.articles_categories_order')
+            ->from('articles_categories c')
+            ->join('articles_categories_description cd', 'c.articles_categories_id = cd.articles_categories_id and c.articles_categories_id > 1')
+            ->where('cd.language_id', lang_id())
+            ->order_by('c.articles_categories_order');
         
         $result = $this->db->get();
         
         return $result->num_rows();
-    }
-    
-    // ------------------------------------------------------------------------
-    
-    /**
-     * build the query
-     *
-     * @access private
-     * @return void
-     */
-    private function query()
-    {
-        $this->db
-        ->select('c.articles_categories_id, c.articles_categories_status, cd.articles_categories_name, c.articles_categories_order')
-        ->from('articles_categories c')
-        ->join('articles_categories_description cd', 'c.articles_categories_id = cd.articles_categories_id and c.articles_categories_id > 1')
-        ->where('cd.language_id', lang_id())
-        ->order_by('c.articles_categories_order');
     }
 } 
 
