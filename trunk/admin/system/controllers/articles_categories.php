@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-controller
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Articles_Categories extends TOC_Controller
 {
@@ -41,7 +41,7 @@ class Articles_Categories extends TOC_Controller
         $this->load->model('articles_categories_model');
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     /**
      * List the articles categories
@@ -57,7 +57,7 @@ class Articles_Categories extends TOC_Controller
         $articles_categories = $this->articles_categories_model->get_articles_categories($start, $limit);
 
         $records = array();
-        if ($articles_categories != NULL)
+        if ($articles_categories !== NULL)
         {
             $records = $articles_categories;
         }
@@ -65,7 +65,7 @@ class Articles_Categories extends TOC_Controller
         $this->output->set_output(json_encode(array(EXT_JSON_READER_TOTAL => $this->articles_categories_model->get_total(), EXT_JSON_READER_ROOT => $records)));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     /**
      * Delete an article cateogry
@@ -103,7 +103,7 @@ class Articles_Categories extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Delete several articles categories
@@ -118,8 +118,8 @@ class Articles_Categories extends TOC_Controller
 
         $articles_categories_ids = json_decode($this->input->post('batch'));
 
-        $check_categories_array = array();
-        if (!empty($articles_categories_ids))
+        $check_categories = array();
+        if (count($articles_categories_ids) > 0)
         {
             foreach($articles_categories_ids as $id)
             {
@@ -128,25 +128,32 @@ class Articles_Categories extends TOC_Controller
                 if ($count > 0)
                 {
                     $data = $this->articles_categories_model->get_data($id);
-                    $check_categories_array[] = $data['articles_categories_name'];
+                    $check_categories[] = $data['articles_categories_name'];
                 }
             }
         }
-
-        if (!empty($check_categories_array))
+        else
         {
             $error = TRUE;
-            $feedback[] = lang('batch_delete_error_articles_categories_in_use') . '<br />' . implode(', ', $check_categories_array);
+        }
+
+        if (count($check_categories) > 0)
+        {
+            $error = TRUE;
+            $feedback[] = lang('batch_delete_error_articles_categories_in_use') . '<br />' . implode(', ', $check_categories);
         }
 
         if ($error === FALSE)
         {
-            foreach($articles_categories_ids as $id)
+            if (count($articles_categories_ids) > 0)
             {
-                if ($this->articles_categories_model->delete($id) === FALSE)
+                foreach($articles_categories_ids as $id)
                 {
-                    $error = TRUE;
-                    break;
+                    if ($this->articles_categories_model->delete($id) === FALSE)
+                    {
+                        $error = TRUE;
+                        break;
+                    }
                 }
             }
 
@@ -167,7 +174,7 @@ class Articles_Categories extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     /**
      * Set the status of an article category
@@ -189,7 +196,7 @@ class Articles_Categories extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Save an article category
@@ -206,7 +213,7 @@ class Articles_Categories extends TOC_Controller
         $formatted_urls = array();
         
         //search engine friendly urls
-        if ( is_array($urls) && !empty($urls) )
+        if (is_array($urls) && count($urls) > 0)
         {
             foreach($urls as $languages_id => $url)
             {
@@ -242,7 +249,7 @@ class Articles_Categories extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     /**
      * Load an article category
@@ -255,7 +262,7 @@ class Articles_Categories extends TOC_Controller
         $articles_categories_infos = $this->articles_categories_model->get_info($this->input->post('articles_categories_id'));
 
         $data = array();
-        if ($articles_categories_infos != NULL)
+        if ($articles_categories_infos !== NULL)
         {
             foreach($articles_categories_infos as $info)
             {
