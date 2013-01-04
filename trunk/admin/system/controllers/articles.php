@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-controller
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Articles extends TOC_Controller {
     /**
@@ -40,7 +40,7 @@ class Articles extends TOC_Controller {
         $this->load->model('articles_model');
     }
     
-// --------------------------------------------------------------------
+    // --------------------------------------------------------------------
     
     /**
      * List Articles
@@ -59,7 +59,7 @@ class Articles extends TOC_Controller {
         $articles = $this->articles_model->get_articles($start, $limit, $current_category_id, $search);
         
         $records = array();
-        if ($articles != NULL)
+        if ($articles !== NULL)
         {
             $records = $articles;
         }
@@ -67,7 +67,7 @@ class Articles extends TOC_Controller {
         $this->output->set_output(json_encode(array(EXT_JSON_READER_TOTAL => $this->articles_model->get_total($current_category_id, $search), EXT_JSON_READER_ROOT => $records)));
     }
     
-// --------------------------------------------------------------------    
+    // --------------------------------------------------------------------    
     
     /**
      * Get the articles categories
@@ -87,7 +87,7 @@ class Articles extends TOC_Controller {
             $records = array(array('id' => '', 'text' => lang('top_articles_category')));
         }
         
-        if ($article_categories != NULL)
+        if ($article_categories !== NULL)
         {
             foreach($article_categories as $category)
             {
@@ -101,7 +101,7 @@ class Articles extends TOC_Controller {
         $this->output->set_output(json_encode(array(EXT_JSON_READER_ROOT => $records)));
     }
     
-// --------------------------------------------------------------------   
+    // --------------------------------------------------------------------   
 
     /**
      * Save the article
@@ -111,7 +111,30 @@ class Articles extends TOC_Controller {
      */
     public function save_article()
     {
+        $this->load->helper('html_output');
+        
+        $articles_name = $this->input->post('articles_name');
+        $urls = $this->input->post('articles_url');
+        $formatted_urls = array();
+        
+        //search engine friendly urls
+        if (is_array($urls) && count($urls) > 0)
+        {
+            foreach($urls as $languages_id => $url)
+            {
+                $url = format_friendly_url($url);
+
+                if (empty($url))
+                {
+                    $url = format_friendly_url($articles_name[$languages_id]);
+                }
+
+                $formatted_urls[$languages_id] = $url;
+            }
+        }
+        
         $data = array('articles_name' => $this->input->post('articles_name'),
+                      'articles_url' => $formatted_urls,
                       'articles_image' => 'articles_image',
                       'articles_description' => $this->input->post('articles_description'),
                       'articles_order' => $this->input->post('articles_order'),
@@ -122,7 +145,7 @@ class Articles extends TOC_Controller {
                       'meta_keywords' => $this->input->post('meta_keywords'),
                       'meta_description' => $this->input->post('meta_description'));
         
-        if ($this->articles_model->save(($this->input->post('articles_id') != -1 ? $this->input->post('articles_id') : NULL), $data))
+        if ($this->articles_model->save(($this->input->post('articles_id') !== -1 ? $this->input->post('articles_id') : NULL), $data))
         {
             $response = array('success' => TRUE, 'feedback' => lang('ms_success_action_performed'));
         }
@@ -134,7 +157,7 @@ class Articles extends TOC_Controller {
         $this->output->set_header("Content-Type: text/html")->set_output(json_encode($response));
     }
     
-// --------------------------------------------------------------------  
+    // --------------------------------------------------------------------  
     
     /**
      * Delete the article
@@ -156,7 +179,7 @@ class Articles extends TOC_Controller {
         $this->output->set_output(json_encode($response));
     }
 
-// --------------------------------------------------------------------      
+    // --------------------------------------------------------------------      
     
     /**
      * Delete the articles
@@ -170,7 +193,7 @@ class Articles extends TOC_Controller {
         
         $articles_ids = json_decode($this->input->post('batch'));
         
-        if (!empty($articles_ids))
+        if (count($articles_ids) > 0)
         {
             foreach($articles_ids as $articles_id)
             {
@@ -198,7 +221,7 @@ class Articles extends TOC_Controller {
         $this->output->set_output(json_encode($response));
     }
     
-// --------------------------------------------------------------------       
+    // --------------------------------------------------------------------       
     
     /**
      * Set the status of the article
@@ -220,7 +243,7 @@ class Articles extends TOC_Controller {
         $this->output->set_output(json_encode($response));
     }
     
-// --------------------------------------------------------------------  
+    // --------------------------------------------------------------------  
     
     /**
      * Load an article
@@ -233,7 +256,7 @@ class Articles extends TOC_Controller {
         $articles_infos = $this->articles_model->get_info($this->input->post('articles_id'));
       
         $data = array();
-        if ($articles_infos != NULL)
+        if ($articles_infos !== NULL)
         {
             foreach($articles_infos as $articles_info)
             {
@@ -246,6 +269,7 @@ class Articles extends TOC_Controller {
                 }
                 
                 $data['articles_name[' . $articles_info['language_id'] . ']'] = $articles_info['articles_name'];
+                $data['articles_url[' . $articles_info['language_id'] . ']'] = $articles_info['articles_url'];
                 $data['articles_description[' . $articles_info['language_id'] . ']'] = $articles_info['articles_description'];
                 $data['page_title[' . $articles_info['language_id'] . ']'] = $articles_info['articles_page_title'];
                 $data['meta_keywords[' . $articles_info['language_id'] . ']'] = $articles_info['articles_meta_keywords'];

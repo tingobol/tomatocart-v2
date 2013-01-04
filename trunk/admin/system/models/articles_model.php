@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-model
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Articles_Model extends CI_Model
 {
@@ -39,7 +39,7 @@ class Articles_Model extends CI_Model
         parent::__construct();
     }
     
-// --------------------------------------------------------------------
+    // --------------------------------------------------------------------
     
     /**
      * Get Articles
@@ -48,16 +48,36 @@ class Articles_Model extends CI_Model
      * @param $start
      * @param $limit
      * @param $current_category_id
+     * @param $search
      * @return mixed
      */
-    public function get_articles($start, $limit, $current_category_id, $search = NULL)
+    public function get_articles($start = NULL, $limit = NULL, $current_category_id = 0, $search = NULL)
     {
-        $this->query($current_category_id, $search);
+        $this->db
+            ->select('a.articles_id, a.articles_status, a.articles_order, ad.articles_name, acd.articles_categories_name')
+            ->from('articles a')
+            ->join('articles_description ad', 'a.articles_id = ad.articles_id and a.articles_id > 5')
+            ->join('articles_categories_description acd', 'acd.articles_categories_id = a.articles_categories_id and acd.language_id = ad.language_id')
+            ->where('ad.language_id', lang_id());
         
-        $result = $this->db
-        ->order_by('a.articles_id')
-        ->limit($limit, $start)
-        ->get();
+        if ($current_category_id > 0)
+        {
+            $this->db->where('a.articles_categories_id', $current_category_id);
+        }
+        
+        if ($search !== NULL)
+        {
+            $this->db
+                ->like('ad.articles_name', $search)
+                ->order_by('a.articles_id');
+        }
+        
+        if ($start !== NULL && $limit !== NULL)
+        {
+            $this->db->limit($limit, $start);
+        }
+        
+        $result = $this->db->get();
       
         if ($result->num_rows() > 0)
         {
@@ -67,7 +87,7 @@ class Articles_Model extends CI_Model
         return NULL;
     }
     
-// --------------------------------------------------------------------
+    // --------------------------------------------------------------------
   
     /**
      * Save an article
@@ -84,8 +104,10 @@ class Articles_Model extends CI_Model
         
         $error = FALSE;
         
+        //start transaction
         $this->db->trans_begin();
         
+        //article information
         $article_info = array('articles_status' => $data['articles_status'], 
                               'articles_order' => $data['articles_order'], 
                               'articles_categories_id' => $data['articles_categories']);
@@ -126,6 +148,7 @@ class Articles_Model extends CI_Model
             }
         }
         
+        //upload article image
         if ($error === FALSE)
         {
             if (directory_make(ROOTPATH . 'images/articles') && directory_make(ROOTPATH . 'images/articles/originals'))
@@ -147,9 +170,10 @@ class Articles_Model extends CI_Model
                     }
                     else
                     {
+                        //resize the image for each image group
                         foreach($this->image->get_groups() as $group)
                         {
-                            if ($group['id'] != '1')
+                            if ($group['id'] !== 1)
                             {
                                 $this->image->resize($upload_info['file_name'], $group['id'], 'articles');
                             }
@@ -164,7 +188,8 @@ class Articles_Model extends CI_Model
         {
             foreach(lang_get_all() as $l)
             {
-                $articles_description = array('articles_name' => $data['articles_name'][$l['id']], 
+                $articles_description = array('articles_name' => $data['articles_name'][$l['id']],
+                                              'articles_url' => $data['articles_url'][$l['id']], 
                                               'articles_description' => $data['articles_description'][$l['id']], 
                                               'articles_page_title' => $data['page_title'][$l['id']], 
                                               'articles_meta_keywords' => $data['meta_keywords'][$l['id']], 
@@ -192,17 +217,19 @@ class Articles_Model extends CI_Model
         
         if ($error === FALSE)
         {
+            //commit transaction
             $this->db->trans_commit();
             
             return TRUE;
         }
         
+        //rollback
         $this->db->trans_rollback();
         
         return FALSE;
     }
     
-// --------------------------------------------------------------------
+    // --------------------------------------------------------------------
     
     /**
      * Delete an article
@@ -215,6 +242,7 @@ class Articles_Model extends CI_Model
     {
         $this->load->library('image');
         
+        //start transaction
         $this->db->trans_begin();
         
         $this->image->delete_articles_image($id);
@@ -228,17 +256,19 @@ class Articles_Model extends CI_Model
         
         if ($this->db->trans_status() === TRUE)
         {
+            //commit transaction
             $this->db->trans_commit();
             
             return TRUE;
         }
         
+        //rollback
         $this->db->trans_rollback();
         
         return FALSE;
     }
     
-// --------------------------------------------------------------------
+    // --------------------------------------------------------------------
     
     /**
      * Set the status of an article
@@ -260,7 +290,7 @@ class Articles_Model extends CI_Model
         return FALSE;
     }
     
-// --------------------------------------------------------------------
+    // --------------------------------------------------------------------
     
     /**
      * Get the info of an anticle
@@ -272,11 +302,11 @@ class Articles_Model extends CI_Model
     public function get_info($id)
     {
         $result = $this->db
-        ->select('a.*, ad.*')
-        ->from('articles a')
-        ->join('articles_description ad', 'a.articles_id = ad.articles_id')
-        ->where('a.articles_id', $id)
-        ->get();
+            ->select('a.*, ad.*')
+            ->from('articles a')
+            ->join('articles_description ad', 'a.articles_id = ad.articles_id')
+            ->where('a.articles_id', $id)
+            ->get();
         
         if ($result->num_rows() > 0)
         {
@@ -286,7 +316,7 @@ class Articles_Model extends CI_Model
         return NULL;
     }
     
-// --------------------------------------------------------------------
+    // --------------------------------------------------------------------
     
     /**
      * Get the total number of the articles
@@ -296,43 +326,28 @@ class Articles_Model extends CI_Model
      * @param $search
      * @return int
      */
-    public function get_total($current_category_id, $search)
-    {
-        $this->query($current_category_id, $search);
-        
-        $result = $this->db->get();
-        
-        return $result->num_rows();
-    }
-    
-// --------------------------------------------------------------------
-    
-    /**
-     * Build the query
-     *
-     * @access private
-     * @param $current_category_id
-     * @param $search
-     * @return void
-     */
-    private function query($current_category_id, $search)
+    public function get_total($current_category_id = NULL, $search = NULL)
     {
         $this->db
-        ->select('a.articles_id, a.articles_status, a.articles_order, ad.articles_name, acd.articles_categories_name')
-        ->from('articles a')
-        ->join('articles_description ad', 'a.articles_id = ad.articles_id and a.articles_id > 5')
-        ->join('articles_categories_description acd', 'acd.articles_categories_id = a.articles_categories_id and acd.language_id = ad.language_id')
-        ->where('ad.language_id', lang_id());
+            ->select('a.articles_id, a.articles_status, a.articles_order, ad.articles_name, acd.articles_categories_name')
+            ->from('articles a')
+            ->join('articles_description ad', 'a.articles_id = ad.articles_id and a.articles_id > 5')
+            ->join('articles_categories_description acd', 'acd.articles_categories_id = a.articles_categories_id and acd.language_id = ad.language_id')
+            ->where('ad.language_id', lang_id());
         
         if ($current_category_id > 0)
         {
             $this->db->where('a.articles_categories_id', $current_category_id);
         }
         
-        if (!empty($search))
+        if ($search !== NULL)
         {
             $this->db->like('ad.articles_name', $search);
         }
+        
+        $result = $this->db->get();
+        
+        return $result->num_rows();
     }
 } 
 
