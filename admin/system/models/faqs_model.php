@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-model
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 
 class Faqs_Model extends CI_Model
@@ -40,7 +40,7 @@ class Faqs_Model extends CI_Model
         parent::__construct();
     }
     
-// --------------------------------------------------------------------
+    // --------------------------------------------------------------------
 
     /**
      * Get the faqs
@@ -51,11 +51,27 @@ class Faqs_Model extends CI_Model
      * @param $search
      * @return mixed
      */
-    public function get_faqs($start, $limit, $search = NULL)
+    public function get_faqs($start = NULL, $limit = NULL, $search = NULL)
     {
-        $this->query($search);
+        $this->db
+            ->select('f.faqs_id, f.faqs_status, f.faqs_order, fd.faqs_question')
+            ->from('faqs f')
+            ->join('faqs_description fd', 'f.faqs_id = fd.faqs_id')
+            ->where('fd.language_id', lang_id());
         
-        $result = $this->db->order_by('f.faqs_order, f.faqs_id')->get();
+        if ($search !== NULL)
+        {
+            $this->db->like('fd.faqs_question', $search);
+        }
+        
+        $this->db->order_by('f.faqs_order, f.faqs_id');
+        
+        if ($start !== NULL && $limit !== NULL)
+        {
+            $this->db->limit($limit, $start);
+        }
+        
+        $result = $this->db->get();
         
         if ($result->num_rows() > 0)
         {
@@ -65,7 +81,7 @@ class Faqs_Model extends CI_Model
         return NULL;
     }
     
-// --------------------------------------------------------------------
+    // --------------------------------------------------------------------
 
     /**
      * Save the faq
@@ -73,12 +89,13 @@ class Faqs_Model extends CI_Model
      * @access public
      * @param $id
      * @param $data
-     * @return mixed
+     * @return boolean
      */
     public function save($id = NULL, $data = array())
     {
         $error = FALSE;
         
+        //start transaction
         $this->db->trans_begin();
         
         //process faqs
@@ -106,6 +123,7 @@ class Faqs_Model extends CI_Model
         //process faqs description
         if ($error === FALSE)
         {
+            //languages
             foreach(lang_get_all() as $l)
             {
                 $decription_data = array('faqs_question' => $data['faqs_question'][$l['id']], 
@@ -123,6 +141,7 @@ class Faqs_Model extends CI_Model
                     $this->db->insert('faqs_description', $decription_data);
                 }
                 
+                //check transaction status
                 if ($this->db->trans_status() === FALSE)
                 {
                     $error = TRUE;
@@ -134,17 +153,19 @@ class Faqs_Model extends CI_Model
         
         if ($error === FALSE)
         {
+            //commit transaction
             $this->db->trans_commit();
             
             return TRUE;
         }
         
+        //rollback
         $this->db->trans_rollback();
         
         return FALSE;
     }
     
-// --------------------------------------------------------------------
+    // --------------------------------------------------------------------
 
     /**
      * Get the data of the faqs
@@ -156,11 +177,11 @@ class Faqs_Model extends CI_Model
     public function get_data($id)
     {
         $result = $this->db
-        ->select('f.*, fd.*')
-        ->from('faqs f')
-        ->join('faqs_description fd', 'f.faqs_id =fd.faqs_id')
-        ->where(array('f.faqs_id' => $id, 'fd.language_id' => lang_id()))
-        ->get();
+            ->select('f.*, fd.*')
+            ->from('faqs f')
+            ->join('faqs_description fd', 'f.faqs_id =fd.faqs_id')
+            ->where(array('f.faqs_id' => $id, 'fd.language_id' => lang_id()))
+            ->get();
         
         if ($result->num_rows() > 0)
         {
@@ -170,7 +191,7 @@ class Faqs_Model extends CI_Model
         return NULL;
     }
     
-// --------------------------------------------------------------------
+    // --------------------------------------------------------------------
 
     /**
      * Get the descriptions of the faq
@@ -182,10 +203,10 @@ class Faqs_Model extends CI_Model
     public function get_description($id)
     {
         $result = $this->db
-        ->select('faqs_question, faqs_url, faqs_answer, language_id')
-        ->from('faqs_description')
-        ->where('faqs_id', $id)
-        ->get();
+            ->select('faqs_question, faqs_url, faqs_answer, language_id')
+            ->from('faqs_description')
+            ->where('faqs_id', $id)
+            ->get();
         
         if ($result->num_rows() > 0)
         {
@@ -195,7 +216,7 @@ class Faqs_Model extends CI_Model
         return NULL;
     }
     
-// --------------------------------------------------------------------
+    // --------------------------------------------------------------------
     
     /**
      * Delete the faq
@@ -208,10 +229,12 @@ class Faqs_Model extends CI_Model
     {
         $error = FALSE;
         
+        //start transaction
         $this->db->trans_begin();
         
         $this->db->delete('faqs_description', array('faqs_id' => $id));
         
+        //check transaction status
         if ($this->db->trans_status() === FALSE)
         {
             $error = TRUE;
@@ -221,6 +244,7 @@ class Faqs_Model extends CI_Model
         {
             $this->db->delete('faqs', array('faqs_id' => $id));
             
+            //check transaction status
             if ($this->db->trans_status() === FALSE)
             {
                 $error = TRUE;
@@ -229,20 +253,22 @@ class Faqs_Model extends CI_Model
         
         if ($error === FALSE)
         {
+            //commit transaction
             $this->db->trans_commit();
             
             return TRUE;
         }
         
+        //rollback
         $this->db->trans_rollback();
         
         return FALSE;
     }
     
-// --------------------------------------------------------------------
+    // --------------------------------------------------------------------
 
     /**
-     * Get the status of faq
+     * Set the status of faq
      * 
      * @access public
      * @param $id
@@ -261,7 +287,7 @@ class Faqs_Model extends CI_Model
         return FALSE;
     }
     
-// --------------------------------------------------------------------
+    // --------------------------------------------------------------------
 
     /**
      * Get the total number of faqs
@@ -270,36 +296,22 @@ class Faqs_Model extends CI_Model
      * @param $search
      * @return int
      */
-    public function get_total($search)
+    public function get_total($search = NULL)
     {
-        $this->query($search);
+        $this->db
+            ->select('f.faqs_id, f.faqs_status, f.faqs_order, fd.faqs_question')
+            ->from('faqs f')
+            ->join('faqs_description fd', 'f.faqs_id = fd.faqs_id')
+            ->where('fd.language_id', lang_id());
+        
+        if ($search !== NULL)
+        {
+            $this->db->like('fd.faqs_question', $search);
+        }
         
         $result = $this->db->get();
         
         return $result->num_rows();
-    }
-    
-// --------------------------------------------------------------------
-
-    /**
-     * Build the query
-     * 
-     * @access private
-     * @param $search
-     * @return void
-     */
-    public function query($search)
-    {
-        $this->db
-        ->select('f.faqs_id, f.faqs_status, f.faqs_order, fd.faqs_question')
-        ->from('faqs f')
-        ->join('faqs_description fd', 'f.faqs_id = fd.faqs_id')
-        ->where('fd.language_id', lang_id());
-        
-        if (!empty($search))
-        {
-            $this->db->like('fd.faqs_question', $search);
-        }
     }
 }
 

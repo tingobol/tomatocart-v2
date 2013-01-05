@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-model
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Currencies_Model extends CI_Model
 {
@@ -39,7 +39,7 @@ class Currencies_Model extends CI_Model
         parent::__construct();
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Get all the currencies
@@ -70,7 +70,7 @@ class Currencies_Model extends CI_Model
         return NULL;
     }
   
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     /**
      * Get the currencies
@@ -80,14 +80,19 @@ class Currencies_Model extends CI_Model
      * @param $limit
      * @return mixed
      */
-    public function get_currencies($start, $limit)
+    public function get_currencies($start = NULL, $limit = NULL)
     {
-        $result = $this->db
-        ->select('*')
-        ->from('currencies')
-        ->order_by('title')
-        ->limit($limit, $start)
-        ->get();
+        $this->db
+            ->select('*')
+            ->from('currencies')
+            ->order_by('title');
+        
+        if ($start !== NULL && $limit !== NULL)
+        {
+            $this->db->limit($limit, $start);
+        }
+        
+        $result = $this->db->get();
         
         if ($result->num_rows() > 0)
         {
@@ -97,7 +102,7 @@ class Currencies_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Whether the currency code is existed
@@ -118,21 +123,23 @@ class Currencies_Model extends CI_Model
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Save the currency
      *
      * @access public
      * @param $id
-     * @param $data
      * @param $set_default
+     * @param $data
      * @return boolean
      */
-    public function save($id = NULL, $data, $set_default = FALSE)
+    public function save($id = NULL, $set_default = FALSE, $data)
     {
+        //start transaction
         $this->db->trans_begin();
         
+        //editing or adding the currencies
         if (is_numeric($id))
         {
             $this->db->update('currencies', $data, array('currencies_id' => $id));
@@ -142,6 +149,7 @@ class Currencies_Model extends CI_Model
             $this->db->insert('currencies', $data);
         }
         
+        //check transaction status
         if ($this->db->trans_status() === TRUE)
         {
             $id = is_numeric($id) ? $id : $this->db->insert_id();
@@ -152,15 +160,22 @@ class Currencies_Model extends CI_Model
             }
         }
         
+        //check transaction status
         if ($this->db->trans_status() === TRUE)
         {
+            //commit
+            $this->db->trans_commit();
+            
             return TRUE;
         }
         
+        //rollback
+        $this->db->trans_rollback();
+            
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Delete the currency with its id
@@ -172,15 +187,16 @@ class Currencies_Model extends CI_Model
     public function delete($id)
     {
         $result = $this->db
-        ->select('code')
-        ->from('currencies')
-        ->where('currencies_id', $id)
-        ->get();
+            ->select('code')
+            ->from('currencies')
+            ->where('currencies_id', $id)
+            ->get();
         
         if ($result->num_rows() > 0)
         {
             $currency = $result->row_array();
             
+            //forbiden to delete the default currency
             if ($currency['code'] != DEFAULT_CURRENCY)
             {
                 $this->db->delete('currencies', array('currencies_id' => $id));
@@ -195,7 +211,7 @@ class Currencies_Model extends CI_Model
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Get data of the currency
@@ -207,10 +223,10 @@ class Currencies_Model extends CI_Model
     public function get_data($id)
     {
         $result = $this->db
-        ->select('*')
-        ->from('currencies')
-        ->where('currencies_id', $id)
-        ->get();
+            ->select('*')
+            ->from('currencies')
+            ->where('currencies_id', $id)
+            ->get();
         
         if ($result->num_rows() > 0)
         {
@@ -220,37 +236,48 @@ class Currencies_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
+    /**
+     * Get information of currencies
+     *
+     * @access public
+     * @param $currecies_ids
+     * @return mixed
+     */
     public function get_currencies_info($currecies_ids)
     {
-        $Qcurrencies = $this->db
-        ->select('currencies_id, title, code')
-        ->from('currencies')
-        ->where_in('currencies_id', $currecies_ids)
-        ->order_by('title')
-        ->get();
+        $result = $this->db
+            ->select('currencies_id, title, code')
+            ->from('currencies')
+            ->where_in('currencies_id', $currecies_ids)
+            ->order_by('title')
+            ->get();
         
-        return $Qcurrencies->result_array();
+        if ($result->num_rows() > 0)
+        {
+            return $result->result_array();
+        }
+        
+        return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Update the currency rate
      *
      * @access public
      * @param $id
-     * @param $service
      * @return boolean
      */
     public function update_rates($id)
     {
         $result = $this->db
-        ->select('currencies_id, code, title')
-        ->from('currencies')
-        ->where('currencies_id', $id)
-        ->get();
+            ->select('currencies_id, code, title')
+            ->from('currencies')
+            ->where('currencies_id', $id)
+            ->get();
         
         $currency = $result->row_array();
         
@@ -269,7 +296,7 @@ class Currencies_Model extends CI_Model
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Get the currency rate
@@ -295,7 +322,7 @@ class Currencies_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Get the total currencies

@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-model
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Guest_Book_Model extends CI_Model 
 {
@@ -39,7 +39,7 @@ class Guest_Book_Model extends CI_Model
         parent::__construct();
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get Guest Books
@@ -49,17 +49,20 @@ class Guest_Book_Model extends CI_Model
      * @param $limit
      * @return mixed
      */
-    public function get_guest_books($start, $limit)
+    public function get_guest_books($start = NULL, $limit = NULL)
     {
-        $records = array();
-        
-        $result = $this->db
-        ->select('guest_books_id, title, email, guest_books_status, gb.languages_id, content, date_added, l.code')
-        ->from('guest_books gb')
-        ->join('languages l', 'l.languages_id = gb.languages_id', 'inner')
-        ->order_by('guest_books_id desc')
-        ->limit($limit, $start)
-        ->get();
+        $this->db
+            ->select('guest_books_id, title, email, guest_books_status, gb.languages_id, content, date_added, l.code')
+            ->from('guest_books gb')
+            ->join('languages l', 'l.languages_id = gb.languages_id', 'inner')
+            ->order_by('guest_books_id desc');
+          
+        if ($start !== NULL && $limit !== NULL)
+        {
+            $this->db->limit($limit, $start);
+        }
+          
+        $result = $this->db->get();
         
         if ($result->num_rows() > 0)
         {
@@ -69,7 +72,7 @@ class Guest_Book_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get the data of one guest book
@@ -80,13 +83,11 @@ class Guest_Book_Model extends CI_Model
      */
     public function get_data($id)
     {
-        $data = array();
-        
         $result = $this->db
-        ->select('*')
-        ->from('guest_books')
-        ->where('guest_books_id', $id)
-        ->get();
+            ->select('*')
+            ->from('guest_books')
+            ->where('guest_books_id', $id)
+            ->get();
         
         if ($result->num_rows() > 0)
         {
@@ -96,7 +97,7 @@ class Guest_Book_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Save the data of one guestbook
@@ -107,7 +108,7 @@ class Guest_Book_Model extends CI_Model
      */
     public function save($data)
     {
-        if (isset($data['guest_books_id']) && !empty($data['guest_books_id']))
+        if (isset($data['guest_books_id']) && $data['guest_books_id'] > 0)
         {
             $this->db->update('guest_books', $data, array('guest_books_id' => $data['guest_books_id']));
         }
@@ -124,7 +125,8 @@ class Guest_Book_Model extends CI_Model
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+    
     /**
      * Delete guest book
      * 
@@ -144,7 +146,8 @@ class Guest_Book_Model extends CI_Model
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+    
     /**
      * Batch delete guest books
      * 
@@ -165,7 +168,7 @@ class Guest_Book_Model extends CI_Model
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Set the status of one guestbook
@@ -187,7 +190,7 @@ class Guest_Book_Model extends CI_Model
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get the total number of guest books

@@ -294,4 +294,4 @@ Ext.define('Toc.slideImages.SlideImagesGrid', {
 });
 
 /* End of file slide_images_grid.php */
-/* Location: ./system/modules/slide_images/slide_images_grid.php */
+/* Location: ./templates/base/web/views/slide_images/slide_images_grid.php */

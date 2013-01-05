@@ -26,7 +26,7 @@ Ext.define('Toc.information.InformationDialog', {
     config.title = '<?php echo lang('action_heading_new_information'); ?>';
     config.layout = 'fit';
     config.width = 850;
-    config.height = 530;
+    config.height = 550;
     config.modal = true;
     config.iconCls = 'icon-information-win';
     

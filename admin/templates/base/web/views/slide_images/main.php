@@ -91,4 +91,4 @@ Ext.override(Toc.desktop.SlideImagesWindow, {
 });
 
 /* End of file main.php */
-/* Location: ./system/modules/slide_images/views/main.php */
+/* Location: ./templates/base/web/views/slide_images/main.php */
