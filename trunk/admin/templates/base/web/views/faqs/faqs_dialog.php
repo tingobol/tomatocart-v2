@@ -178,8 +178,7 @@ Ext.define('Toc.faqs.FaqsDialog', {
             {
               xtype: 'textfield', 
               fieldLabel: '<?php echo lang('field_faq_url'); ?>', 
-              name: 'faqs_url[<?php echo $l['id']; ?>]', 
-              allowBlank: false
+              name: 'faqs_url[<?php echo $l['id']; ?>]'
             },
             {
               xtype: 'htmleditor',

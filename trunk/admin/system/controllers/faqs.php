@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-controller
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Faqs extends TOC_Controller 
 {
@@ -41,7 +41,7 @@ class Faqs extends TOC_Controller
         $this->load->model('faqs_model');
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     /**
      * List the faqs
@@ -58,7 +58,7 @@ class Faqs extends TOC_Controller
         $faqs = $this->faqs_model->get_faqs($start, $limit, $search);
         
         $records = array();
-        if ($faqs != NULL)
+        if ($faqs !== NULL)
         {
             $records = $faqs;
         }
@@ -67,7 +67,8 @@ class Faqs extends TOC_Controller
                                                     EXT_JSON_READER_ROOT => $records)));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+    
     /**
      * Save the faq
      * 
@@ -81,16 +82,17 @@ class Faqs extends TOC_Controller
         //search engine friendly urls
         $formatted_urls = array();
         $urls = $this->input->post('faqs_url');
+        $faqs_question = $this->input->post('faqs_question');
     
-        if (is_array($urls) && !empty($urls))
+        if (is_array($urls) && count($urls) > 0)
         {
             foreach($urls as $languages_id => $url)
             {
                 $url = format_friendly_url($url);
-        
+                
                 if (empty($url))
                 {
-                    $url = format_friendly_url($categories_name[$languages_id]);
+                    $url = $faqs_question[$languages_id];
                 }
         
                 $formatted_urls[$languages_id] = $url;
@@ -115,7 +117,7 @@ class Faqs extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     /**
      * Load the faq
@@ -127,11 +129,11 @@ class Faqs extends TOC_Controller
     {
         $data = $this->faqs_model->get_data($this->input->post('faqs_id'));
         
-        if ($data != NULL)
+        if ($data !== NULL)
         {
             $faq_descriptions = $this->faqs_model->get_description($this->input->post('faqs_id'));
             
-            if ($faq_descriptions != NULL)
+            if ($faq_descriptions !== NULL)
             {
                 foreach($faq_descriptions as $description)
                 {
@@ -151,7 +153,7 @@ class Faqs extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     /**
      * Delete the faq
@@ -173,7 +175,7 @@ class Faqs extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     /**
      * Batch delete the faqs
@@ -187,7 +189,7 @@ class Faqs extends TOC_Controller
         
         $faqs_ids = json_decode($this->input->post('batch'));
         
-        if (!empty($faqs_ids))
+        if (count($faqs_ids) > 0)
         {
             foreach($faqs_ids as $faqs_id)
             {
@@ -215,7 +217,7 @@ class Faqs extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     /**
      * Set the status of the faq

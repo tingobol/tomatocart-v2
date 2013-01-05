@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-controller
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Guest_Book extends TOC_Controller 
 {
@@ -60,7 +60,7 @@ class Guest_Book extends TOC_Controller
         $guest_books = $this->guest_book_model->get_guest_books($start, $limit);
         
         $records = array();
-        if ($guest_books != NULL)
+        if ($guest_books !== NULL)
         {
             foreach($guest_books as $guest_book)
             {
@@ -77,7 +77,7 @@ class Guest_Book extends TOC_Controller
         $this->output->set_output(json_encode(array(EXT_JSON_READER_TOTAL => $this->guest_book_model->get_totals(), EXT_JSON_READER_ROOT => $records)));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Load one guest book
@@ -101,7 +101,7 @@ class Guest_Book extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get all the available languages
@@ -113,9 +113,8 @@ class Guest_Book extends TOC_Controller
     {
         $languages = array();
         
-        $languages_all = $this->lang->get_all();
-        
-        foreach ($languages_all as $l)
+        //languages
+        foreach (lang_get_all() as $l)
         {
             $languages[] = array('id' => $l['id'], 'text' => $l['name']);
         }
@@ -123,7 +122,7 @@ class Guest_Book extends TOC_Controller
         $this->output->set_output(json_encode(array(EXT_JSON_READER_ROOT => $languages)));
     }
 
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Save guest book
@@ -153,7 +152,8 @@ class Guest_Book extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+    
     /**
      * Delete guest book
      *
@@ -166,17 +166,18 @@ class Guest_Book extends TOC_Controller
         
         if ($this->guest_book_model->delete($guest_book_id))
         {
-            $response = array('success' => true, 'feedback' => lang('ms_success_action_performed'));
+            $response = array('success' => TRUE, 'feedback' => lang('ms_success_action_performed'));
         }
         else
         {
-            $response = array('success' => false, 'feedback' => lang('ms_error_action_not_performed'));
+            $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed'));
         }
         
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+    
     /**
      * Delete guestbooks
      * 
@@ -191,17 +192,17 @@ class Guest_Book extends TOC_Controller
         
         if ($this->guest_book_model->batch_delete($guest_book_ids))
         {
-            $response = array('success' => true, 'feedback' => lang('ms_success_action_performed'));
+            $response = array('success' => TRUE, 'feedback' => lang('ms_success_action_performed'));
         }
         else
         {
-            $response = array('success' => false, 'feedback' => lang('ms_error_action_not_performed'));  
+            $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed'));  
         }
         
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Set the status of guest book
@@ -216,11 +217,11 @@ class Guest_Book extends TOC_Controller
         
         if ($this->guest_book_model->set_status($guest_book_id, $flag))
         {
-            $response = array('success' => true, 'feedback' => lang('ms_success_action_performed'));
+            $response = array('success' => TRUE, 'feedback' => lang('ms_success_action_performed'));
         }
         else
         {
-            $response = array('success' => false, 'feedback' => lang('ms_error_action_not_performed'));  
+            $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed'));  
         }
         
         $this->output->set_output(json_encode($response));

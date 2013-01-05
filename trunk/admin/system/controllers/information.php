@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-controller
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Information extends TOC_Controller
 {
@@ -42,7 +42,7 @@ class Information extends TOC_Controller
         $this->load->model('articles_model');
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * List the articles
@@ -58,7 +58,7 @@ class Information extends TOC_Controller
         $articles = $this->information_model->get_articles($start, $limit);
         
         $records = array();
-        if ($articles != NULL)
+        if ($articles !== NULL)
         {
             $records = $articles;
         }
@@ -67,7 +67,7 @@ class Information extends TOC_Controller
                                                     EXT_JSON_READER_ROOT => $records)));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Set the status of the article
@@ -89,7 +89,7 @@ class Information extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Delete an artcile
@@ -111,7 +111,7 @@ class Information extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Batach delete the articles
@@ -124,14 +124,23 @@ class Information extends TOC_Controller
         $error = FALSE;
         
         $articles_ids = json_decode($this->input->post('batch'));
-        foreach($articles_ids as $id)
+        
+        if (count($articles_ids) > 0)
         {
-            if ($this->articles_model->delete($id) === FALSE)
+            foreach($articles_ids as $id)
             {
-                $error = TRUE;
-                break;
+                if ($this->articles_model->delete($id) === FALSE)
+                {
+                    $error = TRUE;
+                    break;
+                }
             }
         }
+        else
+        {
+            $error = TRUE;
+        }
+       
         
         if ($error === FALSE)
         {
@@ -145,7 +154,7 @@ class Information extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Save an article
@@ -160,7 +169,8 @@ class Information extends TOC_Controller
         //search engine friendly urls
         $formatted_urls = array();
         $urls = $this->input->post('articles_url');
-        if (is_array($urls) && !empty($urls))
+        $article_name = $this->input->post('articles_name');
+        if (is_array($urls) && count($urls) > 0)
         {
             foreach($urls as $languages_id => $url)
             {
@@ -200,9 +210,9 @@ class Information extends TOC_Controller
         $this->output->set_header('Content-Type: text/html')->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
-     /**
+    /**
      * Load an article
      *
      * @access public
@@ -213,7 +223,7 @@ class Information extends TOC_Controller
         $articles_infos = $this->articles_model->get_info($this->input->post('articles_id'));
         
         $data = array();
-        if ($articles_infos != NULL)
+        if ($articles_infos !== NULL)
         {
             foreach($articles_infos as $articles_info)
             {

@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-model
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Information_Model extends CI_Model
 {
@@ -39,24 +39,31 @@ class Information_Model extends CI_Model
         parent::__construct();
     }
     
-// --------------------------------------------------------------------
+    // --------------------------------------------------------------------
 
     /**
      * Get the articles
      *
      * @access public
+     * @param $start
+     * @param $limit
      * @return mixed
      */
-    public function get_articles($start, $limit)
+    public function get_articles($start = NULL, $limit = NULL)
     {
-        $result = $this->db
-        ->select('a.articles_id, a.articles_status, a.articles_order, ad.articles_name, acd.articles_categories_name')
-        ->from('articles a')
-        ->join('articles_description ad', 'a.articles_id = ad.articles_id')
-        ->join('articles_categories_description acd', 'acd.articles_categories_id = a.articles_categories_id and acd.language_id = ad.language_id')
-        ->where(array('acd.articles_categories_id' => 1, 'ad.language_id' => lang_id()))
-        ->limit($limit, $start)
-        ->get();
+        $this->db
+            ->select('a.articles_id, a.articles_status, a.articles_order, ad.articles_name, acd.articles_categories_name')
+            ->from('articles a')
+            ->join('articles_description ad', 'a.articles_id = ad.articles_id')
+            ->join('articles_categories_description acd', 'acd.articles_categories_id = a.articles_categories_id and acd.language_id = ad.language_id')
+            ->where(array('acd.articles_categories_id' => 1, 'ad.language_id' => lang_id()));
+        
+        if ($start !== NULL && $limit !== NULL)
+        {
+            $this->db->limit($limit, $start);
+        }
+        
+        $result = $this->db->get();
         
         if ($result->num_rows() > 0)
         {
@@ -66,7 +73,7 @@ class Information_Model extends CI_Model
         return NULL;
     }
     
-// --------------------------------------------------------------------
+    // --------------------------------------------------------------------
     
     /**
      * Get the total numbers of the articles
@@ -79,7 +86,6 @@ class Information_Model extends CI_Model
         return $this->db->where('articles_categories_id', 1)->from('articles')->count_all_results();
     }
 }
-
 
 /* End of file information_model.php */
 /* Location: ./system/models/information_model.php */

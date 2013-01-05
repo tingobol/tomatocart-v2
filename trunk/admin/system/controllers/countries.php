@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-controller
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Countries extends TOC_Controller
 {
@@ -41,7 +41,7 @@ class Countries extends TOC_Controller
         $this->load->model('countries_model');
     }
     
-// ------------------------------------------------------------------------   
+    // ------------------------------------------------------------------------   
     
     /**
      * List the countries
@@ -59,7 +59,7 @@ class Countries extends TOC_Controller
         $countries = $this->countries_model->get_countries($start, $limit);
         
         $records = array();
-        if ($countries != NULL)
+        if ($countries !== NULL)
         {
             foreach($countries as $country)
             {
@@ -76,7 +76,7 @@ class Countries extends TOC_Controller
                                                     EXT_JSON_READER_ROOT => $records)));
     }
     
-// ------------------------------------------------------------------------ 
+    // ------------------------------------------------------------------------ 
     
     /**
      * List the zones in the country
@@ -89,7 +89,7 @@ class Countries extends TOC_Controller
         $zones = $this->countries_model->get_zones($this->input->get_post('countries_id'));
         
         $records = array();
-        if ($zones != NULL)
+        if ($zones !== NULL)
         {
             $records = $zones;
         } 
@@ -97,7 +97,7 @@ class Countries extends TOC_Controller
         $this->output->set_output(json_encode(array(EXT_JSON_READER_ROOT => $records)));
     }
     
-// ------------------------------------------------------------------------ 
+    // ------------------------------------------------------------------------ 
     
     /**
      * Delete the country
@@ -112,6 +112,7 @@ class Countries extends TOC_Controller
          
         $check_address_book = $this->countries_model->check_address_book($this->input->post('countries_id'));
         
+        //country using in the address book
         if ($check_address_book > 0)
         {
             $error = TRUE;
@@ -120,6 +121,7 @@ class Countries extends TOC_Controller
         
         $check_geo_zones = $this->countries_model->check_geo_zones($this->input->post('countries_id'));
         
+        //country using in the tax zone
         if ($check_geo_zones > 0)
         {
             $error = TRUE;
@@ -145,7 +147,7 @@ class Countries extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------ 
+    // ------------------------------------------------------------------------ 
     
     /**
      * Delete the zone
@@ -160,6 +162,7 @@ class Countries extends TOC_Controller
         
         $address_books = $this->countries_model->get_zone_address_books($this->input->post('zone_id'));
         
+        //zone using in the address book
         if ($address_books > 0)
         {
             $error = TRUE;
@@ -168,6 +171,7 @@ class Countries extends TOC_Controller
         
         $geo_zones = $this->countries_model->get_zone_geo_zones($this->input->post('zone_id'));
         
+        //zone using in the tax zone
         if ($geo_zones > 0)
         {
             $error = TRUE;
@@ -193,7 +197,7 @@ class Countries extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------ 
+    // ------------------------------------------------------------------------ 
     
     /**
      * Delete the zones
@@ -214,12 +218,13 @@ class Countries extends TOC_Controller
         
         $zones = $this->countries_model->get_delete_zones($zones_ids);
         
-        if ($zones != NULL)
+        if ($zones !== NULL)
         {
             foreach($zones as $zone)
             {
                 $address_books = $this->countries_model->get_zone_address_books($zone['zone_id']);
                 
+                //zone using in the address book
                 if ($address_books > 0)
                 {
                     $error = TRUE;
@@ -228,6 +233,7 @@ class Countries extends TOC_Controller
                 
                 $geo_zones = $this->countries_model->get_zone_geo_zones($zone['zone_id']);
                 
+                //zone using in the tax zone
                 if ($geo_zones > 0)
                 {
                     $error = TRUE;
@@ -236,17 +242,18 @@ class Countries extends TOC_Controller
             }
         }
         
-        if (!empty($check_address_book_flag)) 
+        if (count($check_address_book_flag) > 0) 
         {
             $feedback[] = lang('batch_delete_warning_zone_in_use_address_book') . '<p>' . implode(', ', $check_address_book_flag) . '</p>';
         }
         
-        if (!empty($check_tax_zones_flag)) 
+        if (count($check_tax_zones_flag) > 0) 
         {
             $feedback[] = lang('batch_delete_warning_zone_in_use_tax_zone') . '<p>' . implode(', ', $check_tax_zones_flag) . '</p>';
         }
     
-        if ($error === FALSE && !empty($zones_ids))
+        //delete the zones
+        if ($error === FALSE && count($zones_ids) > 0)
         {
             foreach($zones_ids as $id)
             {
@@ -274,7 +281,7 @@ class Countries extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------ 
+    // ------------------------------------------------------------------------ 
     
     /**
      * Save the country
@@ -301,7 +308,7 @@ class Countries extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------ 
+    // ------------------------------------------------------------------------ 
     
     /**
      * Load the country
@@ -313,7 +320,7 @@ class Countries extends TOC_Controller
     {
         $data = $this->countries_model->get_data($this->input->post('countries_id'));
         
-        if ($data != NULL)
+        if ($data !== NULL)
         {
             $response = array('success' => TRUE, 'data' => $data);
         }
@@ -325,7 +332,7 @@ class Countries extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------ 
+    // ------------------------------------------------------------------------ 
     
     /**
      * Save the zone in the country
@@ -351,7 +358,7 @@ class Countries extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------ 
+    // ------------------------------------------------------------------------ 
     
     /**
      * Load the zone
@@ -363,7 +370,7 @@ class Countries extends TOC_Controller
     {
         $data = $this->countries_model->get_zone_data($this->input->post('zone_id'));
         
-        if ($data != NULL)
+        if ($data !== NULL)
         {
             $response = array('success' => TRUE, 'data' => $data);
         }

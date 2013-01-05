@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-controller
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Currencies extends TOC_Controller
 {
@@ -41,7 +41,7 @@ class Currencies extends TOC_Controller
         $this->load->model('currencies_model');
     }
   
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * List the currencies
@@ -59,7 +59,7 @@ class Currencies extends TOC_Controller
         $currencies = $this->currencies_model->get_currencies($start, $limit);
         
         $records = array();
-        if ($currencies != NULL)
+        if ($currencies !== NULL)
         {
             foreach($currencies as $currency)
             {
@@ -82,7 +82,7 @@ class Currencies extends TOC_Controller
                                                     EXT_JSON_READER_ROOT => $records)));
     }
   
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Save the currency
@@ -98,6 +98,7 @@ class Currencies extends TOC_Controller
         $code = $this->input->post('code');
         $currencies_id = $this->input->post('currencies_id');
         
+        //add new currency that is already existed
         if (!is_numeric($currencies_id) && $this->currencies_model->code_exist($code))
         {
             $error = TRUE;
@@ -119,7 +120,7 @@ class Currencies extends TOC_Controller
                 $default = TRUE;
             }
             
-            if ($this->currencies_model->save($currencies_id, $data, $default))
+            if ($this->currencies_model->save($currencies_id, $default, $data))
             {
                 $response = array('success' => TRUE, 'feedback' => lang('ms_success_action_performed'));
             }
@@ -136,7 +137,7 @@ class Currencies extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
   
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Load the currency
@@ -147,14 +148,16 @@ class Currencies extends TOC_Controller
     public function load_currency()
     {
         $data = $this->currencies_model->get_data($this->input->post('currencies_id'));
-        if ($data['code'] == DEFAULT_CURRENCY) {
+        
+        if ($data['code'] == DEFAULT_CURRENCY) 
+        {
             $data['is_default'] = '1';
         }
         
         $this->output->set_output(json_encode(array('success' => TRUE, 'data' => $data)));
     }
   
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Delete the currency
@@ -193,7 +196,7 @@ class Currencies extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
   
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Batch delete the currencies
@@ -209,29 +212,41 @@ class Currencies extends TOC_Controller
         $currencies_ids = json_decode($this->input->post('batch'));
         $currencies = $this->currencies_model->get_currencies_info($currencies_ids);
         
-        foreach($currencies as $currency)
+        //check the default currency
+        if ($currencies !== NULL)
         {
-            if ($currency['code'] == DEFAULT_CURRENCY)
+            foreach($currencies as $currency)
             {
-                $error = TRUE;
-                $feedback[] = lang('introduction_delete_currency_invalid');
-                
-                break;
+                if ($currency['code'] == DEFAULT_CURRENCY)
+                {
+                    $error = TRUE;
+                    $feedback[] = lang('introduction_delete_currency_invalid');
+                    
+                    break;
+                }
             }
         }
         
         if ($error === FALSE)
         {
-            foreach($currencies_ids as $id)
+            //delete the currencies
+            if (count($currencies_ids) > 0)
             {
-                if ($this->currencies_model->delete($id) == FALSE)
+                foreach($currencies_ids as $id)
                 {
-                    $error = TRUE;
-                    
-                    break;
+                    if ($this->currencies_model->delete($id) === FALSE)
+                    {
+                        $error = TRUE;
+                        
+                        break;
+                    }
                 }
             }
-            
+            else
+            {
+                $error = TRUE;
+            }
+           
             if ($error === FALSE)
             {
                 $response = array('success' => TRUE, 'feedback' => lang('ms_success_action_performed'));
@@ -249,7 +264,7 @@ class Currencies extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
   
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Update the currency rates

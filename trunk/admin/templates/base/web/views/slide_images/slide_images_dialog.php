@@ -25,7 +25,7 @@ Ext.define('Toc.slideImages.SlideImagesDialog', {
     config.layout = 'fit';
     config.modal = true;
     config.width = 600;
-    config.height = 500;
+    config.height = 450;
     config.iconCls = 'icon-slide_images-win';
     config.items = this.buildForm();
     
@@ -98,8 +98,6 @@ Ext.define('Toc.slideImages.SlideImagesDialog', {
         labelSeparator: '',
         anchor: '98%'
       },
-      width: 600,
-      height: 350,
       border: false,
       fileUpload: true,
       items: [this.getDataPanel(), this.getTabPanel()] 
@@ -131,7 +129,9 @@ Ext.define('Toc.slideImages.SlideImagesDialog', {
       displayField: 'text',
       valueField: 'id',
       editable: false,
-      forceSelection: true
+      forceSelection: true,
+      allowBlank: false
+      
     });
     
     var pnlData = Ext.create('Ext.Panel', {
@@ -158,7 +158,7 @@ Ext.define('Toc.slideImages.SlideImagesDialog', {
                       width: 200,
                       border: false,
                       items:[
-                        {xtype:'radio', name: 'status', fieldLabel: '<?php echo lang('field_publish'); ?>', boxLabel: '<?php echo lang('status_enabled'); ?>' , inputValue: '1'}
+                        {xtype:'radio', name: 'status', fieldLabel: '<?php echo lang('field_publish'); ?>', boxLabel: '<?php echo lang('status_enabled'); ?>' , inputValue: '1', checked: true}
                       ]
                     },
                     {
@@ -230,8 +230,7 @@ Ext.define('Toc.slideImages.SlideImagesDialog', {
                   xtype: "fileuploadfield",
                   width: 400,
                   fieldLabel: "' . lang('field_slide_image') . '",
-                  name: "image' . $l['id'] . '",
-                  allowBlank: false
+                  name: "image' . $l['id'] . '"
                 },
                 {
                   xtype: "panel",
@@ -272,4 +271,4 @@ Ext.define('Toc.slideImages.SlideImagesDialog', {
 });
 
 /* End of file slide_images_dialog.php */
-/* Location: ./system/modules/slide_images/slide_images_dialog.php */
+/* Location: ./templates/base/web/views/slide_images/slide_images_dialog.php */

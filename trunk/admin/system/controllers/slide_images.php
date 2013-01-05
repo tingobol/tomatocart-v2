@@ -24,7 +24,7 @@
  * @subpackage	tomatocart
  * @category	template-module-controller
  * @author		TomatoCart Dev Team
- * @link		http://tomatocart.com/wiki/
+ * @link		http://tomatocart.com
  */
 class Slide_Images extends TOC_Controller
 {
@@ -154,22 +154,24 @@ class Slide_Images extends TOC_Controller
 
         $error = FALSE;
         $feedback = array();
-
+        
         //check images for all languages
         if (empty($image_id))
         {
             foreach(lang_get_all() as $l)
             {
-                if (!isset($_FILES['image' . $l['id']]['name']))
+                //there isn't any image uploaded, throw the error feedback
+                if (empty($_FILES['image' . $l['id']]['name']))
                 {
                     $error = TRUE;
-                    $feedback [] = sprintf(lang('ms_error_image_empty'), $l['name']);
+                    
+                    $feedback[] = sprintf(lang('ms_error_image_empty'), $l['name']);
 
                     break;
                 }
             }
         }
-
+        
         //save image
         if ($error === FALSE)
         {
@@ -228,7 +230,7 @@ class Slide_Images extends TOC_Controller
 
         $images_ids = json_decode($batch);
 
-        if (!empty($images_ids))
+        if (count($images_ids) > 0)
         {
             foreach($images_ids as $id)
             {
@@ -280,12 +282,19 @@ class Slide_Images extends TOC_Controller
 
     // --------------------------------------------------------------------
     
+    /**
+     * Load a slide image
+     * 
+     * @access public
+     * @return string
+     */
     public function load_slide_images()
     {
         $data = $this->slide_images_model->get_data($this->input->post('image_id'));
 
         if ($data !== NULL) 
         {
+            //languages
             $languages = lang_get_all();
             
             foreach ($languages as $l)
@@ -302,9 +311,9 @@ class Slide_Images extends TOC_Controller
             }
         }
 
-        $this->output->set_output(json_encode(array('success' => true, 'data' => $data)));
+        $this->output->set_output(json_encode(array('success' => TRUE, 'data' => $data)));
     }
 }
 
 /* End of file slide_images.php */
-/* Location: ./system/modules/slide_images/controllers/slide_images.php */
+/* Location: ./system/controllers/slide_images.php */

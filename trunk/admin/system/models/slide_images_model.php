@@ -22,9 +22,9 @@
  *
  * @package		TomatoCart
  * @subpackage	tomatocart
- * @category	template-module-controller
+ * @category	template-module-model
  * @author		TomatoCart Dev Team
- * @link		http://tomatocart.com/wiki/
+ * @link		http://tomatocart.com
  */
 class Slide_Images_Model extends CI_Model
 {
@@ -50,16 +50,23 @@ class Slide_Images_Model extends CI_Model
      * @param $group
      * @return mixed
      */
-    public function get_images($start, $limit, $group = NULL)
+    public function get_images($start = NULL, $limit = NULL, $group = NULL)
     {
         $this->db->select('*')->from('slide_images')->where('language_id', lang_id());
 
-        if (!empty($group))
+        if ($group !== NULL)
         {
             $this->db->where('group', $group);
         }
+        
+        $this->db->order_by('sort_order');
+        
+        if ($start !== NULL && $limit !== NULL)
+        {
+            $this->db->limit($limit, $start);
+        }
 
-        $result = $this->db->order_by('sort_order')->limit($limit, $start)->get();
+        $result = $this->db->get();
 
         if ($result->num_rows() > 0)
         {
@@ -75,7 +82,7 @@ class Slide_Images_Model extends CI_Model
      * Get totals
      *
      * @access public
-     * @return mixed
+     * @return int
      */
     public function get_totals($group = NULL)
     {
@@ -273,9 +280,9 @@ class Slide_Images_Model extends CI_Model
      *
      * @access public
      * @param $id
-     * @return void
+     * @return boolean
      */
-    public function delete($id = NULL)
+    public function delete($id)
     {
         //delete image file
         $result = $this->db->get_where('slide_images', array('image_id' => $id));
@@ -292,4 +299,4 @@ class Slide_Images_Model extends CI_Model
 }
 
 /* End of file slide_images_model.php */
-/* Location: ./system/tomatocart/models/slide_images_model.php */
+/* Location: ./system/models/slide_images_model.php */

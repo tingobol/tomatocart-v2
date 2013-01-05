@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-controller
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 Class Zone_Groups extends TOC_Controller
 {
@@ -41,7 +41,7 @@ Class Zone_Groups extends TOC_Controller
         $this->load->model('zone_groups_model');
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * List the zone groups
@@ -57,10 +57,11 @@ Class Zone_Groups extends TOC_Controller
         $zones = $this->zone_groups_model->get_geo_zones($start, $limit);
         
         $records = array();
-        if ($zones != NULL)
+        if ($zones !== NULL)
         {
             foreach($zones as $zone)
             {
+                //get the zone entries in the zone group
                 $entries = $this->zone_groups_model->get_entries($zone['geo_zone_id']);
                 
                 $records[] = array( 'geo_zone_id' => $zone['geo_zone_id'],
@@ -73,7 +74,7 @@ Class Zone_Groups extends TOC_Controller
                                                     EXT_JSON_READER_ROOT => $records)));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * List the zone entries in the zone group
@@ -86,7 +87,7 @@ Class Zone_Groups extends TOC_Controller
         $entries = $this->zone_groups_model->get_zone_entries_info($this->input->get_post('geo_zone_id'));
         
         $records = array();
-        if ($entries != NULL)
+        if ($entries !== NULL)
         {
             foreach($entries as $entry)
             {
@@ -101,7 +102,7 @@ Class Zone_Groups extends TOC_Controller
         $this->output->set_output(json_encode(array(EXT_JSON_READER_ROOT => $records)));
     }
   
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Get all the countries
@@ -116,7 +117,7 @@ Class Zone_Groups extends TOC_Controller
         $records = array(array('countries_id' => '0',
                                'countries_name' => lang('all_countries')));
         
-        if ($entries != NULL)
+        if ($entries !== NULL)
         {
             foreach($entries as $entry)
             {
@@ -127,7 +128,7 @@ Class Zone_Groups extends TOC_Controller
         $this->output->set_output(json_encode(array(EXT_JSON_READER_ROOT => $records)));
     }
   
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Get all the zones in the country
@@ -142,7 +143,7 @@ Class Zone_Groups extends TOC_Controller
         $records = array(array('zone_id' => '0',
                                'zone_name' => lang('all_zones')));
           
-        if ($entries != NULL)
+        if ($entries !== NULL)
         {
             foreach($entries as $entry)
             {
@@ -153,7 +154,7 @@ Class Zone_Groups extends TOC_Controller
         $this->output->set_output(json_encode(array(EXT_JSON_READER_ROOT => $records)));
     }
   
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Save the zone in the zone group
@@ -179,7 +180,7 @@ Class Zone_Groups extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
   
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Delete the zone
@@ -201,7 +202,7 @@ Class Zone_Groups extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
   
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Batch delete the zones
@@ -215,7 +216,7 @@ Class Zone_Groups extends TOC_Controller
         
         $entries_ids = json_decode($this->input->post('batch'));
         
-        if (!empty($entries_ids))
+        if (count($entries_ids) > 0)
         {
             foreach($entries_ids as $id)
             {
@@ -225,6 +226,10 @@ Class Zone_Groups extends TOC_Controller
                     break;
                 }
             }
+        }
+        else
+        {
+            $error = TRUE;
         }
         
         if ($error === FALSE) 
@@ -239,7 +244,7 @@ Class Zone_Groups extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
   
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Load the zone
@@ -251,7 +256,7 @@ Class Zone_Groups extends TOC_Controller
     {
         $data = $this->zone_groups_model->get_entry_data($this->input->post('geo_zone_entry_id'));
         
-        if ($data != NULL)
+        if ($data !== NULL)
         {
             $response = array('success' => TRUE, 'data' => $data);
         }
@@ -263,7 +268,7 @@ Class Zone_Groups extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Save the zone group
@@ -288,7 +293,7 @@ Class Zone_Groups extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Load the zone group
@@ -300,7 +305,7 @@ Class Zone_Groups extends TOC_Controller
     {
         $data = $this->zone_groups_model->get_data($this->input->post('geo_zone_id'));
         
-        if ($data != NULL)
+        if ($data !== NULL)
         {
             $response = array('success' => TRUE, 'data' => $data);
         }
@@ -312,7 +317,7 @@ Class Zone_Groups extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Delete the zone group
@@ -327,6 +332,7 @@ Class Zone_Groups extends TOC_Controller
         
         $check_tax_rates = $this->zone_groups_model->get_tax_rates($this->input->post('geo_zone_id'));
         
+        //zone group using inthe tax classes
         if ($check_tax_rates > 0)
         {
             $error = TRUE;
