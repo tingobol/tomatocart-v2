@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-model
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Tax_Classes_Model extends CI_Model
 {
@@ -39,7 +39,7 @@ class Tax_Classes_Model extends CI_Model
         parent::__construct();
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get the tax classes
@@ -49,14 +49,19 @@ class Tax_Classes_Model extends CI_Model
      * @param $limit
      * @return mixed
      */
-    public function get_tax_classes($start, $limit)
+    public function get_tax_classes($start = NULL, $limit = NULL)
     {
-        $result = $this->db
-        ->select('tax_class_id, tax_class_title, tax_class_description, last_modified, date_added')
-        ->from('tax_class')
-        ->order_by('tax_class_title')
-        ->limit($limit, $start)
-        ->get();
+        $this->db
+            ->select('tax_class_id, tax_class_title, tax_class_description, last_modified, date_added')
+            ->from('tax_class')
+            ->order_by('tax_class_title');
+            
+        if ($start !== NULL && $limit !== NULL)
+        {
+            $this->db->limit($limit, $start);
+        }
+        
+        $result = $this->db->get();
         
         if ($result->num_rows() > 0)
         {
@@ -66,7 +71,7 @@ class Tax_Classes_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Get the total number of tax rates with the tax class id
@@ -80,7 +85,7 @@ class Tax_Classes_Model extends CI_Model
         return $this->db->where('tax_class_id', $id)->from('tax_rates')->count_all_results();
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Get the tax rates with the tax class id
@@ -92,11 +97,11 @@ class Tax_Classes_Model extends CI_Model
     public function get_tax_rates($id)
     {
         $result = $this->db
-        ->select('r.tax_rates_id, r.tax_priority, r.tax_rate, r.tax_description, r.date_added, r.last_modified, z.geo_zone_id, z.geo_zone_name')
-        ->from('tax_rates r')
-        ->join('geo_zones z', 'r.tax_zone_id = z.geo_zone_id')
-        ->where('r.tax_class_id', $id)
-        ->get();
+            ->select('r.tax_rates_id, r.tax_priority, r.tax_rate, r.tax_description, r.date_added, r.last_modified, z.geo_zone_id, z.geo_zone_name')
+            ->from('tax_rates r')
+            ->join('geo_zones z', 'r.tax_zone_id = z.geo_zone_id')
+            ->where('r.tax_class_id', $id)
+            ->get();
         
         if ($result->num_rows() > 0)
         {
@@ -106,7 +111,7 @@ class Tax_Classes_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Get the data of the tax class with the id
@@ -118,10 +123,10 @@ class Tax_Classes_Model extends CI_Model
     public function get_data($id)
     {
         $result = $this->db
-        ->select('*')
-        ->from('tax_class')
-        ->where('tax_class_id', $id)
-        ->get();
+            ->select('*')
+            ->from('tax_class')
+            ->where('tax_class_id', $id)
+            ->get();
         
         if ($result->num_rows() > 0)
         {
@@ -134,7 +139,7 @@ class Tax_Classes_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Whether there is any product using the tax class
@@ -146,16 +151,16 @@ class Tax_Classes_Model extends CI_Model
     public function get_products($id)
     {
         $result = $this->db
-        ->select('products_id')
-        ->from('products')
-        ->where('products_tax_class_id', $id)
-        ->limit(1)
-        ->get();
+            ->select('products_id')
+            ->from('products')
+            ->where('products_tax_class_id', $id)
+            ->limit(1)
+            ->get();
         
         return $result->num_rows();
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Delete the tax class with the id
@@ -166,28 +171,34 @@ class Tax_Classes_Model extends CI_Model
      */
     public function delete($id)
     {
+        //start transaction
         $this->db->trans_begin();
         
-        $Qrates = $this->db->delete('tax_rates', array('tax_class_id' => $id));
+        //delete the tax rates
+        $this->db->delete('tax_rates', array('tax_class_id' => $id));
         
+        //check transaction status
         if ($this->db->trans_status() === TRUE)
         {
             $this->db->delete('tax_class', array('tax_class_id' => $id));
         }
         
+        //check transaction status
         if ($this->db->trans_status() === TRUE)
         {
+            //commit
             $this->db->trans_commit();
             
             return TRUE;
         }
         
+        //rollback
         $this->db->trans_rollback();
         
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Save the tax class with its id
@@ -199,6 +210,7 @@ class Tax_Classes_Model extends CI_Model
      */
     public function save($id = NULL, $data)
     {
+        //editing or adding the tax class
         if (is_numeric($id))
         {
             $data['last_modified'] = date('Y-m-d H:i:s');
@@ -218,7 +230,7 @@ class Tax_Classes_Model extends CI_Model
         return FALSE;
     }
   
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     /**
      * Get the zone groups
@@ -229,9 +241,9 @@ class Tax_Classes_Model extends CI_Model
     public function get_zones()
     {
         $result = $this->db
-        ->select('geo_zone_id, geo_zone_name')
-        ->from('geo_zones')
-        ->get();
+            ->select('geo_zone_id, geo_zone_name')
+            ->from('geo_zones')
+            ->get();
         
         if ($result->num_rows() > 0)
         {
@@ -241,7 +253,7 @@ class Tax_Classes_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Save the tax rate
@@ -253,6 +265,7 @@ class Tax_Classes_Model extends CI_Model
      */
     public function save_entry($id = NULL, $data)
     {
+        //editing or adding the tax rate
         if (is_numeric($id))
         {
             $data['last_modified'] = date('Y-m-d H:i:s');
@@ -274,7 +287,7 @@ class Tax_Classes_Model extends CI_Model
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Delete the tax rate with the id
@@ -295,7 +308,7 @@ class Tax_Classes_Model extends CI_Model
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Get the data of the tax rate with the id
@@ -307,12 +320,12 @@ class Tax_Classes_Model extends CI_Model
     public function get_entry_data($id)
     {
         $result = $this->db
-        ->select('r.*, tc.tax_class_title, z.geo_zone_id, z.geo_zone_name')
-        ->from('tax_rates r')
-        ->join('tax_class tc', 'r.tax_class_id = tc.tax_class_id')
-        ->join('geo_zones z', 'r.tax_zone_id = z.geo_zone_id')
-        ->where('r.tax_rates_id', $id)
-        ->get();
+            ->select('r.*, tc.tax_class_title, z.geo_zone_id, z.geo_zone_name')
+            ->from('tax_rates r')
+            ->join('tax_class tc', 'r.tax_class_id = tc.tax_class_id')
+            ->join('geo_zones z', 'r.tax_zone_id = z.geo_zone_id')
+            ->where('r.tax_rates_id', $id)
+            ->get();
         
         if ($result->num_rows() > 0)
         {
@@ -322,7 +335,7 @@ class Tax_Classes_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get the total number of tax classes

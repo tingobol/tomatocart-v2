@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-controller
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Orders_Status extends TOC_Controller
 {
@@ -41,7 +41,7 @@ class Orders_Status extends TOC_Controller
         $this->load->model('orders_status_model');
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * List the orders status
@@ -57,7 +57,7 @@ class Orders_Status extends TOC_Controller
         $statuses = $this->orders_status_model->get_orders_status($start, $limit);
         
         $records = array();
-        if ($statuses != NULL)
+        if ($statuses !== NULL)
         {
             foreach($statuses as $status)
             {
@@ -79,7 +79,7 @@ class Orders_Status extends TOC_Controller
                                                     EXT_JSON_READER_ROOT => $records)));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Set the status of the order status
@@ -101,7 +101,7 @@ class Orders_Status extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Save the orders status
@@ -126,7 +126,7 @@ class Orders_Status extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Load the orders status
@@ -138,7 +138,7 @@ class Orders_Status extends TOC_Controller
     {
         $statuses = $this->orders_status_model->load_order_status($this->input->post('orders_status_id'));
         
-        if ($statuses != NULL)
+        if ($statuses !== NULL)
         {
             $data = array();
             if (DEFAULT_ORDERS_STATUS_ID == $this->input->post('orders_status_id'))
@@ -162,7 +162,7 @@ class Orders_Status extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Delete the orders status
@@ -172,35 +172,12 @@ class Orders_Status extends TOC_Controller
      */
     public function delete_orders_status()
     {
-        $error = FALSE;
-        $feedback = array();
+        $result = array('error' => FALSE, 'feedback' => array());
+         
+        //whether the order status is allowed to be deleted
+        $result = $this->check_orders_status($this->input->post('orders_status_id'), $result);
         
-        if ($this->input->post('orders_status_id') == DEFAULT_ORDERS_STATUS_ID)
-        {
-            $error = TRUE;
-            
-            $feedback[] = lang('delete_error_order_status_prohibited');
-        }
-        else
-        {
-            $check_orders = $this->orders_status_model->check_orders($this->input->post('orders_status_id'));
-            
-            if ($check_orders > 0)
-            {
-                $error = TRUE;
-                $feedback[] = sprintf(lang('delete_error_order_status_in_use'), $check_orders);
-            }
-            
-            $check_history = $this->orders_status_model->check_history($this->input->post('orders_status_id'));
-            
-            if ($check_history > 0)
-            {
-                $error = TRUE;
-                $feedback[] = sprintf(lang('delete_error_order_status_used'), $check_history);
-            }
-        }
-      
-        if ($error === FALSE)
+        if ($result['error'] === FALSE)
         {
             if ($this->orders_status_model->delete($this->input->post('orders_status_id')))
             {
@@ -213,13 +190,13 @@ class Orders_Status extends TOC_Controller
         }
         else
         {
-            $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed') . '<br />' . implode('<br />', $feedback));
+            $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed') . '<br />' . implode('<br />', $result['feedback']));
         }
         
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Batch delete the orders status
@@ -229,52 +206,40 @@ class Orders_Status extends TOC_Controller
      */
     public function batch_delete_orders_status()
     {
+        $result = array('error' => FALSE, 'feedback' => array());
+        
         $orders_status_ids = json_decode($this->input->post('batch'));
         
-        $error = FALSE;
-        $feedback = array();
-        
-        foreach($orders_status_ids as $id)
+        if (count($orders_status_ids) > 0)
         {
-            if ($id == DEFAULT_ORDERS_STATUS_ID)
+            foreach($orders_status_ids as $id)
             {
-                $error = TRUE;
-                $feedback[] = lang('batch_delete_error_order_status_prohibited');
-            }
-            else
-            {
-                $check_orders = $this->orders_status_model->check_orders($id);
+                //whether the order status is allowed to be deleted
+                $result = $this->check_orders_status($id, $result);
                 
-                if ($check_orders > 0) 
+                if ($result['error'] === TRUE)
                 {
-                    $error = TRUE;
-                    $feedback[] = lang('batch_delete_error_order_status_in_use');
-                    break;
-                }
-                
-                $check_history = $this->orders_status_model->check_history($id);
-                
-                if ($check_history > 0)
-                {
-                    $error = TRUE;
-                    $feedback[] = lang('batch_delete_error_order_status_used');
                     break;
                 }
             }
         }
+        else
+        {
+            $result['error'] = TRUE;
+        }
         
-        if ($error === FALSE)
+        if ($result['error'] === FALSE)
         {
             foreach($orders_status_ids as $id)
             {
-                if (!$this->orders_status_model->delete($id))
+                if ($this->orders_status_model->delete($id) === FALSE)
                 {
-                    $error = TRUE;
+                    $result['error'] = TRUE;
                     break;
                 }
             }
             
-            if ($error === FALSE) 
+            if ($result['error'] === FALSE) 
             {
                 $response = array('success' => TRUE, 'feedback' => lang('ms_success_action_performed'));
             } 
@@ -285,10 +250,51 @@ class Orders_Status extends TOC_Controller
         }
         else
         {
-            $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed') . '<br />' . implode('<br />', $feedback));
+            $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed') . '<br />' . implode('<br />', $result['feedback']));
         }
         
         $this->output->set_output(json_encode($response));
+    }
+    
+    // ------------------------------------------------------------------------
+    
+    /**
+     * Check the orders status
+     *
+     * @access private
+     * @param $id
+     * @return array
+     */
+    private function check_orders_status($id, $result)
+    {
+        //deleting the default order status
+        if ($id == DEFAULT_ORDERS_STATUS_ID)
+        {
+            $result['error'] = TRUE;
+            $result['feedback'][] = lang('delete_error_order_status_prohibited');
+        }
+        else
+        {
+            $check_orders = $this->orders_status_model->check_orders($id);
+            
+            //the order status using by some orders
+            if ($check_orders > 0)
+            {
+                $result['error'] = TRUE;
+                $result['feedback'][] = sprintf(lang('delete_error_order_status_in_use'), $check_orders);
+            }
+            
+            $check_history = $this->orders_status_model->check_history($id);
+            
+            //the order status using by some orders history
+            if ($check_history > 0)
+            {
+                $result['error'] = TRUE;
+                $result['feedback'][] = sprintf(lang('delete_error_order_status_used'), $check_history);
+            }
+        }
+        
+        return $result;
     }
 }
 

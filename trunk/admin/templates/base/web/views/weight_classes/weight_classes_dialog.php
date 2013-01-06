@@ -70,7 +70,7 @@ Ext.define('Toc.weight_classes.WeightClassesDialog', {
           
           Ext.each(rules, function(rule) {
             this.frmWeightClass.add({
-              xtype: 'numberfield',
+              xtype: 'textfield',
               name: 'rules[' + rule.weight_class_id + ']',
               fieldLabel: rule.weight_class_title,
               value: rule.weight_class_rule
@@ -105,7 +105,7 @@ Ext.define('Toc.weight_classes.WeightClassesDialog', {
             
             Ext.each(rules, function(rule) {
               this.frmWeightClass.add({
-                xtype: 'numberfield',
+                xtype: 'textfield',
                 name: 'rules[' + rule.weight_class_id + ']',
                 fieldLabel: rule.weight_class_title,
                 value: rule.weight_class_rule

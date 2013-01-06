@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-model
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Weight_Classes_Model extends CI_Model
 {
@@ -39,7 +39,7 @@ class Weight_Classes_Model extends CI_Model
         parent::__construct();
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get the weight classes
@@ -49,15 +49,20 @@ class Weight_Classes_Model extends CI_Model
      * @param $limit
      * @return mixed
      */
-    public function get_classes($start, $limit)
+    public function get_classes($start = NULL, $limit = NULL)
     {
-        $result = $this->db
-        ->select('weight_class_id, weight_class_key, weight_class_title')
-        ->from('weight_classes')
-        ->where('language_id', lang_id())
-        ->order_by('weight_class_title')
-        ->limit($limit, $start)
-        ->get();
+        $this->db
+            ->select('weight_class_id, weight_class_key, weight_class_title')
+            ->from('weight_classes')
+            ->where('language_id', lang_id())
+            ->order_by('weight_class_title');
+        
+        if ($start !== NULL && $limit !== NULL)
+        {
+            $this->db->limit($limit, $start);
+        }
+        
+        $result = $this->db->get();
         
         if ($result->num_rows() > 0)
         {
@@ -67,7 +72,7 @@ class Weight_Classes_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get the weight classes rules
@@ -78,11 +83,11 @@ class Weight_Classes_Model extends CI_Model
     public function get_rules()
     {
         $result = $this->db
-        ->select('weight_class_id, weight_class_title')
-        ->from('weight_classes')
-        ->where('language_id', lang_id())
-        ->order_by('weight_class_title')
-        ->get();
+            ->select('weight_class_id, weight_class_title')
+            ->from('weight_classes')
+            ->where('language_id', lang_id())
+            ->order_by('weight_class_title')
+            ->get();
         
         if ($result->num_rows() > 0)
         {
@@ -92,7 +97,7 @@ class Weight_Classes_Model extends CI_Model
         return NULL;
     }
   
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Save the weight class
@@ -107,8 +112,10 @@ class Weight_Classes_Model extends CI_Model
     {
         $error = FALSE;
         
+        //start transaction
         $this->db->trans_begin();
         
+        //editing or adding the weight class
         if (is_numeric($id))
         {
             $weight_class_id = $id;
@@ -116,9 +123,9 @@ class Weight_Classes_Model extends CI_Model
         else
         {
             $result = $this->db
-            ->select_max('weight_class_id')
-            ->from('weight_classes')
-            ->get();
+                ->select_max('weight_class_id')
+                ->from('weight_classes')
+                ->get();
             
             $max_weight_class = $result->row_array();
             
@@ -127,24 +134,28 @@ class Weight_Classes_Model extends CI_Model
             $weight_class_id = $max_weight_class['weight_class_id'] + 1;
         }
       
+        //languages
         foreach(lang_get_all() as $l)
         {
+            //editing or adding the weight class
             if (is_numeric($id))
             {
                 $this->db->update('weight_classes', 
-                                  array('weight_class_key' => $data['key'][$l['id']], 
-                                        'weight_class_title' => $data['name'][$l['id']]),
-                                  array('weight_class_id' => $weight_class_id, 
-                                        'language_id' => $l['id']));
+                    array('weight_class_key' => $data['key'][$l['id']], 
+                          'weight_class_title' => $data['name'][$l['id']]),
+                    array('weight_class_id' => $weight_class_id, 
+                          'language_id' => $l['id']));
             }
             else
             {
-                $this->db->insert('weight_classes', array('weight_class_id' => $weight_class_id, 
-                                                          'language_id' => $l['id'], 
-                                                          'weight_class_key' => $data['key'][$l['id']], 
-                                                          'weight_class_title' => $data['name'][$l['id']]));
+                $this->db->insert('weight_classes',
+                    array('weight_class_id' => $weight_class_id, 
+                          'language_id' => $l['id'], 
+                          'weight_class_key' => $data['key'][$l['id']], 
+                          'weight_class_title' => $data['name'][$l['id']]));
             }
             
+            //check transaction status
             if ($this->db->trans_status() === FALSE)
             {
                 $error = TRUE;
@@ -152,26 +163,28 @@ class Weight_Classes_Model extends CI_Model
             }
         }
       
-        //handler rules
+        //process weiht class rules
         if ($error === FALSE)
         {
+            //editing or adding the weight class
             if (is_numeric($id))
             {
                 $result = $this->db
-                ->select('weight_class_to_id')
-                ->from('weight_classes_rules')
-                ->where(array('weight_class_from_id' => $weight_class_id, 'weight_class_to_id !=' => $weight_class_id))
-                ->get();
+                    ->select('weight_class_to_id')
+                    ->from('weight_classes_rules')
+                    ->where(array('weight_class_from_id' => $weight_class_id, 'weight_class_to_id !=' => $weight_class_id))
+                    ->get();
                 
                 if ($result->num_rows() > 0)
                 {
                     foreach($result->result_array() as $rule)
                     {
                         $this->db->update('weight_classes_rules', 
-                                          array('weight_class_rule' => $data['rules'][$rule['weight_class_to_id']]), 
-                                          array('weight_class_from_id' => $weight_class_id, 
-                                                'weight_class_to_id' => $rule['weight_class_to_id']));
+                            array('weight_class_rule' => $data['rules'][$rule['weight_class_to_id']]), 
+                            array('weight_class_from_id' => $weight_class_id, 
+                                  'weight_class_to_id' => $rule['weight_class_to_id']));
                                           
+                        //check transaction status
                         if ($this->db->trans_status() === FALSE)
                         {
                             $error = TRUE;
@@ -185,43 +198,45 @@ class Weight_Classes_Model extends CI_Model
             else
             {
                 $result = $this->db
-                ->select('weight_class_id')
-                ->from('weight_classes')
-                ->where(array('weight_class_id !=' => $weight_class_id, 'language_id' => lang_id()))
-                ->get();
+                    ->select('weight_class_id')
+                    ->from('weight_classes')
+                    ->where(array('weight_class_id !=' => $weight_class_id, 'language_id' => lang_id()))
+                    ->get();
               
-              if ($result->num_rows() > 0)
-              {
-                  foreach($result->result_array() as $class)
-                  {
-                      $this->db->insert('weight_classes_rules', 
-                                        array('weight_class_from_id' => $class['weight_class_id'], 
-                                              'weight_class_to_id' => $weight_class_id, 
-                                              'weight_class_rule' => '1'));
-                                        
-                      if ($this->db->trans_status() === FALSE)
-                      {
-                          $error = TRUE;
-                          break;
-                      }
-                      
-                      if ($error === FALSE)
-                      {
-                          $this->db->insert('weight_classes_rules', 
-                                            array('weight_class_from_id' => $weight_class_id, 
-                                                  'weight_class_to_id' => $class['weight_class_id'], 
-                                                  'weight_class_rule' => $data['rules'][$class['weight_class_id']]));
-                                            
-                          if ($this->db->trans_status() === FALSE)
-                          {
-                              $error = TRUE;
-                              break;
-                          }
-                      }
-                  }
-              }
-              
-              $result->free_result();
+                if ($result->num_rows() > 0)
+                {
+                    foreach($result->result_array() as $class)
+                    {
+                        $this->db->insert('weight_classes_rules', 
+                            array('weight_class_from_id' => $class['weight_class_id'], 
+                                  'weight_class_to_id' => $weight_class_id, 
+                                  'weight_class_rule' => '1'));
+                                          
+                        //check transaction status
+                        if ($this->db->trans_status() === FALSE)
+                        {
+                            $error = TRUE;
+                            break;
+                        }
+                        
+                        if ($error === FALSE)
+                        {
+                            $this->db->insert('weight_classes_rules', 
+                                              array('weight_class_from_id' => $weight_class_id, 
+                                                    'weight_class_to_id' => $class['weight_class_id'], 
+                                                    'weight_class_rule' => $data['rules'][$class['weight_class_id']]));
+                                              
+                            //check transaction status
+                            if ($this->db->trans_status() === FALSE)
+                            {
+                                $error = TRUE;
+                                break;
+                            }
+                        }
+                    }
+                }
+                
+                $result->free_result();
             }
         }
       
@@ -231,9 +246,10 @@ class Weight_Classes_Model extends CI_Model
             if ($default === TRUE)
             {
                 $this->db->update('configuration', 
-                                  array('configuration_value' => $weight_class_id), 
-                                  array('configuration_key' => 'SHIPPING_WEIGHT_UNIT'));
+                    array('configuration_value' => $weight_class_id), 
+                    array('configuration_key' => 'SHIPPING_WEIGHT_UNIT'));
                                   
+                //check transaction status
                 if ($this->db->trans_status() === FALSE)
                 {
                     $error = TRUE;
@@ -243,17 +259,19 @@ class Weight_Classes_Model extends CI_Model
         
         if ($error === FALSE)
         {
+            //commit
             $this->db->trans_commit();
             
             return TRUE;
         }
         
+        //rollback
         $this->db->trans_rollback();
         
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get data of the weight class with the id
@@ -265,10 +283,10 @@ class Weight_Classes_Model extends CI_Model
     public function get_infos($id)
     {
         $result = $this->db
-        ->select('language_id, weight_class_id, weight_class_key, weight_class_title')
-        ->from('weight_classes')
-        ->where('weight_class_id', $id)
-        ->get();
+            ->select('language_id, weight_class_id, weight_class_key, weight_class_title')
+            ->from('weight_classes')
+            ->where('weight_class_id', $id)
+            ->get();
         
         if ($result->num_rows() > 0)
         {
@@ -278,7 +296,7 @@ class Weight_Classes_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get rules of the weight class with the id
@@ -290,12 +308,12 @@ class Weight_Classes_Model extends CI_Model
     public function get_rules_infos($id)
     {
         $result = $this->db
-        ->select('r.weight_class_to_id, r.weight_class_rule, c.weight_class_title, c.weight_class_key')
-        ->from('weight_classes_rules r')
-        ->join('weight_classes c', 'r.weight_class_to_id = c.weight_class_id')
-        ->where(array('r.weight_class_from_id' => $id, 'r.weight_class_to_id !=' => $id, 'c.language_id' => lang_id()))
-        ->order_by('c.weight_class_title')
-        ->get();
+            ->select('r.weight_class_to_id as weight_class_id, r.weight_class_rule, c.weight_class_title, c.weight_class_key')
+            ->from('weight_classes_rules r')
+            ->join('weight_classes c', 'r.weight_class_to_id = c.weight_class_id')
+            ->where(array('r.weight_class_from_id' => $id, 'r.weight_class_to_id !=' => $id, 'c.language_id' => lang_id()))
+            ->order_by('c.weight_class_title')
+            ->get();
         
         if ($result->num_rows() > 0)
         {
@@ -305,7 +323,7 @@ class Weight_Classes_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Delete the weight class with its id
@@ -316,34 +334,39 @@ class Weight_Classes_Model extends CI_Model
      */
     public function delete($id)
     {
+        //start transaction
         $this->db->trans_begin();
         
         $this->db->where('weight_class_from_id', $id)->or_where('weight_class_to_id', $id)->delete('weight_classes_rules');
         
+        //check transaction status
         if ($this->db->trans_status() === TRUE)
         {
             $this->db->delete('weight_classes', array('weight_class_id' => $id));
         }
         
+        //check transaction status
         if ($this->db->trans_status() === TRUE)
         {
+            //commit
             $this->db->trans_commit();
             
             return TRUE;
         }
         
+        //rollback
         $this->db->trans_rollback();
         
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Whether the weight class is in use
      *
      * @access public
-     * @param $id
+     * @param $weight_classes_id
      * @return int
      */
     public function get_products($weight_classes_id)
@@ -351,7 +374,7 @@ class Weight_Classes_Model extends CI_Model
         return $this->db->where('products_weight_class', $weight_classes_id)->from('products')->count_all_results();
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get the total number of weight classes

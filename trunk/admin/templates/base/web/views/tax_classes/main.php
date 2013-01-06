@@ -65,11 +65,15 @@ Ext.override(Toc.desktop.TaxClassesWindow, {
   },
   
   onCreateTaxRates: function(grdTaxRates, taxClassId) {
-    var dlgTaxRates = this.createTaxRatesDialog();
-    
-    this.onSaveSuccess(dlgTaxRates, grdTaxRates);
-    
-    dlgTaxRates.show(taxClassId);
+    if (taxClassId > 0) {
+      var dlg = this.createTaxRatesDialog();
+       
+      this.onSaveSuccess(dlg, grdTaxRates);
+       
+      dlg.show(taxClassId);
+    } else {
+      Ext.MessageBox.alert(TocLanguage.msgInfoTitle, TocLanguage.msgMustSelectOne);
+    }   
   },
   
   onEditTaxClasses: function(grdTaxClasses, record) {

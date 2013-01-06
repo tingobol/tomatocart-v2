@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-controller
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Tax_Classes extends TOC_Controller
 {
@@ -42,7 +42,7 @@ class Tax_Classes extends TOC_Controller
         $this->load->model('tax_classes_model');
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * List the tax classes
@@ -58,7 +58,7 @@ class Tax_Classes extends TOC_Controller
         $tax_classes = $this->tax_classes_model->get_tax_classes($start, $limit);
         
         $record = array();
-        if ($tax_classes != NULL)
+        if ($tax_classes !== NULL)
         {
             foreach($tax_classes as $tax_class)
             {
@@ -74,7 +74,7 @@ class Tax_Classes extends TOC_Controller
                                                     EXT_JSON_READER_ROOT => $records)));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * List the tax rates with the tax class id
@@ -87,7 +87,7 @@ class Tax_Classes extends TOC_Controller
         $tax_rates = $this->tax_classes_model->get_tax_rates($this->input->get_post('tax_class_id'));
         
         $records = array();
-        if ($tax_rates != NULL)
+        if ($tax_rates !== NULL)
         {
             $records = $tax_rates;
         }
@@ -95,7 +95,7 @@ class Tax_Classes extends TOC_Controller
         $this->output->set_output(json_encode(array(EXT_JSON_READER_ROOT => $records)));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Delete the tax class
@@ -105,11 +105,12 @@ class Tax_Classes extends TOC_Controller
      */
     public function delete_tax_class()
     {
-        $error = false;
+        $error = FALSE;
         $feedback = array();
         
         $check_products = $this->tax_classes_model->get_products($this->input->post('tax_class_id'));
         
+        //the tax class is using by some products
         if ($check_products > 0)
         {
             $error = TRUE;
@@ -135,7 +136,7 @@ class Tax_Classes extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Save the tax class
@@ -160,7 +161,7 @@ class Tax_Classes extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * List the zone groups
@@ -173,7 +174,7 @@ class Tax_Classes extends TOC_Controller
         $zones = $this->tax_classes_model->get_zones();
         
         $records = array();
-        if ($zones != NULL)
+        if ($zones !== NULL)
         {
             $records = $zones;
         }
@@ -181,7 +182,7 @@ class Tax_Classes extends TOC_Controller
         $this->output->set_output(json_encode(array(EXT_JSON_READER_ROOT => $records)));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * save the tax rate
@@ -209,7 +210,7 @@ class Tax_Classes extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Load the tax class
@@ -221,7 +222,7 @@ class Tax_Classes extends TOC_Controller
     {
         $data = $this->tax_classes_model->get_data($this->input->post('tax_class_id'));
         
-        if ($data != NULL)
+        if ($data !== NULL)
         {
             $response = array('success' => TRUE, 'data' => $data);
         }
@@ -233,7 +234,7 @@ class Tax_Classes extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Delete the tax rate
@@ -255,7 +256,7 @@ class Tax_Classes extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Batch delete the tax rate
@@ -270,14 +271,22 @@ class Tax_Classes extends TOC_Controller
         $batch = $this->input->post('batch');
         $tax_rates_ids = json_decode($batch);
         
-        foreach($tax_rates_ids as $id)
+        if (count($tax_rates_ids) > 0)
         {
-            if ($this->tax_classes_model->delete_entry($id) === FALSE)
+            foreach($tax_rates_ids as $id)
             {
-                $error = TRUE;
-                break;
+                if ($this->tax_classes_model->delete_entry($id) === FALSE)
+                {
+                    $error = TRUE;
+                    break;
+                }
             }
         }
+        else
+        {
+            $error = TRUE;
+        }
+        
         
         if ($error === FALSE)
         {
@@ -291,7 +300,7 @@ class Tax_Classes extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Load the tax rate
@@ -303,7 +312,7 @@ class Tax_Classes extends TOC_Controller
     {
         $data = $this->tax_classes_model->get_entry_data($this->input->post('tax_rates_id'));
         
-        if ($data != NULL)
+        if ($data !== NULL)
         {
             $response = array('success' => TRUE, 'data' => $data);
         }

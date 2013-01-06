@@ -42,6 +42,8 @@ Ext.define('Toc.tax_classes.TaxClassesMainPanel', {
       record = this.grdTaxClasses.getStore().getAt(0);
       
       this.onGrdTaxClassesSelectChange(record);
+    }else {
+      this.grdTaxRates.onRefresh();
     }
   },
   
@@ -54,7 +56,9 @@ Ext.define('Toc.tax_classes.TaxClassesMainPanel', {
     record = this.grdTaxClasses.getSelectionModel().getLastSelected() || null;
     
     if (record) {
-      record.set('total_zones', this.grdTaxRates.getStore().getCount());
+      record.set('tax_total_rates', this.grdTaxRates.getStore().getCount());
+      
+      record.commit();
     }
   }
 });
