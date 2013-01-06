@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-model
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Unit_Classes_Model extends CI_Model
 {
@@ -39,7 +39,7 @@ class Unit_Classes_Model extends CI_Model
         parent::__construct();
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     /**
      * Get the quantity unit classes
@@ -49,14 +49,19 @@ class Unit_Classes_Model extends CI_Model
      * @param $limit
      * @return mixed
      */
-    public function get_classes($start, $limit)
+    public function get_classes($start = NULL, $limit = NULL)
     {
-        $result = $this->db
-        ->select('quantity_unit_class_id,  quantity_unit_class_title')
-        ->from('quantity_unit_classes')
-        ->where('language_id', lang_id())
-        ->limit($limit, $start)
-        ->get();
+        $this->db
+            ->select('quantity_unit_class_id,  quantity_unit_class_title')
+            ->from('quantity_unit_classes')
+            ->where('language_id', lang_id());
+            
+        if ($limit !== NULL && $start !== NULL)
+        {
+            $this->db->limit($limit, $start);
+        }
+        
+        $result = $this->db->get();
         
         if ($result->num_rows() > 0)
         {
@@ -66,7 +71,7 @@ class Unit_Classes_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Whether there is any product using the quantity unit class
@@ -80,7 +85,7 @@ class Unit_Classes_Model extends CI_Model
         return $this->db->where('quantity_unit_class', $id)->from('products')->count_all_results();
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Delete the quantity unit class
@@ -101,7 +106,7 @@ class Unit_Classes_Model extends CI_Model
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Save the quantity unit classes
@@ -116,24 +121,28 @@ class Unit_Classes_Model extends CI_Model
     {
         $error = FALSE;
         
+        //start transaction
         $this->db->trans_begin();
         
+        //editing or adding the unit class
         if (is_numeric($id))
         {
             $unit_class_id = $id;
         }
         else
         {
-            $Qunit = $this->db->select_max('quantity_unit_class_id')->from('quantity_unit_classes')->get();
+            $result = $this->db->select_max('quantity_unit_class_id')->from('quantity_unit_classes')->get();
             
-            $max_unit = $Qunit->row_array();
-            $Qunit->free_result();
+            $max_unit = $result->row_array();
+            $result->free_result();
             
             $unit_class_id = $max_unit['quantity_unit_class_id'] + 1;
         }
         
+        //languages
         foreach(lang_get_all() as $l)
         {
+            //editing or adding the unit class
             if (is_numeric($id))
             {
                 $this->db->update('quantity_unit_classes', 
@@ -148,6 +157,7 @@ class Unit_Classes_Model extends CI_Model
                                         'quantity_unit_class_title' => $data['unit_class_title'][$l['id']]));
             }
             
+            //check transaction status
             if ($this->db->trans_status() === FALSE)
             {
                 $error = TRUE;
@@ -162,6 +172,7 @@ class Unit_Classes_Model extends CI_Model
                 $this->db->update('configuration', array('configuration_value' => $unit_class_id), array('configuration_key' => 'DEFAULT_UNIT_CLASSES'));
             }
             
+            //check transaction status
             if ($this->db->trans_status() === FALSE)
             {
                 $error = TRUE;
@@ -170,17 +181,19 @@ class Unit_Classes_Model extends CI_Model
         
         if ($error === FALSE)
         {
+            //commit
             $this->db->trans_commit();
             
             return TRUE;
         }
         
+        //rollback
         $this->db->trans_rollback();
         
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get the data of the quantity unity class with the id
@@ -192,10 +205,10 @@ class Unit_Classes_Model extends CI_Model
     public function get_classes_infos($id)
     {
         $result = $this->db
-        ->select('language_id, quantity_unit_class_title')
-        ->from('quantity_unit_classes')
-        ->where('quantity_unit_class_id', $id)
-        ->get();
+            ->select('language_id, quantity_unit_class_title')
+            ->from('quantity_unit_classes')
+            ->where('quantity_unit_class_id', $id)
+            ->get();
         
         if ($result->num_rows() > 0)
         {
@@ -205,7 +218,7 @@ class Unit_Classes_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get the total number of the quantity unit classes

@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-controller
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Weight_Classes extends TOC_Controller
 {
@@ -41,7 +41,7 @@ class Weight_Classes extends TOC_Controller
         $this->load->model('weight_classes_model');
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * List the weight classes
@@ -57,7 +57,7 @@ class Weight_Classes extends TOC_Controller
         $classes = $this->weight_classes_model->get_classes($start, $limit);
         
         $records = array();
-        if ($classes != NULL)
+        if ($classes !== NULL)
         {
             foreach($classes as $class)
             {
@@ -78,7 +78,7 @@ class Weight_Classes extends TOC_Controller
                                                     EXT_JSON_READER_ROOT => $records)));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get the weight classes rules
@@ -90,7 +90,7 @@ class Weight_Classes extends TOC_Controller
     {
         $rules = $this->weight_classes_model->get_rules();
         
-        if ($rules != NULL)
+        if ($rules !== NULL)
         {
             $response = array('success' => TRUE, 'rules' => $rules);
         }
@@ -102,7 +102,7 @@ class Weight_Classes extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Save the weight classes
@@ -128,7 +128,7 @@ class Weight_Classes extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Load the weight classes
@@ -138,10 +138,11 @@ class Weight_Classes extends TOC_Controller
      */
     public function load_weight_classes()
     {
+        //get the data of the weight class
         $classes_infos = $this->weight_classes_model->get_infos($this->input->post('weight_class_id'));
         
         $data = array();
-        if ($classes_infos != NULL)
+        if ($classes_infos !== NULL)
         {
             foreach($classes_infos as $class_info)
             {
@@ -159,10 +160,11 @@ class Weight_Classes extends TOC_Controller
                 $data['key[' . $class_info['language_id'] . ']'] = $class_info['weight_class_key'];
             }
             
+            //get the rules data for the wight class
             $rules_infos = $this->weight_classes_model->get_rules_infos($this->input->post('weight_class_id'));
         
             $rules = array();
-            if ($rules_infos != NULL)
+            if ($rules_infos !== NULL)
             {
                 $rules = $rules_infos;
             }
@@ -179,7 +181,7 @@ class Weight_Classes extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Delete the weight class
@@ -189,26 +191,12 @@ class Weight_Classes extends TOC_Controller
      */
     public function delete_weight_class()
     {
-        $error = false;
-        $feedback = array();
+        $result = array('error' => FALSE, 'feedback' => array());
         
-        if ($this->input->post('weight_classes_id') == SHIPPING_WEIGHT_UNIT)
-        {
-            $error = true;
-            $feedback[] = lang('delete_error_weight_class_prohibited');
-        }
-        else
-        {
-            $check_products = $this->weight_classes_model->get_products($this->input->post('weight_classes_id'));
-            
-            if ($check_products > 0)
-            {
-                $error = TRUE;
-                $feedback[] = sprintf(lang('delete_error_weight_class_in_use'), $check_products);
-            }
-        }
+        //whether the weight class is allowed to be deleted
+        $result = $this->check_weight_class($this->input->post('weight_classes_id'), $result);
         
-        if ($error === FALSE)
+        if ($result['error'] === FALSE)
         {
             if ($this->weight_classes_model->delete($this->input->post('weight_classes_id')))
             {
@@ -221,13 +209,13 @@ class Weight_Classes extends TOC_Controller
         }
         else
         {
-            $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed') . '<br />' . implode('<br />', $feedback));
+            $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed') . '<br />' . implode('<br />', $result['feedback']));
         }
         
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Batch delete the weight classes
@@ -237,42 +225,41 @@ class Weight_Classes extends TOC_Controller
      */
     public function delete_weight_classes()
     {
-        $error = FALSE;
-        $feedback = array();
+        $result = array('error' => FALSE, 'feedback' => array());
         
         $weight_classes_ids = json_decode($this->input->post('batch'));
         
-        foreach($weight_classes_ids as $id)
+        //whether the weight classes are allowed to be deleted
+        if (count($weight_classes_ids) > 0)
         {
-            if ( $id == SHIPPING_WEIGHT_UNIT ) {
-                $error = TRUE;
-                $feedback[] = lang('delete_error_weight_class_prohibited');
-            }
-            else
+            foreach($weight_classes_ids as $id)
             {
-                $check_products = $this->weight_classes_model->get_products($id);
+                $result = $this->check_weight_class($id, $result);
                 
-                if ($check_products > 0)
+                if ($result['error'] === TRUE)
                 {
-                    $error = TRUE;
-                    $feedback[] = lang('batch_delete_error_weight_class_in_use');
                     break;
                 }
             }
         }
+        else
+        {
+            $result['error'] === TRUE;
+        }
         
-        if ($error === FALSE)
+        //delete the weight classes
+        if ($result['error'] === FALSE)
         {
             foreach($weight_classes_ids as $id)
             {
                 if ($this->weight_classes_model->delete($id) === FALSE)
                 {
-                    $error = TRUE;
+                    $result['error'] = TRUE;
                     break;
                 }
             }
             
-            if ($error === FALSE) 
+            if ($result['error'] === FALSE) 
             {
                 $response = array('success' => TRUE, 'feedback' => lang('ms_success_action_performed'));
             } 
@@ -283,10 +270,43 @@ class Weight_Classes extends TOC_Controller
         }
         else
         {
-            $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed') . '<br />' . implode('<br />', $feedback));
+            $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed') . '<br />' . implode('<br />', $result['feedback']));
         }
         
         $this->output->set_output(json_encode($response));
+    }
+    
+    // ------------------------------------------------------------------------
+    
+    /**
+     * Check the weight classes
+     *
+     * @access private
+     * @param $id
+     * @param $result
+     * @return array
+     */
+    private function check_weight_class($id, $result)
+    {
+        //deleting the default weight class
+        if ($id == SHIPPING_WEIGHT_UNIT)
+        {
+            $result['error'] = TRUE;
+            $result['feedback'][] = lang('delete_error_weight_class_prohibited');
+        }
+        else
+        {
+            //the weight class is using by some products
+            $check_products = $this->weight_classes_model->get_products($id);
+            
+            if ($check_products > 0)
+            {
+                $result['error'] = TRUE;
+                $result['feedback'][] = sprintf(lang('delete_error_weight_class_in_use'), $check_products);
+            }
+        }
+        
+        return $result;
     }
 }
 
