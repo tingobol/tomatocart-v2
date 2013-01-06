@@ -73,7 +73,7 @@ class Setting extends TOC_Controller
 
         //parse http, get http server & http path
         $http_url = parse_url($www);
-        $http_server = $http_url['scheme'] . '://' . $http_url['host'];
+        $http_server = rtrim($http_url['scheme'] . '://' . $http_url['host'] . $http_url['path'], '/');
         $http_path = $http_url['path'];
         if (isset($http_url['port']) && !empty($http_url['port'])) {
             $http_server .= ':' . $http_url['port'];
