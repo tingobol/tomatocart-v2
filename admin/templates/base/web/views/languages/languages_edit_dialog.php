@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource ./system/modules/languages/views/languages_edit_dialog.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -57,11 +59,7 @@ Ext.define('Toc.languages.LanguagesEditDialog', {
       this.dsParentLanguages.getProxy().extraParams['languages_id'] = languagesId;
     
       this.frmEditLanguage.load({
-        url: Toc.CONF.CONN_URL,
-        params: {
-          module: 'languages',
-          action: 'load_language'
-        },
+        url: '<?php echo site_url('languages/load_language'); ?>',
         success: function(form, action) {
           if ( !action.result.data['default'] ) {
             this.frmEditLanguage.add({
@@ -103,11 +101,7 @@ Ext.define('Toc.languages.LanguagesEditDialog', {
       pageSize: Toc.CONF.GRID_PAGE_SIZE,
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
-        extraParams: {
-          module: 'languages',
-          action: 'get_currencies'
-        },
+        url: '<?php echo site_url('languages/get_currencies'); ?>',
         reader: {
           type: 'json',
           root: Toc.CONF.JSON_READER_ROOT,
@@ -125,11 +119,7 @@ Ext.define('Toc.languages.LanguagesEditDialog', {
       pageSize: Toc.CONF.GRID_PAGE_SIZE,
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
-        extraParams: {
-          module: 'languages',
-          action: 'get_parent_language'
-        },
+        url: '<?php echo site_url('languages/get_parent_language'); ?>',
         reader: {
           type: 'json',
           root: Toc.CONF.JSON_READER_ROOT,
@@ -140,11 +130,8 @@ Ext.define('Toc.languages.LanguagesEditDialog', {
     });
     
     this.frmEditLanguage = Ext.create('Ext.form.Panel', {
-      url: Toc.CONF.CONN_URL,
-      baseParams: {  
-        module: 'languages',
-        action: 'save_language'
-      },
+      url: '<?php echo site_url('languages/save_language'); ?>',
+      baseParams: {},
       border: false,
       bodyPadding: 10,
       fieldDefaults: {
@@ -270,4 +257,4 @@ Ext.define('Toc.languages.LanguagesEditDialog', {
 });
 
 /* End of file languages_edit_dialog.php */
-/* Location: ./system/modules/languages/views/languages_edit_dialog.php */
+/* Location: ./templates/base/web/views/languages/languages_edit_dialog.php */

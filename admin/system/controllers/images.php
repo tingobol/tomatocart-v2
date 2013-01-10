@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-controller
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Images extends TOC_Controller
 {
@@ -41,7 +41,7 @@ class Images extends TOC_Controller
         $this->load->library('image');
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * List the images
@@ -52,14 +52,14 @@ class Images extends TOC_Controller
     public function list_images()
     { 
         $records = array(
-          array('module' => lang('images_check_title'), 'run' => 'checkimages'), 
-          array('module' => lang('images_resize_title'), 'run' => 'resizeimages')
+            array('module' => lang('images_check_title'), 'run' => 'checkimages'), 
+            array('module' => lang('images_resize_title'), 'run' => 'resizeimages')
         );
         
         $this->output->set_output(json_encode(array(EXT_JSON_READER_ROOT => $records)));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Check the images
@@ -75,18 +75,19 @@ class Images extends TOC_Controller
         
         $images_groups = $this->image->get_groups();
         
-        if ($products_images != NULL)
+        //get the total number of images in each image group
+        if ($products_images !== NULL)
         {
             foreach($products_images as $image)
             {
                 foreach($images_groups as $group)
                 {
-                    if (!isset($counter[$group['id']]['records']))
+                    if ( ! isset($counter[$group['id']]['records']))
                     {
                         $counter[$group['id']]['records'] = 0;
                     }
                     
-                    if (!isset($counter[$group['id']]['existing']))
+                    if ( ! isset($counter[$group['id']]['existing']))
                     {
                         $counter[$group['id']]['existing'] = 0;
                     }
@@ -110,7 +111,7 @@ class Images extends TOC_Controller
         $this->output->set_output(json_encode(array(EXT_JSON_READER_ROOT => $records)));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get the image groups
@@ -122,19 +123,20 @@ class Images extends TOC_Controller
     {
         $images_groups = $this->image->get_groups();
         
-        $groups = array();
+        $records = array();
         foreach($images_groups as $group)
         {
-            if ($group['id'] != '1')
+            
+            if ((int)$group['id'] !== 1)
             {
-                $groups[] = array('text' => $group['title'], 'id' => $group['id']);
+                $records[] = array('text' => $group['title'], 'id' => $group['id']);
             }
         }
         
-        $this->output->set_output(json_encode(array(EXT_JSON_READER_ROOT => $groups)));
+        $this->output->set_output(json_encode(array(EXT_JSON_READER_ROOT => $records)));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * List the images resized
@@ -158,21 +160,23 @@ class Images extends TOC_Controller
         $products_images = $this->image->get_products_images();
         $images_groups = $this->image->get_groups();
         
+        //resize the products images in each image group
         $counter = array();
-        if ($products_images != NULL)
+        if ($products_images !== NULL)
         {
             foreach($products_images as $image)
             {
                 foreach($images_groups as $group)
                 {
-                    if ($group['id'] != 1 && in_array($group['id'], $groups))
+                    if ((int)$group['id'] !== 1 && in_array($group['id'], $groups))
                     {
-                        if (!isset($counter[$group['id']]))
+                        if ( ! isset($counter[$group['id']]))
                         {
                             $counter[$group['id']] = 0;
                         }
                         
-                        if ($overwrite === TRUE || !file_exists(ROOTPATH . 'images/products/' . $group['code'] . '/' . $image['image']))
+                        //resize the product image only if the image need to be overwritted or is not existed
+                        if ($overwrite === TRUE || ! file_exists(ROOTPATH . 'images/products/' . $group['code'] . '/' . $image['image']))
                         {
                             if ($this->image->resize($image['image'], $group['id']))
                             {

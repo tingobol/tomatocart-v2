@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-model
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Customers_Groups_Model extends CI_Model
 {
@@ -39,7 +39,7 @@ class Customers_Groups_Model extends CI_Model
         parent::__construct();
     }
 
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get the customers groupds
@@ -49,16 +49,16 @@ class Customers_Groups_Model extends CI_Model
      * @param $limit
      * @return mixed
      */
-    public function get_groups($start, $limit)
+    public function get_groups($start = NULL, $limit = NULL)
     {
         $result = $this->db
-        ->select('c.customers_groups_id, cg.language_id, cg.customers_groups_name,  c.customers_groups_discount, c.is_default')
-        ->from('customers_groups c')
-        ->join('customers_groups_description cg', 'c.customers_groups_id = cg.customers_groups_id')
-        ->where('cg.language_id', lang_id())
-        ->order_by('cg.customers_groups_name')
-        ->limit($limit, $start)
-        ->get();
+            ->select('c.customers_groups_id, cg.language_id, cg.customers_groups_name,  c.customers_groups_discount, c.is_default')
+            ->from('customers_groups c')
+            ->join('customers_groups_description cg', 'c.customers_groups_id = cg.customers_groups_id')
+            ->where('cg.language_id', lang_id())
+            ->order_by('cg.customers_groups_name')
+            ->limit($limit, $start)
+            ->get();
         
         if ($result->num_rows() > 0)
         {
@@ -68,7 +68,7 @@ class Customers_Groups_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Save an customer group
@@ -82,8 +82,10 @@ class Customers_Groups_Model extends CI_Model
     {
         $error = FALSE;
         
+        //start transaction
         $this->db->trans_begin();
         
+        //editing or adding the customer group
         if (is_numeric($id))
         {
             $this->db->update('customers_groups', 
@@ -95,6 +97,7 @@ class Customers_Groups_Model extends CI_Model
             $this->db->insert('customers_groups', array('customers_groups_discount' => $data['customers_groups_discount'], 'is_default' => $data['is_default']));
         }
         
+        //check transaction status
         if ($this->db->trans_status() === FALSE)
         {
             $error = TRUE;
@@ -106,8 +109,10 @@ class Customers_Groups_Model extends CI_Model
         
         if ($error === FALSE)
         {
+            //process languages
             foreach(lang_get_all() as $l)
             {
+                //editing or adding the customer group
                 if (is_numeric($id))
                 {
                     $this->db->update('customers_groups_description', 
@@ -121,6 +126,7 @@ class Customers_Groups_Model extends CI_Model
                                                                             'customers_groups_name' => $data['customers_groups_name'][$l['id']]));
                 }
                 
+                //check transaction status
                 if ($this->db->trans_status() === FALSE)
                 {
                     $error = TRUE;
@@ -131,6 +137,7 @@ class Customers_Groups_Model extends CI_Model
         
         if ($error === FALSE)
         {
+            //set the customer group as the default group
             if ($data['is_default'] == 1)
             {
                 $this->db->update('customers_groups', array('is_default' => 0));
@@ -141,6 +148,7 @@ class Customers_Groups_Model extends CI_Model
                 }
             }
             
+            //check transaction status
             if ($this->db->trans_status() === FALSE)
             {
                 $error = TRUE;
@@ -149,17 +157,19 @@ class Customers_Groups_Model extends CI_Model
         
         if ($error === FALSE)
         {
+            //commit
             $this->db->trans_commit();
             
             return TRUE;
         }
         
+        //rollback
         $this->db->trans_rollback();
         
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     /**
      * Get data of a customer group
@@ -171,11 +181,11 @@ class Customers_Groups_Model extends CI_Model
     public function get_data($id)
     {
         $result = $this->db
-        ->select('cg.*, cgd.*')
-        ->from('customers_groups cg')
-        ->join('customers_groups_description cgd', 'cg.customers_groups_id = cgd.customers_groups_id')
-        ->where(array('cg.customers_groups_id' => $id, 'cgd.language_id' => lang_id()))
-        ->get();
+            ->select('cg.*, cgd.*')
+            ->from('customers_groups cg')
+            ->join('customers_groups_description cgd', 'cg.customers_groups_id = cgd.customers_groups_id')
+            ->where(array('cg.customers_groups_id' => $id, 'cgd.language_id' => lang_id()))
+            ->get();
         
         if ($result->num_rows() > 0)
         {
@@ -185,7 +195,7 @@ class Customers_Groups_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Check whether the customer group is used in the system
@@ -199,7 +209,7 @@ class Customers_Groups_Model extends CI_Model
         return $this->db->from('customers')->where('customers_groups_id', $id)->count_all_results();
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Delete a customer group
@@ -210,28 +220,33 @@ class Customers_Groups_Model extends CI_Model
      */
     public function delete($id)
     {
+        //start transaction
         $this->db->trans_begin();
         
         $this->db->delete('customers_groups', array('customers_groups_id' => $id));
         
+        //check transaction status
         if ($this->db->trans_status() === TRUE)
         {
             $this->db->delete('customers_groups_description', array('customers_groups_id' => $id));
         }
         
+        //check transaction status
         if ($this->db->trans_status() === TRUE)
         {
+            //commit
             $this->db->trans_commit();
             
             return TRUE;
         }
         
+        //rollback
         $this->db->trans_rollback();
         
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     /**
      * Get the info of a customer group
@@ -243,12 +258,12 @@ class Customers_Groups_Model extends CI_Model
     public function get_info($id)
     {
         $result = $this->db
-        ->select('c.customers_groups_id, cg.language_id, cg.customers_groups_name,  c.customers_groups_discount, c.is_default')
-        ->from('customers_groups c')
-        ->join('customers_groups_description cg', 'c.customers_groups_id = cg.customers_groups_id')
-        ->where('c.customers_groups_id', $id)
-        ->order_by('cg.customers_groups_name')
-        ->get();
+            ->select('c.customers_groups_id, cg.language_id, cg.customers_groups_name,  c.customers_groups_discount, c.is_default')
+            ->from('customers_groups c')
+            ->join('customers_groups_description cg', 'c.customers_groups_id = cg.customers_groups_id')
+            ->where('c.customers_groups_id', $id)
+            ->order_by('cg.customers_groups_name')
+            ->get();
         
         if ($result->num_rows() > 0)
         {
@@ -258,13 +273,12 @@ class Customers_Groups_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get total number of customer groups
      *
      * @access public
-     * @param $id
      * @return int
      */
     public function get_total()

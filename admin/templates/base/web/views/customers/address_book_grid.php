@@ -137,10 +137,8 @@ Ext.define('Toc.customers.AddressBookGrid', {
       function(btn) {
         if (btn == 'yes') {
           Ext.Ajax.request({
-            url: Toc.CONF.CONN_URL,
+            url : '<?php echo site_url('customers/delete_address_book'); ?>',
             params: {
-              module: 'customers',
-              action: 'delete_address_book',
               address_book_id: addressBookId,
               customers_id: customersId
             },
@@ -181,10 +179,8 @@ Ext.define('Toc.customers.AddressBookGrid', {
         function(btn) {
           if (btn == 'yes') {
             Ext.Ajax.request({
-              url: Toc.CONF.CONN_URL,
+              url : '<?php echo site_url('customers/delete_address_books'); ?>',
               params: {
-                module: 'customers',
-                action: 'delete_address_books',
                 batch: batch,
                 customers_id: customersId  
               },

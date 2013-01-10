@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource ./system/modules/languages/views/languages_grid.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -35,11 +37,7 @@ Ext.define('Toc.languages.LanguagesGrid', {
       pageSize: Toc.CONF.GRID_PAGE_SIZE,
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
-        extraParams: {
-          module: 'languages',
-          action: 'list_languages'
-        },
+        url: '<?php echo site_url('languages/list_languages'); ?>',
         reader: {
           type: 'json',
           root: Toc.CONF.JSON_READER_ROOT,
@@ -146,6 +144,7 @@ Ext.define('Toc.languages.LanguagesGrid', {
   
   onDelete: function(record) {
     var languagesId = record.get('languages_id');
+    var code = record.get('code');
     
     Ext.MessageBox.confirm(
       TocLanguage.msgWarningTitle, 
@@ -154,10 +153,8 @@ Ext.define('Toc.languages.LanguagesGrid', {
         if (btn == 'yes') {
           Ext.Ajax.request({
             waitMsg: TocLanguage.formSubmitWaitMsg,
-            url: Toc.CONF.CONN_URL,
+            url: '<?php echo site_url('languages/delete_language'); ?>',
             params: {
-              module: 'languages',
-              action: 'delete_language',
               languages_id: languagesId,
               code: code
             },
@@ -188,7 +185,7 @@ Ext.define('Toc.languages.LanguagesGrid', {
     });
     
     if (keys.length > 0) {
-      var batch = Ext.JSON.encode(Ext.JSON.encode(keys));
+      var batch = Ext.JSON.encode(keys);
       
       Ext.MessageBox.confirm(
         TocLanguage.msgWarningTitle, 
@@ -197,10 +194,8 @@ Ext.define('Toc.languages.LanguagesGrid', {
           if (btn == 'yes') {
             Ext.Ajax.request({
               waitMsg: TocLanguage.formSubmitWaitMsg,
-              url: Toc.CONF.CONN_URL,
+              url: '<?php echo site_url('languages/delete_languages'); ?>',
               params: {
-                module: 'languages',
-                action: 'delete_languages',
                 batch: batch
               },
               callback: function(options, success, response) {
@@ -231,4 +226,4 @@ Ext.define('Toc.languages.LanguagesGrid', {
 });
 
 /* End of file languages_grid.php */
-/* Location: ./system/modules/languages/views/languages_grid.php */
+/* Location: ./templates/base/web/views/languages/languages_grid.php */

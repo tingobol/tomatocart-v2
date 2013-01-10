@@ -24,7 +24,7 @@
  * @subpackage	tomatocart
  * @category	template-module-model
  * @author		TomatoCart Dev Team
- * @link		http://tomatocart.com/wiki/
+ * @link		http://tomatocart.com
  */
 class Customers_Model extends CI_Model
 {
@@ -38,6 +38,8 @@ class Customers_Model extends CI_Model
     {
         parent::__construct();
     }
+    
+    // --------------------------------------------------------------------
 
     /**
      * Get customers
@@ -48,7 +50,7 @@ class Customers_Model extends CI_Model
      * @param $search
      * @return mixed
      */
-    public function get_customers($start, $limit, $search)
+    public function get_customers($start = NULL, $limit = NULL, $search = NULL)
     {
         $this->db
             ->select('c.customers_id, c.customers_credits, c.customers_gender, c.customers_lastname, c.customers_firstname, c.customers_email_address, c.customers_status, c.customers_ip_address, c.date_account_created, c.number_of_logons, c.date_last_logon, cgd.customers_groups_name')
@@ -56,12 +58,20 @@ class Customers_Model extends CI_Model
             ->join('customers_groups_description cgd', 'c.customers_groups_id = cgd.customers_groups_id and cgd.language_id = ' . lang_id(), 'left');
 
         //keywords
-        if (!empty($search))
+        if ($search !== NULL)
         {
             $this->db->like('c.customers_lastname', $search)->or_like('c.customers_firstname', $search)->or_like('c.customers_email_address', $search);
         }
+        
+        $this->db->order_by('c.customers_lastname, c.customers_firstname');
+        
+        if ($start !== NULL && $limit !== NULL)
+        {
+            $this->db->limit($limit, $start);
+        }
 
-        $result = $this->db->order_by('c.customers_lastname, c.customers_firstname')->limit($limit, $start)->get();
+        $result = $this->db->get();
+        
         if ($result->num_rows() > 0)
         {
             return $result->result_array();
@@ -69,6 +79,8 @@ class Customers_Model extends CI_Model
 
         return NULL;
     }
+    
+    // --------------------------------------------------------------------
 
     /**
      * Delete customer
@@ -88,6 +100,7 @@ class Customers_Model extends CI_Model
         {
             $this->db->delete('reviews', array('customers_id' => $id));
         }
+        //update the customers id to NULL in the reviews table
         else
         {
             $result = $this->db->select('reviews_id')->from('reviews')->where('customers_id', $id)->get();
@@ -96,6 +109,8 @@ class Customers_Model extends CI_Model
             {
                 $this->db->update('reviews', array('customers_id' => NULL), array('customers_id' => $id));
             }
+            
+            $result->free_result();
         }
         
         //delete address book
@@ -133,6 +148,8 @@ class Customers_Model extends CI_Model
         
         return TRUE;
     }
+    
+    // --------------------------------------------------------------------
 
     /**
      * Set customer status
@@ -146,6 +163,8 @@ class Customers_Model extends CI_Model
     {
         return $this->db->update('customers', array('customers_status' => $flag), array('customers_id' => $customers_id));
     }
+    
+    // --------------------------------------------------------------------
 
     /**
      * Get totals
@@ -172,6 +191,8 @@ class Customers_Model extends CI_Model
             return $result->num_rows();
         }
     }
+    
+    // --------------------------------------------------------------------
 
     /**
      * Get customers groups
@@ -196,6 +217,8 @@ class Customers_Model extends CI_Model
 
         return NULL;
     }
+    
+    // --------------------------------------------------------------------
 
     /**
      * Check customer account
@@ -212,7 +235,7 @@ class Customers_Model extends CI_Model
             ->from('customers')
             ->where('customers_email_address', $email_address);
 
-        if (!empty($customers_id) && is_numeric($customers_id))
+        if (is_numeric($customers_id))
         {
             $this->db->where('customers_id !=', $customers_id);
         }
@@ -226,6 +249,8 @@ class Customers_Model extends CI_Model
 
         return FALSE;
     }
+    
+    // --------------------------------------------------------------------
 
     /**
      * Save customer data
@@ -236,7 +261,7 @@ class Customers_Model extends CI_Model
      * @param $send_email
      * @return boolean
      */
-    public function save($id = null, $data, $send_email = true)
+    public function save($id = NULL, $data, $send_email = true)
     {
         //start transaction
         $this->db->trans_start();
@@ -267,9 +292,9 @@ class Customers_Model extends CI_Model
         }
         
         //customers password
-        if ( !empty($data['customers_password']) )
+        if ( ! empty($data['customers_password']))
         {
-            $customers_id = ( !empty($id) ) ? $id : $this->db->insert_id();
+            $customers_id = is_numeric($id) ? $id : $this->db->insert_id();
             $this->db->update('customers', array('customers_password' => encrypt_password($data['customers_password'])), array('customers_id' => $customers_id));
         }
         
@@ -284,6 +309,8 @@ class Customers_Model extends CI_Model
         
         return TRUE;
     }
+    
+    // --------------------------------------------------------------------
 
     /**
      * Get customer data
@@ -291,7 +318,7 @@ class Customers_Model extends CI_Model
      * @access public
      * @param $id
      * @param $key
-     * @return array
+     * @return mixed
      */
     public function get_data($id, $key = NULL)
     {
@@ -319,7 +346,7 @@ class Customers_Model extends CI_Model
             }
 
             //get specific value
-            if ( !empty($key) )
+            if ( ! empty($key))
             {
                 return $data[$key];
             }
@@ -329,6 +356,8 @@ class Customers_Model extends CI_Model
 
         return NULL;
     }
+    
+    // --------------------------------------------------------------------
 
     /**
      * Get address book data
@@ -368,6 +397,8 @@ class Customers_Model extends CI_Model
         return NULL;
     }
 
+    // --------------------------------------------------------------------
+    
     /**
      * Delete address
      * 
@@ -380,12 +411,14 @@ class Customers_Model extends CI_Model
     {
         $where = array('address_book_id' => $id);
 
-        if ( !empty($customer_id) ) {
+        if (is_numeric($customer_id)) {
             $where['customers_id'] = $customer_id;
         }
 
         return $this->db->delete('address_book', $where);
     }
+    
+    // --------------------------------------------------------------------
 
     /**
      * Get country zones
@@ -411,6 +444,8 @@ class Customers_Model extends CI_Model
         return NULL;
     }
     
+    // --------------------------------------------------------------------
+    
     /**
      * Get state zones
      * 
@@ -429,6 +464,8 @@ class Customers_Model extends CI_Model
         return $result->num_rows();
     }
 
+    // --------------------------------------------------------------------
+    
     /**
      * Get zone likes
      * 
@@ -454,6 +491,7 @@ class Customers_Model extends CI_Model
         return NULL;
     }
 
+    // --------------------------------------------------------------------
     /**
      * Save address
      * 
@@ -483,6 +521,7 @@ class Customers_Model extends CI_Model
                               'entry_telephone' => $data['telephone'], 
                               'entry_fax' => $data['fax']);
 
+        //editing or adding the address book
         if (is_numeric($id))
         {
             $this->db->update('address_book', $address_book, array('address_book_id' => $id, 'customers_id' => $data['customer_id']));
@@ -497,7 +536,7 @@ class Customers_Model extends CI_Model
         
         //if customer does not have default address then we set it
         $customer = $this->get_data($data['customer_id']);
-        if ( ($customer['customers_default_address_id'] < 1) || ($data['primary'] === true) )
+        if (($customer['customers_default_address_id'] < 1) || ($data['primary'] === TRUE))
         {
             $address_book_id = is_numeric($id) ? $id : $insert_address_book_id;
 

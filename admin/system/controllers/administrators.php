@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-controller
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Administrators extends TOC_Controller
 {
@@ -41,7 +41,7 @@ class Administrators extends TOC_Controller
         $this->load->model('administrators_model');
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * List the administrators
@@ -62,7 +62,7 @@ class Administrators extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ----------------------------------------------------- -------------------
     
     /**
      * Get the accessible module
@@ -87,7 +87,7 @@ class Administrators extends TOC_Controller
         $this->output->set_output(json_encode($modules));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Save the administrator
@@ -105,6 +105,7 @@ class Administrators extends TOC_Controller
         
         $modules = json_decode($this->input->post('modules'));
         
+        //verifiy that the global access is checked
         if ($this->input->post('access_globaladmin') === 'on')
         {
             $modules = array('*');
@@ -145,7 +146,7 @@ class Administrators extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Delete the administrator
@@ -167,7 +168,7 @@ class Administrators extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     /**
      * Batch delete the administrators
@@ -177,13 +178,13 @@ class Administrators extends TOC_Controller
      */
     public function delete_administrators()
     {
-        $admin_ids = json_decode($this->input->post('batch'));
+        $ids = json_decode($this->input->post('batch'));
         
         $error = FALSE;
         
-        foreach($admin_ids as $id)
+        foreach($ids as $id)
         {
-            if (!$this->administrators_model->delete($id))
+            if ( ! $this->administrators_model->delete($id))
             {
                 $error = TRUE;
                 break;
@@ -202,7 +203,7 @@ class Administrators extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Load the administrator
@@ -214,7 +215,7 @@ class Administrators extends TOC_Controller
     {
         $data = $this->administrators_model->get_data($this->input->post('aID'));
         
-        if ($data != NULL)
+        if ($data !== NULL)
         {
             $response = array('success' => TRUE, 'data' => $data);
         }
@@ -226,21 +227,22 @@ class Administrators extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Load the accessible modules for the administrator
      *
-     * @access public
+     * @access private
      * @param $administrators_id
      * @return array
      */
-    public function load_access_modules($administrators_id)
+    private function load_access_modules($administrators_id)
     {
         $modules = $this->administrators_model->get_modules($administrators_id);
         
+        //verify that the global access is selected
         $global_access = FALSE;
-        if ($modules != NULL)
+        if ($modules !== NULL)
         {
             foreach($modules as $module)
             {
@@ -252,6 +254,7 @@ class Administrators extends TOC_Controller
             }
         }
         
+        //get all the accesible modules
         $access_modules = array();
         if ($global_access == TRUE)
         {
@@ -259,7 +262,7 @@ class Administrators extends TOC_Controller
         }
         else
         {
-            if ($modules != NULL)
+            if ($modules !== NULL)
             {
                 foreach($modules as $module)
                 {
@@ -273,7 +276,7 @@ class Administrators extends TOC_Controller
         return $access_modules;
     }
         
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get all the modules
@@ -290,17 +293,20 @@ class Administrators extends TOC_Controller
         
         $access_DirectoryListing = directory_map(APPPATH . 'modules/access', 1);
         
+        //get the information of all the accessible modules
         $access_modules = array();
         foreach($access_DirectoryListing as $file)
         {
             $module = substr($file, 0, strrpos($file, '.'));
             
+            //create the accessible module object
             $module_class = 'TOC_Access_' . ucfirst($module);
             
-            if ( !class_exists( $module_class ) ) 
+            if ( ! class_exists($module_class)) 
             {
                 $this->lang->ini_load('access/' . $module . '.php');
-                require_once(APPPATH . 'modules/access/' . $module . '.php');
+                
+                $this->load->file(APPPATH . 'modules/access/' . $module . '.php');
             }
             
             $module_obj = new $module_class();
@@ -318,6 +324,7 @@ class Administrators extends TOC_Controller
         
         ksort($access_modules);
         
+        //build the data for the tree panel
         $access_options = array(); 
         $count = 1;
         foreach ($access_modules as $group => $modules) 

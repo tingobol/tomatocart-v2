@@ -193,4 +193,4 @@ Ext.define('Toc.customers_groups.CustomersGroupsGrid', {
 });
 
 /* End of file customers_groups_grid.php */
-/* Location: ./templates/base/web/views/customers_groups/main.php */
+/* Location: ./templates/base/web/views/customers_groups/customers_groups_grid.php */

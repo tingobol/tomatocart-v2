@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-controller
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Image_Groups extends TOC_Controller
 {
@@ -41,7 +41,7 @@ class Image_Groups extends TOC_Controller
         $this->load->model('image_groups_model');
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * List the image groups
@@ -57,12 +57,13 @@ class Image_Groups extends TOC_Controller
         $image_groups = $this->image_groups_model->get_image_groups($start, $limit);
         
         $records = array();
-        if ($image_groups != NULL)
+        if ($image_groups !== NULL)
         {
             foreach($image_groups as $image_group)
             {
                 $title = $image_group['title'];
                 
+                //verify that the image group is the default image group
                 if ($image_group['id'] === DEFAULT_IMAGE_GROUP_ID)
                 {
                     $title .= ' (' . lang('default_entry') . ')';
@@ -76,7 +77,7 @@ class Image_Groups extends TOC_Controller
                                                     EXT_JSON_READER_ROOT => $records)));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Save the image group
@@ -104,7 +105,7 @@ class Image_Groups extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Delete the image group
@@ -142,7 +143,7 @@ class Image_Groups extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Batch delete the image groups
@@ -154,7 +155,8 @@ class Image_Groups extends TOC_Controller
     {
         $error = FALSE;
         $feedback = array();
-          
+
+        //verify whether the default image group within the image groups
         $image_groups_ids = json_decode($this->input->post('batch'));
         foreach($image_groups_ids as $id)
         {
@@ -167,26 +169,27 @@ class Image_Groups extends TOC_Controller
             }
         }
         
+        //delete the image group id
         if ($error === FALSE)
         {
-          foreach($image_groups_ids as $id)
-          {
-              if ($this->image_groups_model->delete($id) === FALSE)
-              {
-                  $error = TRUE;
-                  
-                  break;
-              }
-          }
-          
-          if ($error === FALSE)
-          {
-              $response = array('success' => TRUE, 'feedback' => lang('ms_success_action_performed'));
-          }
-          else
-          {
-              $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed'));
-          }
+            foreach($image_groups_ids as $id)
+            {
+                if ($this->image_groups_model->delete($id) === FALSE)
+                {
+                    $error = TRUE;
+                    
+                    break;
+                }
+            }
+            
+            if ($error === FALSE)
+            {
+                $response = array('success' => TRUE, 'feedback' => lang('ms_success_action_performed'));
+            }
+            else
+            {
+                $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed'));
+            }
         }
         else
         {
@@ -196,7 +199,7 @@ class Image_Groups extends TOC_Controller
          $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Load the image group
@@ -208,7 +211,7 @@ class Image_Groups extends TOC_Controller
     {
         $image_groups = $this->image_groups_model->get_data($this->input->post('image_groups_id'));
         
-        if ($image_groups != NULL)
+        if ($image_groups !== NULL)
         {
             $data = array();
             foreach($image_groups as $image_group)

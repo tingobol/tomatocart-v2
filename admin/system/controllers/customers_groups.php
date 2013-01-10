@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-controller
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Customers_Groups extends TOC_Controller
 {
@@ -41,7 +41,7 @@ class Customers_Groups extends TOC_Controller
         $this->load->model('customers_groups_model');
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     /**
      * List the customers groups
@@ -57,11 +57,13 @@ class Customers_Groups extends TOC_Controller
         $groups = $this->customers_groups_model->get_groups($start, $limit);
         
         $records = array();
-        if ($groups != NULL)
+        if ($groups !== NULL)
         {
             foreach($groups as $group)
             {
                 $group_name = $group['customers_groups_name'];
+                
+                //verify that it is the default customer group
                 if ($group['is_default'])
                 {
                     $group_name .= '(' . lang('default_entry') . ')';
@@ -78,7 +80,7 @@ class Customers_Groups extends TOC_Controller
                                                     EXT_JSON_READER_ROOT => $records)));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Save a customer group
@@ -91,7 +93,7 @@ class Customers_Groups extends TOC_Controller
         $data = array('customers_groups_id' => $this->input->post('groups_id'),
                       'customers_groups_discount' => $this->input->post('customers_groups_discount'),
                       'customers_groups_name' => $this->input->post('customers_groups_name'),
-                      'is_default' => ($this->input->post('is_default') ? $this->input->post('is_default') : 0));
+                      'is_default' => ((int)$this->input->post('is_default') === 1 ? (int)$this->input->post('is_default') : 0));
       
         if ($this->customers_groups_model->save($this->input->post('groups_id'), $data))
         {
@@ -105,7 +107,7 @@ class Customers_Groups extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Delete a customer group
@@ -120,12 +122,14 @@ class Customers_Groups extends TOC_Controller
         
         $data = $this->customers_groups_model->get_data($this->input->post('customer_groups_id'));
         
+        //it is not allowed to delete the default customer group
         if ($data['is_default'] == 1)
         {
             $error = TRUE;
             $feedback[] = lang('delete_error_customer_group_prohibited');
         }
         
+        //verify that the customer group is used by some customers
         $check_in_use = $this->customers_groups_model->get_in_use($this->input->post('customer_groups_id'));
         if ($check_in_use > 0)
         {
@@ -146,14 +150,13 @@ class Customers_Groups extends TOC_Controller
         }
         else
         {
-            $feedback = implode('<br />', $feedback);
-            $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed') . '<br />' . $feedback);
+            $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed') . '<br />' . implode('<br />', $feedback));
         }
         
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Batch delete customers groups
@@ -165,6 +168,7 @@ class Customers_Groups extends TOC_Controller
     {
         $error = FALSE;
         $feedback = array();
+        $check_customers_flag = array();
         
         $customers_groups_ids = json_decode($this->input->post('batch'));
         
@@ -172,6 +176,7 @@ class Customers_Groups extends TOC_Controller
         {
             $data = $this->customers_groups_model->get_data($id);
             
+            //prohibited to delete the default customer group
             if ($data['is_default'] == 1)
             {
                 $error = TRUE;
@@ -179,6 +184,7 @@ class Customers_Groups extends TOC_Controller
                 break;
             }
             
+            //verify that the customer group is used by some customers
             $check_in_use = $this->customers_groups_model->get_in_use($id);
             
             if ($check_in_use > 0)
@@ -189,6 +195,7 @@ class Customers_Groups extends TOC_Controller
             }
         }
         
+        //delete the customers groups
         if ($error === FALSE)
         {
             foreach($customers_groups_ids as $id)
@@ -211,7 +218,7 @@ class Customers_Groups extends TOC_Controller
         }
         else
         {
-            if (!empty($check_customers_flag))
+            if (count($check_customers_flag) > 0)
             {
                 $feedback[] = lang('batch_delete_error_customer_group_in_use') . '<br />' . implode(', ', $check_customers_flag);
             }
@@ -222,7 +229,7 @@ class Customers_Groups extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Load a customer group
@@ -235,7 +242,7 @@ class Customers_Groups extends TOC_Controller
         $infos = $this->customers_groups_model->get_info($this->input->post('groups_id'));
         
         $data = array();
-        if ($infos != NULL)
+        if ($infos !== NULL)
         {
             foreach($infos as $info)
             {
@@ -250,12 +257,8 @@ class Customers_Groups extends TOC_Controller
             
             $response = array('success' => TRUE, 'data' => $data);
         }
-        else
-        {
-            $response = array('success' => FALSE);
-        }
         
-        $this->output->set_output(json_encode($response));
+        $this->output->set_output(json_encode(array('success' => TRUE, 'data' => $data)));
     }
 }
 

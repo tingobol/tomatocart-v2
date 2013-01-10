@@ -36,7 +36,7 @@ Ext.define('Toc.customers.CustomersGrid', {
     
     config.region = 'center';
     config.border = false;
-    config.viewConfig = {emptyText: TocLanguage.gridNoRecords}; 
+    config.viewConfig = {emptyText: TocLanguage.gridNoRecords};
     
     config.store = Ext.create('Ext.data.Store', {
       fields:[
@@ -96,7 +96,32 @@ Ext.define('Toc.customers.CustomersGrid', {
     config.plugins = [{
       ptype: 'rowexpander',
       rowBodyTpl : [
-        '<div style="padding: 10px;">{customers_info}</div>'
+        '<div style="padding: 10px;">',
+            '<table width="100%" cellspacing="5">',
+                '<tbody>',
+                    '<tr>',
+                        '<td width="150">{customers_info.field_gender.label}</td>',
+                        '<td>{customers_info.field_gender.value}</td>',
+                    '</tr>',
+                    '<tr>',
+                        '<td>{customers_info.field_email_address.label}</td>',
+                        '<td>{customers_info.field_email_address.value}</td>',
+                    '</tr>',
+                     '<tr>',
+                        '<td>{customers_info.field_customers_group.label}</td>',
+                        '<td>{customers_info.field_customers_group.value}</td>',
+                    '</tr>',
+                     '<tr>',
+                        '<td>{customers_info.field_number_of_logons.label}</td>',
+                        '<td>{customers_info.field_number_of_logons.value}</td>',
+                    '</tr>',
+                     '<tr>',
+                        '<td>{customers_info.field_date_last_logon.label}</td>',
+                        '<td>{customers_info.field_date_last_logon.value}</td>',
+                    '</tr>',
+                '</tbody>',
+            '</table>',
+        '</div>'
       ]
     }];
     
@@ -156,10 +181,8 @@ Ext.define('Toc.customers.CustomersGrid', {
       function(btn) {
         if (btn == 'yes') {
           Ext.Ajax.request({
-            url: Toc.CONF.CONN_URL,
+            url : '<?php echo site_url('customers/delete_customer'); ?>',
             params: {
-              module: 'customers',
-              action: 'delete_customer',
               customers_id: customersId
             },
             callback: function(options, success, response) {

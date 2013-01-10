@@ -38,6 +38,5 @@ Ext.define('Toc.customers.AccordionPanel', {
   }
 });
 
-
 /* End of file accordion_panel.php */
 /* Location: ./templates/base/web/views/customers/accordion_panel.php */

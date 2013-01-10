@@ -24,7 +24,7 @@
  * @subpackage	tomatocart
  * @category	template-module-controller
  * @author		TomatoCart Dev Team
- * @link		http://tomatocart.com/wiki/
+ * @link		http://tomatocart.com
  */
 class Customers extends TOC_Controller
 {
@@ -51,55 +51,33 @@ class Customers extends TOC_Controller
      */
     public function list_customers()
     {
-        $start = $this->input->get_post('start');
-        $limit = $this->input->get_post('limit');
-
-        $start = empty($start) ? 0 : $start;
-        $limit = empty($limit) ? MAX_DISPLAY_SEARCH_RESULTS : $limit;
+        $start = $this->input->get_post('start') ? $this->input->get_post('start') : 0;
+        $limit = $this->input->get_post('limit') ? $this->input->get_post('limit') : MAX_DISPLAY_SEARCH_RESULTS;
 
         $search = $this->input->get_post('search');
         
         $records = array();
 
         $customers = $this->customers_model->get_customers($start, $limit, $search);
-        if ($customers != NULL)
+        if ($customers !== NULL)
         {
             foreach($customers as $customer)
             {
-                $customers_info =
-                    '<table width="100%" cellspacing="5">' .
-                        '<tbody>' . 
-                            '<tr>
-                                <td width="150">' . lang('field_gender') . '</td>
-                                <td>' . ($customer['customers_gender'] == 'm' ? lang('gender_male') : lang('gender_female')) . '</td>
-                            </tr>' . 
-                            '<tr>
-                                <td>' . lang('field_email_address') . '</td>
-                                <td>' . $customer['customers_email_address'] . '</td>
-                            </tr>' .
-                            '<tr>
-                                <td>' . lang('field_customers_group') . '</td>
-                                <td>' . $customer['customers_groups_name'] . '</td>
-                            </tr>' . 
-                            '<tr>
-                                <td>' . lang('field_number_of_logons') . '</td>
-                                <td>' . $customer['number_of_logons'] . '</td>
-                            </tr>' .
-                            '<tr>
-                                <td>' . lang('field_date_last_logon') . '</td>
-                                <td>' . get_date_short($customer['date_last_logon']) . '</td>
-                            </tr>' .
-                        '</tbody>' .
-                    '</table>';
-                 
+                //build the extra information of the customers
+                $customers_info = array('field_email_address' => array('label' => lang('field_gender'), 'value' => $customer['customers_email_address']), 
+                                        'field_customers_group' => array('label' => lang('field_customers_group'), 'value' => $customer['customers_groups_name']), 
+                                        'field_number_of_logons' => array('label' => lang('field_number_of_logons'), 'value' => $customer['number_of_logons']), 
+                                        'field_date_last_logon' => array('label' => lang('field_date_last_logon'), 'value' => get_date_short($customer['date_last_logon'])), 
+                                        'field_gender' => array('label' => lang('field_gender'), 'value' => $customer['customers_gender'] == 'm' ? lang('gender_male') : lang('gender_female')));
+                
                 $records[] = array(
-                  'customers_id' => $customer['customers_id'],
-                  'customers_lastname' => $customer['customers_lastname'],
-                  'customers_firstname' => $customer['customers_firstname'],
-                  'customers_credits' => $this->currencies->format($customer['customers_credits']),
-                  'date_account_created' => $customer['date_account_created'],  
-                  'customers_status' => $customer['customers_status'],
-                  'customers_info' => $customers_info);           
+                    'customers_id' => $customer['customers_id'],
+                    'customers_lastname' => $customer['customers_lastname'],
+                    'customers_firstname' => $customer['customers_firstname'],
+                    'customers_credits' => $this->currencies->format($customer['customers_credits']),
+                    'date_account_created' => $customer['date_account_created'],  
+                    'customers_status' => $customer['customers_status'],
+                    'customers_info' => $customers_info);           
             }
         }
 
@@ -121,11 +99,11 @@ class Customers extends TOC_Controller
 
         if ($this->customers_model->delete($customers_id))
         {
-            $response = array('success' => true, 'feedback' => lang('ms_success_action_performed'));
+            $response = array('success' => TRUE, 'feedback' => lang('ms_success_action_performed'));
         }
         else
         {
-            $response = array('success' => false, 'feedback' => lang('ms_error_action_not_performed'));
+            $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed'));
         }
 
         $this->output->set_output(json_encode($response));
@@ -146,11 +124,11 @@ class Customers extends TOC_Controller
 
         if ($this->customers_model->set_status($customers_id, $flag))
         {
-            $response = array('success' => true, 'feedback' => lang('ms_success_action_performed'));
+            $response = array('success' => TRUE, 'feedback' => lang('ms_success_action_performed'));
         }
         else
         {
-            $response = array('success' => true, 'feedback' => lang('ms_error_action_not_performed'));
+            $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed'));
         }
 
         $this->output->set_output(json_encode($response));
@@ -169,7 +147,7 @@ class Customers extends TOC_Controller
         $groups = $this->customers_model->get_customers_groups();
 
         $records = array(array('id' => '', 'text' => lang('none')));
-        if ($groups != NULL)
+        if ($groups !== NULL)
         {
             foreach($groups as $group)
             {
@@ -204,21 +182,21 @@ class Customers extends TOC_Controller
         $customers_id = $this->input->post('customers_id');
         $confirm_password = $this->input->post('confirm_password');
 
-        $data = array('gender' => (!empty($customers_gender) ? $customers_gender : ''),
+        $data = array('gender' => ( ! empty($customers_gender) ? $customers_gender : ''),
                       'firstname' => $this->input->post('customers_firstname'),
                       'lastname' => $this->input->post('customers_lastname'),
                       'dob' => $this->input->post('customers_dob'),
                       'email_address' => $this->input->post('customers_email_address'),
                       'customers_password' => $this->input->post('customers_password'),
-                      'newsletter' => (!empty($customers_newsletter) && ($customers_newsletter == 'on') ? '1' : '0' ),           
-                      'status' => (!empty($customers_status) && ($customers_status == 'on') ? '1' : '0'),
-                      'customers_groups_id' => ( !empty($customers_groups_id) ? $customers_groups_id : '') );
+                      'newsletter' => ( ! empty($customers_newsletter) && ($customers_newsletter == 'on') ? '1' : '0' ),           
+                      'status' => ( ! empty($customers_status) && ($customers_status == 'on') ? '1' : '0'),
+                      'customers_groups_id' => ( ! empty($customers_groups_id) ? $customers_groups_id : '') );
 
         $error = FALSE;
         $feedback = array();
 
         //customer gender
-        if ( ACCOUNT_GENDER > 0 )
+        if (ACCOUNT_GENDER > 0)
         {
             if ( ($data['gender'] != 'm') && ($data['gender'] != 'f') )
             {
@@ -228,32 +206,33 @@ class Customers extends TOC_Controller
         }
 
         //customer firstname
-        if ( strlen(trim($data['firstname'])) < ACCOUNT_FIRST_NAME )
+        if (strlen(trim($data['firstname'])) < ACCOUNT_FIRST_NAME)
         {
             $error = TRUE;
             $feedback[] = sprintf(lang('ms_error_first_name'), ACCOUNT_FIRST_NAME);
         }
 
         //customer lastname
-        if ( strlen(trim($data['lastname'])) < ACCOUNT_LAST_NAME )
+        if (strlen(trim($data['lastname'])) < ACCOUNT_LAST_NAME)
         {
             $error = TRUE;
             $feedback[] = sprintf(lang('ms_error_last_name'), ACCOUNT_LAST_NAME);
         }
 
         //customer email address
-        if ( strlen(trim($data['email_address'])) < ACCOUNT_EMAIL_ADDRESS )
+        if (strlen(trim($data['email_address'])) < ACCOUNT_EMAIL_ADDRESS)
         {
             $error = TRUE;
             $feedback[] = sprintf(lang('ms_error_email_address'), ACCOUNT_EMAIL_ADDRESS);
         }
-        elseif ( !valid_email($data['email_address']) )
+        elseif ( ! valid_email($data['email_address']))
         {
             $error = TRUE;
             $feedback[] = lang('ms_error_email_address_invalid');
         }
         else
         {
+            //verify that the email address is uesed by some customers
             $check = $this->customers_model->check($data['email_address'], $customers_id);
 
             if ($check > 0)
@@ -264,12 +243,12 @@ class Customers extends TOC_Controller
         }
 
         //password
-        if ( (empty($customers_id) || !empty($data['customers_password'])) && (strlen(trim($data['customers_password'])) < ACCOUNT_PASSWORD) )
+        if ((empty($customers_id) || ! empty($data['customers_password'])) && (strlen(trim($data['customers_password'])) < ACCOUNT_PASSWORD))
         {
             $error = TRUE;
             $feedback[] = sprintf(lang('ms_error_password'), ACCOUNT_PASSWORD);
         }
-        else if ( !empty($confirm_password) && ( (trim($data['customers_password']) != trim($confirm_password)) || ( strlen(trim($data['customers_password'])) != strlen(trim($confirm_password)) ) ) )
+        else if ( ! empty($confirm_password) && ( (trim($data['customers_password']) != trim($confirm_password)) || ( strlen(trim($data['customers_password'])) != strlen(trim($confirm_password)))))
         {
             $error = TRUE;
             $feedback[] = lang('ms_error_password_confirmation_invalid');
@@ -278,18 +257,18 @@ class Customers extends TOC_Controller
         //save customer data
         if ($error === FALSE)
         {
-            if ($this->customers_model->save( (!empty($customers_id) && is_numeric($customers_id) ? $customers_id : NULL), $data))
+            if ($this->customers_model->save((is_numeric($customers_id) ? $customers_id : NULL), $data))
             {
-                $response = array('success' => true, 'feedback' => lang('ms_success_action_performed'));
+                $response = array('success' => TRUE, 'feedback' => lang('ms_success_action_performed'));
             }
             else
             {
-                $response = array('success' => false, 'feedback' => lang('ms_error_action_not_performed'));
+                $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed'));
             }
         }
         else
         {
-            $response = array('success' => false, 'feedback' => lang('ms_error_action_not_performed') . '<br />' . implode('<br />', $feedback));
+            $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed') . '<br />' . implode('<br />', $feedback));
         }
 
         $this->output->set_output(json_encode($response));
@@ -309,14 +288,14 @@ class Customers extends TOC_Controller
 
         $data = $this->customers_model->get_data($customers_id);
         
-        if ($data != NULL) 
+        if ($data !== NULL) 
         {
             $data['customers_dob'] = mdate('%Y-%m-%d', human_to_unix($data['customers_dob']));
             $data['customers_password'] = '';
             $data['confirm_password'] = '';
         }
 
-        $this->output->set_output(json_encode(array('success' => true, 'data' => $data)));
+        $this->output->set_output(json_encode(array('success' => TRUE, 'data' => $data)));
     }
 
     // --------------------------------------------------------------------
@@ -336,7 +315,7 @@ class Customers extends TOC_Controller
         $addresses = $this->customers_model->get_addressbook_data($customers_id);
 
         $records = array();
-        if (!empty($addresses))
+        if ($addresses !== NULL)
         {
             foreach($addresses as $address)
             {
@@ -366,11 +345,11 @@ class Customers extends TOC_Controller
 
         if ($this->customers_model->delete_address($address_book_id))
         {
-            $response = array('success' => true, 'feedback' => lang('ms_success_action_performed'));
+            $response = array('success' => TRUE, 'feedback' => lang('ms_success_action_performed'));
         }
         else
         {
-            $response = array('success' => false, 'feedback' => lang('ms_error_action_not_performed'));
+            $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed'));
         }
 
         $this->output->set_output(json_encode($response));
@@ -392,7 +371,7 @@ class Customers extends TOC_Controller
         $countries = $this->address->get_countries();
         
         $records = array();
-        if ($countries != NULL) 
+        if ($countries !== NULL) 
         {
             foreach ($countries as $country)
             {
@@ -419,7 +398,7 @@ class Customers extends TOC_Controller
         $zones = $this->address->get_zones($country_id);
 
         $records = array();
-        if ($zones != NULL) 
+        if ($zones !== NULL) 
         {
             foreach ($zones as $zone) {
                 $records[] = array(
@@ -470,7 +449,8 @@ class Customers extends TOC_Controller
         $error = FALSE;
         $feedback = array();
 
-        if ( ACCOUNT_GENDER > 0 )
+        //verify account gender
+        if (ACCOUNT_GENDER > 0)
         {
             if ( ($data['gender'] != 'm') && ($data['gender'] != 'f') )
             {
@@ -479,62 +459,71 @@ class Customers extends TOC_Controller
             }
         }
 
-        if ( strlen(trim($data['firstname'])) < ACCOUNT_FIRST_NAME )
+        //verify account first name
+        if (strlen(trim($data['firstname'])) < ACCOUNT_FIRST_NAME)
         {
             $error = TRUE;
             $feedback[] = sprintf(lang('ms_error_first_name'), ACCOUNT_FIRST_NAME);
         }
 
-        if ( strlen(trim($data['lastname'])) < ACCOUNT_LAST_NAME )
+        //verify account last name
+        if (strlen(trim($data['lastname'])) < ACCOUNT_LAST_NAME)
         {
             $error = TRUE;
             $feedback[] = sprintf(lang('ms_error_last_name'), ACCOUNT_LAST_NAME);
         }
 
 
-        if ( ACCOUNT_COMPANY > 0 )
+        //verify account company
+        if (ACCOUNT_COMPANY > 0)
         {
-            if ( strlen(trim($data['company'])) < ACCOUNT_COMPANY )
+            if (strlen(trim($data['company'])) < ACCOUNT_COMPANY)
             {
                 $error = TRUE;
                 $feedback[] = sprintf(lang('ms_error_company'), ACCOUNT_COMPANY);
             }
         }
 
-        if ( strlen(trim($data['street_address'])) < ACCOUNT_STREET_ADDRESS )
+        //verify account street address
+        if (strlen(trim($data['street_address'])) < ACCOUNT_STREET_ADDRESS)
         {
             $error = TRUE;
             $feedback[] = sprintf(lang('ms_error_street_address'), ACCOUNT_STREET_ADDRESS);
         }
 
-        if ( ACCOUNT_SUBURB > 0 )
+        //verify account suburb
+        if (ACCOUNT_SUBURB > 0)
         {
-            if ( strlen(trim($data['suburb'])) < ACCOUNT_SUBURB )
+            if (strlen(trim($data['suburb'])) < ACCOUNT_SUBURB)
             {
                 $error = TRUE;
                 $feedback[] = sprintf(lang('ms_error_suburb'), ACCOUNT_SUBURB);
             }
         }
 
-        if ( ACCOUNT_POST_CODE > 0 )
+        //verify account post code
+        if (ACCOUNT_POST_CODE > 0)
         {
-            if ( strlen(trim($data['postcode'])) < ACCOUNT_POST_CODE )
+            if (strlen(trim($data['postcode'])) < ACCOUNT_POST_CODE)
             {
                 $error = TRUE;
                 $feedback[] = sprintf(lang('entry_post_code'), ACCOUNT_POST_CODE);
             }
         }
 
-        if ( strlen(trim($data['city'])) < ACCOUNT_CITY )
+        //verify account city
+        if (strlen(trim($data['city'])) < ACCOUNT_CITY)
         {
             $error = TRUE;
             $feedback[] = sprintf(lang('ms_error_city'), ACCOUNT_CITY);
         }
 
-        if ( ACCOUNT_STATE > 0 )
+        //verify account state
+        if (ACCOUNT_STATE > 0)
         {
             $zones_nums = $this->customers_model->get_state_zones($data['country_id']);
 
+            //set the zone id
             if ($zones_nums > 0)
             {
                 $zones = $this->customers_model->get_zones($data['country_id'], strtoupper($data['state']));
@@ -558,31 +547,34 @@ class Customers extends TOC_Controller
                     }
                 }
             }
-            else if (strlen(trim($data['state'])) < ACCOUNT_STATE )
+            else if (strlen(trim($data['state'])) < ACCOUNT_STATE)
             {
                 $error = TRUE;
                 $feedback[] = sprintf(lang('ms_error_state'), ACCOUNT_STATE);
             }
         }
 
-        if ( !is_numeric($data['country_id']) || ($data['country_id'] < 1) ) 
+        //verify account country
+        if ( ! is_numeric($data['country_id']) || ($data['country_id'] < 1)) 
         {
             $error = TRUE;
             $feedback[] = lang('ms_error_country');
         }
 
-        if ( ACCOUNT_TELEPHONE > 0 ) 
+        //verify account telephone
+        if (ACCOUNT_TELEPHONE > 0) 
         {
-            if ( strlen(trim($data['telephone'])) < ACCOUNT_TELEPHONE ) 
+            if (strlen(trim($data['telephone'])) < ACCOUNT_TELEPHONE) 
             {
                 $error = TRUE;
                 $feedback[] = sprintf(lang('ms_error_telephone_number'), ACCOUNT_TELEPHONE);
             }
         }
 
-        if ( ACCOUNT_FAX > 0 ) 
+        //verify account fax
+        if (ACCOUNT_FAX > 0) 
         {
-            if ( strlen(trim($data['fax'])) < ACCOUNT_FAX ) 
+            if (strlen(trim($data['fax'])) < ACCOUNT_FAX) 
             {
                 $error = TRUE;
                 $feedback[] = sprintf(lang('ms_error_fax_number'), ACCOUNT_FAX);
@@ -592,20 +584,20 @@ class Customers extends TOC_Controller
         if ($error === FALSE ) 
         {
             $address_book_id = $this->input->post('address_book_id');
-            $address_book_id = (!empty($address_book_id) && is_numeric($address_book_id)) ? $address_book_id : NULL;
+            $address_book_id = is_numeric($address_book_id) ? $address_book_id : NULL;
 
-            if ( $this->customers_model->save_address($address_book_id, $data) ) 
+            if ($this->customers_model->save_address($address_book_id, $data)) 
             {
-                $response = array('success' => true, 'feedback' => lang('ms_success_action_performed'));
+                $response = array('success' => TRUE, 'feedback' => lang('ms_success_action_performed'));
             } 
             else 
             {
-                $response = array('success' => false, 'feedback' => lang('ms_error_action_not_performed'));
+                $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed'));
             }
         } 
         else 
         {
-            $response = array('success' => false, 'feedback' => lang('ms_error_action_not_performed') . '<br />' . implode('<br />', $feedback));
+            $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed') . '<br />' . implode('<br />', $feedback));
         }
 
         $this->output->set_output(json_encode($response));
@@ -625,11 +617,11 @@ class Customers extends TOC_Controller
 
         $batch = json_decode($this->input->post('batch'));
 
-        if (is_array($batch) && !empty($batch))
+        if (is_array($batch) && count($batch) > 0)
         {
             foreach($batch as $id)
             {
-                if (!$this->customers_model->delete_address($id))
+                if ($this->customers_model->delete_address($id) === FALSE)
                 {
                     $error = TRUE;
                     break;
@@ -639,11 +631,11 @@ class Customers extends TOC_Controller
 
         if ($error === FALSE)
         {
-            $response = array('success' => true, 'feedback' => lang('ms_success_action_performed'));
+            $response = array('success' => TRUE, 'feedback' => lang('ms_success_action_performed'));
         }
         else
         {
-            $response = array('success' => false, 'feedback' => lang('ms_error_action_not_performed'));
+            $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed'));
         }
 
         $this->output->set_output(json_encode($response));
@@ -671,9 +663,9 @@ class Customers extends TOC_Controller
             $data['primary'] = TRUE;
         }
 
-        $this->output->set_output(json_encode(array('success' => true, 'data' => $data)));
+        $this->output->set_output(json_encode(array('success' => TRUE, 'data' => $data)));
     }
 }
 
 /* End of file customers.php */
-/* Location: ./system/tomatocart/controllers/customers.php */
+/* Location: ./system/controllers/customers.php */

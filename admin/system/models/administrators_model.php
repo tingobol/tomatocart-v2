@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-model
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Administrators_Model extends CI_Model
 {
@@ -39,7 +39,7 @@ class Administrators_Model extends CI_Model
         parent::__construct();
     }
       
-  // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     /**
      * Get the administrators
@@ -49,14 +49,19 @@ class Administrators_Model extends CI_Model
      * @param $limit
      * @return mixed
      */
-    public function get_administrators($start, $limit)
+    public function get_administrators($start = NULL, $limit = NULL)
     {
-        $result = $this->db
-        ->select('id, user_name, email_address')
-        ->from('administrators')
-        ->order_by('user_name')
-        ->limit($limit, $start)
-        ->get();
+        $this->db
+            ->select('id, user_name, email_address')
+            ->from('administrators')
+            ->order_by('user_name');
+        
+        if ($start !== NULL && $limit !== NULL)
+        {
+            $this->db->limit($limit, $start);
+        }
+        
+        $result = $this->db->get();
         
         if ($result->num_rows() > 0)
         {
@@ -66,7 +71,7 @@ class Administrators_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     /**
      * Save the administrator
@@ -80,17 +85,17 @@ class Administrators_Model extends CI_Model
     public function save($id = NULL, $data, $modules = NULL)
     {
         $this->load->helper('email');
-        $this->load->library('encrypt');
+        $this->load->helper('core');
         
         $error = FALSE;
 
-        //check email
+        //validate email address
         if (valid_email($data['email_address']))
         {
             $this->db
-            ->select('id')
-            ->from('administrators')
-            ->where('email_address', $data['email_address']);
+                ->select('id')
+                ->from('administrators')
+                ->where('email_address', $data['email_address']);
 
             if (is_numeric($id))
             {
@@ -99,6 +104,7 @@ class Administrators_Model extends CI_Model
 
             $result = $this->db->get();
 
+            //verify that the email address has already been used
             if ($result->num_rows() > 0)
             {
                 return -4;
@@ -109,7 +115,7 @@ class Administrators_Model extends CI_Model
             return -3;
         }
 
-        //check username
+        //verify that the username has already been used
         $this->db->select('id')->from('administrators')->where('user_name', $data['username']);
 
         if (is_numeric($id))
@@ -124,44 +130,45 @@ class Administrators_Model extends CI_Model
             return -2;
         }
 
-        if ($error === FALSE)
+        //start transaction
+        $this->db->trans_begin();
+
+        $admin_data = array('user_name' => $data['username'], 'email_address' => $data['email_address']);
+
+        //editing or adding the administrator
+        if (is_numeric($id))
         {
-            $this->db->trans_begin();
-
-            $admin_data = array('user_name' => $data['username'], 'email_address' => $data['email_address']);
-
-            if (is_numeric($id))
+            if (isset($data['password']) && !empty($data['password']))
             {
-                if (isset($data['password']) && !empty($data['password']))
-                {
-                    $admin_data['user_password'] = $this->encrypt->encode(trim($data['password']));
-                }
-
-                $this->db->update('administrators', $admin_data, array('id' => $id));
-            }
-            else
-            {
-                $admin_data['user_password'] = $this->encrypt->encode(trim($data['password']));
-
-                $this->db->insert('administrators', $admin_data);
+                $admin_data['user_password'] = encrypt_password(trim($data['password']));
             }
 
-            if ($this->db->trans_status() === TRUE)
-            {
-                if (!is_numeric($id))
-                {
-                    $id = $this->db->insert_id();
-                }
-            }
-            else
-            {
-                $error = TRUE;
-            }
+            $this->db->update('administrators', $admin_data, array('id' => $id));
+        }
+        else
+        {
+            $admin_data['user_password'] = encrypt_password(trim($data['password']));
+
+            $this->db->insert('administrators', $admin_data);
         }
 
+        //check transaction status
+        if ($this->db->trans_status() === TRUE)
+        {
+            if (!is_numeric($id))
+            {
+                $id = $this->db->insert_id();
+            }
+        }
+        else
+        {
+            $error = TRUE;
+        }
+
+        //set the modules that the administrator could access
         if ($error === FALSE)
         {
-            if (!empty($modules))
+            if (count($modules) > 0)
             {
                 if (in_array('*', $modules))
                 {
@@ -171,16 +178,17 @@ class Administrators_Model extends CI_Model
                 foreach($modules as $module)
                 {
                     $result = $this->db
-                    ->select('administrators_id')
-                    ->from('administrators_access')
-                    ->where(array('administrators_id' => $id, 'module' => $module))
-                    ->limit(1)
-                    ->get();
+                        ->select('administrators_id')
+                        ->from('administrators_access')
+                        ->where(array('administrators_id' => $id, 'module' => $module))
+                        ->limit(1)
+                        ->get();
 
                     if ($result->num_rows() < 1)
                     {
                         $this->db->insert('administrators_access', array('administrators_id' => $id, 'module' => $module));
 
+                        //check transaction status
                         if ($this->db->trans_status() === FALSE)
                         {
                             $error = TRUE;
@@ -193,18 +201,19 @@ class Administrators_Model extends CI_Model
             }
         }
 
-        //delete the original modules which are not in the modules
+        //delete the original modules which are not able to be accesses by the administrator
         if ($error === FALSE)
         {
             $this->db->where('administrators_id', $id);
 
-            if (!empty($modules))
+            if (count($modules) > 0)
             {
                 $this->db->where_not_in('module', $modules);
             }
 
             $this->db->delete('administrators_access');
 
+            //check transaction status
             if ($this->db->trans_status() === FALSE)
             {
                 $error = TRUE;
@@ -213,19 +222,21 @@ class Administrators_Model extends CI_Model
 
         if ($error === FALSE)
         {
+            //commit
             $this->db->trans_commit();
 
             return 1;
         }
         else
         {
+            //rollback
             $this->db->trans_rollback();
 
             return -1;
         }
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Delete the administrator
@@ -236,28 +247,33 @@ class Administrators_Model extends CI_Model
      */
     public function delete($id)
     {
+        //start transaction
         $this->db->trans_begin();
 
         $this->db->delete('administrators_access', array('administrators_id' => $id));
 
+        //check transaction status
         if ($this->db->trans_status() === TRUE)
         {
             $this->db->delete('administrators', array('id' => $id));
         }
 
+        //check transaction status
         if ($this->db->trans_status() === TRUE)
         {
+            //commit
             $this->db->trans_commit();
 
             return TRUE;
         }
 
+        //rollback
         $this->db->trans_rollback();
 
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     /**
      * Get the data of the administrator with the id
@@ -269,10 +285,10 @@ class Administrators_Model extends CI_Model
     public function get_data($id)
     {
         $result = $this->db
-        ->select('id, user_name, email_address')
-        ->from('administrators')
-        ->where('id', $id)
-        ->get();
+            ->select('id, user_name, email_address')
+            ->from('administrators')
+            ->where('id', $id)
+            ->get();
         
         if ($result->num_rows() > 0)
         {
@@ -282,21 +298,41 @@ class Administrators_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
+    /**
+     * Get the data of the administrator with the email address
+     *
+     * @access public
+     * @param $email
+     * @return mixed
+     */
     public function get_admin($email)
     {
-        $Qadmin = $this->db
-        ->select('id, user_name, email_address')
-        ->from('administrators')
-        ->where('email_address', $email)
-        ->get();
+        $result = $this->db
+            ->select('id, user_name, email_address')
+            ->from('administrators')
+            ->where('email_address', $email)
+            ->get();
+        
+        if ($result->num_rows() > 0)
+        {
+            return $result->row_array();
+        }
 
-        return $Qadmin->row_array();
+        return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
+    /**
+     * Update the password of the administrator
+     *
+     * @access public
+     * @param $email
+     * @param $password
+     * @return boolean
+     */
     public function update_password($email, $password)
     {
         $this->db->update('administrators', array('user_password' => $password), array('email_address' => $email));
@@ -309,7 +345,7 @@ class Administrators_Model extends CI_Model
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     /**
      * Get the modules that the administrator could access
@@ -321,10 +357,10 @@ class Administrators_Model extends CI_Model
     public function get_modules($id)
     {
         $result = $this->db
-        ->select('module')
-        ->from('administrators_access')
-        ->where('administrators_id', $id)
-        ->get();
+            ->select('module')
+            ->from('administrators_access')
+            ->where('administrators_id', $id)
+            ->get();
         
         if ($result->num_rows() > 0)
         {
@@ -334,11 +370,14 @@ class Administrators_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     /**
-     * 
+     * Check the email address
+     *
+     * @access public
      * @param $email
+     * @return boolean
      */
     public function check_email($email)
     {
@@ -352,7 +391,7 @@ class Administrators_Model extends CI_Model
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     /**
      * Get the total number of administrators

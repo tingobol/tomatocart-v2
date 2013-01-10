@@ -1,30 +1,34 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource ./system/modules/languages/views/main.php
+ * @since   Version 2.0
+ * @filesource
  */
+
+// ------------------------------------------------------------------------
 
   echo 'Ext.namespace("Toc.languages");';
   
-  require_once 'languages_grid.php';
-  require_once 'languages_add_dialog.php';
-  require_once 'languages_edit_dialog.php';
-  require_once 'languages_export_dialog.php';
-  require_once 'languages_upload_dialog.php';
-  require_once 'modules_tree_panel.php';
-  require_once 'translation_add_dialog.php';
-  require_once 'translation_edit_dialog.php';
-  require_once 'translations_dialog.php';
-  require_once 'translations_edit_grid.php';
+  include 'languages_grid.php';
+  include 'languages_add_dialog.php';
+  include 'languages_edit_dialog.php';
+  include 'languages_export_dialog.php';
+  include 'languages_upload_dialog.php';
+  include 'modules_tree_panel.php';
+  include 'translation_add_dialog.php';
+  include 'translation_edit_dialog.php';
+  include 'translations_dialog.php';
+  include 'translations_edit_grid.php';
 ?>
 
 Ext.override(Toc.desktop.LanguagesWindow, {
@@ -221,4 +225,4 @@ Ext.override(Toc.desktop.LanguagesWindow, {
 });
 
 /* End of file main.php */
-/* Location: ./system/modules/languages/views/main.php */
+/* Location: ./templates/base/web/views/languages/main.php */
