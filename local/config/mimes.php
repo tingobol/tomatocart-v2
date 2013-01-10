@@ -80,7 +80,7 @@ return array(
 	'tgz'	=>	array('application/x-tar', 'application/x-gzip-compressed'),
 	'xhtml'	=>	'application/xhtml+xml',
 	'xht'	=>	'application/xhtml+xml',
-	'zip'	=>	array('application/x-zip', 'application/zip', 'application/x-zip-compressed', 'application/s-compressed', 'multipart/x-zip'),
+	'zip'	=>	array('application/x-zip', 'application/zip', 'application/x-zip-compressed', 'application/s-compressed', 'multipart/x-zip', 'application/octet-stream'),
 	'rar'	=>	array('application/x-rar', 'application/rar', 'application/x-rar-compressed'),
 	'mid'	=>	'audio/midi',
 	'midi'	=>	'audio/midi',
