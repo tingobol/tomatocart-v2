@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-library
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 Class TOC_Image {
     /**
@@ -67,7 +67,7 @@ Class TOC_Image {
         
         $image_groups = $this->ci->image_model->get_groups();
         
-        if (!empty($image_groups))
+        if ($image_groups !== NULL)
         {
             foreach($image_groups as $image_group)
             {
@@ -76,7 +76,7 @@ Class TOC_Image {
         }
     }
   
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Get the image group id based on the code
@@ -98,7 +98,7 @@ Class TOC_Image {
         return 0;
     }
   
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Get the image group code based on the id
@@ -112,7 +112,7 @@ Class TOC_Image {
         return $this->_groups[$id]['code'];
     }
   
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Get the image group width based on the code
@@ -126,7 +126,7 @@ Class TOC_Image {
         return $this->_groups[$this->get_id($code)]['size_width'];
     }
   
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Get the image group height based on the code
@@ -140,7 +140,7 @@ Class TOC_Image {
         return $this->_groups[$this->get_id($code)]['size_height'];
     }
   
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Check the image group based on the code
@@ -154,7 +154,7 @@ Class TOC_Image {
         return isset($this->_groups[$this->get_id($code)]);
     }
   
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
   
     /**
      * Show the product image
@@ -169,16 +169,16 @@ Class TOC_Image {
      */
     public function show($image, $title, $parameters = '', $group = '', $type = 'products') 
     {
-        if (empty($group) || !$this->exists($group)) 
+        if (empty($group) || ! $this->exists($group)) 
         {
-            $group = $this->getCode(DEFAULT_IMAGE_GROUP_ID);
+            $group = $this->get_code(DEFAULT_IMAGE_GROUP_ID);
         }
     
-        $group_id = $this->getID($group);
+        $group_id = $this->get_id($group);
     
         $width = $height = '';
     
-        if ( ($this->_groups[$group_id]['force_size'] == '1') || empty($image) ) 
+        if (($this->_groups[$group_id]['force_size'] == '1') || empty($image)) 
         {
             $width = $this->_groups[$group_id]['size_width'];
             $height = $this->_groups[$group_id]['size_height'];
@@ -201,7 +201,7 @@ Class TOC_Image {
         return image(IMGHTTPPATH . $image, $title, $width, $height, $parameters);
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     /**
      * Get all the image groups
@@ -214,7 +214,7 @@ Class TOC_Image {
         return $this->_groups;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     /**
      * Resize the image
@@ -227,14 +227,16 @@ Class TOC_Image {
      */
     public function resize($image, $group_id, $type = 'products') 
     {
-        if (!file_exists(ROOTPATH . 'images/' . $type . '/' . $this->_groups[$group_id]['code'])) 
+        //ensure that the image group directory is existed
+        if ( ! file_exists(ROOTPATH . 'images/' . $type . '/' . $this->_groups[$group_id]['code'])) 
         {
-            mkdir(ROOTPATH . 'images/' . $type . '/' . $this->_groups[$group_id]['code'], 0777);
+            @mkdir(ROOTPATH . 'images/' . $type . '/' . $this->_groups[$group_id]['code'], 0777);
         }
         
         $original_image = ROOTPATH . 'images/' . $type . '/' . $this->_groups[1]['code'] . '/' . $image;
         $dest_image = ROOTPATH . 'images/' . $type . '/' . $this->_groups[$group_id]['code'] . '/' . $image;
-      
+        
+        //verify that the product image is existing in the original image group and then resize it
         if (file_exists($original_image)) 
         {
             $config['image_library'] = 'gd2';
@@ -250,9 +252,11 @@ Class TOC_Image {
             
             return $this->ci->image_lib->resize();
         }
+        
+        return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     /**
      * Set the default image
@@ -266,7 +270,7 @@ Class TOC_Image {
         return $this->ci->image_model->set_as_default($id);
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Delete the image
@@ -298,7 +302,7 @@ Class TOC_Image {
         }
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     /**
      * Delete the image of an article
@@ -317,7 +321,7 @@ Class TOC_Image {
         }
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     /**
      * Get the products images

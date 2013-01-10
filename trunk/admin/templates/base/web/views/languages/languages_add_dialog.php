@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource ./system/modules/languages/views/languages_add_dialog.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -58,11 +60,7 @@ Ext.define('Toc.languages.LanguagesAddDialog', {
       ],
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
-        extraParams: {
-          module: 'languages',
-          action: 'get_languages'
-        },
+        url : '<?php echo site_url('languages/get_languages'); ?>',
         reader: {
           type: 'json',
           root: Toc.CONF.JSON_READER_ROOT,
@@ -73,11 +71,8 @@ Ext.define('Toc.languages.LanguagesAddDialog', {
     });
     
     this.frmLanguage = Ext.create('Ext.form.Panel', {
-      url: Toc.CONF.CONN_URL,
-      baseParams: {  
-        module: 'languages',
-        action: 'import_language'
-      },
+      url: '<?php echo site_url('languages/import_language'); ?>',
+      baseParams: {},
       border: false,
       bodyPadding: 10,
       fieldDefaults: {
@@ -143,4 +138,4 @@ Ext.define('Toc.languages.LanguagesAddDialog', {
 });
 
 /* End of file languages_add_dialog.php */
-/* Location: ./system/modules/languages/views/languages_add_dialog.php */
+/* Location: ./templates/base/web/views/languages/languages_add_dialog.php */

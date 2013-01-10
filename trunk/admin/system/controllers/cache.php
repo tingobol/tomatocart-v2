@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-controller
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Cache extends TOC_Controller
 {
@@ -47,9 +47,10 @@ class Cache extends TOC_Controller
         
         $this->load->helper('directory');
         $this->_cache_map = directory_map(ROOTPATH . '/local/cache');
+        
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     /**
      * List the cache
@@ -61,15 +62,21 @@ class Cache extends TOC_Controller
     {
         $this->load->helper('date');
         
-        $records = array();
+        //get all the cached files
         $cached_files = array();
-        
-        if (!empty($this->_cache_map))
+        if (count($this->_cache_map) > 0)
         {
-            foreach($this->_cache_map as $cache)
+            foreach($this->_cache_map as $key => $cache)
             {
+                //ignore the sub folder
+                if (@is_dir(ROOTPATH . '/local/cache/' . $key))
+                {
+                    continue;
+                }
+                
                 $last_modified = filemtime(ROOTPATH . '/local/cache/' . $cache);
                 
+                //verify that the cache file named with the language code
                 if (strpos($cache, '-') !== FALSE)
                 {
                     $code = substr($cache, 0, strpos($cache, '-'));
@@ -93,17 +100,25 @@ class Cache extends TOC_Controller
                     $cached_files[$code] = array('total' => 1, 
                                                  'last_modified' => $last_modified);
                 } 
-                
+            }
+        }
+        
+        //build the records of the cached files
+        $records = array();
+        if (count($cached_files) > 0)
+        {
+            foreach($cached_files as $code => $file)
+            {
                 $records[] = array('code' => $code, 
-                                   'total' => $cached_files[$code]['total'], 
-                                   'last_modified' => mdate('%Y/%m/%d %H:%i:%s', $cached_files[$code]['last_modified']));
+                                   'total' => $file['total'], 
+                                   'last_modified' => mdate('%Y/%m/%d %H:%i:%s', $file['last_modified']));
             }
         }
         
         $this->output->set_output(json_encode(array(EXT_JSON_READER_ROOT => $records)));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Delete the cache
@@ -117,7 +132,7 @@ class Cache extends TOC_Controller
         {
             if ( ($cache == $this->input->post('block')) || (substr($cache, 0, strpos($cache, '-')) == $this->input->post('block')) )  
             {
-                if (unlink(ROOTPATH . '/local/cache/' . $cache))
+                if (@unlink(ROOTPATH . '/local/cache/' . $cache))
                 {
                     $response = array('success' => TRUE ,'feedback' => lang('ms_success_action_performed'));
                 }
@@ -131,7 +146,7 @@ class Cache extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Delete the caches
@@ -147,7 +162,7 @@ class Cache extends TOC_Controller
           {
             if (in_array($cache, $cache_codes) || in_array(substr($cache, 0, strpos($cache, '-')), $cache_codes))  
             {
-                if (unlink(ROOTPATH . '/local/cache/' . $cache))
+                if (@unlink(ROOTPATH . '/local/cache/' . $cache))
                 {
                     $response = array('success' => TRUE ,'feedback' => lang('ms_success_action_performed'));
                 }

@@ -231,6 +231,5 @@ Ext.define('Toc.customers.AddressBookDialog', {
   }
 });
 
-
 /* End of file address_book_dialog.php */
 /* Location: ./templates/base/web/views/customers/address_book_dialog.php */

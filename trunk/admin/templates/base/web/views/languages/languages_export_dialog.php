@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource system/modules/languages/views/languages_export_dialog.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -69,11 +71,7 @@ Ext.define('Toc.languages.LanguagesExportDialog', {
       ],
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
-        extraParams: {
-          module: 'languages',
-          action: 'get_groups'
-        },
+        url: '<?php echo site_url('languages/get_groups'); ?>',
         reader: {
           type: 'json',
           root: Toc.CONF.JSON_READER_ROOT,
@@ -100,11 +98,8 @@ Ext.define('Toc.languages.LanguagesExportDialog', {
     });
     
     this.frmExport = Ext.create('Ext.form.Panel', {
-      url: Toc.CONF.CONN_URL,
-      baseParams: {
-        module: 'languages',
-        action: 'export'
-      },
+      url: '<?php echo site_url('languages/export'); ?>',
+      baseParams: {},
       border: false,
       bodyPadding: 20,
       fieldDefaults: {
@@ -128,9 +123,9 @@ Ext.define('Toc.languages.LanguagesExportDialog', {
     var data = this.chkData.getRawValue();
     var params = "height=600px, width=640px, top= 50px, left=165px, staus=yes, toolbar=no, menubar=no, location=no, scrollbars=yes";
     
-    window.open('<?php echo site_url('index/ajax'); ?>' + '?module=languages&action=export&languages_id=' + languagesId + '&export=' + groups + '&include_data=' + data, '<?php echo lang('button_export'); ?>', params);
+    window.open('<?php echo site_url('languages/export'); ?>' + '?languages_id=' + languagesId + '&export=' + groups + '&include_data=' + data, '<?php echo lang('button_export'); ?>', params);
   }
 });
 
 /* End of file languages_export_dialog.php */
-/* Location: system/modules/languages/views/languages_export_dialog.php */
+/* Location: ./templates/base/web/views/languages/languages_export_dialog.php */

@@ -112,7 +112,8 @@ Ext.define('Toc.administrators.AdministratorsDialog', {
           allowBlank: false
         },
         {
-          xtype: 'textfield', 
+          xtype: 'textfield',
+          inputType: 'password',
           fieldLabel: '<?php echo lang('field_password'); ?>', 
           name: 'user_password', 
           allowBlank: this.aID > 0 ? true : false

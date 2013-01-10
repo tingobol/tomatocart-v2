@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-model
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Image_Model extends CI_Model 
 {
@@ -39,10 +39,10 @@ class Image_Model extends CI_Model
         parent::__construct();
     }
 
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
-     * Get customers
+     * Get the image groups
      *
      * @access public
      * @return mixed
@@ -50,10 +50,10 @@ class Image_Model extends CI_Model
     public function get_groups()
     {
         $result = $this->db
-        ->select('*')
-        ->from('products_images_groups')
-        ->where('language_id', lang_id())
-        ->get();
+            ->select('*')
+            ->from('products_images_groups')
+            ->where('language_id', lang_id())
+            ->get();
         
         if ($result->num_rows() > 0)
         {
@@ -63,7 +63,7 @@ class Image_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Set an image as the default image
@@ -75,16 +75,16 @@ class Image_Model extends CI_Model
     public function set_as_default($id)
     {
         $result = $this->db
-        ->select('products_id')
-        ->from('products_images')
-        ->where('id', $id)
-        ->get();
+            ->select('products_id')
+            ->from('products_images')
+            ->where('id', $id)
+            ->get();
         
         $image = $result->row_array();
         
         $result->free_result();
         
-        if (!empty($image))
+        if (count($image) > 0)
         {
             $this->db->update('products_images', array('default_flag' => 0), array('products_id' => $image['products_id'], 'default_flag' => 1));
             
@@ -99,7 +99,7 @@ class Image_Model extends CI_Model
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     /**
      * Get the image name
@@ -111,10 +111,10 @@ class Image_Model extends CI_Model
     public function get_image_name($id)
     {
         $result = $this->db
-        ->select('image')
-        ->from('products_images')
-        ->where('id', $id)
-        ->get();
+          ->select('image')
+          ->from('products_images')
+          ->where('id', $id)
+          ->get();
         
         if ($result->num_rows() > 0)
         {
@@ -124,7 +124,7 @@ class Image_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     /**
      * Delete an image
@@ -145,7 +145,7 @@ class Image_Model extends CI_Model
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     /**
      * Get the info of the article image
@@ -157,10 +157,10 @@ class Image_Model extends CI_Model
     public function get_articles_image($id)
     {
         $result = $this->db
-        ->select('articles_image')
-        ->from('articles')
-        ->where('articles_id', $id)
-        ->get();
+            ->select('articles_image')
+            ->from('articles')
+            ->where('articles_id', $id)
+            ->get();
         
         if ($result->num_rows() > 0)
         {
@@ -170,7 +170,7 @@ class Image_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get the products images
@@ -181,9 +181,9 @@ class Image_Model extends CI_Model
     public function get_products_images()
     {
         $result = $this->db
-        ->select('image')
-        ->from('products_images')
-        ->get();
+            ->select('image')
+            ->from('products_images')
+            ->get();
         
         if ($result->num_rows() > 0)
         {

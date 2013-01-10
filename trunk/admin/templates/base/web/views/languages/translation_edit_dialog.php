@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource system/modules/languages/views/translation_edit_dialog.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -63,7 +65,6 @@ Ext.define('Toc.languages.TranslationEditDialog', {
     
     this.frmTranslationEdit = Ext.create('Ext.form.Panel', {
       baseParams: {
-        module: 'languages',
         languages_id: config.languagesId,
         group: config.group,
         definition_key: config.definitionKey
@@ -81,11 +82,7 @@ Ext.define('Toc.languages.TranslationEditDialog', {
   
   submitForm : function() {
     this.frmTranslationEdit.form.submit({
-      url: Toc.CONF.CONN_URL,
-      params: { 
-        module: 'languages',
-        action: 'update_translation'
-      },
+      url: '<?php echo site_url('languages/update_translation'); ?>',
       waitMsg: TocLanguage.formSubmitWaitMsg,
       success: function(form, action) {
         this.fireEvent('savesuccess', action.result.feedback);
@@ -101,5 +98,5 @@ Ext.define('Toc.languages.TranslationEditDialog', {
   }
 });
 
-/* End of file translations_dialog.php */
-/* Location: system/modules/languages/views/translations_dialog.php */
+/* End of file translations_edit_dialog.php */
+/* Location: ./templates/base/web/views/languages/translations_edit_dialog.php */

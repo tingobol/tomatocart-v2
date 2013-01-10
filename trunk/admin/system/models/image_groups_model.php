@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-model
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Image_Groups_Model extends CI_Model
 {
@@ -39,7 +39,7 @@ class Image_Groups_Model extends CI_Model
         parent::__construct();
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     /**
      * Get the image groups
@@ -49,15 +49,20 @@ class Image_Groups_Model extends CI_Model
      * @param $limit
      * @return mixed
      */
-    public function get_image_groups($start, $limit)
+    public function get_image_groups($start = NULL, $limit = NULL)
     {
-        $result = $this->db
-        ->select('id, title')
-        ->from('products_images_groups')
-        ->where('language_id', lang_id())
-        ->order_by('title')
-        ->limit($limit, $start)
-        ->get();
+        $this->db
+            ->select('id, title')
+            ->from('products_images_groups')
+            ->where('language_id', lang_id())
+            ->order_by('title');
+            
+        if ($start !== NULL && $limit !== NULL)
+        {
+            $this->db->limit($limit, $start);
+        }
+            
+        $result = $this->db->get();    
         
         if ($result->num_rows() > 0)
         {
@@ -67,7 +72,7 @@ class Image_Groups_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Save the image group
@@ -80,6 +85,7 @@ class Image_Groups_Model extends CI_Model
      */
     public function save($id = NULL, $data, $default = FALSE)
     {
+        //editing or adding the products images groups
         if (is_numeric($id))
         {
             $group_id = $id;
@@ -87,9 +93,9 @@ class Image_Groups_Model extends CI_Model
         else
         {
             $result = $this->db
-            ->select_max('id')
-            ->from('products_images_groups')
-            ->get();
+                ->select_max('id')
+                ->from('products_images_groups')
+                ->get();
             
             $group = $result->row_array();
             
@@ -100,25 +106,30 @@ class Image_Groups_Model extends CI_Model
         
         $error = FALSE;
         
+        //start transaction
         $this->db->trans_begin();
         
+        //process languages
         foreach(lang_get_all() as $l)
         {
-            $data['title'] = $data['title'][$l['id']];
-            $data['force_size'] = $data['force_size'] === TRUE ? 1 : 0;
+            $image_group = $data;
+            
+            $image_group['title'] = $data['title'][$l['id']];
+            $image_group['force_size'] = $data['force_size'] === TRUE ? 1 : 0;
             
             if (is_numeric($id))
             {
-                $this->db->update('products_images_groups', $data, array('id' => $id, 'language_id' => $l['id']));
+                $this->db->update('products_images_groups', $image_group, array('id' => $id, 'language_id' => $l['id']));
             }
             else
             {
-                $data['id'] = $group_id;
-                $data['language_id'] = $l['id'];
+                $image_group['id'] = $group_id;
+                $image_group['language_id'] = $l['id'];
                 
-                $this->db->insert('products_images_groups', $data);
+                $this->db->insert('products_images_groups', $image_group);
             }
             
+            //check transaction status
             if ($this->db->trans_status() === FALSE)
             {
                 $error = TRUE;
@@ -128,10 +139,12 @@ class Image_Groups_Model extends CI_Model
         
         if ($error === FALSE)
         {
+            //update the default image group
             if ($default === TRUE)
             {
                 $this->db->update('configuration', array('configuration_value' => $group_id), array('configuration_key' => 'DEFAULT_IMAGE_GROUP_ID'));
                 
+                //check transaction status
                 if ($this->db->trans_status() === FALSE)
                 {
                     $error = TRUE;
@@ -141,17 +154,19 @@ class Image_Groups_Model extends CI_Model
         
         if ($error === FALSE)
         {
+            //commit
             $this->db->trans_commit();
             
             return TRUE;
         }
         
+        //rollback
         $this->db->trans_rollback();
         
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Delete the image group with id
@@ -172,7 +187,7 @@ class Image_Groups_Model extends CI_Model
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get data of the image group with the id
@@ -184,10 +199,10 @@ class Image_Groups_Model extends CI_Model
     public function get_data($id)
     {
         $result = $this->db
-        ->select('*')
-        ->from('products_images_groups')
-        ->where('id', $id)
-        ->get();
+            ->select('*')
+            ->from('products_images_groups')
+            ->where('id', $id)
+            ->get();
         
         if ($result->num_rows() > 0)
         {
@@ -197,7 +212,7 @@ class Image_Groups_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get the total number of the image groups
@@ -207,7 +222,13 @@ class Image_Groups_Model extends CI_Model
      */
     public function get_total()
     {
-        return $this->db->count_all('products_images_groups');
+        $result = $this->db
+            ->select('id')
+            ->from('products_images_groups')
+            ->where('language_id', lang_id())
+            ->get();
+        
+        return $result->num_rows();
     }
 }
 

@@ -39,23 +39,22 @@ class Server_Info extends TOC_Controller
         parent::__construct();
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get the system info
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function get_system_info()
     {
-        @list($system, $host, $kernel) = preg_split('/[\s,]+/', @exec('uname -a'), 5);
         
-        $data = array('server_host' => $host . ' (' . gethostbyname($host) . ')',
+        $data = array('server_host' => $this->input->server('SERVER_NAME') . ' (' . gethostbyname($this->input->server('SERVER_NAME')) . ')',
                       'project_version' => $this->config->item('project_version'), 
-                      'server_operating_system' => $system . ' ' . $kernel, 
+                      'server_operating_system' => PHP_OS, 
                       'server_date' => date('Y-m-d H:i:s'), 
-                      'database_host' => $this->config->item('hostname') . ' (' . gethostbyname($this->config->item('hostname')) . ')', 
+                      'database_host' => $this->db->hostname . ' (' . gethostbyname($this->db->hostname) . ')', 
                       'database_version' => 'MySQL ' . (function_exists('mysql_get_server_info') ? mysql_get_server_info() : ''), 
                       'http_server' => $this->input->server('SERVER_SOFTWARE'), 
                       'php_version' => 'PHP: ' . PHP_VERSION . ' / Zend: ' . (function_exists('zend_version') ? zend_version() : ''));
