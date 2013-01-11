@@ -280,9 +280,7 @@ class Articles_Categories extends TOC_Controller
             }
         }
 
-        $response = array('success' => TRUE, 'data' => $data);
-
-        $this->output->set_output(json_encode($response));
+        $this->output->set_output(json_encode(array('success' => TRUE, 'data' => $data)));
     }
 }
 

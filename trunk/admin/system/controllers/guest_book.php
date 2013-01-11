@@ -89,16 +89,7 @@ class Guest_Book extends TOC_Controller
     {
         $data = $this->guest_book_model->get_data($this->input->get_post('guest_books_id'));
         
-        if ($data !== NULL)
-        {
-            $response = array('success' => TRUE, 'data' => $data);
-        }
-        else
-        {
-            $response = array('success' => FALSE);
-        }
-        
-        $this->output->set_output(json_encode($response));
+        $this->output->set_output(json_encode(array('success' => TRUE, 'data' => $data)));
     }
     
     // ------------------------------------------------------------------------

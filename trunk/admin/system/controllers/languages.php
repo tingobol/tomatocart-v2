@@ -101,9 +101,7 @@ class Languages extends TOC_Controller
                                'text' => $currency['title']);
         }
         
-        $response = array(EXT_JSON_READER_ROOT => $records);
-        
-        $this->output->set_output(json_encode($response));
+        $this->output->set_output(json_encode(array(EXT_JSON_READER_ROOT => $records));
     }
     
     // ------------------------------------------------------------------------
@@ -126,9 +124,7 @@ class Languages extends TOC_Controller
             }
         }
         
-        $response = array(EXT_JSON_READER_ROOT => $records);
-        
-        $this->output->set_output(json_encode($response));
+        $this->output->set_output(json_encode(array(EXT_JSON_READER_ROOT => $records)));
     }
     
     // ------------------------------------------------------------------------
@@ -144,9 +140,7 @@ class Languages extends TOC_Controller
         $data = $this->lang_model->get_data($this->input->post('languages_id'));
         $data['default'] = ($data['code'] == DEFAULT_LANGUAGE) ? TRUE : FALSE;
         
-        $response = array('success' => TRUE, 'data' => $data);
-        
-        $this->output->set_output(json_encode($response));
+        $this->output->set_output(json_encode(array('success' => TRUE, 'data' => $data)));
     }
     
     // ------------------------------------------------------------------------
@@ -211,9 +205,7 @@ class Languages extends TOC_Controller
             }
         }
         
-        $response = array(EXT_JSON_READER_ROOT => $records);
-        
-        $this->output->set_output(json_encode($response));
+        $this->output->set_output(json_encode(array(EXT_JSON_READER_ROOT => $records)));
     }
     
     // ------------------------------------------------------------------------
@@ -361,9 +353,7 @@ class Languages extends TOC_Controller
             }
         }
         
-        $response = array(EXT_JSON_READER_ROOT => $records);
-        
-        $this->output->set_output(json_encode($response));
+        $this->output->set_output(json_encode(array(EXT_JSON_READER_ROOT => $records)));
     }
     
     // ------------------------------------------------------------------------
@@ -422,9 +412,7 @@ class Languages extends TOC_Controller
             }
         }
         
-        $response = array(EXT_JSON_READER_ROOT => $records);
-          
-        $this->output->set_output(json_encode($response));
+        $this->output->set_output(json_encode(array(EXT_JSON_READER_ROOT => $records)));
     }
     
     // ------------------------------------------------------------------------
@@ -450,9 +438,7 @@ class Languages extends TOC_Controller
             }
         }
         
-        $response = array(EXT_JSON_READER_ROOT => $records);
-        
-        $this->output->set_output(json_encode($response));
+        $this->output->set_output(json_encode(array(EXT_JSON_READER_ROOT => $records)));
     }
     
     // ------------------------------------------------------------------------

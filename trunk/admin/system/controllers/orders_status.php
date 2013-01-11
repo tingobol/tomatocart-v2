@@ -138,9 +138,9 @@ class Orders_Status extends TOC_Controller
     {
         $statuses = $this->orders_status_model->load_order_status($this->input->post('orders_status_id'));
         
+        $data = array();
         if ($statuses !== NULL)
         {
-            $data = array();
             if (DEFAULT_ORDERS_STATUS_ID == $this->input->post('orders_status_id'))
             {
                 $data['default'] = '1';
@@ -151,15 +151,9 @@ class Orders_Status extends TOC_Controller
                 $data['name[' . $status['language_id'] . ']'] = $status['orders_status_name'];
                 $data['public_flag'] = $status['public_flag'];
             }
-            
-            $response = array('success' => TRUE, 'data' => $data);
-        }
-        else
-        {
-            $response = array('success' => FALSE);
         }
         
-        $this->output->set_output(json_encode($response));
+        $this->output->set_output(json_encode(array('success' => TRUE, 'data' => $data)));
     }
     
     // ------------------------------------------------------------------------

@@ -95,15 +95,15 @@ class Slide_Images extends TOC_Controller
     {
         $groups = $this->slide_images_model->get_groups();
 
-        $result = array(array('id' => '', 'text' => lang('--All--')));
+        $records = array(array('id' => '', 'text' => lang('--All--')));
         if ($groups !== NULL)
         {
             foreach ($groups as $group) {
-                $result[] = array('id' => $group, 'text' => $group);
+                $records[] = array('id' => $group, 'text' => $group);
             }
         }
 
-        $this->output->set_output(json_encode(array(EXT_JSON_READER_ROOT => $result)));
+        $this->output->set_output(json_encode(array(EXT_JSON_READER_ROOT => $records)));
     }
 
     // --------------------------------------------------------------------
@@ -118,16 +118,16 @@ class Slide_Images extends TOC_Controller
     {
         $groups = $this->slide_images_model->get_groups();
 
-        $result = array();
+        $records = array();
         if ($groups !== NULL)
         {
             foreach ($groups as $group)
             {
-                $result[] = array('id' => $group, 'text' => $group);
+                $records[] = array('id' => $group, 'text' => $group);
             }
         }
 
-        $this->output->set_output(json_encode(array(EXT_JSON_READER_ROOT => $result)));
+        $this->output->set_output(json_encode(array(EXT_JSON_READER_ROOT => $records)));
     }
 
     // --------------------------------------------------------------------

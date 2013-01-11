@@ -211,9 +211,9 @@ class Image_Groups extends TOC_Controller
     {
         $image_groups = $this->image_groups_model->get_data($this->input->post('image_groups_id'));
         
+        $data = array();
         if ($image_groups !== NULL)
         {
-            $data = array();
             foreach($image_groups as $image_group)
             {
                 $data['title[' . $image_group['language_id'] . ']'] = $image_group['title'];
@@ -233,12 +233,8 @@ class Image_Groups extends TOC_Controller
             
             $response = array('success' => TRUE, 'data' => $data);
         }
-        else
-        {
-            $response = array('success' => FALSE);
-        }
         
-        $this->output->set_output(json_encode($response));
+        $this->output->set_output(json_encode(array('success' => TRUE, 'data' => $data)));
     }
 }
 
