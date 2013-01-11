@@ -320,16 +320,7 @@ class Countries extends TOC_Controller
     {
         $data = $this->countries_model->get_data($this->input->post('countries_id'));
         
-        if ($data !== NULL)
-        {
-            $response = array('success' => TRUE, 'data' => $data);
-        }
-        else
-        {
-            $response = array('success' => FALSE);
-        }
-        
-        $this->output->set_output(json_encode($response));
+        $this->output->set_output(json_encode(array('success' => TRUE, 'data' => $data)));
     }
     
     // ------------------------------------------------------------------------ 
@@ -370,16 +361,7 @@ class Countries extends TOC_Controller
     {
         $data = $this->countries_model->get_zone_data($this->input->post('zone_id'));
         
-        if ($data !== NULL)
-        {
-            $response = array('success' => TRUE, 'data' => $data);
-        }
-        else
-        {
-            $response = array('success' => FALSE);
-        }
-        
-        $this->output->set_output(json_encode($response));
+        $this->output->set_output(json_encode(array('success' => TRUE, 'data' => $data)));
     }
 } 
 

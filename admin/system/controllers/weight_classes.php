@@ -90,16 +90,7 @@ class Weight_Classes extends TOC_Controller
     {
         $rules = $this->weight_classes_model->get_rules();
         
-        if ($rules !== NULL)
-        {
-            $response = array('success' => TRUE, 'rules' => $rules);
-        }
-        else
-        {
-            $response = array('success' => FALSE);
-        }
-        
-        $this->output->set_output(json_encode($response));
+        $this->output->set_output(json_encode(array('success' => TRUE, 'rules' => $rules)));
     }
     
     // ------------------------------------------------------------------------
@@ -170,15 +161,9 @@ class Weight_Classes extends TOC_Controller
             }
             
             $data['rules'] = $rules;
-            
-            $response = array('success' => TRUE, 'data' => $data);
-        }
-        else
-        {
-            $response = array('success' => FALSE);
         }
         
-        $this->output->set_output(json_encode($response));
+        $this->output->set_output(json_encode(array('success' => TRUE, 'data' => $data)));
     }
     
     // ------------------------------------------------------------------------

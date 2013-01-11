@@ -143,14 +143,9 @@ class Faqs extends TOC_Controller
                 }
             }
             
-            $response = array('success' => TRUE, 'data' => $data);
-        }
-        else
-        {
-            $response = array('success' => FALSE);
         }
         
-        $this->output->set_output(json_encode($response));
+        $this->output->set_output(json_encode(array('success' => TRUE, 'data' => $data)));
     }
     
     // ------------------------------------------------------------------------

@@ -256,16 +256,7 @@ Class Zone_Groups extends TOC_Controller
     {
         $data = $this->zone_groups_model->get_entry_data($this->input->post('geo_zone_entry_id'));
         
-        if ($data !== NULL)
-        {
-            $response = array('success' => TRUE, 'data' => $data);
-        }
-        else
-        {
-            $response = array('success' => FALSE);
-        }
-        
-        $this->output->set_output(json_encode($response));
+        $this->output->set_output(json_encode(array('success' => TRUE, 'data' => $data)));
     }
     
     // ------------------------------------------------------------------------
@@ -305,16 +296,7 @@ Class Zone_Groups extends TOC_Controller
     {
         $data = $this->zone_groups_model->get_data($this->input->post('geo_zone_id'));
         
-        if ($data !== NULL)
-        {
-            $response = array('success' => TRUE, 'data' => $data);
-        }
-        else
-        {
-            $response = array('success' => FALSE);
-        }
-       
-        $this->output->set_output(json_encode($response));
+        $this->output->set_output(json_encode(array('success' => TRUE, 'data' => $data)));
     }
     
     // ------------------------------------------------------------------------

@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-controller
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Homepage_Info extends TOC_Controller
 {
@@ -41,7 +41,7 @@ class Homepage_Info extends TOC_Controller
         $this->load->model('homepage_info_model');
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Save the home information
@@ -68,7 +68,7 @@ class Homepage_Info extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Load the home page infomation

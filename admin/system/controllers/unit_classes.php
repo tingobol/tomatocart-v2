@@ -251,15 +251,9 @@ class Unit_Classes extends TOC_Controller
             {
                 $data['unit_class_title[' . $classes_info['language_id'] . ']'] =  $classes_info['quantity_unit_class_title'];
             }
-            
-            $response = array('success' => TRUE, 'data' => $data);
-        }
-        else
-        {
-            $response = array('success' => FALSE);
         }
         
-        $this->output->set_output(json_encode($response));
+        $this->output->set_output(json_encode(array('success' => TRUE, 'data' => $data)));
     }
 }
 

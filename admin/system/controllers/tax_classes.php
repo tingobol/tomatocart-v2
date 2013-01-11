@@ -222,16 +222,7 @@ class Tax_Classes extends TOC_Controller
     {
         $data = $this->tax_classes_model->get_data($this->input->post('tax_class_id'));
         
-        if ($data !== NULL)
-        {
-            $response = array('success' => TRUE, 'data' => $data);
-        }
-        else
-        {
-            $response = array('success' => FALSE);
-        }
-        
-        $this->output->set_output(json_encode($response));
+        $this->output->set_output(json_encode(array('success' => TRUE, 'data' => $data)));
     }
     
     // ------------------------------------------------------------------------
@@ -312,16 +303,7 @@ class Tax_Classes extends TOC_Controller
     {
         $data = $this->tax_classes_model->get_entry_data($this->input->post('tax_rates_id'));
         
-        if ($data !== NULL)
-        {
-            $response = array('success' => TRUE, 'data' => $data);
-        }
-        else
-        {
-            $response = array('success' => FALSE);
-        }
-        
-        $this->output->set_output(json_encode($response));
+        $this->output->set_output(json_encode(array('success' => TRUE, 'data' => $data)));
     }
 }
 

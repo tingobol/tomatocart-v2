@@ -62,11 +62,7 @@ Ext.define('Toc.countries.ZonesDialog', {
     
     if (zoneId > 0) {
       this.frmZone.load({
-        url: Toc.CONF.CONN_URL,
-        params: {
-          module: 'countries',
-          action: 'load_zone'
-        },
+        url: '<?php echo site_url('countries/load_zone'); ?>',
         success: function(form, action) {
           Toc.countries.ZonesDialog.superclass.show.call(this);
         },
@@ -82,11 +78,8 @@ Ext.define('Toc.countries.ZonesDialog', {
   
   buildForm: function() {
     this.frmZone = Ext.create('Ext.form.Panel', {
-      url: Toc.CONF.CONN_URL,
-      baseParams: {
-        module: 'countries',
-        action: 'save_zone'
-      },
+      url: '<?php echo site_url('countries/save_zone'); ?>',
+      baseParams: {},
       fieldDefaults: {
         labelSeparator: '',
         anchor: '97%'
