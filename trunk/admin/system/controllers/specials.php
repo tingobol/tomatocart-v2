@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-controller
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Specials extends TOC_Controller
 {
@@ -41,7 +41,7 @@ class Specials extends TOC_Controller
         $this->load->model('specials_model');
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * List the special products
@@ -56,32 +56,27 @@ class Specials extends TOC_Controller
         
         $start = $this->input->get_post('start') ? $this->input->get_post('start') : 0;
         $limit = $this->input->get_post('limit') ? $this->input->get_post('limit') : MAX_DISPLAY_SEARCH_RESULTS;
+        $search = $this->input->get_post('search');
+        $manufacturers_id = $this->input->get_post('manufacturers_id');
         
+        //get the categories
         $current_category_id = end(explode( '_' , $this->input->get_post('category_id') ? $this->input->get_post('category_id') : 0));
-        
-        $params = array('start' => $start, 
-                        'limit' => $limit, 
-                        'search' => $this->input->get_post('search'), 
-                        'manufacturers_id' => $this->input->get_post('manufacturers_id'));
-        
+        $in_categories = array();
         if ($current_category_id > 0)
         {
             $this->category_tree->set_breadcrumb_usage(FALSE);
             
-            $in_categories = array($current_category_id);
-            
-            foreach($this->category_tree->getTree($current_category_id) as $category)
+            $in_categories[] = $current_category_id;
+            foreach($this->category_tree->get_tree($current_category_id) as $category)
             {
                 $in_categories[] = $category['id'];
             }
-            
-            $params['in_categories'] = $in_categories;
         }
         
-        $specials = $this->specials_model->get_specials($params);
+        $specials = $this->specials_model->get_specials($start, $limit, $search, $manufacturers_id, $in_categories);
         
         $records = array();
-        if ($specials != NULL)
+        if ($specials !== NULL)
         {
             foreach($specials as $special)
             {
@@ -90,11 +85,11 @@ class Specials extends TOC_Controller
             }
         }
         
-        $this->output->set_output(json_encode(array(EXT_JSON_READER_TOTAL => $this->specials_model->get_total($params),
+        $this->output->set_output(json_encode(array(EXT_JSON_READER_TOTAL => $this->specials_model->get_total($search, $manufacturers_id, $in_categories),
                                                     EXT_JSON_READER_ROOT => $records)));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get the manufacturers
@@ -116,7 +111,7 @@ class Specials extends TOC_Controller
         $this->output->set_output(json_encode(array(EXT_JSON_READER_ROOT => $records)));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get the categories
@@ -131,7 +126,7 @@ class Specials extends TOC_Controller
         $records = array(array('id' => 0,
                                'text' => lang('top_category')));
         
-        foreach ($this->category_tree->getTree() as $value) 
+        foreach ($this->category_tree->get_tree() as $value) 
         {
             $category_id = strval($value['id']);
             $margin = 0;
@@ -151,7 +146,7 @@ class Specials extends TOC_Controller
         $this->output->set_output(json_encode(array(EXT_JSON_READER_ROOT => $records)));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Save the special product
@@ -166,7 +161,7 @@ class Specials extends TOC_Controller
                       'start_date' => $this->input->post('start_date'), 
                       'expires_date' => $this->input->post('expires_date'), 
                       'specials_date_added' => $this->input->post('specials_date_added'), 
-                      'status' => $this->input->post('status') ? 1 : NULL);
+                      'status' => $this->input->post('status') ? 1 : 0);
         
         if ($this->specials_model->save($this->input->post('specials_id'), $data))
         {
@@ -180,7 +175,7 @@ class Specials extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * List the products
@@ -199,7 +194,7 @@ class Specials extends TOC_Controller
         $products = $this->specials_model->get_products($start, $limit);
         
         $records = array();
-        if ($products != NULL)
+        if ($products !== NULL)
         {
             foreach($products as $product)
             {
@@ -230,7 +225,7 @@ class Specials extends TOC_Controller
                                                      EXT_JSON_READER_ROOT => $records)));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Delete the special product
@@ -252,7 +247,7 @@ class Specials extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Batch delete the special products
@@ -266,11 +261,11 @@ class Specials extends TOC_Controller
         
         $specials_ids = json_decode($this->input->post('batch'));
         
-        if (!empty($specials_ids))
+        if (count($specials_ids) > 0)
         {
             foreach($specials_ids as $id)
             {
-                if (!$this->specials_model->delete($id))
+                if ( ! $this->specials_model->delete($id))
                 {
                     $error = TRUE;
                     break;
@@ -290,7 +285,7 @@ class Specials extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Load the special product
@@ -304,19 +299,13 @@ class Specials extends TOC_Controller
         
         $data = $this->specials_model->get_data($this->input->post('specials_id'));
         
-        if ($data != NULL)
+        if ($data !== NULL)
         {
             $data['start_date'] = mdate('%Y-%m-%d', human_to_unix($data['start_date']));
             $data['expires_date'] = mdate('%Y-%m-%d', human_to_unix($data['expires_date']));
-            
-            $response = array('success' => TRUE, 'data' => $data); 
-        }
-        else
-        {
-            $response = array('success' => FALSE); 
         }
         
-        $this->output->set_output(json_encode($response));
+        $this->output->set_output(json_encode(array('success' => TRUE, 'data' => $data)));
     }
 }
 

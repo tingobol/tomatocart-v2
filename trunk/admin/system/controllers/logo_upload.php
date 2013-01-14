@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-controller
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Logo_Upload extends TOC_Controller
 {
@@ -48,7 +48,7 @@ class Logo_Upload extends TOC_Controller
         $this->logo_path = ROOTPATH . 'images/';
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Save the logo
@@ -62,7 +62,7 @@ class Logo_Upload extends TOC_Controller
         {
             $image = $this->get_template_logo(config('DEFAULT_TEMPLATE'));
             
-            if ($image != NULL)
+            if ($image !== NULL)
             {
                 list($width, $height) = getimagesize(ROOTPATH . 'images/' . $image);
             
@@ -81,7 +81,7 @@ class Logo_Upload extends TOC_Controller
         $this->output->set_header("Content-Type: text/html")->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     /**
      * Get the logo
@@ -109,7 +109,7 @@ class Logo_Upload extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get the template logo
@@ -126,11 +126,11 @@ class Logo_Upload extends TOC_Controller
         
         $images_map = directory_map($this->logo_path);
         
-        if (!empty($images_map))
+        if (count($images_map) > 0)
         {
             foreach($images_map as $image)
             {
-                if (!is_array($image))
+                if ( ! is_array($image))
                 {
                     $filename = explode(".", $image);
                     
@@ -145,7 +145,7 @@ class Logo_Upload extends TOC_Controller
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Upload the logo
@@ -159,30 +159,42 @@ class Logo_Upload extends TOC_Controller
         $this->load->library(array('image_lib', 'upload'));
         $this->load->helper('directory');
         
+        //verify whether the resize logo checkbox is checked
+        $resize_logo = $this->input->post('resize');
+        
+        //upload the lgogo
         $this->upload->initialize(array('upload_path' => $this->logo_path, 'allowed_types' => 'gif|jpg|png'));
         
         if ($this->upload->do_upload($field))
         {
+            //get the path of the uploaded image
             $data = $this->upload->data();
-            
             $logo_uploaded_path = $data['full_path'];
             
-            $original = $this->logo_path . 'logo_originals.' . $data['image_type'];
-            
+            //resize the logo
             $templates_map = directory_map(ROOTPATH . 'templates', 2);
-        
             foreach($templates_map as $template => $files)
             {
                 if (file_exists(ROOTPATH . 'templates/' . $template . '/template.xml'))
                 {
                     $this->delete_logo($template);
                     
-                    $xml_info = simplexml_load_file(ROOTPATH . 'templates/' . $template . '/template.xml');
+                    //the resize logo checkbox is checked, resize the logo with the defined width and height
+                    if ($resize_logo == '1')
+                    {
+                        $logo_width = $this->input->post('logo_width');
+                        $logo_height = $this->input->post('logo_height');
+                    }
+                    //resize the logo with the width and height defined in the template
+                    else
+                    {
+                        $xml_info = simplexml_load_file(ROOTPATH . 'templates/' . $template . '/template.xml');
                     
-                    $logo_info = $xml_info->Logo[0]->attributes();
-                    
-                    $logo_height = $logo_info['height'];
-                    $logo_width = $logo_info['width'];
+                        $logo_info = $xml_info->Logo[0]->attributes();
+                        
+                        $logo_height = $logo_info['height'];
+                        $logo_width = $logo_info['width'];
+                    }
                     
                     $dest_image = $this->logo_path . 'logo_' . $template . '.' . $data['image_type'];
                     
@@ -190,13 +202,15 @@ class Logo_Upload extends TOC_Controller
                                                        'source_image' => $logo_uploaded_path,
                                                        'new_image' => $dest_image,
                                                        'create_thumb' => TRUE, 
-                                                       'width' => $logo_width, 
+                                                       'width' => $logo_width,
+                                                       'maintain_ratio' => FALSE,
                                                        'height' => $logo_height));
                     
                     $this->image_lib->resize();
                 }
             }
             
+            //delete the original uploaded image
             @unlink($data['full_path']);
             
             return TRUE;
@@ -205,7 +219,7 @@ class Logo_Upload extends TOC_Controller
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Delete the logo
@@ -222,17 +236,17 @@ class Logo_Upload extends TOC_Controller
         
         $images_map = directory_map($this->logo_path);
         
-        if (!empty($images_map))
+        if (count($images_map) > 0)
         {
             foreach($images_map as $image)
             {
-                if (!is_array($image))
+                if ( ! is_array($image))
                 {
                     $filename = explode(".", $image);
                     
                     if ($filename[0] == $logo)
                     {
-                        if(unlink($this->logo_path . $image))
+                        if(@unlink($this->logo_path . $image))
                         {
                             return TRUE;
                         }

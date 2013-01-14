@@ -52,6 +52,7 @@ Ext.override(Toc.desktop.ReviewsWindow, {
   
   onEditReviews: function(grd, record) {
     var dlg = this.createReviewsEditDialog();
+    
     dlg.setTitle(record.get('products_name'));
     
     this.onSaveSuccess(dlg, grd);
@@ -65,24 +66,6 @@ Ext.override(Toc.desktop.ReviewsWindow, {
     
     if (!dlg) {
       dlg = desktop.createWindow({}, Toc.reviews.ReviewsEditDialog);
-    }
-      
-    return dlg;
-  },
-  
-  createRatingsDialog: function() {
-    var desktop = this.app.getDesktop();
-    var dlg = desktop.getWindow('ratings-dialog-win');
-    
-    if (!dlg) {
-      dlg = desktop.createWindow({}, Toc.reviews.RatingsDialog);
-      
-      dlg.on('saveSuccess', function (feedback) {
-        this.app.showNotification({
-          title: TocLanguage.msgSuccessTitle,
-          html: feedback
-        });
-      }, this);
     }
       
     return dlg;

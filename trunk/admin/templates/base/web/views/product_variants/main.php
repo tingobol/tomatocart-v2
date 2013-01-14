@@ -78,7 +78,7 @@ Ext.override(Toc.desktop.ProductVariantsWindow, {
   
   onEditVariantsGroups: function(grdGroups, record) {
     var dlg = this.createProductVariantsGroupsDialog();
-    dlg.setTitle('<?php echo lang("action_heading_new_variant_group"); ?>');
+    dlg.setTitle(record.get('products_variants_groups_name'));
     
     this.onSaveSuccess(dlg, grdGroups);
     

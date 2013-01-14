@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-model
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Product_Variants_Model extends CI_Model
 {
@@ -39,7 +39,7 @@ class Product_Variants_Model extends CI_Model
         parent::__construct();
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
    
     /**
      * Get the variants groups
@@ -49,15 +49,20 @@ class Product_Variants_Model extends CI_Model
      * @param $limit
      * @return mixed
      */
-    public function get_variants_groups($start, $limit)
+    public function get_variants_groups($start = NULL, $limit = NULL)
     {
-        $result = $this->db
-        ->select('products_variants_groups_id, products_variants_groups_name')
-        ->from('products_variants_groups')
-        ->where('language_id', lang_id())
-        ->order_by('products_variants_groups_name')
-        ->limit($limit, $start)
-        ->get();
+        $this->db
+            ->select('products_variants_groups_id, products_variants_groups_name')
+            ->from('products_variants_groups')
+            ->where('language_id', lang_id())
+            ->order_by('products_variants_groups_name');
+            
+        if ($start !== NULL && $limit !== NULL)
+        {
+            $this->db->limit($limit, $start);
+        }
+        
+        $result = $this->db->get();
         
         if ($result->num_rows() > 0)
         {
@@ -67,7 +72,7 @@ class Product_Variants_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get the total number of the variants values in the variants group
@@ -81,7 +86,7 @@ class Product_Variants_Model extends CI_Model
         return $this->db->where('products_variants_groups_id', $groups_id)->from('products_variants_values_to_products_variants_groups')->count_all_results();
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get the variants values in the variants group
@@ -93,12 +98,12 @@ class Product_Variants_Model extends CI_Model
     public function get_variants_entries($groups_id)
     {
         $result = $this->db
-        ->select('pvv.products_variants_values_id, pvv.products_variants_values_name')
-        ->from('products_variants_values pvv')
-        ->join('products_variants_values_to_products_variants_groups pvv2pvg', 'pvv2pvg.products_variants_values_id = pvv.products_variants_values_id')
-        ->where(array('pvv2pvg.products_variants_groups_id' => $groups_id, 'pvv.language_id' => lang_id()))
-        ->order_by('pvv.products_variants_values_name')
-        ->get();
+            ->select('pvv.products_variants_values_id, pvv.products_variants_values_name')
+            ->from('products_variants_values pvv')
+            ->join('products_variants_values_to_products_variants_groups pvv2pvg', 'pvv2pvg.products_variants_values_id = pvv.products_variants_values_id')
+            ->where(array('pvv2pvg.products_variants_groups_id' => $groups_id, 'pvv.language_id' => lang_id()))
+            ->order_by('pvv.products_variants_values_name')
+            ->get();
         
         if ($result->num_rows() > 0)
         {
@@ -108,10 +113,10 @@ class Product_Variants_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
-     * Get the data of the product variants value with id
+     * Get the data of the product variants value
      *
      * @access public
      * @param $id
@@ -123,10 +128,10 @@ class Product_Variants_Model extends CI_Model
         $language_id = empty($language_id) ? lang_id() : $language_id;
         
         $result = $this->db
-        ->select('*')
-        ->from('products_variants_values')
-        ->where(array('products_variants_values_id' => $id, 'language_id' => $language_id))
-        ->get();
+            ->select('*')
+            ->from('products_variants_values')
+            ->where(array('products_variants_values_id' => $id, 'language_id' => $language_id))
+            ->get();
         
         if ($result->num_rows() > 0)
         {
@@ -134,9 +139,9 @@ class Product_Variants_Model extends CI_Model
             $result->free_result();
             
             $data['total_products'] = $this->db
-            ->where('products_variants_values_id', $data['products_variants_values_id'])
-            ->from('products_variants_entries')
-            ->count_all_results();
+                ->where('products_variants_values_id', $data['products_variants_values_id'])
+                ->from('products_variants_entries')
+                ->count_all_results();
             
             return $data;
         }
@@ -144,7 +149,7 @@ class Product_Variants_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Delete the product variants value from the variants group
@@ -158,33 +163,39 @@ class Product_Variants_Model extends CI_Model
     {
         $error = FALSE;
         
+        //start transaction
         $this->db->trans_begin();
         
+        //delete the variants value
         $this->db->delete('products_variants_values', array('products_variants_values_id' => $id));
         
+        //delete the variants value from the variants group
         if ($this->db->trans_status() === TRUE)
         {
             $this->db->delete('products_variants_values_to_products_variants_groups', 
-                              array('products_variants_groups_id' => $group_id, 
-                                    'products_variants_values_id' => $id));
+                array('products_variants_groups_id' => $group_id, 
+                      'products_variants_values_id' => $id));
         }
         
+        //check transaction status
         if ($this->db->trans_status() === TRUE)
         {
+            //commit
             $this->db->trans_commit();
             
             return TRUE;
         }
         
+        //rollback
         $this->db->trans_rollback();
         
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
-     * Save the product variants value to a variants group
+     * Save the products variants value
      *
      * @access public
      * @param $id
@@ -195,6 +206,7 @@ class Product_Variants_Model extends CI_Model
     {
         $error = FALSE;
         
+        //editing or adding the products variants value
         if (is_numeric($id))
         {
             $entry_id = $id;
@@ -202,9 +214,9 @@ class Product_Variants_Model extends CI_Model
         else
         {
             $result = $this->db
-            ->select_max('products_variants_values_id')
-            ->from('products_variants_values')
-            ->get();
+                ->select_max('products_variants_values_id')
+                ->from('products_variants_values')
+                ->get();
             
             $max_values = $result->row_array();
             $entry_id = $max_values['products_variants_values_id'] + 1;
@@ -212,24 +224,28 @@ class Product_Variants_Model extends CI_Model
             $result->free_result();
         }
         
+        //start transaction
         $this->db->trans_begin();
         
+        //process languages
         foreach(lang_get_all() as $l)
         {
+            //editing or adding the products variants value
             if (is_numeric($id))
             {
-                $this->db->update('products_variants_values', 
-                                  array('products_variants_values_name' => $data['name'][$l['id']]), 
-                                  array('products_variants_values_id' => $entry_id, 'language_id' => $l['id']));
+                $this->db->update('products_variants_values',
+                    array('products_variants_values_name' => $data['name'][$l['id']]), 
+                    array('products_variants_values_id' => $entry_id, 'language_id' => $l['id']));
             }
             else
             {
-                $this->db->insert('products_variants_values', 
-                                  array('products_variants_values_id' => $entry_id, 
-                                        'language_id' => $l['id'], 
-                                        'products_variants_values_name' => $data['name'][$l['id']]));
+                $this->db->insert('products_variants_values',
+                    array('products_variants_values_id' => $entry_id, 
+                          'language_id' => $l['id'], 
+                          'products_variants_values_name' => $data['name'][$l['id']]));
             }
             
+            //check transaction status
             if ($this->db->trans_status() === FALSE)
             {
                 $error = TRUE;
@@ -237,14 +253,16 @@ class Product_Variants_Model extends CI_Model
             }
         }
         
+        //attach the new products variants value with the variants group
         if ($error === FALSE)
         {
-            if (!is_numeric($id))
+            if ( ! is_numeric($id))
             {
-                $this->db->insert('products_variants_values_to_products_variants_groups', 
-                                  array('products_variants_groups_id' => $data['products_variants_groups_id'], 
-                                        'products_variants_values_id' => $entry_id));
-                                  
+                $this->db->insert('products_variants_values_to_products_variants_groups',
+                    array('products_variants_groups_id' => $data['products_variants_groups_id'], 
+                          'products_variants_values_id' => $entry_id));
+
+                //check transaction status
                 if ($this->db->trans_status() === FALSE)
                 {
                     $error = TRUE;
@@ -254,20 +272,22 @@ class Product_Variants_Model extends CI_Model
         
         if ($error === FALSE)
         {
+            //commit
             $this->db->trans_commit();
             
             return TRUE;
         }
         
+        //rollback
         $this->db->trans_rollback();
         
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
-     * Get the data of the product variants value with id
+     * Get the data of the products variants value
      *
      * @access public
      * @param $id
@@ -276,10 +296,10 @@ class Product_Variants_Model extends CI_Model
     public function get_entries_data($id)
     {
         $result = $this->db
-        ->select('*')
-        ->from('products_variants_values')
-        ->where('products_variants_values_id', $id)
-        ->get();
+            ->select('*')
+            ->from('products_variants_values')
+            ->where('products_variants_values_id', $id)
+            ->get();
         
         if ($result->num_rows() > 0)
         {
@@ -289,10 +309,10 @@ class Product_Variants_Model extends CI_Model
         return NULL;
     }
   
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
-     * Get the data of the group with id
+     * Get the data of the variants group
      *
      * @access public
      * @param $id
@@ -301,10 +321,10 @@ class Product_Variants_Model extends CI_Model
     public function get_groups_data($id)
     {
         $result = $this->db
-        ->select('*')
-        ->from('products_variants_groups')
-        ->where('products_variants_groups_id', $id)
-        ->get();
+            ->select('*')
+            ->from('products_variants_groups')
+            ->where('products_variants_groups_id', $id)
+            ->get();
         
         if ($result->num_rows() > 0)
         {
@@ -314,7 +334,7 @@ class Product_Variants_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * save the variants group
@@ -328,6 +348,7 @@ class Product_Variants_Model extends CI_Model
     {
         $error = FALSE;
         
+        //editing or adding the product variants group
         if (is_numeric($id))
         {
             $group_id = $id;
@@ -335,9 +356,9 @@ class Product_Variants_Model extends CI_Model
         else
         {
             $result = $this->db
-            ->select_max('products_variants_groups_id')
-            ->from('products_variants_values_to_products_variants_groups')
-            ->get();
+                ->select_max('products_variants_groups_id')
+                ->from('products_variants_values_to_products_variants_groups')
+                ->get();
             
             $max_groups = $result->row_array();
             $result->free_result();
@@ -345,24 +366,28 @@ class Product_Variants_Model extends CI_Model
             $group_id = $max_groups['products_variants_groups_id'] + 1;
         }
         
+        //start transaction
         $this->db->trans_begin();
         
+        //process languages
         foreach(lang_get_all() as $l)
         {
+            //editing or adding the product variants group
             if (is_numeric($id))
             {
-                $this->db->update('products_variants_groups', 
-                                  array('products_variants_groups_name' => $data['name'][$l['id']]), 
-                                  array('products_variants_groups_id' => $group_id, 'language_id' => $l['id']));
+                $this->db->update('products_variants_groups',
+                    array('products_variants_groups_name' => $data['name'][$l['id']]), 
+                    array('products_variants_groups_id' => $group_id, 'language_id' => $l['id']));
             }
             else
             {
-                $this->db->insert('products_variants_groups', 
-                                  array('products_variants_groups_id' => $group_id, 
-                                        'language_id' => $l['id'], 
-                                        'products_variants_groups_name' => $data['name'][$l['id']]));
+                $this->db->insert('products_variants_groups',
+                    array('products_variants_groups_id' => $group_id, 
+                          'language_id' => $l['id'], 
+                          'products_variants_groups_name' => $data['name'][$l['id']]));
             }
             
+            //check transaction status
             if ($this->db->trans_status() === FALSE)
             {
                 $error = TRUE;
@@ -372,20 +397,22 @@ class Product_Variants_Model extends CI_Model
         
         if ($error === FALSE)
         {
+            //commit
             $this->db->trans_commit();
             
             return TRUE;
         }
         
+        //rollback
         $this->db->trans_rollback();
         
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
-     * delete the variants group with id
+     * delete the variants group
      *
      * @access public
      * @param $id
@@ -395,20 +422,23 @@ class Product_Variants_Model extends CI_Model
     {
         $error = FALSE;
         
+        //start transaction
         $this->db->trans_begin();
         
         $result = $this->db
-        ->select('products_variants_values_id')
-        ->from('products_variants_values_to_products_variants_groups')
-        ->where('products_variants_groups_id', $id)
-        ->get();
+            ->select('products_variants_values_id')
+            ->from('products_variants_values_to_products_variants_groups')
+            ->where('products_variants_groups_id', $id)
+            ->get();
         
+        //delete the variants values in this variants group
         if ($result->num_rows() > 0)
         {
             foreach($result->result_array() as $entry)
             {
                 $this->db->delete('products_variants_values', array('products_variants_values_id' => $entry['products_variants_values_id']));
                 
+                //check transaction status
                 if ($this->db->trans_status() === FALSE)
                 {
                     $error = TRUE;
@@ -423,16 +453,19 @@ class Product_Variants_Model extends CI_Model
         {
             $this->db->delete('products_variants_values_to_products_variants_groups', array('products_variants_groups_id' => $id));
             
+            //check transaction status
             if ($this->db->trans_status() === FALSE)
             {
                 $error = TRUE;
             }
         }
         
+        //delete the variants grpup
         if ($error === FALSE)
         {
             $this->db->delete('products_variants_groups', array('products_variants_groups_id' => $id));
             
+            //check transaction status
             if ($this->db->trans_status() === FALSE)
             {
                 $error = TRUE;
@@ -441,20 +474,22 @@ class Product_Variants_Model extends CI_Model
         
         if ($error === FALSE)
         {
+            //commit
             $this->db->trans_commit();
             
             return TRUE;
         }
         
+        //rollback
         $this->db->trans_rollback();
         
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
-     * Get the total number of group products
+     * Get the total number of variants products in the variants group
      *
      * @access public
      * @param $groups_id
@@ -465,7 +500,7 @@ class Product_Variants_Model extends CI_Model
         return $this->db->where('products_variants_groups_id', $groups_id)->from('products_variants_entries')->count_all_results();
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get the total number of variants groups

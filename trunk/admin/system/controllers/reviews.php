@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-controller
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Reviews extends TOC_Controller
 {
@@ -41,7 +41,7 @@ class Reviews extends TOC_Controller
       $this->load->model('reviews_model');
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * List the reviews
@@ -60,7 +60,7 @@ class Reviews extends TOC_Controller
         $reviews = $this->reviews_model->get_reviews($start, $limit);
         
         $records = array();
-        if ($reviews != NULL)
+        if ($reviews !== NULL)
         {
             foreach($reviews as $review)
             {
@@ -77,7 +77,7 @@ class Reviews extends TOC_Controller
                                                     EXT_JSON_READER_ROOT => $records)));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Set the status of the review
@@ -99,7 +99,7 @@ class Reviews extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Load the review
@@ -114,21 +114,23 @@ class Reviews extends TOC_Controller
         
         $data = $this->reviews_model->get_data($this->input->post('reviews_id'));
         
-        if ($data != NULL)
+        if ($data !== NULL)
         {
             $data['detailed_rating'] = $data['reviews_rating'];
             $data['reviews_rating'] = image('images/stars_' . $data['reviews_rating'] . '.png', sprintf(lang('rating_from_5_stars'), $data['reviews_rating']));
             
+            //get the summary rating
             $average = $this->reviews_model->get_avg_rating($data['products_id']);
             
-            if ($average != NULL)
+            if ($average !== NULL)
             {
                 $data['average_rating'] = $average['reviews_rating'] / 5 * 100;
             }
             
+            //get ratings
             $ratings = $this->reviews_model->get_customers_ratings($this->input->post('reviews_id'));
             
-            if ($ratings != NULL)
+            if ($ratings !== NULL)
             {
                 $customers_ratings = array();
                 foreach($ratings as $rating)
@@ -139,7 +141,7 @@ class Reviews extends TOC_Controller
                                                  'value' => $rating['ratings_value']); 
                 }
                 
-                if (!empty($customers_ratings))
+                if (count($customers_ratings) > 0)
                 {
                     $data['ratings'] = $customers_ratings;
                 }
@@ -150,18 +152,12 @@ class Reviews extends TOC_Controller
             }
             
             $data['date_added'] = mdate('%Y/%m/%d', human_to_unix($data['date_added']));
-            
-            $response = array('success' => TRUE, 'data' => $data);
-        }
-        else
-        {
-            $response = array('success' => FALSE);
         }
         
-        $this->output->set_output(json_encode($response));
+        $this->output->set_output(json_encode(array('success' => TRUE, 'data' => $data)));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Save the review
@@ -174,6 +170,7 @@ class Reviews extends TOC_Controller
         $total = 0;
         $data = array('review' => $this->input->post('reviews_text'), 'reviews_status' => $this->input->post('reviews_status'));
         
+        //verify whether some ratings are included
         $ratings = array();
         foreach($this->input->post() as $key => $value)
         {
@@ -208,7 +205,7 @@ class Reviews extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Delete the review
@@ -230,7 +227,7 @@ class Reviews extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Batch delete the reviews
@@ -244,13 +241,20 @@ class Reviews extends TOC_Controller
         
         $reviews_ids = json_decode($this->input->post('batch'));
         
-        foreach($reviews_ids as $id)
+        if (count($reviews_ids) > 0)
         {
-            if (!$this->reviews_model->delete($id))
+            foreach($reviews_ids as $id)
             {
-                $error = TRUE;
-                break;
+                if (!$this->reviews_model->delete($id))
+                {
+                    $error = TRUE;
+                    break;
+                }
             }
+        }
+        else
+        {
+            $error = TRUE;
         }
         
         if ($error === FALSE) 

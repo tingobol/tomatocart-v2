@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-controller
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Ratings extends TOC_Controller
 {
@@ -41,7 +41,7 @@ class Ratings extends TOC_Controller
         $this->load->model('ratings_model');
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * List the ratings
@@ -57,14 +57,14 @@ class Ratings extends TOC_Controller
         $ratings = $this->ratings_model->get_ratings($start, $limit);
         
         $records = array();
-        if ($ratings != NULL)
+        if ($ratings !== NULL)
         {
             foreach($ratings as $rating)
             {
                 $records[] = array(
-                  'ratings_id' => $rating['ratings_id'],
-                  'ratings_name' => $rating['ratings_text'],
-                  'status' => $rating['status']
+                    'ratings_id' => $rating['ratings_id'],
+                    'ratings_name' => $rating['ratings_text'],
+                    'status' => $rating['status']
                 );
             }
         }
@@ -73,7 +73,7 @@ class Ratings extends TOC_Controller
                                                     EXT_JSON_READER_ROOT => $records)));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Set the status of the rating
@@ -95,7 +95,7 @@ class Ratings extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Save the ratings
@@ -108,6 +108,8 @@ class Ratings extends TOC_Controller
         $ratings_text = $this->input->post('ratings_text');
         
         $data = array('status' => $this->input->post('status'));
+        
+        //process languages
         foreach(lang_get_all() as $l)
         {
             $data['ratings_text'][$l['id']] = $ratings_text[$l['id']];
@@ -125,7 +127,7 @@ class Ratings extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Delete the rating
@@ -147,7 +149,7 @@ class Ratings extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Batch delete the ratings
@@ -159,15 +161,22 @@ class Ratings extends TOC_Controller
     {
         $error = FALSE;
         
-        $ratins_ids = json_decode($this->input->post('batch'));
+        $ratings_ids = json_decode($this->input->post('batch'));
         
-        foreach($ratins_ids as $id)
+        if (count($ratings_ids) > 0)
         {
-            if (!$this->ratings_model->delete($id))
+            foreach($ratings_ids as $id)
             {
-                $error = TRUE;
-                break;
+                if ( ! $this->ratings_model->delete($id))
+                {
+                    $error = TRUE;
+                    break;
+                }
             }
+        }
+        else
+        {
+            $error = TRUE;
         }
         
         if ($error == FALSE) 
@@ -182,7 +191,7 @@ class Ratings extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Load the ratings
@@ -194,7 +203,7 @@ class Ratings extends TOC_Controller
     {
         $ratings = $this->ratings_model->get_data($this->input->post('ratings_id'));
         
-        if ($ratings != NULL)
+        if ($ratings !== NULL)
         {
             $data = array();
             foreach($ratings as $rating)
@@ -206,15 +215,9 @@ class Ratings extends TOC_Controller
                 
                 $data['ratings_text[' . $rating['languages_id'] .']'] = $rating['ratings_text'];
             }
-            
-            $response = array('success' => TRUE, 'data' => $data);
-        }
-        else
-        {
-            $response = array('success' => FALSE);
         }
         
-        $this->output->set_output(json_encode($response));
+        $this->output->set_output(json_encode(array('success' => TRUE, 'data' => $data)));
     }
 }
 

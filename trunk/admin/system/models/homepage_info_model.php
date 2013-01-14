@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-model
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Homepage_Info_Model extends CI_Model
 {
@@ -39,7 +39,7 @@ class Homepage_Info_Model extends CI_Model
         parent::__construct();
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Save the data of the home page
@@ -52,12 +52,15 @@ class Homepage_Info_Model extends CI_Model
     {
         $error = FALSE;
         
+        //start transaction
         $this->db->trans_begin();
         
+        //process page title
         foreach($data['page_title'] as $key => $value)
         {
             $this->db->update('configuration', array('configuration_value' => $value), array('configuration_key' => 'HOME_PAGE_TITLE_' . $key));
             
+            //check transaction status
             if ($this->db->trans_status() === FALSE)
             {
                 $error = TRUE;
@@ -65,12 +68,14 @@ class Homepage_Info_Model extends CI_Model
             }
         }
         
+        //process meta keywords
         if ($error === FALSE)
         {
             foreach($data['keywords'] as $key => $value)
             {
                 $this->db->update('configuration', array('configuration_value' => $value), array('configuration_key' => 'HOME_META_KEYWORD_' . $key));
                 
+                //check transaction status
                 if ($this->db->trans_status() === FALSE)
                 {
                     $error = TRUE;
@@ -79,12 +84,14 @@ class Homepage_Info_Model extends CI_Model
             }
         }
         
+        //process meta description
         if ($error === FALSE)
         {
             foreach($data['descriptions'] as $key => $value)
             {
                 $this->db->update('configuration', array('configuration_value' => $value), array('configuration_key' => 'HOME_META_DESCRIPTION_' . $key));
                 
+                //check transaction status
                 if ($this->db->trans_status() === FALSE)
                 {
                     $error = TRUE;
@@ -93,12 +100,14 @@ class Homepage_Info_Model extends CI_Model
             }
         }
         
+        //process index text
         if ($error === FALSE)
         {
             foreach($data['index_text'] as $languages_id => $value)
             {
                 $this->db->update('languages_definitions', array('definition_value' => $value), array('definition_key' => 'index_text', 'languages_id' => $languages_id));
                 
+                //check transaction status
                 if ($this->db->trans_status() === FALSE)
                 {
                     $error = TRUE;
@@ -109,17 +118,19 @@ class Homepage_Info_Model extends CI_Model
         
         if ($error === FALSE)
         {
+            //commit
             $this->db->trans_commit();
             
             return TRUE;
         }
         
+        //rollback
         $this->db->trans_rollback();
         
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get the data of home page
@@ -131,13 +142,14 @@ class Homepage_Info_Model extends CI_Model
     {
         $data = array();
         
+        //process homepage info for each language
         foreach(lang_get_all() as $l)
         {
             $name = $l['name'];
             $code = strtoupper($l['code']);
             
             //check page title for language
-            if (!defined('HOME_PAGE_TITLE_' . $code))
+            if ( ! defined('HOME_PAGE_TITLE_' . $code))
             {
                 $this->db->insert('configuration', array('configuration_title' => 'Homepage Page Title For ' . $name, 
                                                          'configuration_key' => 'HOME_PAGE_TITLE_' . $code, 
@@ -151,7 +163,7 @@ class Homepage_Info_Model extends CI_Model
             }
             
             //check meta keywords for language
-            if (!defined('HOME_META_KEYWORD_' . $code))
+            if ( ! defined('HOME_META_KEYWORD_' . $code))
             {
                 $this->db->insert('configuration', array('configuration_title' => 'Homepage Meta Keywords For ' . $name, 
                                                          'configuration_key' => 'HOME_META_KEYWORD_' . $code, 
@@ -165,7 +177,7 @@ class Homepage_Info_Model extends CI_Model
             }
             
             //check meta description for language
-            if (!defined('HOME_META_DESCRIPTION_' . $code))
+            if ( ! defined('HOME_META_DESCRIPTION_' . $code))
             {
                 $this->db->insert('configuration', array('configuration_title' => 'Homepage Meta Description For ' . $name, 
                                                          'configuration_key' => 'HOME_META_DESCRIPTION_' . $code, 
@@ -178,11 +190,12 @@ class Homepage_Info_Model extends CI_Model
                 define('HOME_META_DESCRIPTION_' . $code, '');
             }
             
+            //process the index text
             $result = $this->db
-            ->select('*')
-            ->from('languages_definitions')
-            ->where(array('definition_key' => 'index_text', 'languages_id' => $l['id']))
-            ->get();
+                ->select('*')
+                ->from('languages_definitions')
+                ->where(array('definition_key' => 'index_text', 'languages_id' => $l['id']))
+                ->get();
             
             if ($result->num_rows() > 0)
             {

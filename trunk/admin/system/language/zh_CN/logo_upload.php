@@ -14,6 +14,11 @@ action_heading_logo_upload = 上传Logo
 
 field_logo_image = Logo图片：
 
+field_resize_logo = 改变logo大小
+field_logo_image = Logo图片:
+field_logo_width = Logo宽度:
+field_logo_height = Logo高度:
+
 ms_logo_upload_success = 成功：您的网店Logo上传成功。
 ms_logo_upload_error = 错误：Logo上传失败。
 

@@ -144,7 +144,7 @@ Ext.define('Toc.specials.SpecialsGrid', {
     });
     
     config.txtSearch = Ext.create('Ext.form.TextField', {
-      width: 100,
+      width: 150,
       hideLabel: true
     });
     

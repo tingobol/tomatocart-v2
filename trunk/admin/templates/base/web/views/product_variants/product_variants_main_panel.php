@@ -43,6 +43,8 @@ Ext.define('Toc.product_variants.MainPanel', {
       var record = this.grdVariantsGroups.getStore().getAt(0);
       
       this.onGrdVariantsGroupsSelectChange(record);
+    }else {
+      this.grdVariantsEntries.onRefresh();
     }
   },
   

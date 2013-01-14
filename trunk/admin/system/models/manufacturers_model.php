@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-model
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Manufacturers_Model extends CI_Model
 {
@@ -39,7 +39,7 @@ class Manufacturers_Model extends CI_Model
         parent::__construct();
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get the manufacturers
@@ -49,14 +49,19 @@ class Manufacturers_Model extends CI_Model
      * @param $limit
      * @return mixed
      */
-    public function get_manufacturers($start, $limit)
+    public function get_manufacturers($start = NULL, $limit = NULL)
     {
-        $result = $this->db
-        ->select('manufacturers_id, manufacturers_name, manufacturers_image, date_added, last_modified')
-        ->from('manufacturers')
-        ->order_by('manufacturers_name')
-        ->limit($limit, $start)
-        ->get();
+        $this->db
+            ->select('manufacturers_id, manufacturers_name, manufacturers_image, date_added, last_modified')
+            ->from('manufacturers')
+            ->order_by('manufacturers_name');
+        
+        if ($start !== NULL && $limit !== NULL)
+        {
+            $this->db->limit($limit, $start);
+        }
+        
+        $result = $this->db->get();
         
         if ($result->num_rows() > 0)
         {
@@ -66,7 +71,7 @@ class Manufacturers_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get the total clicks of the manufacture with id
@@ -88,7 +93,7 @@ class Manufacturers_Model extends CI_Model
         return $clicks['total'];
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Delete the manufacturer with id
@@ -103,19 +108,22 @@ class Manufacturers_Model extends CI_Model
     {
         $this->load->model('products_model');
         
+        $error = FALSE;
+        
+        //delete the manufacturer's image
         if ($delete_image === TRUE )
         {
-            $result = $this->db
-            ->select('manufacturers_image')
-            ->from('manufacturers')
-            ->where('manufacturers_id', $id)
-            ->get();
+            $res_manfacturers = $this->db
+                ->select('manufacturers_image')
+                ->from('manufacturers')
+                ->where('manufacturers_id', $id)
+                ->get();
             
-            $image = $result->row_array();
+            $image = $res_manfacturers->row_array();
             
-            $result->free_result();
+            $res_manfacturers->free_result();
             
-            if (!empty($image))
+            if (count($image) > 0)
             {
                 if (file_exists(ROOTPATH . 'images/manufacturers/' . $image['manufacturers_image']))
                 {
@@ -125,38 +133,73 @@ class Manufacturers_Model extends CI_Model
             }
         }
         
-        $this->db->delete('manufacturers', array('manufacturers_id' => $id));
-        $this->db->delete('manufacturers_info', array('manufacturers_id' => $id));
+        //start transaction
+        $this->db->trans_begin();
         
+        //delete the products linked with the manufacturer
         if ($delete_products === TRUE)
         {
-            $result = $this->db
-            ->select('products_id')
-            ->from('products')
-            ->where('manufacturers_id', $id)
-            ->get();
+            $res_products = $this->db
+                ->select('products_id')
+                ->from('products')
+                ->where('manufacturers_id', $id)
+                ->get();
             
-            $products = $result->result_array();
+            $products = $res_products->result_array();
             
-            $result->free_result();
+            $res_products->free_result();
             
-            if (!empty($products))
+            if (count($products) > 0)
             {
                 foreach($products as $product)
                 {
-                    $this->products_model->delete_product($product['products_id']);
+                    if ( ! $this->products_model->delete_product($product['products_id']))
+                    {
+                        $error = TRUE;
+                        break;
+                    }
                 }
             }
         }
         else
         {
             $this->db->update('products', array('manufacturers_id' => NULL), array('manufacturers_id' => $id));
+            
+            //check transaction status
+            if ($this->db->trans_status() === FALSE)
+            {
+                $error = TRUE;
+            }
         }
         
-        return TRUE;
+        //delete the manufacturers
+        if ($error === FALSE)
+        {
+            $this->db->delete('manufacturers', array('manufacturers_id' => $id));
+            $this->db->delete('manufacturers_info', array('manufacturers_id' => $id));
+            
+            //check transaction status
+            if ($this->db->trans_status() === FALSE)
+            {
+                $error = TRUE;
+            }
+        }
+        
+        if ($error === FALSE)
+        {
+            //commit
+            $this->db->trans_commit();
+            
+            return TRUE;
+        }
+        
+        //rollback
+        $this->db->trans_rollback();
+        
+        return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Save the manufacturer
@@ -172,8 +215,10 @@ class Manufacturers_Model extends CI_Model
         
         $error = FALSE;
         
+        //start transaction
         $this->db->trans_begin();
         
+        //editing or adding the manufacturer
         if (is_numeric($id))
         {
             $this->db->update('manufacturers', array('manufacturers_name' => $data['name'], 'last_modified' => date('Y-m-d H:i:s')), array('manufacturers_id' => $id));
@@ -183,6 +228,7 @@ class Manufacturers_Model extends CI_Model
             $this->db->insert('manufacturers', array('manufacturers_name' => $data['name'], 'date_added' => date('Y-m-d H:i:s')));
         }
         
+        //check transaction status and then upload the manufacturer image
         if ($this->db->trans_status() === TRUE)
         {
             $manufacturers_id = $id ? $id : $this->db->insert_id();
@@ -193,10 +239,9 @@ class Manufacturers_Model extends CI_Model
             
             if ($this->upload->do_upload($data['image']))
             {
-                $manufacturers_image_info = $this->upload->data();
+                $this->db->update('manufacturers', array('manufacturers_image' => $this->upload->data('file_name')), array('manufacturers_id' => $manufacturers_id));
                 
-                $this->db->update('manufacturers', array('manufacturers_image' => $manufacturers_image_info['file_name']), array('manufacturers_id' => $manufacturers_id));
-                
+                //check transaction status
                 if ($this->db->trans_status() === FALSE)
                 {
                     $error = TRUE;
@@ -208,6 +253,7 @@ class Manufacturers_Model extends CI_Model
             $error = TRUE;
         }
         
+        //process languages
         if ($error === FALSE)
         {
             foreach(lang_get_all() as $l)
@@ -218,6 +264,7 @@ class Manufacturers_Model extends CI_Model
                                             'manufacturers_meta_keywords' => $data['meta_keywords'][$l['id']], 
                                             'manufacturers_meta_description' => $data['meta_description'][$l['id']]);
                 
+                //editing or adding the manufacturer
                 if (is_numeric($id))
                 {
                     $this->db->update('manufacturers_info', $manufacturers_info, array('manufacturers_id' => $manufacturers_id, 'languages_id' => $l['id']));
@@ -230,6 +277,7 @@ class Manufacturers_Model extends CI_Model
                     $this->db->insert('manufacturers_info', $manufacturers_info);
                 }
                 
+                //check transaction status
                 if ($this->db->trans_status() === FALSE)
                 {
                     $error = TRUE;
@@ -240,17 +288,19 @@ class Manufacturers_Model extends CI_Model
         
         if ($error === FALSE)
         {
+            //commit
             $this->db->trans_commit();
             
             return TRUE;
         }
         
+        //rollback
         $this->db->trans_rollback();
         
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get the data of the manufacturer
@@ -267,27 +317,29 @@ class Manufacturers_Model extends CI_Model
            $language_id = lang_id();
         }
         
-        $result = $this->db
-        ->select('m.*, mi.*')
-        ->from('manufacturers m')
-        ->join('manufacturers_info mi', 'm.manufacturers_id = mi.manufacturers_id')
-        ->where(array('m.manufacturers_id' => $id, 'mi.languages_id' => $language_id))
-        ->get();
-        
-        if ($result->num_rows() > 0)
-        {
-            $data = $result->row_array();
-        
-            $result->free_result();
-            
-            $result = $this->db
-            ->select_sum('url_clicked', 'total')
-            ->from('manufacturers_info')
-            ->where('manufacturers_id', $id)
+        //get the manufacturer's data
+        $res_manufacturer = $this->db
+            ->select('m.*, mi.*')
+            ->from('manufacturers m')
+            ->join('manufacturers_info mi', 'm.manufacturers_id = mi.manufacturers_id')
+            ->where(array('m.manufacturers_id' => $id, 'mi.languages_id' => $language_id))
             ->get();
+        
+        if ($res_manufacturer->num_rows() > 0)
+        {
+            $data = $res_manufacturer->row_array();
+        
+            $res_manufacturer->free_result();
             
-            $clicks = $result->row_array();
-            $result->free_result();
+            //get the total count of url clicked
+            $res_url_clicked = $this->db
+                ->select_sum('url_clicked', 'total')
+                ->from('manufacturers_info')
+                ->where('manufacturers_id', $id)
+                ->get();
+            
+            $clicks = $res_url_clicked->row_array();
+            $res_url_clicked->free_result();
             
             $data['url_clicks'] = $clicks['total'];
             
@@ -299,7 +351,7 @@ class Manufacturers_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get the info of the manufacturer with id
@@ -311,10 +363,10 @@ class Manufacturers_Model extends CI_Model
     public function get_info($id)
     {
         $result = $this->db
-        ->select('languages_id, manufacturers_url, manufacturers_friendly_url, manufacturers_page_title, manufacturers_meta_keywords, manufacturers_meta_description')
-        ->from('manufacturers_info')
-        ->where('manufacturers_id', $id)
-        ->get();
+            ->select('languages_id, manufacturers_url, manufacturers_friendly_url, manufacturers_page_title, manufacturers_meta_keywords, manufacturers_meta_description')
+            ->from('manufacturers_info')
+            ->where('manufacturers_id', $id)
+            ->get();
         
         if ($result->num_rows() > 0)
         {
@@ -335,9 +387,9 @@ class Manufacturers_Model extends CI_Model
     public function get_manufacturers_data()
     {
         $result = $this->db
-        ->select('*')
-        ->from('manufacturers')
-        ->get();
+            ->select('*')
+            ->from('manufacturers')
+            ->get();
         
         if ($result->num_rows() > 0)
         {
