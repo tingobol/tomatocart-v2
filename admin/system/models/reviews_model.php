@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-model
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Reviews_Model extends CI_Model
 {
@@ -39,7 +39,7 @@ class Reviews_Model extends CI_Model
         parent::__construct();
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get the reviews
@@ -49,16 +49,21 @@ class Reviews_Model extends CI_Model
      * @param $limit
      * @return mixed
      */
-    public function get_reviews($start, $limit)
+    public function get_reviews($start = NULL, $limit = NULL)
     {
-        $result = $this->db
-        ->select('r.reviews_id, r.products_id, r.date_added, r.last_modified, r.reviews_rating, r.reviews_status, pd.products_name, l.code as languages_code')
-        ->from('reviews r')
-        ->join('products_description pd', 'r.products_id = pd.products_id and r.languages_id = pd.language_id', 'left')
-        ->join('languages l', 'r.languages_id = l.languages_id')
-        ->order_by('r.date_added desc')
-        ->limit($limit, $start)
-        ->get();
+        $this->db
+            ->select('r.reviews_id, r.products_id, r.date_added, r.last_modified, r.reviews_rating, r.reviews_status, pd.products_name, l.code as languages_code')
+            ->from('reviews r')
+            ->join('products_description pd', 'r.products_id = pd.products_id and r.languages_id = pd.language_id', 'left')
+            ->join('languages l', 'r.languages_id = l.languages_id')
+            ->order_by('r.date_added desc');
+            
+        if ($start !== NULL && $limit !== NULL)
+        {
+            $this->db->limit($limit, $start);
+        }
+        
+        $result = $this->db->get();
         
         if ($result->num_rows() > 0)
         {
@@ -68,7 +73,7 @@ class Reviews_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Set the status of the review
@@ -90,7 +95,7 @@ class Reviews_Model extends CI_Model
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get the data of the review
@@ -102,11 +107,11 @@ class Reviews_Model extends CI_Model
     public function get_data($id)
     {
         $result = $this->db
-        ->select('r.*, pd.products_name')
-        ->from('reviews r')
-        ->join('products_description pd', 'r.products_id = pd.products_id and r.languages_id = pd.language_id')
-        ->where('r.reviews_id', $id)
-        ->get();
+            ->select('r.*, pd.products_name')
+            ->from('reviews r')
+            ->join('products_description pd', 'r.products_id = pd.products_id and r.languages_id = pd.language_id')
+            ->where('r.reviews_id', $id)
+            ->get();
         
         if ($result->num_rows() > 0)
         {
@@ -116,7 +121,7 @@ class Reviews_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------    
+    // ------------------------------------------------------------------------    
     
     /**
      * Get the average ratings
@@ -128,10 +133,10 @@ class Reviews_Model extends CI_Model
     public function get_avg_rating($products_id)
     {
         $result = $this->db
-        ->select_avg('reviews_rating')
-        ->from('reviews')
-        ->where('products_id', $products_id)
-        ->get();
+            ->select_avg('reviews_rating')
+            ->from('reviews')
+            ->where('products_id', $products_id)
+            ->get();
         
         if ($result->num_rows() > 0)
         {
@@ -141,7 +146,7 @@ class Reviews_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get the customers ratings
@@ -153,12 +158,12 @@ class Reviews_Model extends CI_Model
     public function get_customers_ratings($reviews_id)
     {
         $result = $this->db
-        ->select('r.customers_ratings_id, r.ratings_id, r.ratings_value, rd.ratings_text')
-        ->from('customers_ratings r')
-        ->join('ratings_description rd', 'r.ratings_id = rd.ratings_id')
-        ->where(array('r.reviews_id' => $reviews_id, 'rd.languages_id' => lang_id()))
-        ->order_by('r.customers_ratings_id')
-        ->get();
+            ->select('r.customers_ratings_id, r.ratings_id, r.ratings_value, rd.ratings_text')
+            ->from('customers_ratings r')
+            ->join('ratings_description rd', 'r.ratings_id = rd.ratings_id')
+            ->where(array('r.reviews_id' => $reviews_id, 'rd.languages_id' => lang_id()))
+            ->order_by('r.customers_ratings_id')
+            ->get();
         
         if ($result->num_rows() > 0)
         {
@@ -168,7 +173,7 @@ class Reviews_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Save the review
@@ -182,22 +187,33 @@ class Reviews_Model extends CI_Model
     {
         $error = FALSE;
         
+        //start transaction
         $this->db->trans_begin();
         
-        $this->db->update('reviews', array('reviews_text' => $data['review'], 
-                                           'reviews_rating' => $data['rating'], 
-                                           'reviews_status' => $data['reviews_status']), 
-                                     array('reviews_id' => $id));
-                                     
-        if ($this->db->trans_status() === TRUE)
+        $this->db->update('reviews',
+            array('reviews_text' => $data['review'], 
+                  'reviews_rating' => $data['rating'], 
+                  'reviews_status' => $data['reviews_status']), 
+            array('reviews_id' => $id));
+
+        //check transaction status
+        if ($this->db->trans_status === FALSE)
         {
-            if (!empty($data['ratings']))
+            $error = TRUE;
+        }
+
+        //process ratings
+        if ($error === FALSE)
+        {
+            if ($data['ratings'] !== NULL)
             {
                 foreach($data['ratings'] as $customers_ratins_id => $value)
                 {
-                    $this->db->update('customers_ratings', 
-                                      array('ratings_value' => $value), array('customers_ratings_id' => $customers_ratins_id));
-                                      
+                    $this->db->update('customers_ratings',
+                        array('ratings_value' => $value),
+                        array('customers_ratings_id' => $customers_ratins_id));
+                    
+                    //check transaction status
                     if ($this->db->trans_status() === FALSE)
                     {
                         $error = TRUE;
@@ -206,24 +222,22 @@ class Reviews_Model extends CI_Model
                 }
             }
         }
-        else
-        {
-            $error = TRUE;
-        }
     
         if ($error === FALSE)
         {
+            //commit
             $this->db->trans_commit();
             
             return TRUE;
         }
         
+        //rollback
         $this->db->trans_rollback();
         
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Delete the review
@@ -234,28 +248,33 @@ class Reviews_Model extends CI_Model
      */
     public function delete($id)
     {
+        //start transaction
         $this->db->trans_begin();
         
         $this->db->delete('reviews', array('reviews_id' => $id));
         
+        //check transaction status
         if ($this->db->trans_status() === TRUE)
         {
             $this->db->delete('customers_ratings', array('reviews_id' => $id));
         }
         
+        //check transaction status
         if ($this->db->trans_status() === TRUE)
         {
+            //commit
             $this->db->trans_commit();
             
             return TRUE;
         }
         
+        //rollback
         $this->db->trans_rollback();
         
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get the total number of reviews

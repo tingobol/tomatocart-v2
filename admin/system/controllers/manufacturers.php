@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-controller
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Manufacturers extends TOC_Controller 
 {
@@ -41,7 +41,7 @@ class Manufacturers extends TOC_Controller
         $this->load->model('manufacturers_model');
     }
 
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * List the manufacturers
@@ -57,7 +57,7 @@ class Manufacturers extends TOC_Controller
         $manufacturers = $this->manufacturers_model->get_manufacturers($start, $limit);
         
         $records = array();
-        if ($manufacturers != NULL)
+        if ($manufacturers !== NULL)
         {
             foreach($manufacturers as $manufacturer)
             {
@@ -73,7 +73,7 @@ class Manufacturers extends TOC_Controller
                                                     EXT_JSON_READER_ROOT => $records)));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Delete the manufacturer
@@ -95,7 +95,7 @@ class Manufacturers extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Batch delete the manufacturers
@@ -110,11 +110,11 @@ class Manufacturers extends TOC_Controller
         $batch = $this->input->post('batch');
         $manufacturers_ids = json_decode($batch);
         
-        if (!empty($manufacturers_ids))
+        if (count($manufacturers_ids) > 0)
         {
             foreach($manufacturers_ids as $manufacturers_id)
             {
-                if ($this->manufacturers_model->delete($manufacturers_id) !== TRUE)
+                if ( ! $this->manufacturers_model->delete($manufacturers_id))
                 {
                     $error = TRUE;
                     break;
@@ -138,7 +138,7 @@ class Manufacturers extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Save the manufacturer
@@ -154,12 +154,13 @@ class Manufacturers extends TOC_Controller
         $formatted_urls = array();
         $urls = $this->input->post('manufacturers_friendly_url');
         
-        if (is_array($urls) && !empty($urls))
+        if (is_array($urls) && count($urls) > 0)
         {
             foreach($urls as $languages_id => $url)
             {
                 $url = format_friendly_url($url);
                 
+                //if the friendly url is empty, set it with the manufacturer's name
                 if (empty($url))
                 {
                     $url = format_friendly_url($this->input->post('manufacturers_name'));
@@ -186,10 +187,10 @@ class Manufacturers extends TOC_Controller
             $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed')); 
         }
         
-        $this->output->set_header("Content-Type: text/html")->set_output(json_encode($response));
+        $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Load the manufacturer
@@ -203,7 +204,7 @@ class Manufacturers extends TOC_Controller
         
         $manufacturers_info = $this->manufacturers_model->get_info($this->input->post('manufacturers_id'));
         
-        if ($manufacturers_info != NULL)
+        if ($manufacturers_info !== NULL)
         {
             foreach($manufacturers_info as $manufacturer_info)
             {
@@ -215,16 +216,7 @@ class Manufacturers extends TOC_Controller
             }
         }
         
-        if (($data != NULL) && ($manufacturers_info != NULL))
-        {
-            $response = array('success' => TRUE, 'data' => $data);
-        }
-        else
-        {
-            $response = array('success' => FALSE);
-        }
-        
-        $this->output->set_output(json_encode($response));
+        $this->output->set_output(json_encode(array('success' => TRUE, 'data' => $data)));
     }
 }
 

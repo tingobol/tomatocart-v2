@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-model
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Specials_Model extends CI_Model
 {
@@ -39,21 +39,60 @@ class Specials_Model extends CI_Model
         parent::__construct();
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get the special products
      *
      * @access public
-     * @param $params
+     * @param $start
+     * @param $limit
+     * @param $search
+     * @param $manufacturers_id
+     * @param $in_categories
      * @return mixed
      */
-    public function get_specials($params)
+    public function get_specials($start = NULL, $limit = NULL, $search = NULL, $manufacturers_id = NULL, $in_categories = array())
     {
-        $result = $this->get_query($params)
-        ->order_by('pd.products_name')
-        ->limit($params['limit'], $params['start'])
-        ->get();
+        if (count($in_categories) > 0)
+        {
+            $this->db
+                ->select('p.products_id, pd.products_name, p.products_price, s.specials_id, s.specials_new_products_price, s.specials_date_added, s.specials_last_modified, s.expires_date, s.date_status_change, s.status')
+                ->from('specials s')
+                ->join('products p', 'p.products_id = s.products_id')
+                ->join('products_description pd', 'p.products_id = pd.products_id')
+                ->join('products_to_categories p2c', 'p.products_id = p2c.products_id')
+                ->where('pd.language_id', lang_id())
+                ->where_in('p2c.categories_id', $in_categories);
+        }
+        else
+        {
+            $this->db
+                ->select('p.products_id, pd.products_name, p.products_price, s.specials_id, s.specials_new_products_price, s.specials_date_added, s.specials_last_modified, s.expires_date, s.date_status_change, s.status')
+                ->from('specials s')
+                ->join('products p', 'p.products_id = s.products_id')
+                ->join('products_description pd', 'p.products_id = pd.products_id')
+                ->where('pd.language_id', lang_id());
+        }
+        
+        if ($search !== NULL)
+        {
+            $this->db->like('pd.products_name', $search);
+        }
+        
+        if (is_numeric($manufacturers_id))
+        {
+            $this->db->where('p.manufacturers_id', $manufacturers_id);
+        }
+        
+        $this->db->order_by('pd.products_name');
+        
+        if ($start !== NULL && $limit !== NULL)
+        {
+            $this->db->limit($limit, $start);
+        }
+        
+        $result = $this->db->get();
         
         if ($result->num_rows() > 0)
         {
@@ -64,7 +103,7 @@ class Specials_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Save the special product
@@ -79,10 +118,10 @@ class Specials_Model extends CI_Model
         $error = FALSE;
         
         $result = $this->db
-        ->select('products_price')
-        ->from('products')
-        ->where('products_id', $data['products_id'])
-        ->get();
+            ->select('products_price')
+            ->from('products')
+            ->where('products_id', $data['products_id'])
+            ->get();
         
         $product = $result->row_array();
         
@@ -95,11 +134,13 @@ class Specials_Model extends CI_Model
             $specials_price = $product['products_price'] - (((double)$specials_price / 100) * $product['products_price']);
         }
         
+        //verify the speical price
         if (($specials_price < '0.00') || (isset($product['products_price']) && $specials_price >= $product['products_price']))
         {
             $error = TRUE;
         }
         
+        //verify the expires date
         if ($data['expires_date'] < $data['start_date'])
         {
             $error = TRUE;
@@ -107,6 +148,7 @@ class Specials_Model extends CI_Model
         
         if ($error === FALSE)
         {
+            //editing or adding the specials
             if (is_numeric($id))
             {
                 $this->db->update('specials', array('specials_new_products_price' => $specials_price, 
@@ -140,7 +182,7 @@ class Specials_Model extends CI_Model
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get the products
@@ -150,16 +192,21 @@ class Specials_Model extends CI_Model
      * @param $limit
      * @return mixed
      */
-    public function get_products($start, $limit)
+    public function get_products($start = NULL, $limit = NULL)
     {
-        $result = $this->db
-        ->select('p.products_id, pd.products_name, p.products_tax_class_id')
-        ->from('products p')
-        ->join('products_description pd', 'p.products_id = pd.products_id')
-        ->where(array('pd.language_id' => lang_id(), 'p.products_type !=' => PRODUCT_TYPE_GIFT_CERTIFICATE))
-        ->order_by('pd.products_name')
-        ->limit($limit, $start)
-        ->get();
+        $this->db
+            ->select('p.products_id, pd.products_name, p.products_tax_class_id')
+            ->from('products p')
+            ->join('products_description pd', 'p.products_id = pd.products_id')
+            ->where(array('pd.language_id' => lang_id(), 'p.products_type !=' => PRODUCT_TYPE_GIFT_CERTIFICATE))
+            ->order_by('pd.products_name');
+        
+        if ($start !== NULL && $limit !== NULL)
+        {
+            $this->db->limit($limit, $start);
+        }
+        
+        $result = $this->db->get();
         
         if ($result->num_rows() > 0)
         {
@@ -169,7 +216,7 @@ class Specials_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Delete the special product with id
@@ -190,7 +237,7 @@ class Specials_Model extends CI_Model
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get the data of the special product
@@ -202,13 +249,13 @@ class Specials_Model extends CI_Model
     public function get_data($id)
     {
         $result = $this->db
-        ->select('p.products_id, pd.products_name, p.products_price, s.specials_id, s.specials_new_products_price, s.specials_date_added, s.specials_last_modified, s.start_date, s.expires_date, s.date_status_change, s.status')
-        ->from('specials s')
-        ->join('products p', 's.products_id = p.products_id')
-        ->join('products_description pd', 'p.products_id = pd.products_id')
-        ->where(array('s.specials_id' => $id, 'pd.language_id' => lang_id()))
-        ->limit(1)
-        ->get();
+            ->select('p.products_id, pd.products_name, p.products_price, s.specials_id, s.specials_new_products_price, s.specials_date_added, s.specials_last_modified, s.start_date, s.expires_date, s.date_status_change, s.status')
+            ->from('specials s')
+            ->join('products p', 's.products_id = p.products_id')
+            ->join('products_description pd', 'p.products_id = pd.products_id')
+            ->where(array('s.specials_id' => $id, 'pd.language_id' => lang_id()))
+            ->limit(1)
+            ->get();
         
         if ($result->num_rows() > 0)
         {
@@ -218,7 +265,7 @@ class Specials_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get the total number of products
@@ -229,12 +276,12 @@ class Specials_Model extends CI_Model
     public function get_total_products()
     {
         return $this->db
-               ->where('products_type !=', PRODUCT_TYPE_GIFT_CERTIFICATE)
-               ->from('products')
-               ->count_all_results();
+                   ->where('products_type !=', PRODUCT_TYPE_GIFT_CERTIFICATE)
+                   ->from('products')
+                   ->count_all_results();
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get the total number of speical products
@@ -242,55 +289,42 @@ class Specials_Model extends CI_Model
      * @access public
      * @return int
      */
-    public function get_total($params)
+    public function get_total($search = NULL, $manufacturers_id = NULL, $in_categories = array())
     {
-        $result = $this->get_query($params)->get();
-        
-        return $result->num_rows();
-    }
-    
-// ------------------------------------------------------------------------
-    
-    /**
-     * Build the query
-     *
-     * @access private
-     * @return resource
-     */
-    private function get_query($params)
-    {
-        if (isset($params['in_categories']) && !empty($params['in_categories']))
+        if (count($in_categories) > 0)
         {
             $this->db
-            ->select('p.products_id, pd.products_name, p.products_price, s.specials_id, s.specials_new_products_price, s.specials_date_added, s.specials_last_modified, s.expires_date, s.date_status_change, s.status')
-            ->from('specials s')
-            ->join('products p', 'p.products_id = s.products_id')
-            ->join('products_description pd', 'p.products_id = pd.products_id')
-            ->join('products_to_categories p2c', 'p.products_id = p2c.products_id')
-            ->where('pd.language_id', lang_id())
-            ->where_in('p2c.categories_id', $params['in_categories']);
+                ->select('p.products_id, pd.products_name, p.products_price, s.specials_id, s.specials_new_products_price, s.specials_date_added, s.specials_last_modified, s.expires_date, s.date_status_change, s.status')
+                ->from('specials s')
+                ->join('products p', 'p.products_id = s.products_id')
+                ->join('products_description pd', 'p.products_id = pd.products_id')
+                ->join('products_to_categories p2c', 'p.products_id = p2c.products_id')
+                ->where('pd.language_id', lang_id())
+                ->where_in('p2c.categories_id', $in_categories);
         }
         else
         {
             $this->db
-            ->select('p.products_id, pd.products_name, p.products_price, s.specials_id, s.specials_new_products_price, s.specials_date_added, s.specials_last_modified, s.expires_date, s.date_status_change, s.status')
-            ->from('specials s')
-            ->join('products p', 'p.products_id = s.products_id')
-            ->join('products_description pd', 'p.products_id = pd.products_id')
-            ->where('pd.language_id', lang_id());
+                ->select('p.products_id, pd.products_name, p.products_price, s.specials_id, s.specials_new_products_price, s.specials_date_added, s.specials_last_modified, s.expires_date, s.date_status_change, s.status')
+                ->from('specials s')
+                ->join('products p', 'p.products_id = s.products_id')
+                ->join('products_description pd', 'p.products_id = pd.products_id')
+                ->where('pd.language_id', lang_id());
         }
         
-        if (isset($params['search']) && !empty($params['search']))
+        if ($search !== NULL)
         {
-            $this->db->like('pd.products_name', $params['search']);
+            $this->db->like('pd.products_name', $search);
         }
         
-        if (isset($params['manufacturers_id']) && !empty($params['manufacturers_id']))
+        if (is_numeric($manufacturers_id))
         {
-            $this->db->where('p.manufacturers_id', $params['manufacturers_id']);
+            $this->db->where('p.manufacturers_id', $manufacturers_id);
         }
         
-        return $this->db;
+        $result = $this->db->get();
+        
+        return $result->num_rows();
     }
 }
 

@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-model
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Feature_Products_Manager_Model extends CI_Model
 {
@@ -39,10 +39,10 @@ class Feature_Products_Manager_Model extends CI_Model
         parent::__construct();
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
-     * Get the products which will be displayed in the feature products module
+     * Get the featured products
      *
      * @access public
      * @param $start
@@ -50,15 +50,31 @@ class Feature_Products_Manager_Model extends CI_Model
      * @param $in_categories
      * @return mixed
      */
-    public function get_products($start, $limit, $in_categories = array())
+    public function get_products($start = NULL, $limit = NULL, $in_categories = array())
     {
-        $this->query($in_categories);
-      
-        $result = $this->db
-        ->order_by('pf.sort_order')
-        ->limit($limit, $start)
-        ->get();
+        $this->db
+            ->select('pd.products_id, pd.products_name, pf.sort_order')
+            ->from('products_frontpage pf')
+            ->join('products_description pd', 'pf.products_id = pd.products_id');
         
+        if (count($in_categories) > 0)
+        {
+            $this->db
+                ->join('products_to_categories p2c', 'p2c.products_id = pf.products_id')
+                ->where_in('p2c.categories_id', $in_categories);
+        }
+        
+        $this->db
+            ->where('pd.language_id', lang_id())
+            ->order_by('pf.sort_order');
+            
+        if ($start !== NULL && $limit !== NULL)
+        {
+            $this->db->limit($limit, $start);
+        }
+        
+        $result = $this->db->get();
+      
         if ($result->num_rows() > 0)
         {
             return $result->result_array();
@@ -67,7 +83,7 @@ class Feature_Products_Manager_Model extends CI_Model
         return NULL;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Delete the product
@@ -88,7 +104,7 @@ class Feature_Products_Manager_Model extends CI_Model
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Update the sort order of the feature product
@@ -110,7 +126,7 @@ class Feature_Products_Manager_Model extends CI_Model
         return FALSE;
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get total number of the feature products
@@ -119,39 +135,25 @@ class Feature_Products_Manager_Model extends CI_Model
      * @param $in_categories
      * @return int
      */
-    public function get_total($in_categories)
+    public function get_total($in_categories = array())
     {
-        $this->query($in_categories);
+        $this->db
+          ->select('pd.products_id, pd.products_name, pf.sort_order')
+          ->from('products_frontpage pf')
+          ->join('products_description pd', 'pf.products_id = pd.products_id');
+        
+        if (count($in_categories) > 0)
+        {
+            $this->db
+                ->join('products_to_categories p2c', 'p2c.products_id = pf.products_id')
+                ->where_in('p2c.categories_id', $in_categories);
+        }
+        
+        $this->db->where('pd.language_id', lang_id());
         
         $result = $this->db->get();
         
         return $result->num_rows();
-    }
-    
-// ------------------------------------------------------------------------
-    
-    /**
-     * Get total number of the feature products
-     *
-     * @access private
-     * @param $in_categories
-     * @return void
-     */
-    private function query($in_categories)
-    {
-        $this->db
-        ->select('pd.products_id, pd.products_name, pf.sort_order')
-        ->from('products_frontpage pf')
-        ->join('products_description pd', 'pf.products_id = pd.products_id');
-        
-        if (!empty($in_categories))
-        {
-            $this->db
-            ->join('products_to_categories p2c', 'p2c.products_id = pf.products_id')
-            ->where_in('p2c.categories_id', $in_categories);
-        }
-        
-        $this->db->where('pd.language_id', lang_id());
     }
 }
 

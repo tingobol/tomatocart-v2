@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-controller
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Product_Variants extends TOC_Controller
 {
@@ -41,7 +41,7 @@ class Product_Variants extends TOC_Controller
         $this->load->model('product_variants_model');
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * List Product Variants
@@ -57,7 +57,7 @@ class Product_Variants extends TOC_Controller
         $groups = $this->product_variants_model->get_variants_groups($start, $limit);
         
         $records = array();
-        if ($groups != NULL)
+        if ($groups !== NULL)
         {
             foreach($groups as $group)
             {
@@ -73,25 +73,25 @@ class Product_Variants extends TOC_Controller
                                                     EXT_JSON_READER_ROOT => $records)));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
-     * List Product Variants entries
+     * List Product Variants values
      *
      * @access public
      * @return string
      */
     public function list_product_variants_entries()
     {
-        $entries = $this->product_variants_model->get_variants_entries($this->input->get_post('products_variants_groups_id'));
+        $records = $this->product_variants_model->get_variants_entries($this->input->get_post('products_variants_groups_id'));
         
-        $this->output->set_output(json_encode(array(EXT_JSON_READER_ROOT => $entries)));
+        $this->output->set_output(json_encode(array(EXT_JSON_READER_ROOT => $records)));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
-     * Delete the product variants value from a variants group
+     * Delete the products variants value from a variants group
      *
      * @access public
      * @return string
@@ -101,23 +101,25 @@ class Product_Variants extends TOC_Controller
         $error = FALSE;
         $feedback = array();
         
+        //verify whether the variants value is in use by some products
         $entry_data = $this->product_variants_model->get_entry_data($this->input->post('products_variants_values_id'));
-        if (($entry_data != NULL) && ($entry_data['total_products'] > 0))
+        if (($entry_data !== NULL) && ($entry_data['total_products'] > 0))
         {
             $error = TRUE;
             $feedback[] = sprintf(lang('delete_error_group_entry_in_use'), $entry_data['total_products']);
         }
         
+        //delete the variants value
         if ($error === FALSE)
         {
-          if ($this->product_variants_model->delete_entry($this->input->post('products_variants_values_id'), $this->input->post('products_variants_groups_id')))
-          {
-              $response = array('success' => TRUE ,'feedback' => lang('ms_success_action_performed'));
-          }
-          else
-          {
-              $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed')); 
-          }
+            if ($this->product_variants_model->delete_entry($this->input->post('products_variants_values_id'), $this->input->post('products_variants_groups_id')))
+            {
+                $response = array('success' => TRUE ,'feedback' => lang('ms_success_action_performed'));
+            }
+            else
+            {
+                $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed')); 
+            }
         }
         else
         {
@@ -127,10 +129,10 @@ class Product_Variants extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
-     * Batch delete the product variants values from a variants group
+     * Batch delete the products variants values from a variants group
      *
      * @access public
      * @return string
@@ -143,27 +145,32 @@ class Product_Variants extends TOC_Controller
         $feedback = array();
         $check_products_array = array();
       
-        foreach($values_ids as $id)
+        //verify whether some variants values are in use by some products
+        if (count($values_ids) > 0)
         {
-            $entry_data = $this->product_variants_model->get_entry_data($id);
-            
-            if ($entry_data['total_products'] > 0)
+            foreach($values_ids as $id)
             {
-                $check_products_array[] = $entry_data['products_variants_values_name'];
+                $entry_data = $this->product_variants_model->get_entry_data($id);
+                
+                if ($entry_data['total_products'] > 0)
+                {
+                    $check_products_array[] = $entry_data['products_variants_values_name'];
+                }
             }
         }
       
-        if (!empty($check_products_array)) 
+        if (count($check_products_array) > 0) 
         {
             $error = TRUE;
             $feedback[] = lang('batch_delete_error_group_entries_in_use') . '<p>' . implode(', ', $check_products_array) . '</p>';
         }
         
+        //delete the variants values
         if ($error === FALSE)
         {
             foreach($values_ids as $id)
             {
-                if (!$this->product_variants_model->delete_entry($id, $this->input->post('products_variants_groups_id')))
+                if ( ! $this->product_variants_model->delete_entry($id, $this->input->post('products_variants_groups_id')))
                 {
                     $error = TRUE;
                     break;
@@ -187,10 +194,10 @@ class Product_Variants extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
-     * Save the product variants value to a variant group
+     * Save the products variants value
      *
      * @access public
      * @return string
@@ -212,10 +219,10 @@ class Product_Variants extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
-     * Load the product variants value
+     * Load the products variants value
      *
      * @access public
      * @return string
@@ -224,9 +231,9 @@ class Product_Variants extends TOC_Controller
     {
         $entries_data = $this->product_variants_model->get_entries_data($this->input->post('products_variants_values_id'));
         
-        if ($entries_data != NULL)
+        $data = array();
+        if ($entries_data !== NULL)
         {
-            $data = array();
             foreach($entries_data as $entry)
             {
                 if ($entry['language_id'] == lang_id())
@@ -236,18 +243,12 @@ class Product_Variants extends TOC_Controller
                 
                 $data['products_variants_values_name[' . $entry['language_id'] . ']'] = $entry['products_variants_values_name'];
             }
-            
-            $response = array('success' => TRUE, 'data' => $data); 
-        }
-        else
-        {
-            $response = array('success' => FALSE); 
         }
         
-        $this->output->set_output(json_encode($response));
+        $this->output->set_output(json_encode(array('success' => TRUE, 'data' => $data)));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Save the product variants group
@@ -271,7 +272,7 @@ class Product_Variants extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Load the product variants group
@@ -283,9 +284,9 @@ class Product_Variants extends TOC_Controller
     {
         $groups_data = $this->product_variants_model->get_groups_data($this->input->post('products_variants_groups_id'));
         
-        if ($groups_data != NULL)
+        $data = array();
+        if ($groups_data !== NULL)
         {
-            $data = array();
             foreach($groups_data as $group)
             {
                 if ($group['language_id'] == lang_id())
@@ -295,18 +296,12 @@ class Product_Variants extends TOC_Controller
                 
                 $data['products_variants_groups_name[' . $group['language_id'] . ']'] = $group['products_variants_groups_name'];
             }
-            
-            $response = array('success' => TRUE, 'data' => $data);
-        }
-        else
-        {
-            $response = array('success' => FALSE);
         }
         
-        $this->output->set_output(json_encode($response));
+        $this->output->set_output(json_encode(array('success' => TRUE, 'data' => $data)));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Delete the product variants group
@@ -321,12 +316,14 @@ class Product_Variants extends TOC_Controller
         
         $total_products = $this->product_variants_model->get_group_products($this->input->post('products_variants_groups_id'));
         
+        //verify whether the variants group is in use by some products
         if ($total_products > 0)
         {
             $error = TRUE;
             $feedback[] = sprintf(lang('delete_error_variant_group_in_use'), $total_products);
         }
         
+        //delete the variants group
         if ($error === FALSE)
         {
             if ($this->product_variants_model->delete($this->input->post('products_variants_groups_id')))

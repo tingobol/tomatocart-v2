@@ -24,7 +24,7 @@
  * @subpackage  tomatocart
  * @category  template-module-controller
  * @author    TomatoCart Dev Team
- * @link    http://tomatocart.com/wiki/
+ * @link    http://tomatocart.com
  */
 class Feature_Products_Manager extends TOC_Controller
 {
@@ -41,7 +41,7 @@ class Feature_Products_Manager extends TOC_Controller
         $this->load->model('feature_products_manager_model');
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * List feature products
@@ -58,6 +58,7 @@ class Feature_Products_Manager extends TOC_Controller
         
         $current_category_id = end(explode( '_', ($this->input->get_post('categories_id') ? $this->input->get_post('categories_id') : 0)));
         
+        //get the sub categories
         $in_categories = array();
         if ($current_category_id > 0)
         {
@@ -65,7 +66,7 @@ class Feature_Products_Manager extends TOC_Controller
             
             $in_categories = array($current_category_id);
             
-            foreach($this->category_tree->getTree($current_category_id) as $category)
+            foreach($this->category_tree->get_tree($current_category_id) as $category)
             {
                 $in_categories[] = $category['id'];
             }
@@ -74,7 +75,7 @@ class Feature_Products_Manager extends TOC_Controller
         $products = $this->feature_products_manager_model->get_products($start, $limit, $in_categories);
         
         $records = array();
-        if ($products != NULL)
+        if ($products !== NULL)
         {
             foreach($products as $product)
             {
@@ -88,7 +89,7 @@ class Feature_Products_Manager extends TOC_Controller
                                                     EXT_JSON_READER_TOTAL => $this->feature_products_manager_model->get_total($in_categories))));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Get the categories
@@ -103,7 +104,7 @@ class Feature_Products_Manager extends TOC_Controller
         $records = array(array('id' => 0,
                                'text' => lang('top_category')));
         
-        foreach ($this->category_tree->getTree() as $value) 
+        foreach ($this->category_tree->get_tree() as $value) 
         {
             $category_id = strval($value['id']);
             $margin = 0;
@@ -123,7 +124,7 @@ class Feature_Products_Manager extends TOC_Controller
         $this->output->set_output(json_encode(array(EXT_JSON_READER_ROOT => $records)));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Delete the product
@@ -145,7 +146,7 @@ class Feature_Products_Manager extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Delete the products
@@ -158,13 +159,21 @@ class Feature_Products_Manager extends TOC_Controller
         $products_ids = json_decode($this->input->post('batch'));
         
         $error = FALSE;
-        foreach($products_ids as $id)
+        
+        if (count($products_ids) > 0)
         {
-            if ($this->feature_products_manager_model->delete($id) === FALSE)
+            foreach($products_ids as $id)
             {
-                $error = TRUE;
-                break;
+                if ( ! $this->feature_products_manager_model->delete($id))
+                {
+                    $error = TRUE;
+                    break;
+                }
             }
+        }
+        else
+        {
+            $error = TRUE;
         }
         
         if ($error === FALSE) 
@@ -178,7 +187,7 @@ class Feature_Products_Manager extends TOC_Controller
         $this->output->set_output(json_encode($response));
     }
     
-// ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     
     /**
      * Update the sort order of the feature product

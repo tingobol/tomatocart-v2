@@ -69,6 +69,37 @@ Ext.define('Toc.logo_upload.LogoUploadDialog', {
   },
   
   buildForm: function() {
+    var fieldWidth = Ext.create('Ext.form.field.Number', {
+      name: 'logo_width',
+      disabled: true,
+      fieldLabel: '<?php echo lang('field_logo_width'); ?>'
+    });
+    
+    var fieldHeight = Ext.create('Ext.form.field.Number', {
+      name: 'logo_height',
+      disabled: true,
+      fieldLabel: '<?php echo lang('field_logo_height'); ?>'
+    });
+    
+    var checkbox = Ext.create('Ext.form.field.Checkbox', {
+      name: 'resize',
+      fieldLabel: '<?php echo lang('field_resize_logo'); ?>',
+      checked: false,
+      inputValue: '1',
+      listeners: {
+        change: {
+          fn: function(checkbox, value){
+            if (value == '1') {
+              fieldWidth.enable();
+              fieldHeight.enable();
+            }else {
+              fieldWidth.disable();
+              fieldHeight.disable();
+            }
+          }
+        }
+      }
+    });
     this.frmUpload = Ext.create('Ext.form.Panel', {
       fileUpload: true,
       url: '<?php echo site_url('logo_upload/save_logo'); ?>',
@@ -84,6 +115,9 @@ Ext.define('Toc.logo_upload.LogoUploadDialog', {
           border: false,
           bodyPadding: 10,
           items: [
+            checkbox,
+            fieldWidth,
+            fieldHeight,
             {xtype: 'filefield', fieldLabel: '<?php echo lang('field_logo_image'); ?>', name: 'logo_image'}
           ]
         }

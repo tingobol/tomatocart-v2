@@ -1,16 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * TomatoCart
+ * TomatoCart Open Source Shopping Cart Solution
  *
- * An open source application ecommerce framework
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License v3 (2007)
+ * as published by the Free Software Foundation.
  *
  * @package   TomatoCart
  * @author    TomatoCart Dev Team
- * @copyright Copyright (c) 2011, TomatoCart, Inc.
- * @license   http://www.gnu.org/licenses/gpl-3.0.html
+ * @copyright Copyright (c) 2009 - 2012, TomatoCart. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html
  * @link    http://tomatocart.com
- * @since   Version 0.5
- * @filesource .system/modules/products_expected/views/products_expected_grid.php
+ * @since   Version 2.0
+ * @filesource
  */
 ?>
 
@@ -31,7 +33,7 @@ Ext.define('Toc.products_expected.ProductsExpectedGrid', {
       pageSize: Toc.CONF.GRID_PAGE_SIZE,
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
+        url : '<?php echo site_url('products_expected/list_products_expected'); ?>',
         extraParams: {
           module: 'products_expected',
           action: 'list_products_expected'
@@ -92,4 +94,4 @@ Ext.define('Toc.products_expected.ProductsExpectedGrid', {
 });
 
 /* End of file products_expected_grid.php */
-/* Location: ./system/modules/products_expected/views/products_expected_grid.php */
+/* Location: ./templates/base/web/views/products_expected/products_expected_grid.php */
