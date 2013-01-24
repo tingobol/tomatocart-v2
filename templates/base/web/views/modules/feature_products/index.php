@@ -23,20 +23,19 @@
     <?php 
         foreach ($products as $product):
     ?>
-        <div class="center" style="height: 180px">
+        <div class="center">
             <div>
-                <a href="<?php echo site_url('product/' . $product['products_id']); ?>">
-					<img title="<?php echo $product['products_name']; ?>" alt="<?php echo $product['products_name']; ?>" src="<?php echo product_image_url($product['products_image']); ?>">
-                </a>
+                 <a href="<?php echo site_url('product/' . $product['products_id']); ?>">
+                      <img title="<?php echo $product['products_name']; ?>" alt="<?php echo $product['products_name']; ?>" src="<?php echo product_image_url($product['products_image'], 'thumbnails'); ?>" />
+                 </a>
             </div>
-            <div><a href="<?php echo site_url('product/' . $product['products_id']); ?>"><?php echo $product['products_name']; ?></a></div>
-            <div><a href="<?php echo site_url('product/' . $product['products_id']); ?>"><?php echo currencies_format($product['products_price']); ?></a></div>
-            <div><a href="<?php echo site_url('cart_add/' . $product['products_id']); ?>" class="btn btn-small btn-small btn-small btn-info"><i class="icon-shopping-cart icon-white "></i><?php echo lang('button_add_to_cart'); ?></a></div>
+            <div class="name"><a href="<?php echo site_url('product/' . $product['products_id']); ?>"><?php echo $product['products_name']; ?></a></div>
+            <div class="short"><a href="<?php echo site_url('product/' . $product['products_id']); ?>"><?php echo $product['products_short_description']; ?></a></div>
+            <div class="price"><a href="<?php echo site_url('product/' . $product['products_id']); ?>"><?php echo currencies_format($product['products_price']); ?></a></div>
+            <div class="cart"><a href="<?php echo site_url('cart_add/' . $product['products_id']); ?>" class="btn btn-mini btn-info"><i class="icon-shopping-cart icon-white "></i> <?php echo lang('button_add_to_cart'); ?></a></div>
         </div>
     <?php 
         endforeach;
     ?>
-    
-    <div style="clear: both">&nbsp;</div>
     </div>
 </div>

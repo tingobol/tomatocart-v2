@@ -48,7 +48,7 @@ class New_Products_Model extends CI_Model
      */
     public function get_new_products($count) 
     {
-        $result = $this->db->select('p.products_id, p.products_tax_class_id, p.products_price, pd.products_name, pd.products_keyword, i.image')
+        $result = $this->db->select('p.products_id, p.products_tax_class_id, p.products_price, pd.products_name, pd.products_short_description, pd.products_keyword, i.image')
             ->from('products p')
             ->join('products_images i', 'p.products_id = i.products_id', 'left')
             ->join('products_description pd', 'p.products_id = pd.products_id', 'inner')

@@ -86,7 +86,7 @@ class Feature_Products extends TOC_Module
         {
             $this->config = json_decode($config, TRUE);
         }
-
+        
         $this->title = lang('feature_products_title');
     }
 
@@ -99,18 +99,28 @@ class Feature_Products extends TOC_Module
     public function index()
     {
         $this->ci->load->model('products_model');
+        
+        $cpath = $this->ci->registry->get('cpath');
+        $categories_id = NULL;
+        
+        if ($cpath !== NULL) {
+            $data = explode("_", $cpath);
+            $categories_id = end($data);
+        }
 
-        $products = $this->ci->products_model->get_feature_products();
+        $products = $this->ci->products_model->get_feature_products($categories_id, $this->config['MODULE_FEATURE_PRODUCTS_MAX_DISPLAY']);
+
         if ($products != NULL)
         {
             $data = array();
             foreach($products as $product) 
             {
                 $data['products'][] = array(
-                'products_id' => $product['products_id'],
-                'products_name' => $product['products_name'],
-              	'products_image' => $product['image'],
-              	'products_price' => $product['products_price']);
+                    'products_id' => $product['products_id'],
+                    'products_name' => $product['products_name'],
+                  	'products_short_description' => (strlen($product['products_short_description']) > 80) ? substr($product['products_short_description'], 0, 80) . '...' : $product['products_short_description'],
+                    'products_image' => $product['image'],
+                  	'products_price' => $product['products_price']);
             }
              
             return $this->load_view('index.php', $data);

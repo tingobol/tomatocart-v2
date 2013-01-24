@@ -120,7 +120,8 @@ class New_Products extends TOC_Module
                 $data['products'][] = array(
                     'products_id' => $product['products_id'],
                     'products_name' => $product['products_name'],
-                  	'products_image' => $product['image'],
+                    'products_short_description' => (strlen($product['products_short_description']) > 80) ? substr($product['products_short_description'], 0, 80) . '...' : $product['products_short_description'],
+                	'products_image' => $product['image'],
                   	'products_price' => $product['products_price']);
             }
 
