@@ -9,17 +9,17 @@
     <definition>
       <key>products_scroller_new_products_title</key>
       <value><![CDATA[新品上市]]></value>
-      <group>modules-content</group>
+      <group>modules-boxes</group>
     </definition>
     <definition>
       <key>products_scroller_special_products_title</key>
       <value><![CDATA[特价专区]]></value>
-      <group>modules-content</group>
+      <group>modules-boxes</group>
     </definition>
     <definition>
       <key>products_scroller_best_sellers_title</key>
       <value><![CDATA[热销商品]]></value>
-      <group>modules-content</group>
+      <group>modules-boxes</group>
     </definition>
   </definitions>
 </language>

@@ -2,9 +2,14 @@
 <language>
   <definitions>
     <definition>
-      <key>box_contact-us_heading</key>
+      <key>box_contact_us_heading</key>
       <value><![CDATA[Contact Us]]></value>
       <group>modules-boxes</group>
     </definition>
+    <definition>
+      <key>field_email</key>
+      <value><![CDATA[Email:]]></value>
+      <group>modules-boxes</group>
+    </definition>  
   </definitions>
 </language>

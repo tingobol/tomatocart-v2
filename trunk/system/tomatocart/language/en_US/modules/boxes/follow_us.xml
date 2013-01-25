@@ -2,7 +2,7 @@
 <language>
   <definitions>
     <definition>
-      <key>box_follow-us_heading</key>
+      <key>box_follow_us_heading</key>
       <value><![CDATA[Follow Us]]></value>
       <group>modules-boxes</group>
     </definition>

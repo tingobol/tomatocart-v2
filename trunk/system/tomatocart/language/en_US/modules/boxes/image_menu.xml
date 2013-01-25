@@ -4,7 +4,7 @@
     <definition>
       <key>image_menu_show_title</key>
       <value><![CDATA[Image Menu]]></value>
-      <group>modules-content</group>
+      <group>modules-boxes</group>
     </definition>
   </definitions>
 </language>

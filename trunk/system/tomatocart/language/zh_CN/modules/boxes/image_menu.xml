@@ -4,7 +4,7 @@
     <definition>
       <key>image_menu_show_title</key>
       <value><![CDATA[交替幻灯片]]></value>
-      <group>modules-content</group>
+      <group>modules-boxes</group>
     </definition>
   </definitions>
 </language>
