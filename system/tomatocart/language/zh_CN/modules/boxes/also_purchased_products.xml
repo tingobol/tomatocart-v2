@@ -4,7 +4,7 @@
     <definition>
       <key>customers_also_purchased_title</key>
       <value><![CDATA[购买过此商品的会员还购买过…]]></value>
-      <group>modules-content</group>
+      <group>modules-boxes</group>
     </definition>
   </definitions>
 </language>

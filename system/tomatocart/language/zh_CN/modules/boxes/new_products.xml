@@ -2,9 +2,9 @@
 <language>
   <definitions>
     <definition>
-      <key>new_products_title</key>
+      <key>box_new_products_heading</key>
       <value><![CDATA[新品上市]]></value>
-      <group>modules-content</group>
+      <group>modules-boxes</group>
     </definition>
   </definitions>
 </language>

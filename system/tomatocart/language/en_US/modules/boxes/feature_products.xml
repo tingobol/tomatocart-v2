@@ -2,9 +2,9 @@
 <language>
   <definitions>
     <definition>
-      <key>feature_products_title</key>
+      <key>box_feature_products_heading</key>
       <value><![CDATA[Feature Products]]></value>
-      <group>modules-content</group>
+      <group>modules-boxes</group>
     </definition>
   </definitions>
 </language>

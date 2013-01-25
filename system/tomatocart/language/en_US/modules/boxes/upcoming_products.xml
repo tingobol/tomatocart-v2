@@ -4,7 +4,7 @@
     <definition>
       <key>upcoming_products_title</key>
       <value><![CDATA[Upcoming Products]]></value>
-      <group>modules-content</group>
+      <group>modules-boxes</group>
     </definition>
   </definitions>
 </language>

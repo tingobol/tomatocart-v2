@@ -2,9 +2,9 @@
 <language>
   <definitions>
     <definition>
-      <key>slide_show_title</key>
+      <key>box_slide_show_heading</key>
       <value><![CDATA[Slideshow]]></value>
-      <group>modules-content</group>
+      <group>modules-boxes</group>
     </definition>
   </definitions>
 </language>
