@@ -85,7 +85,6 @@ class Administrators_Model extends CI_Model
     public function save($id = NULL, $data, $modules = NULL)
     {
         $this->load->helper('email');
-        $this->load->helper('core');
         
         $error = FALSE;
 
