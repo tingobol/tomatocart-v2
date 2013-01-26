@@ -31,7 +31,7 @@
             </div>
             <div><a href="<?php echo site_url('product/' . $product['products_id']); ?>"><?php echo $product['products_name']; ?></a></div>
             <div><s><?php echo currencies_format($product['products_price']); ?></s>&nbsp;&nbsp;<span><?php echo currencies_format($product['special_price']);?></span></div>
-            <div><a href="<?php echo site_url('cart_add/' . $product['products_id']); ?>" class="btn btn-small btn-small btn-small btn-info"><i class="icon-shopping-cart icon-white "></i><?php echo lang('button_add_to_cart'); ?></a></div>
+            <div><a href="<?php echo site_url('cart_add/' . $product['products_id']); ?>" class="btn btn-mini btn-info"><i class="icon-shopping-cart icon-white "></i><?php echo lang('button_add_to_cart'); ?></a></div>
         </div>
     <?php 
       endforeach;

@@ -17,7 +17,7 @@
 ?>
 
 <div class="box">
-    <h4 class="title"><?php echo lang('feature_products_title'); ?></h4>
+    <h4 class="title"><?php echo lang('box_feature_products_heading'); ?></h4>
     
     <div class="contents clearfix col3">
     <?php 
