@@ -101,7 +101,7 @@ class Languages extends TOC_Controller
                                'text' => $currency['title']);
         }
         
-        $this->output->set_output(json_encode(array(EXT_JSON_READER_ROOT => $records));
+        $this->output->set_output(json_encode(array(EXT_JSON_READER_ROOT => $records)));
     }
     
     // ------------------------------------------------------------------------
