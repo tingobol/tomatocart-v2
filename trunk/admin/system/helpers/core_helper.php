@@ -179,3 +179,123 @@ if( ! function_exists('encrypt_password'))
         return $password;
     }
 }
+// ------------------------------------------------------------------------
+
+/**
+ * Resize image
+ *
+ * @access public
+ * @param $original_image original image
+ * @param $dest_image dest image
+ * @param $dest_width dest width
+ * @param $dest_height dest height
+ * @param $force_size force resize
+ * @return boolean
+ */
+if( ! function_exists('toc_gd_resize'))
+{
+    function toc_gd_resize($original_image, $dest_image, $dest_width, $dest_height, $force_size = '0') {
+        $img_type = NULL;
+
+        switch (strtolower(substr(basename($original_image), (strrpos(basename($original_image), '.')+1))))
+        {
+            case 'jpg':
+            case 'jpeg':
+                if (imagetypes() & IMG_JPG) {
+                    $img_type = 'jpg';
+                }
+
+                break;
+
+            case 'gif':
+                if (imagetypes() & IMG_GIF) {
+                    $img_type = 'gif';
+                }
+
+                break;
+
+            case 'png':
+                if (imagetypes() & IMG_PNG) {
+                    $img_type = 'png';
+                }
+
+                break;
+        }
+
+        if ($img_type !== NULL)
+        {
+            list($orig_width, $orig_height) = getimagesize($original_image);
+
+            $width  = $dest_width;
+            $height = $dest_height;
+
+            $factor = max(($orig_width / $width), ($orig_height / $height));
+
+            if ($force_size == '1') {
+                $width = $dest_width;
+            } else {
+                $width  = round($orig_width / $factor);
+                $height = round($orig_height / $factor);
+            }
+
+            $im_p = @imagecreatetruecolor($dest_width, $dest_height);
+            @imagealphablending($im_p, true);
+            $color = @imagecolortransparent($im_p, imagecolorallocatealpha($im_p, 255, 255, 255, 127));
+            @imagefill($im_p, 0, 0, $color);
+            @imagesavealpha($im_p, true);
+
+            $x = 0;
+            $y = 0;
+
+            if ($force_size == '1') {
+                $width = round($orig_width * $dest_height / $orig_height);
+
+                if ($width < $dest_width) {
+                    $x = floor(($dest_width - $width) / 2);
+                }
+            } else {
+                $x = floor(($dest_width - $width) / 2);
+                $y = floor(($dest_height - $height) / 2);
+            }
+
+            switch ($img_type) {
+                case 'jpg':
+                    $im = @imagecreatefromjpeg($original_image);
+                    break;
+
+                case 'gif':
+                    $im = @imagecreatefromgif($original_image);
+                    break;
+
+                case 'png':
+                    $im = @imagecreatefrompng($original_image);
+                    break;
+            }
+
+            @imagecopyresampled($im_p, $im, $x, $y, 0, 0, $width, $height, $orig_width, $orig_height);
+
+            switch ($img_type) {
+                case 'jpg':
+                    @imagejpeg($im_p, $dest_image);
+                    break;
+
+                case 'gif':
+                    @imagegif($im_p, $dest_image);
+                    break;
+
+                case 'png':
+                    @imagepng($im_p, $dest_image);
+                    break;
+            }
+
+            @imagedestroy($im_p);
+            @imagedestroy($im);
+
+            @chmod($dest_image, 0777);
+
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    }
+}
