@@ -6619,17 +6619,17 @@ INSERT INTO `toc_orders_transactions_status` VALUES ( '4', '2', '调查中');
 
 
 INSERT INTO `toc_products_images_groups` VALUES (1, 1, 'Originals', 'originals', 0, 0, 0);
-INSERT INTO `toc_products_images_groups` VALUES (2, 1, 'Thumbnails', 'thumbnails', 100, 80, 0);
-INSERT INTO `toc_products_images_groups` VALUES (3, 1, 'Product Information Page', 'product_info', 240, 180, 0);
+INSERT INTO `toc_products_images_groups` VALUES (2, 1, 'Thumbnails', 'thumbnails', 140, 140, 0);
+INSERT INTO `toc_products_images_groups` VALUES (3, 1, 'Product Information Page', 'product_info', 285, 255, 0);
 INSERT INTO `toc_products_images_groups` VALUES (4, 1, 'Large', 'large', 480, 360, 0);
-INSERT INTO `toc_products_images_groups` VALUES (5, 1, 'Mini', 'mini', 55, 45, 0);
+INSERT INTO `toc_products_images_groups` VALUES (5, 1, 'Mini', 'mini', 57, 57, 0);
 
 
 INSERT INTO `toc_products_images_groups` VALUES (1, 2, '原图', 'originals', 0, 0, 0);
-INSERT INTO `toc_products_images_groups` VALUES (2, 2, '略缩图', 'thumbnails', 100, 80, 0);
-INSERT INTO `toc_products_images_groups` VALUES (3, 2, '产品信息页', 'product_info', 240, 180, 0);
+INSERT INTO `toc_products_images_groups` VALUES (2, 2, '略缩图', 'thumbnails', 140, 140, 0);
+INSERT INTO `toc_products_images_groups` VALUES (3, 2, '产品信息页', 'product_info', 285, 255, 0);
 INSERT INTO `toc_products_images_groups` VALUES (4, 2, '大图', 'large', 480, 360, 0);
-INSERT INTO `toc_products_images_groups` VALUES (5, 2, '袖珍图', 'mini', 55, 45, 0);
+INSERT INTO `toc_products_images_groups` VALUES (5, 2, '袖珍图', 'mini', 57, 57, 0);
 
 
 INSERT INTO `toc_tax_class` VALUES (1, 'Taxable Goods', 'The following types of products are included non-food, services, etc', now(), now());
@@ -6676,9 +6676,8 @@ INSERT INTO `toc_templates_modules` VALUES
 (16, 1, 'web', 'special_products', 1, '*', 'after', 0, 0, '{"MODULE_SPECIAL_MAX_DISPLAY":"9","MODULE_SPECIAL_CACHE":"60"}'),
 (17, 1, 'web', 'information', 1, '*', 'footer-col-1', 0, 0, 'null'),
 (18, 1, 'web', 'article_categories', 1, '*', 'footer-col-2', 0, 0, '{"MODULE_ARTICLES_CATEGORIES_MAX_LIST":"10"}'),
-(19, 1, 'web', 'articles', 1, '*', 'footer-col-3', 0, 0, '{"MODULE_ARTICLES_ARTICLE_CATEGORY":"18","MODULE_ARTICLES_MAX_LIST":"10"}'),
-(20, 1, 'web', 'banner', 1, '*', 'footer-col-4', 0, 0, '{"MODULE_BANNER_IMAGE_GROUPS":"paypal-1","MODULE_BANNER_SLIDE_WIDTH":"150","MODULE_BANNER_SLIDE_HEIGHT":"139"}'),
-(21, 1, 'web', 'banner', 1, '*', 'footer-col-4', 0, 0, '{"MODULE_BANNER_IMAGE_GROUPS":"paypal-2","MODULE_BANNER_SLIDE_WIDTH":"150","MODULE_BANNER_SLIDE_HEIGHT":"60"}');
+(19, 1, 'web', 'follow_us', 1, '*', 'footer-col-3', 0, 0, '{"MODULE_FOLLOW_US_FACEBOOK_LINK":"https://www.facebook.com/tomatocart","MODULE_FOLLOW_US_TWITTER_LINK":"https://twitter.com/tomatocart","MODULE_FOLLOW_US_GOOGLE_PLUS_LINK":"https://plus.google.com/109588253708268031594"}'),
+(21, 1, 'web', 'contact_us', 1, '*', 'footer-col-4', 0, 0, 'null');
 
 
 INSERT INTO `toc_extensions` VALUES
