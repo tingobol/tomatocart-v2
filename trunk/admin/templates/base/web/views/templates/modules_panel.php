@@ -44,11 +44,7 @@ Ext.define('Toc.templates.ModulesPanel', {
         var store = Ext.create('Ext.data.TreeStore', {
             proxy: {
                 type: 'ajax',
-                url : Toc.CONF.CONN_URL,
-                extraParams: {
-                    module: 'templates',
-                    action: 'get_modules_tree'
-                }
+                url : '<?php echo site_url('templates/get_modules_tree'); ?>',
             },
             root: {
                 id: '0',

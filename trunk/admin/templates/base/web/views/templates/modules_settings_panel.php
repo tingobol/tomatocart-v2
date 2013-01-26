@@ -30,11 +30,7 @@ Ext.define('Toc.templates.ModulesSettingsPanel', {
     config.defaults = {anchor: '98%'};
     config.fieldDefaults = {labelAlign: 'top'};
     
-    config.url = Toc.CONF.CONN_URL;
-    config.baseParams = {  
-      module: 'templates',
-      action: 'save_module_settings'
-    };
+    config.url = '<?php echo site_url('templates/save_module_settings'); ?>';
     
     config.module = null;
 
@@ -69,7 +65,7 @@ Ext.define('Toc.templates.ModulesSettingsPanel', {
       fields: ['id', 'text'],
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
+        url : '<?php echo site_url('templates/get_pages'); ?>',
         extraParams: {
           module: 'templates',
           action: 'get_pages'
@@ -211,11 +207,7 @@ Ext.define('Toc.templates.ModulesSettingsPanel', {
                             ],
                             proxy: {
                                 type: 'ajax',
-                                url : Toc.CONF.CONN_URL,
-                                extraParams: {
-                                    module: field.module,
-                                    action: field.action
-                                },
+                                url : '<?php echo site_url(); ?>/' + field.url,
                                 reader: {
                                     type: 'json',
                                     root: Toc.CONF.JSON_READER_ROOT,

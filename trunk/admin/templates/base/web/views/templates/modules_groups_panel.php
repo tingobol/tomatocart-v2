@@ -150,10 +150,8 @@ Ext.define('Toc.templates.ModulesGroupsPanel', {
             	
             //insert module to template layout
             Ext.Ajax.request({
-                url: Toc.CONF.CONN_URL,
+                url: '<?php echo site_url('templates/add_template_module'); ?>',
                 params: {
-                    module: 'templates',
-                    action: 'add_template_module',
                     medium: scope.medium,
                     group: group.name,
                     code: code,
