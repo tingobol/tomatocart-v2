@@ -42,10 +42,10 @@ class TOC_Controller extends CI_Controller
         $this->lang->initialize();
         $this->output->set_header('Content-Type: text/html; charset=' . $this->lang->get_character_set());
         setlocale(LC_TIME, explode(',', $this->lang->get_locale()));
-        
+
         //load language resource
         $this->lang->ini_load();
-        
+
         //load module language resource
         $module = trim($this->router->class);
         $this->lang->ini_load($module . '.php');
@@ -136,6 +136,5 @@ class TOC_Controller extends CI_Controller
     }
 }
 
-
-/* End of file MY_Controller.php */
-/* Location: ./application/libraries/MY_Controller.php */
+/* End of file TOC_Controller.php */
+/* Location: ./admin/system/core/TOC_Controller.php */
