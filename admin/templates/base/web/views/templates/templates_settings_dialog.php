@@ -60,10 +60,8 @@ Ext.define('Toc.templates.TemplatesSettingsDialog', {
   
   buildForm: function(templatesId, code) {
     this.frmSettings = Ext.create('Ext.form.Panel', { 
-      url: Toc.CONF.CONN_URL,
+      url: '<?php echo site_url('templates/save_template_params'); ?>',
       baseParams: {  
-        module: 'templates',
-        action: 'save_template_params',
         templates_id: templatesId
       }, 
       autoScroll: true,
@@ -83,10 +81,8 @@ Ext.define('Toc.templates.TemplatesSettingsDialog', {
 
   requestForm: function(templatesId, code) {
     Ext.Ajax.request({
-      url: Toc.CONF.CONN_URL,
+      url: '<?php echo site_url('templates/get_template_params'); ?>',
       params: {
-        module: 'templates',
-        action: 'get_template_params',
         templates_id: templatesId,
         code: code
       },

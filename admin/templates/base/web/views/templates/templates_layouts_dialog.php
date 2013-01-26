@@ -54,10 +54,8 @@ Ext.define('Toc.templates.TemplatesLayoutsDialog', {
     mask.show();
     
     Ext.Ajax.request({
-      url: Toc.CONF.CONN_URL,
+      url: '<?php echo site_url('templates/get_layout_data'); ?>',
       params: {
-        module: 'templates',
-        action: 'get_layout_data',
         code: this.code,
         templates_id: this.templatesId
       },
@@ -72,7 +70,7 @@ Ext.define('Toc.templates.TemplatesLayoutsDialog', {
             Ext.each(result.layout.web, function(module_group) {
             	if (!Ext.isEmpty(module_group.modules)) {
             		Ext.each(module_group.modules, function(module){
-									scope.modules.push(module);            		
+						scope.modules.push(module);            		
             		});
             	}
             });
@@ -80,28 +78,27 @@ Ext.define('Toc.templates.TemplatesLayoutsDialog', {
 	          this.pnlWebContentGroups.addGroupsPortals(result.layout.web);
           }
 
-					//initialize the mobile layout content groups
-					//
+    	  //initialize the mobile layout content groups
+    	  //
           if (!Ext.isEmpty(result.layout.mobile)) {
             Ext.each(result.layout.mobile, function(module_group) {
             	if (!Ext.isEmpty(module_group.modules)) {
             		Ext.each(module_group.modules, function(module){
-									scope.modules.push(module);            		
+						scope.modules.push(module);            		
             		});
             	}
             });
             
-	          this.pnlMobileContentGroups.addGroupsPortals(result.layout.mobile);
+	        this.pnlMobileContentGroups.addGroupsPortals(result.layout.mobile);
           }
-          
 
-					//initialize the mobile layout content groups
-					//
+		  //initialize the mobile layout content groups
+		  //
           if (!Ext.isEmpty(result.layout.pad)) {
             Ext.each(result.layout.pad, function(module_group) {
             	if (!Ext.isEmpty(module_group.modules)) {
             		Ext.each(module_group.modules, function(module){
-									scope.modules.push(module);            		
+					  	scope.modules.push(module);            		
             		});
             	}
             });
@@ -213,10 +210,8 @@ Ext.define('Toc.templates.TemplatesLayoutsDialog', {
     mask.show();
     
     Ext.Ajax.request({
-      url: Toc.CONF.CONN_URL,
+      url: '<?php echo site_url('templates/delete_template_module'); ?>',
       params: {
-        module: 'templates',
-        action: 'delete_template_module',
         mid: moduleId
       },
       callback: function(options, success, response) {
@@ -267,10 +262,8 @@ Ext.define('Toc.templates.TemplatesLayoutsDialog', {
     mask.show();
     
     Ext.Ajax.request({
-      url: Toc.CONF.CONN_URL,
+      url: '<?php echo site_url('templates/update_template_module_group'); ?>',
       params: {
-        module: 'templates',
-        action: 'update_template_module_group',
         mid: mId,
         group: group
       },

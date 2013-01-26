@@ -50,11 +50,11 @@ Ext.define('Toc.templates.TemplatesGrid', {
     });
     
     config.columns = [
-        { header: 'Templates', dataIndex: 'title', sortable: true, flex: 1},
-        { header: 'Author', align: 'center', dataIndex: 'author', width: 200},
-        { header: 'Url', align: 'center', dataIndex: 'url', width: 200},
+        { header: '<?php echo lang('table_heading_templates'); ?>', dataIndex: 'title', sortable: true, flex: 1},
+        { header: '<?php echo lang('table_heading_author'); ?>', align: 'center', dataIndex: 'author', width: 200},
+        { header: '<?php echo lang('table_heading_url'); ?>', align: 'center', dataIndex: 'url', width: 200},
         {
-            header: 'Actions',
+            header: '<?php echo lang('table_heading_action'); ?>',
             xtype: 'actioncolumn',
             items: [
             	{
