@@ -86,6 +86,8 @@ class TOC_Lang extends CI_Lang
 
         //check the language in the query language and set in the system
         $language = ($this->ci->input->get('admin_language') !== FALSE) ? $this->ci->input->get('admin_language') : '';
+        
+        //set the language to system
         $this->set($language);
     }
 
@@ -719,4 +721,4 @@ class TOC_Lang extends CI_Lang
 // END TOC_Lang Class
 
 /* End of file TOC_Lang.php */
-/* Location: ./system/core/TOC_Lang.php */
+/* Location: ./admin/system/core/TOC_Lang.php */
