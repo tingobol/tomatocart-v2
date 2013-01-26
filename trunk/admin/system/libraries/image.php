@@ -239,18 +239,9 @@ Class TOC_Image {
         //verify that the product image is existing in the original image group and then resize it
         if (file_exists($original_image)) 
         {
-            $config['image_library'] = 'gd2';
-            $config['source_image'] = $original_image;
-            $config['new_image'] = $dest_image;
-            $config['maintain_ratio'] = TRUE;
-            $config['width']   = $this->_groups[$group_id]['size_width'];
-            $config['height'] = $this->_groups[$group_id]['size_height'];
+            toc_gd_resize($original_image, $dest_image, $this->_groups[$group_id]['size_width'], $this->_groups[$group_id]['size_height']);
             
-            $this->ci->load->library('image_lib');
-            
-            $this->ci->image_lib->initialize($config);
-            
-            return $this->ci->image_lib->resize();
+            return TRUE;
         }
         
         return FALSE;
