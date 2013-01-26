@@ -27,7 +27,7 @@
       
       $this->_subgroups = array(array('iconCls' => 'icon-products-win',
                                       'shortcutIconCls' => 'icon-products-shortcut',
-                                      'title' => 'Products',
+                                      'title' => lang('access_products_title'),
                                       'identifier' => 'products-win'));
     
     }
