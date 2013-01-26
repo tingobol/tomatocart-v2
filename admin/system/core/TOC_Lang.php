@@ -658,20 +658,26 @@ class TOC_Lang extends CI_Lang
      * @param int language id
      * @return boolean
      */
-    public function import_xml($xml_file, $languages_id) {
+    public function import_xml($xml_file, $languages_id) 
+    {
         if ( file_exists($xml_file) ) {
             $info = simplexml_load_file($xml_file);
 
-            if (($info !== FALSE) ) {
+            if (($info !== FALSE) ) 
+            {
                 //insert definitions
-                foreach ($info->definitions->definition as $definition) {
+                foreach ($info->definitions->definition as $definition) 
+                {
                     $entry = array(
                     	'languages_id' => $languages_id,
                         'content_group' => (string) $definition->group,
                         'definition_key' => (string) $definition->key,
                         'definition_value' => (string) $definition->value);
-
-                    $this->ci->languages_model->insert_definition($entry);
+                    
+                    if (!$this->ci->languages_model->check_definition($entry)) 
+                    {
+                        $this->ci->languages_model->insert_definition($entry);
+                    }
                 }
 
                 unset($info);
