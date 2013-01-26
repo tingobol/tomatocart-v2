@@ -100,7 +100,7 @@ class Administrators extends TOC_Controller
         $this->load->library('access');
         
         $data = array('username' => $this->input->post('user_name'), 
-                      'password' => $this->input->post('password'), 
+                      'password' => $this->input->post('user_password'), 
                       'email_address' => $this->input->post('email_address'));
         
         $modules = json_decode($this->input->post('modules'));
