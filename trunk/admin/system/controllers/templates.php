@@ -26,7 +26,7 @@
  * @author		TomatoCart Dev Team
  * @link		http://tomatocart.com/wiki/
  */
-class Templates extends TOC_Controller 
+class Templates extends TOC_Controller
 {
     /**
      * Constructor
@@ -42,11 +42,14 @@ class Templates extends TOC_Controller
     }
 
     // --------------------------------------------------------------------
-    
+
     /**
      * List all templates
+     *
+     * @access public
+     * @return string
      */
-    public function list_templates ()
+    public function list_templates()
     {
         $this->load->helper('directory');
          
@@ -62,7 +65,8 @@ class Templates extends TOC_Controller
                 $info = simplexml_load_file($xml_file);
                 $code = (string) $info->Code;
 
-                if ($directory == $code) {
+                if ($directory == $code)
+                {
                     $title = $info->Title;
                     $defaultCls = 'icon-default-record';
                     $installCls = 'icon-install-record';
@@ -71,18 +75,24 @@ class Templates extends TOC_Controller
                     //load template data from database and check whether it is installed
                     //
                     $data = $this->templates_model->get_template_data_via_code($code);
-                    if ($data !== FALSE) {
+                    if ($data !== FALSE)
+                    {
                         $templates_id = $data['id'];
 
-                        if ($code == config('DEFAULT_TEMPLATE')) {
+                        if ($code == config('DEFAULT_TEMPLATE'))
+                        {
                             $title = '&nbsp;(' . lang('default_entry') . ')';
                             $defaultCls = 'icon-default-record';
-                        } else {
+                        }
+                        else
+                        {
                             $defaultCls = 'icon-default-gray-record';
                         }
                          
                         $installCls = 'icon-uninstall-record';
-                    } else {
+                    }
+                    else
+                    {
                         $defaultCls = 'icon-empty-record';
                         $installCls = 'icon-install-record';
                     }
@@ -98,14 +108,20 @@ class Templates extends TOC_Controller
                 }
             }
         }
-        
+
         $this->output->set_output(json_encode(array(EXT_JSON_READER_TOTAL => sizeof($templates), EXT_JSON_READER_ROOT => $templates)));
     }
 
+    // --------------------------------------------------------------------
+
     /**
      * install template
+     *
+     * @access public
+     * @return string
      */
-    public function install() {
+    public function install()
+    {
         $code = $this->input->post('code');
         $info = simplexml_load_file('../templates/' . $code . '/template.xml');
 
@@ -115,13 +131,13 @@ class Templates extends TOC_Controller
             //template info data
             //
             $data = array(
-      	'title' => (string) $info->Title,
-        'code' => (string) $code,
-        'author_name' => (string) $info->Author,
-        'author_www'	=> (string) $info->URL,
-        'markup_version' => 'XHTML 1.0 Transitional',
-        'css_based' => '1',
-        'medium' => 'Screen');
+                'title' => (string) $info->Title,
+                'code' => (string) $code,
+                'author_name' => (string) $info->Author,
+                'author_www'	=> (string) $info->URL,
+                'markup_version' => 'XHTML 1.0 Transitional',
+                'css_based' => '1',
+                'medium' => 'Screen');
 
             //template params
             //
@@ -137,8 +153,10 @@ class Templates extends TOC_Controller
 
             //web layout modules
             $modules = array();
-            if ( isset($info->WebLayout->Modules->Module) ) {
-                foreach ($info->WebLayout->Modules->Module as $moduleEl) {
+            if ( isset($info->WebLayout->Modules->Module) )
+            {
+                foreach ($info->WebLayout->Modules->Module as $moduleEl)
+                {
                     //Get module attributes
                     $attributes = $moduleEl->attributes();
 
@@ -164,20 +182,22 @@ class Templates extends TOC_Controller
 
                     //save to modules array
                     $modules[] = array(
-          	'code' => (string) $attributes['code'],
-            'medium' => 'web',
-            'sort-order' => (string) $attributes['sort-order'],
-            'page'	=>  (string) $attributes['page'],
-          	'group'	=>  (string) $attributes['group'],
-            'params' => $params);
+                        'code' => (string) $attributes['code'],
+                        'medium' => 'web',
+                        'sort-order' => (string) $attributes['sort-order'],
+                        'page'	=>  (string) $attributes['page'],
+                        'group'	=>  (string) $attributes['group'],
+                        'params' => $params);
                 }
             }
             $data['web_layout']['modules'] = $modules;
 
             //mobile layout modules
             $modules = array();
-            if ( isset($info->MobileLayout->Modules->Module) ) {
-                foreach ($info->MobileLayout->Modules->Module as $moduleEl) {
+            if ( isset($info->MobileLayout->Modules->Module) )
+            {
+                foreach ($info->MobileLayout->Modules->Module as $moduleEl)
+                {
                     //Get module attributes
                     $attributes = $moduleEl->attributes();
 
@@ -189,8 +209,10 @@ class Templates extends TOC_Controller
 
                     //if the module has param elements
                     $values = array();
-                    if ( isset($moduleEl->Param) ) {
-                        foreach ($moduleEl->Param as $paramEl) {
+                    if ( isset($moduleEl->Param) )
+                    {
+                        foreach ($moduleEl->Param as $paramEl)
+                        {
                             $attrib = $paramEl->attributes();
 
                             $values[(string)$attrib['name']] = (string) $attrib['value'];
@@ -203,12 +225,12 @@ class Templates extends TOC_Controller
 
                     //save to modules array
                     $modules[] = array(
-          	'code' => (string) $attributes['code'],
-            'medium' => 'mobile',
-            'sort-order' => (string) $attributes['sort-order'],
-            'page'	=>  (string) $attributes['page'],
-          	'group'	=>  (string) $attributes['group'],
-            'params' => $params);
+                      	'code' => (string) $attributes['code'],
+                        'medium' => 'mobile',
+                        'sort-order' => (string) $attributes['sort-order'],
+                        'page'	=>  (string) $attributes['page'],
+                      	'group'	=>  (string) $attributes['group'],
+                        'params' => $params);
                 }
             }
             $data['mobile_layout']['modules'] = $modules;
@@ -216,85 +238,116 @@ class Templates extends TOC_Controller
             $this->templates_model->install($data);
 
             $response = array('success' => true, 'feedback' => lang('ms_success_action_performed'));
-        } else {
+        }
+        else
+        {
             $response = array('success' => false, 'feedback' => lang('ms_error_action_not_performed'));
         }
 
         $this->output->set_output(json_encode($response));
     }
 
+    // --------------------------------------------------------------------
+
     /**
      * Uninstall template
+     *
+     * @access public
+     * @return string
      */
-    public function uninstall() {
+    public function uninstall()
+    {
         $code = $this->input->post('code');
 
         $error = false;
         $feedback = array();
-        if ($code == config('DEFAULT_TEMPLATE')) {
+
+        if ($code == config('DEFAULT_TEMPLATE'))
+        {
             $error = true;
             $feedback[] = lang('uninstall_error_template_prohibited');
         }
 
-        if($error === false) {
-            if ($this->templates_model->remove($code)) {
+        if($error === false)
+        {
+            if ($this->templates_model->remove($code))
+            {
                 $response = array('success' => true, 'feedback' => lang('ms_success_action_performed'));
-            } else {
+            }
+            else
+            {
                 $response = array('success' => false, 'feedback' => lang('ms_error_action_not_performed'));
             }
-        } else {
+        }
+        else
+        {
             $response = array('success' => false, 'feedback' => lang('ms_error_action_not_performed') . '<br />' . implode('<br />', $feedback));
         }
 
         $this->output->set_output(json_encode($response));
     }
 
+    // --------------------------------------------------------------------
+
     /**
      * Set Default Template
+     *
+     * @access public
+     * @return string
      */
-    public function set_default() 
+    public function set_default()
     {
         $code = $this->input->post('code');
 
-        if ($this->templates_model->is_installed($code) === TRUE) {
+        if ($this->templates_model->is_installed($code) === TRUE)
+        {
             $this->templates_model->set_default($code);
 
             $response = array('success' => true, 'feedback' => lang('ms_success_action_performed'));
-        } else {
+        }
+        else
+        {
             $response = array('success' => false, 'feedback' => lang('ms_error_action_not_performed'));
         }
 
         $this->output->set_output(json_encode($response));
     }
-    
+
+    // --------------------------------------------------------------------
+
     /**
      * Upload Template
-     * 
+     *
      * @access public
      * @return string
      */
     public function upload_template()
     {
         $errors = array();
-        
+
         //check whether the cache folder is writable
-		$path = $this->config->item('cache_path');
-		$cache_path = ($path === '') ? APPPATH . 'cache/' : $path;
+        $path = $this->config->item('cache_path');
+        $cache_path = ($path === '') ? APPPATH . 'cache/' : $path;
 
-		if ( ! is_dir($cache_path) OR ! is_really_writable($cache_path))
-		{
-		    $errors[] = 'Unable to write cache file: ' . $cache_path;
-		}
+        if ( ! is_dir($cache_path) OR ! is_really_writable($cache_path))
+        {
+            $errors[] = 'Unable to write cache file: ' . $cache_path;
+        }
 
-        
+
         $this->output->set_header("Content-Type: text/html")->set_output(json_encode(array('success' => true)));
     }
-    
+
+    // --------------------------------------------------------------------
 
     /**
      * Retrieve template params
+     *
+     * @access public
+     * @return string
      */
-    public function get_template_params() {
+    public function get_template_params()
+    {
         $templates_id = $this->input->post('templates_id');
         $code = $this->input->post('code');
         $xml_file = '../templates/' . $code . '/template.xml';
@@ -308,28 +361,33 @@ class Templates extends TOC_Controller
             //template params
             //
             $params = array();
-            if ( isset($info->Params->Param) ) {
-                foreach ($info->Params->Param as $paramEl) {
+            if ( isset($info->Params->Param) )
+            {
+                foreach ($info->Params->Param as $paramEl)
+                {
                     $attributes = $paramEl->attributes();
                     $name = (string)$attributes['name'];
 
                     $param = array(
-          	'name' => 'param[' . $name . ']',
-            'title' => (string)$attributes['title'],
-            'type' => (string) $attributes['type'],
-            'description' => (string) $attributes['description'],
-            'value' => (string) $attributes['default']);
+                        'name' => 'param[' . $name . ']',
+                        'title' => (string)$attributes['title'],
+                        'type' => (string) $attributes['type'],
+                        'description' => (string) $attributes['description'],
+                        'value' => (string) $attributes['default']);
 
                     //set value
-                    if ( isset($template_params[$name]) ) {
+                    if ( isset($template_params[$name]) )
+                    {
                         $param['value'] = $template_params[$name];
                     }
 
-                    if (((string)$attributes['type']) == 'combobox') {
+                    if (((string)$attributes['type']) == 'combobox')
+                    {
                         $options = $paramEl->Option;
 
                         $values = array();
-                        foreach ($options as $option) {
+                        foreach ($options as $option)
+                        {
                             $option_attr = $option->attributes();
 
                             $values[] = array('id' => (string)$option_attr['value'], 'text' => (string)$option);
@@ -343,51 +401,58 @@ class Templates extends TOC_Controller
             }
         }
 
-        return $params;
+        $this->output->set_output(json_encode($params));
     }
+
+    // --------------------------------------------------------------------
 
     /**
      * Save template params
+     *
+     * @access public
+     * @return string
      */
-    public function save_template_params() {
+    public function save_template_params()
+    {
         $tempates_id = $this->input->post('templates_id');
         $params = $this->input->post('param');
 
         $data = array();
-        if (!empty($params) && is_array($params)) {
-            foreach ($params as $key => $value) {
+        if (!empty($params) && is_array($params))
+        {
+            foreach ($params as $key => $value)
+            {
                 $data[$key] = $value;
             }
 
-            if ($this->templates_model->save_template_params($tempates_id, $data)) {
+            if ($this->templates_model->save_template_params($tempates_id, $data))
+            {
                 $response = array('success' => true, 'feedback' => lang('ms_success_action_performed'));
-            } else {
+            }
+            else
+            {
                 $response = array('success' => false, 'feedback' => lang('ms_error_action_not_performed'));
             }
-        } else {
+        }
+        else
+        {
             $response = array('success' => false, 'feedback' => lang('ms_error_action_not_performed'));
         }
 
-        return $response;
+        $this->output->set_output(json_encode($response));
     }
 
-    /*************************************************************************************************
-     *
-     * END: Actions for Template Manipulation Actions
-     *
-     ************************************************************************************************/
-
-    /*************************************************************************************************
-     *
-     * Template Modules
-     *
-     ************************************************************************************************/
+    // --------------------------------------------------------------------
 
     /**
      * Get modules tree
+     *
+     * @access public
+     * @return string
      */
     public function get_modules_tree()
     {
+        //get template modules
         $modules = $this->get_template_modules_meta_data();
 
         foreach ($modules as $key => $module) {
@@ -395,13 +460,22 @@ class Templates extends TOC_Controller
             $modules[$key]['leaf'] = true;
         }
 
-        return $modules;
+        return $this->output->set_output(json_encode($modules));
     }
 
+    // --------------------------------------------------------------------
+
     /**
-     * Get all template modules
+     * Get all template modules meta data
+     *
+     * @access private
+     * @return array
      */
     private function get_template_modules_meta_data() {
+        //load language resources
+        $this->lang->db_load('modules-boxes');
+
+        //modules paths
         $path_array = array('../local/modules/', '../system/tomatocart/modules/');
 
         $modules = array();
@@ -409,11 +483,13 @@ class Templates extends TOC_Controller
         foreach($path_array as $path) {
             $directories = directory_map($path, 1, TRUE);
 
-            include_once '../system/tomatocart/libraries/module.php';
-            foreach ($directories as $directory) {
+            require_once '../system/tomatocart/libraries/module.php';
+            foreach ($directories as $directory)
+            {
                 $file = $path . $directory . '/' . $directory . '.php';
-                if ( file_exists($file) && !in_array($directory, $loaded) ) {
-                    include_once $file;
+                if ( file_exists($file) && !in_array($directory, $loaded) )
+                {
+                    require_once $file;
 
                     $class = new $directory(array());
 
@@ -426,8 +502,13 @@ class Templates extends TOC_Controller
         return $modules;
     }
 
+    // --------------------------------------------------------------------
+
     /**
      * Get layout data
+     *
+     * @access public
+     * @return string
      */
     public function get_layout_data()
     {
@@ -440,34 +521,47 @@ class Templates extends TOC_Controller
             $data[$medium] = $this->get_medium_modules($templates_code, $medium);
         }
 
-        return array('success' => true, 'layout' => $data);
+        $this->output->set_output(json_encode(array('success' => true, 'layout' => $data)));
     }
+
+    // --------------------------------------------------------------------
 
     /**
      * Get modules for each groups
      *
+     * @access private
      * @param string $templates_code
      * @param string $medium
+     * @return string
      */
-    public function get_medium_modules($templates_code, $medium)
+    private function get_medium_modules($templates_code, $medium)
     {
         $info = simplexml_load_file('../templates/' . $templates_code . '/template.xml');
         $template_modules = $this->get_template_modules_meta_data();
 
-        if ($medium == 'web') {
+        if ($medium == 'web')
+        {
             $groupsEl = $info->WebLayout->ContentGroups->Group;
-        } else if ($medium == 'mobile') {
+        }
+        else if ($medium == 'mobile')
+        {
             $groupsEl = $info->MobileLayout->ContentGroups->Group;
-        }else if ($medium == 'pad') {
+        }
+        else if ($medium == 'pad')
+        {
             $groupsEl = $info->PadLayout->ContentGroups->Group;
         }
 
         //modules
         $modules = $this->templates_model->get_medium_modules($templates_code, $medium);
-        foreach ($modules as $index => $module) {
-            print_r($module);
-            foreach ($template_modules as $template_module) {
-                if ($module['module'] == $template_module['code']) {
+        foreach ($modules as $index => $module)
+        {
+            $modules[$index]['title'] = $this->get_module_title($module['module']);
+
+            foreach ($template_modules as $template_module)
+            {
+                if ($module['module'] == $template_module['code'])
+                {
                     //copy values to configuration params array
                     $modules[$index]['params'] = $this->copy_param_values($template_module['params'], $module['params']);
                 }
@@ -476,36 +570,98 @@ class Templates extends TOC_Controller
 
         //groups
         $groups = array();
-        foreach ($groupsEl as $groupEl) {
-            $group['name'] = (string) $groupEl;
-            $group['modules'] = array();
+        if (sizeof($groupsEl) > 0)
+        {
+            foreach ($groupsEl as $groupEl)
+            {
+                $group['name'] = (string) $groupEl;
+                $group['modules'] = array();
 
-            foreach ($modules as $module) {
-                if ($module['content_group'] == (string) $groupEl) {
-                    $group['modules'][] = $module;
+                foreach ($modules as $module)
+                {
+                    if ($module['content_group'] == (string) $groupEl)
+                    {
+                        $group['modules'][] = $module;
+                    }
                 }
-            }
 
-            $groups[] = $group;
+                $groups[] = $group;
+            }
         }
 
         return $groups;
     }
 
+    // --------------------------------------------------------------------
 
-    public function delete_template_module () {
+    /**
+     * Get box module Title
+     *
+     * @access public
+     * @param string $code
+     * @return mixed
+     */
+    public function get_module_title($code)
+    {
+        require_once '../system/tomatocart/libraries/module.php';
+
+        //get module configuration params and insert default value into database
+        $path_array = array('../local/modules/', '../system/tomatocart/modules/');
+
+        $params = array();
+        foreach($path_array as $path)
+        {
+            $file = $path . $code . '/' . $code . '.php';
+            if (file_exists($file))
+            {
+                require_once $file;
+
+                $class = new $code(array());
+
+                return $class->get_title();
+            }
+        }
+
+        return NULL;
+    }
+
+    // --------------------------------------------------------------------
+
+    /**
+     * Delete template Module
+     *
+     * @access public
+     * @return string
+     */
+    public function delete_template_module ()
+    {
         $module_id = $this->input->post('mid');
 
-        if ($this->templates_model->delete_template_module($module_id)) {
+        if ($this->templates_model->delete_template_module($module_id))
+        {
             $response = array('success' => true);
-        } else {
+        }
+        else
+        {
             $response = array('success' => false, 'feedback' => lang('ms_error_action_not_performed'));
         }
 
-        return $response;
+        $this->output->set_output(json_encode($response));
     }
 
-    public function add_template_module () {
+    // --------------------------------------------------------------------
+
+    /**
+     * Add a template module to certain group
+     *
+     * @access public
+     * @return string
+     */
+    public function add_template_module()
+    {
+        //load language resources
+        $this->lang->db_load('modules-boxes');
+
         $code = $this->input->post('code');
         $medium = $this->input->post('medium');
         $group = $this->input->post('group');
@@ -514,49 +670,63 @@ class Templates extends TOC_Controller
         //get module configuration params and insert default value into database
         $path_array = array('../local/modules/', '../system/tomatocart/modules/');
 
-        $params = array();
-        foreach($path_array as $path) {
+        $result = FALSE;
+        $data = array();
+
+        require_once '../system/tomatocart/libraries/module.php';
+        foreach($path_array as $path)
+        {
             $directories = directory_map($path, 1, TRUE);
 
-            include_once '../system/tomatocart/libraries/module.php';
-            foreach ($directories as $directory) {
+            foreach ($directories as $directory)
+            {
                 $file = $path . $directory . '/' . $directory . '.php';
-                if (file_exists($file) && ($code == $directory)) {
-                    include_once $file;
+                if (file_exists($file) && ($code == $directory))
+                {
+                    require_once $file;
 
                     $class = new $directory(array());
 
-                    $params = $class->get_params();
+                    $result = $class->install($templates_id, $medium, $group);
+
+                    if ($result !== FALSE)
+                    {
+                        $data = array(
+                        	'id' => $result, 
+                        	'templates_id' => $templates_id, 
+                            'title' => $class->get_title(),
+                        	'medium' => $medium,
+                          	'module' => $code,
+                        	'status' => 0,
+                        	'content_page' => '*',
+                        	'content_group' => $group,
+                        	'sort_order' => 0,
+                        	'page_specific' => 0,
+                        	'params' => $class->get_params());
+
+                        break;
+                    }
                 }
             }
         }
 
-        $data = array(
-    	'templates_id' => $templates_id, 
-    	'medium' => $medium,
-      'module' => $code,
-    	'status' => 0,
-    	'content_page' => '*',
-    	'content_group' => $group,
-    	'sort_order' => 0,
-    	'page_specific' => 0,
-    	'params' => json_encode($params)
-        );
-
-        $id = $this->templates_model->insert_template_module($data);
-
-        if (is_numeric($id)) {
-            $data['id'] = $id;
-            $data['params'] = $params;
-
+        if ($result !== FALSE) {
             $response = array('success' => true, 'data' => $data);
         } else {
             $response = array('success' => false, 'feedback' => lang('ms_error_action_not_performed'));
         }
 
-        return $response;
+        return $this->output->set_output(json_encode($response));
     }
 
+    // --------------------------------------------------------------------
+
+    /**
+     * Update template module group
+     *
+     * @access public
+     * @return string
+     */
     public function update_template_module_group()
     {
         $module_id = $this->input->post('mid');
@@ -568,19 +738,17 @@ class Templates extends TOC_Controller
             $response = array('success' => false, 'feedback' => lang('ms_error_action_not_performed'));
         }
 
-        return $response;
+        return $this->output->set_output(json_encode($response));
     }
 
-    public function get_default_modules()
-    {
-        $group = $this->input->get_post('group');
+    // --------------------------------------------------------------------
 
-        $modules = $this->templates_model->get_default_modules($group);
-
-        return array(EXT_JSON_READER_TOTAL => $this->templates_model->get_totals($group),
-        EXT_JSON_READER_ROOT => $modules);
-    }
-
+    /**
+     * Get all pages
+     *
+     * @access public
+     * @return string
+     */
     public function get_pages()
     {
         $path_array = array('../system/tomatocart/controllers/', '../local/controllers/');
@@ -603,9 +771,17 @@ class Templates extends TOC_Controller
             }
         }
 
-        return array(EXT_JSON_READER_ROOT => $controllers);
+        return $this->output->set_output(json_encode(array(EXT_JSON_READER_ROOT => $controllers)));
     }
 
+    // --------------------------------------------------------------------
+
+    /**
+     * Get box module parameters
+     *
+     * @access public
+     * @return string
+     */
     public function get_module_params()
     {
         $module_id = $this->input->get_post('module_id');
@@ -615,30 +791,24 @@ class Templates extends TOC_Controller
         return $params;
     }
 
-    public function save_modules()
-    {
-        $params = json_decode($this->input->post('params'));
-        $sorts = json_decode($this->input->post('sorts'));
+    // --------------------------------------------------------------------
 
-        $result = '';
-
-        foreach($sorts as $key=>$value)
-        {
-            $result .= $key . '=' . $value;
-        }
-
-        return array('success' => true, 'feedback' => $result);
-    }
-
-    public function get_template_module_info($code) {
+    /**
+     * Get certain template module info
+     *
+     * @access public
+     * @param $code
+     * @return string
+     */
+    private function get_template_module_info($code) {
         $path_array = array('../local/modules/', '../system/tomatocart/modules/');
 
-        $module = FALSE;
+        $module = NULL;
         foreach($path_array as $path) {
-            include_once '../system/tomatocart/libraries/module.php';
+            require_once '../system/tomatocart/libraries/module.php';
             $file = $path . $code . '/' . $code . '.php';
             if (file_exists($file)) {
-                include_once $file;
+                require_once $file;
 
                 $class = new $code(array());
 
@@ -649,6 +819,14 @@ class Templates extends TOC_Controller
         return $module;
     }
 
+    // --------------------------------------------------------------------
+
+    /**
+     * Save box module settings
+     *
+     * @access public
+     * @return string
+     */
     public function save_module_settings() {
         $data['id'] = $this->input->post('id');
         $data['page_specific'] = ($this->input->post('page_specific') == 'on') ? 1 : 0;
@@ -686,8 +864,10 @@ class Templates extends TOC_Controller
             $response = array('success' => false, 'feedback' => lang('ms_error_action_not_performed'));
         }
 
-        return $response;
+        $this->output->set_output(json_encode($response));
     }
+
+    // --------------------------------------------------------------------
 
     /**
      * Copy param values from values array to param array
@@ -708,6 +888,8 @@ class Templates extends TOC_Controller
 
         return $params;
     }
+
+    // --------------------------------------------------------------------
 
     /**
      * Convert param array to key value pairs array
