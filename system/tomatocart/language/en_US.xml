@@ -2569,6 +2569,21 @@ Note: If you did not request this action via our password forgotten page, please
       <group>info</group>
     </definition>
     <definition>
+      <key>label_products_per_page</key>
+      <value><![CDATA[Products per page:]]></value>
+      <group>products</group>
+    </definition>
+    <definition>
+      <key>label_select_view</key>
+      <value><![CDATA[Select view:]]></value>
+      <group>products</group>
+    </definition>
+    <definition>
+      <key>label_sorting</key>
+      <value><![CDATA[Sorting:]]></value>
+      <group>products</group>
+    </definition>
+    <definition>
       <key>table_heading_weight</key>
       <value><![CDATA[Weight]]></value>
       <group>products</group>
