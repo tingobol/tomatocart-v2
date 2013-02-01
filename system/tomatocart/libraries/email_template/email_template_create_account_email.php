@@ -65,7 +65,6 @@ class TOC_Email_Template_create_account_email extends TOC_Email_Template_Module
      * Set data
      *
      * @access public
-     * @param $osC_Customer
      * @param $password
      * @return void
      */

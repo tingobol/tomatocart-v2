@@ -222,9 +222,7 @@ class TOC_Email_Template_Module
                     }
                 }
                 
-                $this->ci->email->send();
-                
-                echo $this->ci->email->print_debugger();exit;
+                return $this->ci->email->send();
             }
         }
 
