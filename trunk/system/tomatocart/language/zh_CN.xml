@@ -2543,6 +2543,21 @@
       <group>info</group>
     </definition>
     <definition>
+      <key>label_products_per_page</key>
+      <value><![CDATA[每页产品个数:]]></value>
+      <group>products</group>
+    </definition>
+    <definition>
+      <key>label_select_view</key>
+      <value><![CDATA[视图:]]></value>
+      <group>products</group>
+    </definition>
+    <definition>
+      <key>label_sorting</key>
+      <value><![CDATA[排序:]]></value>
+      <group>products</group>
+    </definition>
+    <definition>
       <key>table_heading_weight</key>
       <value><![CDATA[商品重量]]></value>
       <group>products</group>
