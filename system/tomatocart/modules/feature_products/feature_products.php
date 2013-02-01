@@ -87,7 +87,7 @@ class Feature_Products extends TOC_Module
             $this->config = json_decode($config, TRUE);
         }
         
-        $this->title = lang('feature_products_title');
+        $this->title = lang('box_feature_products_heading');
     }
 
     /**
@@ -117,10 +117,13 @@ class Feature_Products extends TOC_Module
             {
                 $data['products'][] = array(
                     'products_id' => $product['products_id'],
-                    'products_name' => $product['products_name'],
-                  	'products_short_description' => (strlen($product['products_short_description']) > 80) ? substr($product['products_short_description'], 0, 80) . '...' : $product['products_short_description'],
-                    'products_image' => $product['image'],
-                  	'products_price' => $product['products_price']);
+                    'product_name' => $product['products_name'],
+                    'product_price' => $product['products_price'],
+                    'specials_price' => $product['specials_price'],
+                    'is_specials' => ($product['specials_price'] === NULL) ? FALSE : TRUE,
+                    'is_featured' => ($product['featured_products_id'] === NULL) ? FALSE : TRUE,
+                    'product_image' => $product['image'],
+                    'short_description' => $product['products_short_description']);
             }
              
             return $this->load_view('index.php', $data);
