@@ -48,16 +48,20 @@ class New_Products_Model extends CI_Model
      */
     public function get_new_products($count) 
     {
-        $result = $this->db->select('p.products_id, p.products_tax_class_id, p.products_price, pd.products_name, pd.products_short_description, pd.products_keyword, i.image')
-            ->from('products p')
-            ->join('products_images i', 'p.products_id = i.products_id', 'left')
-            ->join('products_description pd', 'p.products_id = pd.products_id', 'inner')
-            ->where('p.products_status', 1)
-            ->where('pd.language_id', lang_id())
-            ->where('i.default_flag', 1)
-            ->order_by('p.products_date_added', 'desc')
-            ->limit($count)
-            ->get();
+        $result = $this->db->select('p.*, pd.*, m.*, i.image, s.specials_new_products_price as specials_price, f.products_id as featured_products_id')
+                           ->from('products as p')
+                           ->join('products_description as pd', 'p.products_id = pd.products_id and pd.language_id =' . lang_id(), 'inner')
+                           ->join('products_to_categories as p2c', 'p.products_id = p2c.products_id', 'inner')
+                           ->join('products_frontpage as f', 'p.products_id = f.products_id', 'left')
+                           ->join('products_images as i', 'p.products_id = i.products_id and i.default_flag = 1', 'left')
+                           ->join('categories as c', 'p2c.categories_id = c.categories_id', 'inner')
+                           ->join('specials as s', 'p.products_id = s.products_id and s.status = 1 and s.start_date <= now() and s.expires_date >= now()', 'left')
+                           ->join('manufacturers as m', 'p.manufacturers_id = m.manufacturers_id', 'left')
+                           ->join('manufacturers_info as mi', 'm.manufacturers_id = mi.manufacturers_id and mi.languages_id = ' . lang_id(), 'left')
+                           ->where('p.products_status', 1)
+                           ->order_by('p.products_id', 'desc')
+                           ->limit($count)
+                           ->get();
 
         if ($result->num_rows() > 0)
         {
