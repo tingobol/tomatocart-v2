@@ -102,7 +102,7 @@ class TOC_Registry
         }
         else
         {
-            return FALSE;
+            return NULL;
         }
     }
 }
