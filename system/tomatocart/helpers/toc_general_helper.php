@@ -197,27 +197,154 @@ if( ! function_exists('address_format'))
 
         return $formated;
     }
-
-    /**
-     * Execute service module
-     *
-     * @access public
-     * @param $module
-     * @return void
-     */
-    if( ! function_exists('run_service'))
-    {
-        function run_service($module)
-        {
-            //get instance
-            $ci = get_instance();
-            
-            //run service
-            $ci->service->run($module);
-        }
-    }
-
 }
 
+/**
+ * Execute service module
+ *
+ * @access public
+ * @param $module
+ * @return void
+ */
+if( ! function_exists('run_service'))
+{
+    function run_service($module)
+    {
+        //get instance
+        $ci = get_instance();
+
+        //run service
+        $ci->service->run($module);
+    }
+}
+
+
+/**
+ * Create a random string
+ *
+ * @param int $length The length of the random string to create
+ * @param string $type The type of random string to create (mixed, chars, digits)
+ * @access public
+ * @return string
+ */
+if( ! function_exists('create_random_string'))
+{
+    function create_random_string($length, $type = 'mixed') {
+        if (!in_array($type, array('mixed', 'chars', 'digits'))) {
+            return false;
+        }
+
+        $chars_pattern = 'abcdefghijklmnopqrstuvwxyz';
+        $mixed_pattern = '1234567890' . $chars_pattern;
+
+        $rand_value = '';
+
+        while (strlen($rand_value) < $length) {
+            if ($type == 'digits') {
+                $rand_value .= rand(0,9);
+            } elseif ($type == 'chars') {
+                $rand_value .= substr($chars_pattern, rand(0, 25), 1);
+            } else {
+                $rand_value .= substr($mixed_pattern, rand(0, 35), 1);
+            }
+        }
+
+        return $rand_value;
+    }
+}
+
+/**
+ * Short function to load product library and return the object
+ *
+ * @param int $products_id
+ * @access public
+ * @return object
+ */
+if( ! function_exists('load_product_library'))
+{
+    function load_product_library($products_id) {
+        $id = get_product_id($products_id); //get products id part and omit the variants part
+        
+        //get ci instance
+        $CI =& get_instance();
+        
+        //load library
+        $CI->load->library('product', $products_id, 'product_' . $products_id);
+        
+        //return the object
+        return $CI->{'product_' . $products_id};
+    }
+}
+
+/**
+ * Short function to check whether the customer is logged on
+ *
+ * @access public
+ * @return object
+ */
+if( ! function_exists('is_logged_on'))
+{
+    function is_logged_on() 
+    {
+        //get ci instance
+        $CI =& get_instance();
+        
+        return $CI->customer->is_logged_on();
+    }
+}
+
+
+/**
+ * Short function to check whether the customer is logged on
+ *
+ * @access public
+ * @return object
+ */
+if( ! function_exists('is_logged_on'))
+{
+    function is_logged_on() 
+    {
+        //get ci instance
+        $CI =& get_instance();
+        
+        return $CI->customer->is_logged_on();
+    }
+}
+
+
+/**
+ * Short function to get number of items in the shopping cart
+ *
+ * @access public
+ * @return object
+ */
+if( ! function_exists('cart_item_count'))
+{
+    function cart_item_count() 
+    {
+        //get ci instance
+        $CI =& get_instance();
+        
+        return $CI->shopping_cart->number_of_items();
+    }
+}
+        
+
+/**
+ * Short function to get login status of customer
+ *
+ * @access public
+ * @return boolean
+ */
+if( ! function_exists('is_logged_on'))
+{
+    function is_logged_on() 
+    {
+        //get ci instance
+        $CI =& get_instance();
+        
+        return $CI->customer->is_logged_on();
+    }
+}
 /* End of file general_helper.php */
 /* Location: ./system/tomatocart/helpers/general_helper.php */
