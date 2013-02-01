@@ -37,14 +37,6 @@ class TOC_Navigation_History
     private $ci = null;
 
     /**
-     * Exclude pages
-     *
-     * @access private
-     * @var array
-     */
-    private $excludes = array('account/login');
-
-    /**
      * data
      *
      * @access private
@@ -64,7 +56,7 @@ class TOC_Navigation_History
         $this->ci =& get_instance();
 
         //data
-        if ($this->ci->session->userdata('navigation_history_data') !== FALSE)
+        if ($this->ci->session->userdata('navigation_history_data') !== NULL)
         {
             $this->data = $this->ci->session->userdata('navigation_history_data');
         }
@@ -80,20 +72,12 @@ class TOC_Navigation_History
      * Add current page to navigation history
      *
      * @access public
+     * @return void
      */
     public function add_current_page() {
-        $last_entry_position = sizeof($this->data) - 1;
-
-        if ($last_entry_position == -1)
-        {
-            $this->data[] = array('page' => $this->ci->uri->uri_string(),
-                                  'post' => $this->ci->input->post());
-        }
-        else if ($this->data[$last_entry_position]['page'] != $this->ci->uri->uri_string())
-        {
-            $this->data[] = array('page' => $this->ci->uri->uri_string(),
-                                  'post' => $this->ci->input->post());
-        }
+        $this->data[] = array('page' => $this->ci->uri->uri_string(),
+                              'get' => $this->ci->input->get(),
+                              'post' => $this->ci->input->post());
 
         //set data to session
         $this->ci->session->set_userdata('navigation_history_data', $this->data);
