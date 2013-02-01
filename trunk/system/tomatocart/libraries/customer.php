@@ -57,7 +57,7 @@ class TOC_Customer {
         {
             $this->data = $this->ci->session->userdata('customer_data');
         }
-        
+
         log_message('debug', "TOC Customer Class Initialized");
     }
 
@@ -73,7 +73,7 @@ class TOC_Customer {
             return $this->data['id'];
         }
 
-        return FALSE;
+        return NULL;
     }
 
     /**
@@ -88,7 +88,7 @@ class TOC_Customer {
             return $this->data['customers_groups_id'];
         }
 
-        return FALSE;
+        return NULL;
     }
 
     /**
@@ -98,17 +98,12 @@ class TOC_Customer {
      */
     public function get_firstname()
     {
-        static $first_name = null;
-
-        if (is_null($first_name))
+        if (isset($this->data['firstname']))
         {
-            if (isset($this->data['firstname']))
-            {
-                $first_name = $this->data['firstname'];
-            }
+            return $this->data['firstname'];
         }
 
-        return $first_name;
+        return NULL;
     }
 
     /**
@@ -118,17 +113,12 @@ class TOC_Customer {
      */
     public function get_lastname()
     {
-        static $last_name = null;
-
-        if (is_null($last_name))
+        if (isset($this->data['lastname']))
         {
-            if (isset($this->data['lastname']))
-            {
-                $last_name = $this->data['lastname'];
-            }
+            return $this->data['lastname'];
         }
 
-        return $last_name;
+        return NULL;
     }
 
     /**
@@ -138,17 +128,10 @@ class TOC_Customer {
      */
     public function get_name()
     {
-        static $name = NULL;
+        $first_name = !empty($this->data['firstname']) ? $this->data['firstname'] : '';
+        $last_name = !empty($this->data['lastname']) ? $this->data['lastname'] : '';
 
-        if (empty($name))
-        {
-            $first_name = empty($this->data['firstname']) ? $this->data['firstname'] : '';
-            $last_name = empty($this->data['lastname']) ? $this->data['lastname'] : '';
-
-            $name = $first_name . ' ' . $last_name;
-        }
-
-        return $name;
+        return $first_name . ' ' . $last_name;
     }
 
     /**
@@ -158,14 +141,7 @@ class TOC_Customer {
      */
     public function is_logged_on()
     {
-        static $logged_on = NULL;
-
-        if (is_null($logged_on))
-        {
-            $logged_on = isset($this->data['id']) && is_numeric($this->data['id']);
-        }
-
-        return $logged_on;
+        return isset($this->data['id']) && is_numeric($this->data['id']);
     }
 
     /**
@@ -175,17 +151,12 @@ class TOC_Customer {
      */
     public function get_gender()
     {
-        static $gender = null;
-
-        if (is_null($gender))
+        if (isset($this->data['gender']))
         {
-            if (isset($this->data['gender']))
-            {
-                $gender = $this->data['gender'];
-            }
+            return $this->data['gender'];
         }
 
-        return $gender;
+        return NULL;
     }
 
     /**
@@ -195,17 +166,12 @@ class TOC_Customer {
      */
     public function get_email_address()
     {
-        static $email_address = null;
-
-        if (is_null($email_address))
+        if (isset($this->data['email_address']))
         {
-            if (isset($this->data['email_address']))
-            {
-                $email_address = $this->data['email_address'];
-            }
+            return $this->data['email_address'];
         }
 
-        return $email_address;
+        return NULL;
     }
 
     /**
@@ -215,17 +181,12 @@ class TOC_Customer {
      */
     public function get_country_id()
     {
-        static $country_id = null;
-
-        if (is_null($country_id))
+        if (isset($this->data['country_id']))
         {
-            if (isset($this->data['country_id']))
-            {
-                $country_id = $this->data['country_id'];
-            }
+            return $this->data['country_id'];
         }
 
-        return $country_id;
+        return NULL;
     }
 
     /**
@@ -235,17 +196,12 @@ class TOC_Customer {
      */
     public function get_zone_id()
     {
-        static $zone_id = null;
-
-        if (is_null($zone_id))
+        if (isset($this->data['zone_id']))
         {
-            if (isset($this->data['zone_id']))
-            {
-                $zone_id = $this->data['zone_id'];
-            }
+            return $this->data['zone_id'];
         }
 
-        return $zone_id;
+        return NULL;
     }
 
     /**
@@ -268,17 +224,12 @@ class TOC_Customer {
      */
     public function get_default_address_id()
     {
-        static $id = null;
-
-        if (is_null($id))
+        if (isset($this->data['default_address_id']))
         {
-            if (isset($this->data['default_address_id']))
-            {
-                $id = $this->data['default_address_id'];
-            }
+            return $this->data['default_address_id'];
         }
 
-        return $id;
+        return NULL;
     }
 
     /**
@@ -288,17 +239,12 @@ class TOC_Customer {
      */
     public function get_customer_group_discount()
     {
-        static $customers_groups_discount = null;
-
-        if (is_null($customers_groups_discount))
+        if (isset($this->data['customers_groups_discount']))
         {
-            if (isset($this->data['customers_groups_discount']))
-            {
-                $customers_groups_discount = $this->data['customers_groups_discount'];
-            }
+            return $this->data['customers_groups_discount'];
         }
 
-        return $customers_groups_discount;
+        return NULL;
     }
 
     /**
@@ -312,7 +258,7 @@ class TOC_Customer {
         $data = $this->ci->account_model->get_data($email);
 
         //if customer data is not null
-        if ($data !== FALSE)
+        if ($data !== NULL)
         {
             $this->data = array();
 
@@ -327,7 +273,7 @@ class TOC_Customer {
             $this->data['customers_groups_discount'] = $data['customers_groups_discount'];
             $this->data['country_id'] = $data['entry_country_id'];
             $this->data['zone_id'] = $data['entry_zone_id'];
-            
+
             //set data to session
             $this->ci->session->set_userdata('customer_data', $this->data);
         }
@@ -370,38 +316,181 @@ class TOC_Customer {
             }
         }
     }
-    
+
+    /**
+     * Set customer id
+     *
+     * @access public
+     * @param $id
+     * @return void
+     */
+    function set_id($id)
+    {
+        if (is_numeric($id) && ($id > 0))
+        {
+            $this->data['id'] = $id;
+        }
+        else
+        {
+            $this->data['id'] = NULL;
+        }
+    }
+
+    /**
+     * Set customer group id
+     *
+     * @access public
+     * @param $customers_groups_id
+     * @return void
+     */
+    function set_customer_group_id($customers_groups_id)
+    {
+        if (is_numeric($customers_groups_id) && ($customers_groups_id > 0))
+        {
+            $this->data['customers_groups_id'] = $customers_groups_id;
+        }
+        else
+        {
+            $this->data['customers_groups_id'] = NULL;
+        }
+    }
+
+    /**
+     * Set customer group discount
+     *
+     * @access public
+     * @param $customers_groups_discount
+     * @return void
+     */
+    function set_customer_group_discount($customers_groups_discount)
+    {
+        if (is_numeric($customers_groups_discount) && ($customers_groups_discount > 0))
+        {
+            $this->data['customers_groups_discount'] = $customers_groups_discount;
+        }
+        else
+        {
+            $this->data['customers_groups_discount'] = NULL;
+        }
+    }
+
+    /**
+     * Set default address id
+     *
+     * @access public
+     * @param $id
+     * @return void
+     */
+    function set_default_address_id($id)
+    {
+        if (is_numeric($id) && ($id > 0))
+        {
+            $this->data['default_address_id'] = $id;
+        }
+        else
+        {
+            $this->data['default_address_id'] = NULL;
+        }
+    }
+
+    /**
+     * Set gender
+     * 
+     * @access public
+     * @param $gender
+     * @return void
+     */
+    function set_gender($gender) 
+    {
+        if ( (strtolower($gender) == 'm') || (strtolower($gender) == 'f') ) 
+        {
+            $this->data['gender'] = strtolower($gender);
+        } 
+        else 
+        {
+            $this->data['gender'] = NULL;
+        }
+    }
+
+    /**
+     * Set first name
+     * 
+     * @access public
+     * @param $first_name
+     * @return void
+     */
+    function set_firstname($first_name) 
+    {
+        $this->data['first_name'] = $first_name;
+    }
+
+    /**
+     * Set last name
+     * 
+     * @access public
+     * @param $last_name
+     * @return void
+     */
+    function set_lastname($last_name) 
+    {
+        $this->data['last_name'] = $last_name;
+    }
+
+    /**
+     * Set email address
+     * 
+     * @access public
+     * @param $email_address
+     * @return void
+     */
+    function set_email_address($email_address) 
+    {
+        $this->data['email_address'] = $email_address;
+    }
+
     /**
      * set the country
-     * 
+     *
      * @access public
      * @param int
      */
     public function set_country($country_id)
     {
         $this->data['country_id'] = $country_id;
-        
+
         //update data in session
         $this->update_session_data();
     }
-    
+
+    /**
+     * Set zone id 
+     * 
+     * @access public
+     * @param $id
+     * @return void
+     */
+    function set_zone_id($id) 
+    {
+        $this->data['zone_id'] = $id;
+    }
+
     /**
      * set the zone
-     * 
+     *
      * @access public
      * @param int
      */
     public function set_zone($zone_id)
     {
         $this->data['zone_id'] = $zone_id;
-        
+
         //update data in session
         $this->update_session_data();
     }
-    
+
     /**
      * set the default address
-     * 
+     *
      * @access public
      * @param int
      */
@@ -410,37 +499,36 @@ class TOC_Customer {
         if (is_numeric($address_book_id) && ($address_book_id > 0))
         {
             $this->data['default_address_id'] = $address_book_id;
-            
+
             //update data in session
             $this->update_session_data();
         }
     }
-    
      
     /**
      * Update the session data
-     * 
+     *
      * @access public
      */
     public function update_session_data()
     {
-        if ($this->ci->session->userdata('customer_data') !== FALSE)
+        if ($this->ci->session->userdata('customer_data') !== NULL)
         {
             //update data in session
             $this->ci->session->set_userdata('customer_data', $this->data);
         }
     }
-    
+
     /**
      * Reset customer & session data
      */
     public function reset()
     {
-        //clean customer data
-        $this->data = array();
-
         //clean session data
         $this->ci->session->unset_userdata('customer_data');
+
+        //clean customer data
+        $this->data = array();
     }
 }
 // END Customer Class
