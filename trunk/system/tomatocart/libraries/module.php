@@ -118,19 +118,48 @@ class TOC_Module {
     {
         // Set the super object to a local variable for use later
         $this->ci =& get_instance();
-        
+
         //load module model
         $this->load_model($this->code);
     }
-    
+
     /**
      * Install Template Module
-     * 
+     *
      * @access public
-     * @return boolean
+     * @param $templates_id
+     * @param $medium
+     * @param $group
+     * @return mixed
      */
-    public function install($templates_id, $medium, $group) {
-        
+    public function install($templates_id, $medium, $group)
+    {
+        $languages = $this->ci->lang->get_languages();
+        foreach ($languages as $key => $language) 
+        {
+            $file = '../system/tomatocart/language/' . $key . '/modules/boxes/' . $this->code . '.xml';
+            
+            $this->ci->lang->import_xml($file, $language['id']);
+        }
+
+        $data = array(
+            'templates_id' => $templates_id, 
+            'medium' => $medium,
+            'module' => $this->code,
+            'status' => 0,
+            'content_page' => '*',
+            'content_group' => $group,
+            'sort_order' => 0,
+            'page_specific' => 0,
+            'params' => json_encode($this->params));
+
+        $id = $this->ci->templates_model->insert_template_module($data);
+
+        if (is_numeric($id)) {
+            return $id;
+        }
+
+        return FALSE;
     }
 
     /**
@@ -143,11 +172,11 @@ class TOC_Module {
     public function load_model($module, $name = '')
     {
         $filename = 'system/tomatocart/modules/' . $this->code . '/model.' . $module . '.php';
-        if (file_exists($filename)) 
+        if (file_exists($filename))
         {
             include_once $filename;
             $model_class = $module . '_model';
-    
+
             $this->$module = new $model_class;
         }
     }
