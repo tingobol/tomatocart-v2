@@ -74,8 +74,7 @@ class Slideshows extends TOC_Module
               'mode' => 'remote',
               'value' => '',
               'description' => 'The image groups to choose',
-              'module' => 'slide_images',
-              'action' => 'get_image_groups'),
+              'url' => 'slide_images/get_image_groups'),
     
         //MODULE_SLIDESHOW_SLIDE_WIDTH
         array('name' => 'MODULE_SLIDESHOW_SLIDE_WIDTH',
@@ -135,7 +134,7 @@ class Slideshows extends TOC_Module
             $this->config = json_decode($config, true);
         }
 
-        $this->title = lang('slide_show_title');
+        $this->title = lang('box_slide_show_heading');
     }
 
     /**
