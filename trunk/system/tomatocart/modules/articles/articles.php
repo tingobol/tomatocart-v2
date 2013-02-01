@@ -75,8 +75,7 @@ class Articles extends TOC_Module
               'mode' => 'remote',
               'value' => '',
               'description' => 'The article category',
-              'module' => 'articles',
-              'action' => 'get_articles_categories'),
+              'url' => 'articles/get_articles_categories'),
         
         //MODULE_ARTICLES_MAX_LIST
         array('name' => 'MODULE_ARTICLES_MAX_LIST',
