@@ -110,7 +110,7 @@ if( ! function_exists('get_product_variants_string'))
     {
         if (is_numeric($id))
         {
-            return '';
+            return NULL;
         }
 
         $product = explode('#', $id, 2);
@@ -118,40 +118,6 @@ if( ! function_exists('get_product_variants_string'))
         {
             return $product[1];
         }
-    }
-}
-
-/**
- * Encode a product id string 
- *
- * @access public
- * @param string $string
- * @return int
- */
-if( ! function_exists('encode_product_id_string'))
-{
-    function encode_product_id_string($string)
-    {
-        $string = str_replace(array('#', ':', ';'), array('A', 'B', 'C'), $string);
-
-        return $string;
-    }
-}
-
-/**
- * Decode a product id string 
- *
- * @access public
- * @param string $string
- * @return int
- */
-if( ! function_exists('decode_product_id_string'))
-{
-    function decode_product_id_string($string)
-    {
-        $string = str_replace(array('A', 'B', 'C'), array('#', ':', ';'), $string);
-
-        return $string;
     }
 }
 
