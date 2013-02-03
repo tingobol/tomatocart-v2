@@ -42,6 +42,9 @@ class Guestbooks extends TOC_Controller {
         
         //set page title
         $this->template->set_title(lang('guestbook_heading'));
+
+        //breadcrumb
+        $this->template->set_breadcrumb(lang('guestbook_heading'), site_url('info/guestbooks'));
     }
 
     /**

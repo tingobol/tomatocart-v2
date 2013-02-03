@@ -48,16 +48,21 @@ class Articles extends TOC_Controller {
      */
     public function index($articles_id = NULL)
     {
-        $articles_id = $this->info_model->parse_articles_id($articles_id);
         if ($articles_id !== NULL)
         {
             //get the article
-            $article = $this->info_model->get_article($articles_id, lang_id());
+            $article = $this->info_model->get_article($articles_id);
 
             if ($article != NULL)
             {
                 //set page title
-                $this->template->set_title($article['articles_name']);
+                $this->set_page_title($article['articles_name']);
+                
+                //breadcrumb
+                $this->template->set_breadcrumb($article['articles_categories_name'], site_url('articles_categories/' . $article['articles_categories_id']));
+                
+                //breadcrumb
+                $this->template->set_breadcrumb($article['articles_name'], site_url('articles/' . $articles_id));
 
                 //add the meta title
                 if (!empty($article['page_title']))
