@@ -46,7 +46,7 @@ class Search_Model extends CI_Model
      */
     public function get_result($filters = array())
     {
-        $sql = 'select SQL_CALC_FOUND_ROWS distinct p.*, pd.*, m.*, i.image, if(s.status, s.specials_new_products_price, null) as specials_new_products_price, if(s.status, s.specials_new_products_price, p.products_price) as final_price';
+        $sql = 'select distinct p.*, pd.*, m.*, i.image, if(s.status, s.specials_new_products_price, null) as specials_price, if(s.status, s.specials_new_products_price, p.products_price) as final_price, f.products_id as featured_products_id';
 
         $has_price_set = (isset($filters['price_from']) || isset($filters['price_to']));
         $price_with_tax = isset($filters['with_tax']) && ($filters['with_tax'] == '1');
@@ -56,7 +56,12 @@ class Search_Model extends CI_Model
             $sql .= ', sum(tr.tax_rate) as tax_rate';
         }
 
-        $sql .= ' from ' . $this->db->protect_identifiers('products', TRUE) . ' p left join ' . $this->db->protect_identifiers('manufacturers', TRUE) . ' m using(manufacturers_id) left join ' . $this->db->protect_identifiers('specials', TRUE) . ' s on (p.products_id = s.products_id) left join ' . $this->db->protect_identifiers('products_images', TRUE) . ' i on (p.products_id = i.products_id and i.default_flag = 1)';
+        $sql .= 
+        	' from ' . $this->db->protect_identifiers('products', TRUE) . ' p ' . 
+        	' left join ' . $this->db->protect_identifiers('manufacturers', TRUE) . ' m using(manufacturers_id) ' . 
+        	' left join ' . $this->db->protect_identifiers('specials', TRUE) . ' s on (p.products_id = s.products_id) ' . 
+        	' left join ' . $this->db->protect_identifiers('products_frontpage', TRUE) . ' f on (p.products_id = f.products_id) ' . 
+        	' left join ' . $this->db->protect_identifiers('products_images', TRUE) . ' i on (p.products_id = i.products_id and i.default_flag = 1)';
 
         if ($has_price_set && $price_with_tax)
         {
@@ -130,9 +135,34 @@ class Search_Model extends CI_Model
         {
             $sql .= ' group by p.products_id, tr.tax_priority';
         }
+        
+        //sort: name, price, sku, rating
+        $order_by = 'pd.products_name';
+        if (isset($filters['sort'])) {
+            $entries = array('name', 'price', 'model');
+            
+            list($entry, $sort) = explode('|', $filters['sort']);
+            
+            if (in_array($entry, $entries)) {
+                switch ($entry) {
+                    case "name":
+                        $order_by = 'pd.products_name';
+                        break;
+                    case "price":
+                        $order_by = 'p.products_price';
+                        break;
+                    case "sku":
+                        $order_by = 'p.products_sku';
+                        break;
+                }
+            }
+            
+            if (in_array($sort, array('asc', 'desc'))) {
+                $order_by .= ' ' . $sort;
+            }
+        }
 
-
-        $sql .= ' limit ' . $filters['page'] * $filters['per_page'] . ',' . $filters['per_page'];
+        $sql .= ' order by ' . $order_by . ' limit ' . $filters['page'] * $filters['per_page'] . ',' . $filters['per_page'];
 
         $result = $this->db->query($sql);
         if ($result->num_rows() > 0)
