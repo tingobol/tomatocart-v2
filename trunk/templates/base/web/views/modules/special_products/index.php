@@ -19,22 +19,42 @@
 <div class="box">
     <h4><?php echo lang('box_specials_heading'); ?></h4>
     
-    <div class="contents clearfix col3">
+    <ul class="products-list grid clearfix">
     <?php 
-      foreach($products as $product):
+        foreach ($products as $product):
     ?>
-        <div class="center" style="height: 180px">
-            <div>
-                <a href="<?php echo site_url('product/' . $product['products_id']); ?>">
-                    <img title="<?php echo $product['products_name']; ?>" alt="<?php echo $product['products_name']; ?>" src="<?php echo product_image_url($product['products_image'], 'thumbnails'); ?>" />
-                </a>
+        <li class="clearfix">
+    		<div class="specials-banner"></div>
+    		
+            <div class="left">
+                 <a href="<?php echo site_url('product/' . $product['products_id']); ?>">
+                      <img alt="<?php echo $product['products_name']; ?>" title="<?php echo $product['products_name']; ?>" src="<?php echo product_image_url($product['products_image']); ?>" alt="default thumb" class="thumb" />
+                 </a>
+                <h3>
+                	<a href="<?php echo site_url('product/' . $product['products_id']); ?>">
+                        <?php echo $product['products_name']; ?>
+                    </a>
+                </h3>
+                <p class="description">
+                    <?php echo $product['short_description']; ?>
+                </p>
             </div>
-            <div><a href="<?php echo site_url('product/' . $product['products_id']); ?>"><?php echo $product['products_name']; ?></a></div>
-            <div><s><?php echo currencies_format($product['products_price']); ?></s>&nbsp;&nbsp;<span><?php echo currencies_format($product['special_price']);?></span></div>
-            <div><a href="<?php echo site_url('cart_add/' . $product['products_id']); ?>" class="btn btn-mini btn-info"><i class="icon-shopping-cart icon-white "></i><?php echo lang('button_add_to_cart'); ?></a></div>
-        </div>
+            <div class="right">
+                <span class="price">
+                	<s><?php echo currencies_format($product['special_price']); ?></s>
+                    <?php echo currencies_format($product['products_price']); ?></span>
+                <span class="buttons">
+                    <a class="btn btn-small btn-info" href="<?php echo site_url('cart_add/' . $product['products_id']); ?>">
+                    	<i class="icon-shopping-cart icon-white "></i> 
+                    	<?php echo lang('button_buy_now'); ?>
+                    </a><br />
+                    <a class="wishlist" href="javascript:void(0);"><?php echo lang('add_to_wishlist'); ?></a><br />
+                    <a class="compare" href="javascript:void(0);"><?php echo lang('add_to_compare'); ?></a>
+                </span>
+            </div>
+        </li>
     <?php 
-      endforeach;
+        endforeach;
     ?>
-    </div>
+    </ul>
 </div>
