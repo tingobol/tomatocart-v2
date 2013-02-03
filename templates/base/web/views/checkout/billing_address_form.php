@@ -81,34 +81,34 @@
             if (config('ACCOUNT_GENDER') > -1) :
         ?>
         <div class="control-group">
-            <?php echo draw_label(lang('field_customer_gender'), null, 'fake', (config('ACCOUNT_GENDER') > 0), 'class="control-label"'); ?>
+            <label class="control-label" for="gender1"><?php echo lang('field_customer_gender') . ((config('ACCOUNT_GENDER') > 0) ? '<em>*</em>' : ''); ?></label>
             <div class="controls">
-            	<label class="radio inline" for="gender1"><input type="radio" value="m" id="gender1" name="billing_gender" <?php echo set_radio('billing_gender', 'm', TRUE); ?> /><?php echo lang('gender_male'); ?></label>
-            	<label class="radio inline" for="gender2"><input type="radio" value="f" id="gender2" name="billing_gender" <?php echo set_radio('billing_gender', 'f'); ?> /><?php echo lang('gender_female'); ?></label>
+            	<label class="radio inline" for="gender1"><input type="radio" value="m" id="gender1" name="billing_gender" <?php echo (isset($billing_gender) && $billing_gender == 'm') ? 'checked="checked"' : ''; ?> /><?php echo lang('gender_male'); ?></label>
+            	<label class="radio inline" for="gender2"><input type="radio" value="f" id="gender2" name="billing_gender" <?php echo (isset($billing_gender) && $billing_gender == 'f') ? 'checked="checked"' : ''; ?> /><?php echo lang('gender_female'); ?></label>
             </div>
         </div>
-    <?php 
-        endif;
-    ?>
+        <?php 
+            endif;
+        ?>
         <div class="control-group">
             <label class="control-label" for="billing_firstname"><?php echo lang('field_customer_first_name'); ?><em>*</em></label>
             <div class="controls">
-            	<input type="text" id="billing_firstname" name="billing_firstname" value="<?php echo set_value('billing_firstname'); ?>" />
+            	<input type="text" id="billing_firstname" name="billing_firstname" value="<?php echo $billing_firstname; ?>" />
             </div>
         </div>
         <div class="control-group">
             <label class="control-label" for="billing_lastname"><?php echo lang('field_customer_last_name'); ?><em>*</em></label>
             <div class="controls">
-            	<input type="text" id="billing_lastname" name="billing_lastname" value="<?php echo set_value('billing_lastname'); ?>" />
+            	<input type="text" id="billing_lastname" name="billing_lastname" value="<?php echo $billing_lastname; ?>" />
             </div>
         </div>
     <?php 
         if (config('ACCOUNT_COMPANY') > -1) :
     ?>
         <div class="control-group">
-            <label class="control-label" for="billing_company"><?php echo lang('field_customer_company'); ?><em>*</em></label>
+            <label class="control-label" for="billing_company"><?php echo lang('field_customer_company') . ((config('ACCOUNT_COMPANY') > 0) ? '<em>*</em>' : ''); ?></label>
             <div class="controls">
-            	<input type="text" id="billing_company" name="billing_company" value="<?php echo set_value('billing_company'); ?>" />
+            	<input type="text" id="billing_company" name="billing_company" value="<?php echo $billing_company; ?>" />
             </div>
         </div>
     <?php 
@@ -117,16 +117,16 @@
         <div class="control-group">
             <label class="control-label" for="billing_street_address"><?php echo lang('field_customer_street_address'); ?><em>*</em></label>
             <div class="controls">
-            	<input type="text" id="billing_street_address" name="billing_street_address" value="<?php echo set_value('billing_street_address'); ?>" />
+            	<input type="text" id="billing_street_address" name="billing_street_address" value="<?php echo $billing_street_address; ?>" />
             </div>
         </div>
     <?php
         if (config('ACCOUNT_SUBURB') > -1) :
     ?>
         <div class="control-group">
-            <label class="control-label" for="billing_suburb"><?php echo lang('field_customer_suburb'); ?><em>*</em></label>
+            <label class="control-label" for="billing_suburb"><?php echo lang('field_customer_suburb') . ((config('ACCOUNT_SUBURB') > 0) ? '<em>*</em>' : ''); ?></label>
             <div class="controls">
-            	<input type="text" id="billing_suburb" name="billing_suburb" value="<?php echo set_value('billing_suburb'); ?>" />
+            	<input type="text" id="billing_suburb" name="billing_suburb" value="<?php echo $billing_suburb; ?>" />
             </div>
         </div>
     <?php
@@ -137,9 +137,9 @@
         if (config('ACCOUNT_POST_CODE') > -1) :
     ?>
         <div class="control-group">
-            <label class="control-label" for="billing_postcode"><?php echo lang('field_customer_post_code'); ?><em>*</em></label>
+            <label class="control-label" for="billing_postcode"><?php echo lang('field_customer_post_code') . ((config('ACCOUNT_POST_CODE') > 0) ? '<em>*</em>' : ''); ?></label>
             <div class="controls">
-            	<input type="text" id="billing_postcode" name="billing_postcode" value="<?php echo set_value('billing_postcode'); ?>" />
+            	<input type="text" id="billing_postcode" name="billing_postcode" value="<?php echo $billing_postcode; ?>" />
             </div>
         </div>
     <?php
@@ -148,7 +148,7 @@
         <div class="control-group">
             <label class="control-label" for="billing_city"><?php echo lang('field_customer_city'); ?><em>*</em></label>
             <div class="controls">
-            	<input type="text" id="billing_city" name="billing_city" value="<?php echo set_value('billing_city'); ?>" />
+            	<input type="text" id="billing_city" name="billing_city" value="<?php echo $billing_city; ?>" />
             </div>
         </div>
         
@@ -163,7 +163,7 @@
         if (config('ACCOUNT_STATE') > -1) :
     ?>
         <div id="li-billing-state" class="control-group">
-            <?php echo draw_label(lang('field_customer_state'), 'billing_state', 'billing_state', (config('ACCOUNT_STATE') > 0), 'class="control-label"'); ?>
+        	<label class="control-label" for="billing_state"><?php echo lang('field_customer_state') . ((config('ACCOUNT_STATE') > 0) ? '<em>*</em>' : ''); ?></label>
             <div class="controls">
             <?php 
               if (count($states) > 0) :
@@ -186,7 +186,7 @@
         if (config('ACCOUNT_TELEPHONE') > -1) :
     ?>
         <div class="control-group">
-            <?php echo draw_label(lang('field_customer_telephone_number'), null, 'billing_telephone', (config('ACCOUNT_TELEPHONE') > 0), 'class="control-label"'); ?>
+            <label class="control-label" for="billing_telephone"><?php echo lang('field_customer_telephone_number') . ((config('ACCOUNT_TELEPHONE') > 0) ? '<em>*</em>' : ''); ?></label>
             <div class="controls">
             	<input type="text" id="billing_telephone" name="billing_telephone" value="<?php echo $billing_telephone; ?>" />
             </div>
@@ -199,7 +199,7 @@
         if (config('ACCOUNT_FAX') > -1) :
     ?>
         <div class="control-group">
-            <?php echo draw_label(lang('field_customer_fax_number'), null, 'billing_fax', (config('ACCOUNT_FAX') > 0), 'class="control-label"'); ?>
+            <label class="control-label" for="billing_fax"><?php echo lang('field_customer_fax_number') . ((config('ACCOUNT_FAX') > 0) ? '<em>*</em>' : ''); ?></label>
             <div class="controls">
             	<input type="text" id="billing_fax" name="billing_fax" value="<?php echo $billing_fax; ?>" />
             </div>

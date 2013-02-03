@@ -35,12 +35,14 @@ require_once 'helpers/general_helper.php';
     
     <base href="<?php echo base_url();?>" />
     <link rel="stylesheet" href="<?php echo base_url();?>templates/base/web/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>templates/base/web/css/select2.css" />
     <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>templates/default/web/css/stylesheet.css" />
     <?php echo $template['stylesheets'];?>
     
     <script type="text/javascript" src="<?php echo base_url();?>templates/base/web/javascript/jquery/jquery-1.8.2.min.js"></script>
     <script type="text/javascript" src="<?php echo base_url();?>templates/base/web/javascript/jquery/jquery.loadmask.min.js"></script>
     <script type="text/javascript" src="<?php echo base_url();?>templates/base/web/javascript/bootstrap/bootstrap.min.js"></script>
+    <script type="text/javascript" src="<?php echo base_url();?>templates/base/web/javascript/bootstrap/select2.js"></script>
     <script type="text/javascript" src="<?php echo base_url();?>templates/base/web/javascript/toc.js"></script>
     <?php echo $template['javascripts'];?>
 	<script type="text/javascript">
@@ -63,7 +65,7 @@ require_once 'helpers/general_helper.php';
                     	<div class="pull-right">
                             <a class="popup-cart" href="javascript:void(0);">
                                 <i class="icon-shopping-cart"></i>
-                                <span id="popup-cart-items"><?php echo $items_num; ?></span>&nbsp;<span><?php echo lang('text_items'); ?></span>
+                                <span id="popup-cart-items"><?php echo cart_item_count(); ?></span>&nbsp;<span><?php echo lang('text_items'); ?></span>
                             </a>
                         </div>
                         <div class="dropdown pull-right">
@@ -103,7 +105,7 @@ require_once 'helpers/general_helper.php';
                     	<a href="<?php echo site_url('checkout/shopping_cart'); ?>"><?php echo lang('cart_contents'); ?></a>&nbsp;&nbsp;|&nbsp;&nbsp;
                         <a href="<?php echo site_url('checkout'); ?>"><?php echo lang('checkout'); ?></a>&nbsp;&nbsp;|&nbsp;&nbsp;
                     <?php 
-                        if ($is_logged_on) : 
+                        if (is_logged_on()) : 
                     ?>
                         <a href="<?php echo site_url('account/logoff'); ?>"><?php echo lang('logoff'); ?></a>
                     <?php 
@@ -164,16 +166,17 @@ require_once 'helpers/general_helper.php';
     	<div class="row-fluid">
         <!--  left module group  -->
         <?php 
-            if (isset($template['module_groups']['left'])) 
+            $has_left = isset($template['module_groups']['left']) && !empty($template['module_groups']['left']);
+            if ($has_left) 
             {
         ?>
-            <div id="content-left" class="span<?php echo isset($template['module_groups']['left']) ? 3 : 0; ?>"><?php echo $template['module_groups']['left']; ?></div> 
+            <div id="content-left" class="span<?php echo $has_left ? 3 : 0; ?>"><?php echo $template['module_groups']['left']; ?></div> 
         <?php 
             }  
         ?>
         <!--  END: left module group  -->
     
-        <div  id="content-center" class="span<?php echo 12 - (isset($template['module_groups']['left']) ? 3 : 0) - (isset($template['module_groups']['right']) ? 3 : 0); ?>">
+        <div  id="content-center" class="span<?php echo 12 - ($has_left ? 3 : 0); ?>">
             <!--  before module group  -->
             <?php 
               if (isset($template['module_groups']['before'])) {
@@ -261,12 +264,12 @@ require_once 'helpers/general_helper.php';
 <!--  END: Run Service -->
   
 <script type="text/javascript">
-	$original = $('.nav > li.active');
-	$('.nav > li').mouseenter(function() {
+	$original = $('.navbar .nav > li.active');
+	$('.navbar .nav > li').mouseenter(function() {
 		$(this).parent().find('li').removeClass('active');
 		$(this).addClass('active');
     });
-	$('.nav').mouseleave(function() {
+	$('.navbar .nav').mouseleave(function() {
 		$(this).parent().find('li').removeClass('active');
 		$original.addClass('active');
     });
@@ -280,6 +283,20 @@ require_once 'helpers/general_helper.php';
 	    title: '<b><?php echo lang('cart_contents'); ?></b>',
 	    content: '<?php echo get_shopping_cart_contents(); ?>'
 	});
+</script>
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-37863867-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
 </script>
   <!--  END: page footer -->
 </body>

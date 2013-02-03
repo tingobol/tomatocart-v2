@@ -374,8 +374,8 @@
     };
 
     $.fn.CloudZoom.defaults = {
-        zoomWidth: 'auto',
-        zoomHeight: 'auto',
+        zoomWidth: '400',
+        zoomHeight: '400',
         position: 'right',
         tint: false,
         tintOpacity: 0.5,
