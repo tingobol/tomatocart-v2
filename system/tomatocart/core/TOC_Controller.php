@@ -37,7 +37,10 @@ class TOC_Controller extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        
+
+        //validate customer access
+        $this->validate_customer_access();
+
         //initialize system language
         $this->lang->initialize();
         $this->output->set_header('Content-Type: text/html; charset=' . $this->lang->get_character_set());
@@ -46,7 +49,7 @@ class TOC_Controller extends CI_Controller
         $this->lang->db_load('general');
         $this->lang->db_load('modules-boxes');
         $this->lang->db_load('modules-content');
-        
+
         //load cache
         $this->load->driver('cache', array('adapter' => 'file'));
 
@@ -78,24 +81,39 @@ class TOC_Controller extends CI_Controller
         //load modules according to the module and page
         $this->modules = $this->modules_model->get_modules($module, $class, $medium);
         $this->template->add_modules($this->modules);
-        
+
         //set breadcrumb
-        $this->template->set_breadcrumb(lang('home'), site_url());
-        
-        //add common data
-        $this->template->set('is_logged_on', $this->customer->is_logged_on());
-        $this->template->set('items_num', $this->shopping_cart->number_of_items());
-        
+        $this->template->set_breadcrumb(lang('breadcrumb_shop'), site_url());
+
         //set layout
         $this->template->set_layout('index.php');
     }
-    
+
+    /**
+     * Check whether the customer is able to access the page
+     *
+     * @access protected
+     * @return void
+     */
+    protected function validate_customer_access() {
+        if ($this->customer->is_logged_on() === FALSE) {
+            $group = $this->uri->segment(1);
+            $controller = $this->uri->segment(2);
+
+            if ( ($group == 'account') && !in_array($controller, array('login', 'create', 'password_forgotten', 'wishlist')) ) {
+                $this->navigation_history->add_current_page();
+
+                redirect('account/login');
+            }
+        }
+    }
+
     /**
      * Set the page title
-     * 
+     *
      * @param $title page titme
      */
-    protected function set_page_title($title) 
+    protected function set_page_title($title)
     {
         $this->template->set_title($title . ' -- ' . config('STORE_NAME'));
     }

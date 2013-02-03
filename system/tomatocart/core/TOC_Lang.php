@@ -145,7 +145,7 @@ class TOC_Lang extends CI_Lang {
      */
     public function line($key = '')
     {
-        $value = ($key == '' OR ! isset($this->language[$key])) ? FALSE : $this->language[$key];
+        $value = ($key == '' OR ! isset($this->language[$key])) ? $key : $this->language[$key];
 
         // Because killer robots like unicorns!
         if ($value === FALSE)
