@@ -65,10 +65,9 @@
         <div class="control-group">
             <label class="control-label" for="dob_days"><?php echo lang('field_customer_date_of_birth'); ?><em>*</em></label>
             <div class="controls">
-                <div id="dob_days" class="input-append date" data-date="<?php echo isset($customers_dob) ? mdate('%Y-%m-%d ', human_to_unix($customers_dob)) : set_value('dob_days'); ?>" data-date-format="yyyy-mm-dd">
-                    <input type="text" name="dob_days" /><span class="add-on"><i class="icon-th"></i></span>
+                <div id="dob_days" class="input-append date" data-date="<?php echo isset($dob_days) ? $dob_days : set_value('dob_days'); ?>" data-date-format="yyyy-mm-dd">
+                    <input type="text" name="dob_days" value="<?php echo isset($dob_days) ? $dob_days : set_value('dob_days'); ?>" /><span class="add-on"><i class="icon-th"></i></span>
                 </div>
-            	<span class="help-inline">1991-01-01</span>
             </div>
         </div>
         <?php 
@@ -84,7 +83,7 @@
             if (config('ACCOUNT_NEWSLETTER') == '1') :
         ?>
         <div class="control-group">
-            <label class="control-label" for="newsletter"><?php echo lang('field_customer_newsletter'); ?><em>*</em></label>
+            <label class="control-label" for="newsletter"><?php echo lang('field_customer_newsletter'); ?></label>
             <div class="controls">
             	<input type="checkbox" value="1" id="newsletter" name="newsletter" <?php echo set_checkbox('newsletter', '1', isset($customers_newsletter) && $customers_newsletter == '1'); ?> />
             </div>
