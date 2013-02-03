@@ -19,7 +19,7 @@
 <h1><?php echo $article['articles_name']; ?></h1>
 
 <div class="module-box">
-    <div class="content"><?php echo lang('articles_description'); ?></div>
+    <div class="content"><?php echo $article['articles_description']; ?></div>
 </div>
 
 <div class="controls clearfix">
