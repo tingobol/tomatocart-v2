@@ -165,9 +165,10 @@
             endif;
         ?>
         <?php
-            if (isset($display_primary) && $display_primary===TRUE) :
+            if (isset($display_primary) && $display_primary === TRUE) :
         ?>
         <div class="control-group">
+        	<label class="control-label" for="fax">&nbsp;</label>
             <label class="control-label checkbox" for="primary"><input type="checkbox" value="1" id="primary" name="primary" <?php echo set_checkbox('primary', '1'); ?> /> <?php echo lang('set_as_primary'); ?></label>
         </div>
         <?php
@@ -185,7 +186,7 @@
     
     <div class="control-group">
     	<a href="<?php echo site_url('account/address_book'); ?>" class="btn btn-small btn-info pull-left"><i class="icon-chevron-left icon-white"></i> <?php echo lang('button_back'); ?></a>
-        <button type="submit" class="btn btn-small btn-small btn-success pull-right"><i class="icon-ok-sign icon-white"></i> <?php echo lang('button_continue'); ?></button>
+        <button type="submit" class="btn btn-small btn-success pull-right"><i class="icon-ok-sign icon-white"></i> <?php echo lang('button_continue'); ?></button>
     </div>
 </form>
 
