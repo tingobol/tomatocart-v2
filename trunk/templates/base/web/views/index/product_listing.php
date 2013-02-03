@@ -14,6 +14,14 @@
  * @since		Version 2.0
  * @filesource
 */
+
+    $pagesize_array = array(12 => 12, 24 => 24, 36 => 36, 48 => 48);
+    $sort_array = array('name|asc' => lang('Name (A ~ Z)'), 
+                        'name|desc' => lang('Name (Z ~ A)'), 
+                        'price|asc' => lang('Price (L ~ H)'), 
+                        'price|desc' => lang('Price (H ~ L)'), 
+                        'sku|asc' => lang('SKU (L ~ H)'), 
+                        'sku|desc' => lang('SKU (H ~ L)'));
 ?>
 
 <h1><?php echo $title; ?></h1>
