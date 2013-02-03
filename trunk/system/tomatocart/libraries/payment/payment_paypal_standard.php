@@ -51,8 +51,7 @@ class TOC_Payment_paypal_standard extends TOC_Payment_Module
               'mode' => 'local',
               'value' => 'True',
               'description' => 'Do you want to accept PayPal Website Payments Standard payments?',
-              'values' => array(
-                                array('id' => 'True', 'text' => 'True'),
+              'values' => array(array('id' => 'True', 'text' => 'True'),
                                 array('id' => 'False', 'text' => 'False'))),
         array('name' => 'MODULE_PAYMENT_PAYPAL_STANDARD_ID',
               'title' => '* PayPal E-Mail Address', 
@@ -84,18 +83,16 @@ class TOC_Payment_paypal_standard extends TOC_Payment_Module
               'mode' => 'local',
               'value' => 'Sandbox',
               'description' => 'Use the testing (sandbox) or live gateway server for transactions?',
-              'values' => array(
-                    array('id' => 'Live', 'text' => 'Live'),
-                    array('id' => 'Sandbox', 'text' => 'Sandbox'))),
+              'values' => array(array('id' => 'Live', 'text' => 'Live'),
+                                array('id' => 'Sandbox', 'text' => 'Sandbox'))),
         array('name' => 'MODULE_PAYMENT_PAYPAL_STANDARD_TRANSFER_CART',
               'title' => 'Transfer Cart Line Items', 
               'type' => 'combobox',
               'mode' => 'local',
               'value' => '1',
               'description' => 'Do you want to transfer the details about the items in the cart to paypal?',
-              'values' => array(
-                    array('id' => '1', 'text' => 'True'),
-                    array('id' => '-1', 'text' => 'False'))),
+              'values' => array(array('id' => '1', 'text' => 'True'),
+                                array('id' => '-1', 'text' => 'False'))),
         array('name' => 'MODULE_PAYMENT_PAYPAL_IPN_EWP_PRIVATE_KEY',
               'title' => 'Encrypted Web Payments Private Key (Seller)', 
               'type' => 'textfield',
@@ -107,9 +104,8 @@ class TOC_Payment_paypal_standard extends TOC_Payment_Module
               'mode' => 'local',
               'value' => 'Sale',
               'description' => 'The processing method to use for each transaction.',
-              'values' => array(
-                    array('id' => 'Authorization', 'text' => 'Authorization'),
-                    array('id' => 'Sale', 'text' => 'Sale'))),
+              'values' => array(array('id' => 'Authorization', 'text' => 'Authorization'),
+                                array('id' => 'Sale', 'text' => 'Sale'))),
         array('name' => 'MODULE_PAYMENT_PAYPAL_STANDARD_PAGE_STYLE',
               'title' => 'Page Style', 
               'type' => 'textfield',
@@ -126,9 +122,8 @@ class TOC_Payment_paypal_standard extends TOC_Payment_Module
               'mode' => 'local',
               'value' => 'Sale',
               'description' => 'Do you want to enable Encrypted Web Payments?',
-              'values' => array(
-                    array('id' => '1', 'text' => 'True'),
-                    array('id' => '-1', 'text' => 'False'))),
+              'values' => array(array('id' => '1', 'text' => 'True'),
+                                array('id' => '-1', 'text' => 'False'))),
         array('name' => 'MODULE_PAYMENT_PAYPAL_STANDARD_EWP_PRIVATE_KEY',
               'title' => 'Your Private Key', 
               'type' => 'textfield',
@@ -184,7 +179,7 @@ class TOC_Payment_paypal_standard extends TOC_Payment_Module
         $this->title = lang('payment_paypal_standard_title');
         $this->method_title = lang('payment_paypal_standard_method_title');
         $this->status = (isset($this->config['MODULE_PAYMENT_PAYPAL_STANDARD_STATUS']) && ($this->config['MODULE_PAYMENT_PAYPAL_STANDARD_STATUS'] == 'True')) ? TRUE : FALSE;
-        $this->sort_order = isset($this->config['MODULE_PAYMENT_PAYPAL_STANDARD_SORT_ORDER']) ? $this->config['MODULE_PAYMENT_PAYPAL_STANDARD_SORT_ORDER'] : null;
+        $this->sort_order = isset($this->config['MODULE_PAYMENT_PAYPAL_STANDARD_SORT_ORDER']) ? $this->config['MODULE_PAYMENT_PAYPAL_STANDARD_SORT_ORDER'] : NULL;
     }
 
     /**
@@ -214,7 +209,7 @@ class TOC_Payment_paypal_standard extends TOC_Payment_Module
                 $zones = $this->ci->address_model->get_zone_id_via_geo_zone($this->ci->shopping_cart->get_billing_address('country_id'), $this->config['MODULE_PAYMENT_PAYPAL_STANDARD_ZONE']);
                 
                 $check_flag = FALSE;
-                if ($zones !== FALSE)
+                if ($zones !== NULL)
                 {
                     foreach($zones as $zone_id)
                     {
@@ -274,7 +269,6 @@ class TOC_Payment_paypal_standard extends TOC_Payment_Module
                       'invoice' => 1, //$this->order_id,
                       'custom' => $this->ci->customer->get_id(),
                       'no_note' => '1',
-                      'lc' => 'EN', //AU, DE, FR, IT, GB, ES, US
                       'notify_url' =>  site_url('checkout/callback/' . $this->code),
                       'return' => site_url('checkout/process'),
                       'rm' => '2',
@@ -322,9 +316,9 @@ class TOC_Payment_paypal_standard extends TOC_Payment_Module
             }
             $params['shipping'] = $this->ci->currencies->format_raw($shipping);
 
-            $total_tax = $this->ci->shopping_cart->getTax() - $shipping_tax;
+            $total_tax = $this->ci->shopping_cart->get_tax() - $shipping_tax;
             $params['tax'] = $this->ci->currencies->format_raw($total_tax);
-            $params['amount'] = $this->ci->currencies->format_raw($this->ci->shopping_cart->getTotal() - $shipping - $total_tax);
+            $params['amount'] = $this->ci->currencies->format_raw($this->ci->shopping_cart->get_total() - $shipping - $total_tax);
         }
         else 
         {

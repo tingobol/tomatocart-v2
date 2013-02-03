@@ -34,95 +34,96 @@
  * @author		TomatoCart Dev Team
  * @link		http://tomatocart.com/wiki/
  */
-class TOC_Shopping_Cart {
+class TOC_Shopping_Cart
+{
 
     /**
      * ci instance
      *
-     * @access private
+     * @access protected
      * @var string
      */
-    private $ci = null;
+    protected $ci = null;
 
     /**
      * shopping cart content
      *
-     * @access private
+     * @access protected
      * @var array
      */
-    private $contents = array();
+    protected $contents = array();
 
     /**
      * products subtotal
      *
-     * @access private
+     * @access protected
      * @var float
      */
-    private $subtotal = 0;
+    protected $subtotal = 0;
 
     /**
      * shopping cart total
      *
-     * @access private
+     * @access protected
      * @var float
      */
-    private $total = 0;
+    protected $total = 0;
 
     /**
      * products total weight
      *
-     * @access private
+     * @access protected
      * @var float
      */
-    private $weight = 0;
+    protected $weight = 0;
 
     /**
      * products tax total
      *
-     * @access private
+     * @access protected
      * @var float
      */
-    private $tax = 0;
+    protected $tax = 0;
 
     /**
      * products tax groups
      *
-     * @access private
+     * @access protected
      * @var array
      */
-    private $tax_groups = array();
+    protected $tax_groups = array();
 
     /**
      * shopping cart content type
      *
-     * @access private
+     * @access protected
      * @var string
      */
-    private $content_type;
+    protected $content_type;
 
     /**
      * shopping cart shipping address
      *
-     * @access private
+     * @access protected
      * @var array
      */
-    private $shipping_address = null;
+    protected $shipping_address = null;
 
     /**
      * shopping cart billing address
      *
-     * @access private
+     * @access protected
      * @var array
      */
-    private $billing_address = null;
+    protected $billing_address = null;
 
     /**
      * products tax total
      *
-     * @access private
+     * @access protected
      * @var boolean
      */
-    private $products_in_stock = TRUE;
+    protected $products_in_stock = TRUE;
 
     /**
      * Shopping Class Constructor
@@ -142,7 +143,7 @@ class TOC_Shopping_Cart {
 
         // Grab the shopping cart array from the session table, if it exists
         $cart_contents = $this->ci->session->userdata('cart_contents');
-        if (($cart_contents !== FALSE) && ($cart_contents != null))
+        if (($cart_contents !== FALSE) && ($cart_contents != NULL))
         {
             $cart_contents = $this->ci->session->userdata('cart_contents');
 
@@ -192,8 +193,6 @@ class TOC_Shopping_Cart {
             'shipping_quotes' => $this->shipping_quotes,
             'order_totals' => $this->order_totals);
 
-        log_message('error', json_encode($this->order_totals));
-
         $this->ci->session->set_userdata('cart_contents', $cart_contents);
     }
 
@@ -204,9 +203,11 @@ class TOC_Shopping_Cart {
      */
     function update()
     {
+        $this->calculate();
+
         //    if ( !isset($_SESSION['cartID']) )
         //    {
-        //      $this->calculate();
+        //
         //    }
     }
 
@@ -218,6 +219,81 @@ class TOC_Shopping_Cart {
     function has_contents()
     {
         return !empty($this->contents);
+    }
+
+    /**
+     * Synchronize shopping cart contents with database
+     *
+     * @access public
+     * @return boolean
+     */
+    function synchronize_with_database() {
+        //if customer is not logged on
+        if (!$this->ci->customer->is_logged_on()) {
+            return FALSE;
+        }
+
+        // insert current cart contents in database
+        if ($this->has_contents()) {
+            foreach ($this->contents as $products_id_string => $data) {
+                $basket = $this->ci->shopping_cart_model->get_content($this->ci->customer->get_id(), $products_id_string);
+
+                if ($basket !== NULL) {
+                    $this->ci->shopping_cart_model->update_content($this->ci->customer->get_id(), $products_id_string, $data['quantity'] + $basket['customers_basket_quantity']);
+                } else {
+                    $this->ci->shopping_cart_model->insert_content($this->ci->customer->get_id(), $products_id_string, $data['quantity'], $data['final_price']);
+                }
+            }
+        }
+
+        // reset per-session cart contents, but not the database contents
+        $this->reset();
+
+        // synchronize content
+        $products = $this->ci->shopping_cart_model->get_contents($this->ci->customer->get_id());
+        if ($products != NULL) {
+            foreach ($products as $data) {
+                $products_id = $data['products_id'];
+                $variants = parse_variants_from_id_string($products_id);
+                $quantity = $data['customers_basket_quantity'];
+
+                $product = load_product_library($products_id);
+                if ($product->is_valid()) {
+                    $this->contents[$products_id] = array('id' => $products_id,
+                                                      'name' => $product->get_title(),
+                                                      'type' => $product->get_product_type(),
+                                                      'keyword' => $product->get_keyword(),
+                                                      'sku' => $product->get_sku($variants),
+                                                      'image' => $product->get_image(),
+                                                      'price' => $product->get_price($variants, $quantity),
+                                                      'final_price' => $product->get_price($variants, $quantity),
+                                                      'quantity' => ($quantity > $product->get_quantity($products_id)) ? $product->get_quantity($products_id) : $quantity,
+                                                      'weight' => $product->get_weight($variants),
+                                                      'tax_class_id' => $product->get_tax_class_id(),
+                                                      'date_added' => get_date_short($data['customers_basket_date_added']),
+                                                      'weight_class_id' => $product->get_weight_class());
+
+                    //set in stock status
+                    $this->contents[$products_id]['in_stock'] = $this->is_in_stock($products_id);
+
+                    if ($variants !== NULL) {
+                        foreach ($variants as $group_id => $value_id) {
+                            $data = $this->ci->shopping_cart_model->get_variants_data(get_product_id($products_id), $group_id, $value_id);
+
+                            if ($data !== NULL) {
+                                $this->contents[$products_id]['variants'][$group_id] = array('groups_id' => $group_id,
+                                                                                         'variants_values_id' => $value_id,
+                                                                                         'groups_name' => $data['products_variants_groups_name'],
+                                                                                         'values_name' => $data['products_variants_values_name']);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        $this->clean_up();
+        $this->calculate();
     }
 
     /**
@@ -239,7 +315,7 @@ class TOC_Shopping_Cart {
         $this->weight = 0;
         $this->tax = 0;
         $this->tax_groups = array();
-        $this->content_type = null;
+        $this->content_type = NULL;
 
         $this->shipping_boxes_weight = 0;
         $this->shipping_boxes = 1;
@@ -266,32 +342,33 @@ class TOC_Shopping_Cart {
      * @param int $quantity
      * @param stirng $action
      */
-    function add($products_id_string, $variants = null, $quantity = null, $action = 'add')
+    function add($products_id_string, $variants = NULL, $quantity = NULL, $action = 'add')
     {
-        $products_id = get_product_id($products_id_string);
-        $this->ci->load->library('product', $products_id, 'product_' . $products_id);
-        $product = $this->ci->{'product_' . $products_id};
-
-        //if product has variants and variants is not given
-        if ($product->has_variants() && ($variants == null))
-        {
-            $variant = $product->get_default_variant();
-            $variants = parse_variants_from_id_string($variant['product_id_string']);
-        }
-
-        $products_id_string = get_product_id_string($products_id_string, $variants);
+        //load product object
+        $product = load_product_library($products_id_string);
 
         if ($product->get_id() > 0)
         {
+            //if product has variants and variants is not given
+            if ($product->has_variants() && ($variants == NULL)) {
+                $variant = $product->get_default_variant();
+                $variants = parse_variants_from_id_string($variant['product_id_string']);
+            }
+
+            //get products id string
+            $products_id_string = get_product_id_string($products_id_string, $variants);
+
             //if product already exists in shopping cart
             if ($this->exists($products_id_string))
             {
                 $old_quantity = $this->get_quantity($products_id_string);
 
+                //if quantity is not specified
                 if (!is_numeric($quantity))
                 {
                     $quantity = $this->get_quantity($products_id_string) + 1;
                 }
+                //if quantity is zero
                 else if (is_numeric($quantity) && ($quantity == 0))
                 {
                     $this->remove($products_id_string);
@@ -303,10 +380,6 @@ class TOC_Shopping_Cart {
                     if ($action == 'add')
                     {
                         $quantity = $this->get_quantity($products_id_string) + $quantity;
-                    }
-                    else if ($action == 'update')
-                    {
-                        $quantity = $quantity;
                     }
                 }
 
@@ -352,9 +425,10 @@ class TOC_Shopping_Cart {
                 // update database
                 if ($this->ci->customer->is_logged_on())
                 {
-                    //$this->ci->shopping_cart_model->update_content($this->ci->customer->get_id(), $products_id_string, $quantity);
+                    $this->ci->shopping_cart_model->update_content($this->ci->customer->get_id(), $products_id_string, $quantity);
                 }
             }
+            // add product
             else
             {
                 if (!is_numeric($quantity)) {
@@ -375,12 +449,6 @@ class TOC_Shopping_Cart {
                     $error = sprintf(lang('error_order_increment'), $product->get_title(), $increment);
                 }
 
-                //if product has variants and variants is not given
-                if ($product->has_variants() && ($variants == null)) {
-                    $variant = $product->get_default_variant();
-                    $variants = parse_variants_from_id_string($variant['product_id_string']);
-                }
-
                 $price = $product->get_price($variants, $quantity);
                 $this->contents[$products_id_string] = array('id' => $products_id_string,
                                                       'name' => $product->get_title(),
@@ -394,8 +462,10 @@ class TOC_Shopping_Cart {
                                                       'weight' => $product->get_weight($variants),
                                                       'tax_class_id' => $product->get_tax_class_id(),
                                                       'date_added' => get_date_short(get_date_now()),
-                                                      'weight_class_id' => $product->get_weight_class(),
-                                                      'in_stock' => $product->get_quantity($products_id_string) - $quantity);
+                                                      'weight_class_id' => $product->get_weight_class());
+
+                //set in stock status
+                $this->contents[$products_id_string]['in_stock'] = $this->is_in_stock($products_id_string);
 
                 //set error to session
                 if (isset($error) && !empty($error)) {
@@ -405,7 +475,7 @@ class TOC_Shopping_Cart {
                 // insert into database
                 if ($this->ci->customer->is_logged_on())
                 {
-                    //$this->ci->customer->insert_content($this->ci->customer->get_id(), $products_id_string, $quantity);
+                    $this->ci->shopping_cart_model->insert_content($this->ci->customer->get_id(), $products_id_string, $quantity, $price);
                 }
 
                 if (is_array($variants) && !empty($variants)) {
@@ -432,12 +502,16 @@ class TOC_Shopping_Cart {
 
             $this->clean_up();
             $this->calculate();
-
-            $this->save_session();
         }
     }
 
-    function number_of_physical_items()
+    /**
+     * Get number of physical items
+     *
+     * @access public
+     * @return int
+     */
+    public function number_of_physical_items()
     {
         $total = 0;
 
@@ -454,7 +528,13 @@ class TOC_Shopping_Cart {
         return $total;
     }
 
-    function number_of_items()
+    /**
+     * Get number of items
+     *
+     * @access public
+     * @return void
+     */
+    public function number_of_items()
     {
         $total = 0;
 
@@ -469,64 +549,107 @@ class TOC_Shopping_Cart {
         return $total;
     }
 
-    function get_quantity($products_id)
+    /**
+     * Get shopping cart product quantity
+     *
+     * @access public
+     * @param $products_id
+     * @return int
+     */
+    public function get_quantity($products_id)
     {
         if (isset($this->contents[$products_id]))
         {
             return $this->contents[$products_id]['quantity'];
         }
 
-        return FALSE;
+        return 0;
     }
 
-    function exists($products_id)
+    /**
+     * Check whether the product exists
+     *
+     * @access public
+     * @param $products_id
+     * @return boolean
+     */
+    public function exists($products_id)
     {
         return isset($this->contents[$products_id]);
     }
 
-    function remove($products_id)
+    /**
+     * Remove shopping cart content
+     *
+     * @access public
+     * @param $products_id
+     * @return void
+     */
+    public function remove($products_id)
     {
         unset($this->contents[$products_id]);
 
         // remove from database
         if ($this->ci->customer->is_logged_on())
         {
-            $this->ci->shopping_cart_model->delete_content($products_id);
+            $this->ci->shopping_cart_model->delete_content($this->ci->customer->get_id(), $products_id);
         }
 
         $this->calculate();
-        $this->save_session();
     }
 
-    function get_products()
+    /**
+     * Get shopping cart contents
+     *
+     * @access public
+     * @return array
+     */
+    public function get_products()
     {
-        static $_is_sorted = FALSE;
-
-        if ($_is_sorted === FALSE)
-        {
-            $_is_sorted = TRUE;
-
-            uasort($this->contents, array('TOC_Shopping_Cart', '_uasort_products_by_date_added'));
-        }
+        uasort($this->contents, array('TOC_Shopping_Cart', '_uasort_products_by_date_added'));
 
         return $this->contents;
     }
 
+    /**
+     * Get shopping cart sub total
+     *
+     * @access public
+     * @return float
+     */
     function get_sub_total()
     {
         return $this->sub_total;
     }
 
+    /**
+     * Get shopping cart total
+     *
+     * @access public
+     * @return float
+     */
     function get_total()
     {
         return $this->total;
     }
 
+    /**
+     * Check whether the cart total is zero
+     *
+     * @access public
+     * @return boolean
+     */
     function is_total_zero()
     {
         return ($this->total == 0);
     }
 
+    /**
+     * Get total weight
+     *
+     * @access public
+     * @return float
+     */
     function get_weight()
     {
         return $this->weight;
@@ -542,11 +665,15 @@ class TOC_Shopping_Cart {
         return $_SESSION['cartID'];
     }
 
+    /**
+     * Get shopping cart content type(physical, virtual, mixed)
+     *
+     * @access public
+     * @return string
+     */
     function get_content_type()
     {
-        global $osC_Database;
-
-        if ( $this->has_contents() )
+        if ($this->has_contents())
         {
             $products = array_values($this->contents);
 
@@ -586,27 +713,54 @@ class TOC_Shopping_Cart {
         return $this->content_type;
     }
 
+    /**
+     * Check whether the content is virtual
+     *
+     * @access public
+     * @return boolean
+     */
     function is_virtual_cart()
     {
         return ($this->get_content_type() == 'virtual');
     }
 
+    /**
+     * Check whether a product has variants
+     *
+     * @access public
+     * @return boolean
+     */
     function has_variants($products_id)
     {
         return isset($this->contents[$products_id]['variants']) && !empty($this->contents[$products_id]['variants']);
     }
 
+    /**
+     * Get product variants
+     *
+     * @access public
+     * @param $products_id
+     * @return array
+     */
     function get_variants($products_id)
     {
         if (isset($this->contents[$products_id]['variants']) && !empty($this->contents[$products_id]['variants'])) {
             return $this->contents[$products_id]['variants'];
         }
+
+        return NULL;
     }
 
+    /**
+     * Check if product is in stock
+     *
+     * @access public
+     * @param $products_id_string
+     * @return boolean
+     */
     function is_in_stock($products_id_string)
     {
-        $products_id = get_product_id($products_id_string);
-        $product = $this->ci->{'product_' . $products_id};
+        $product = load_product_library($products_id_string);
 
         if (($product->get_quantity($products_id_string) - $this->contents[$products_id_string]['quantity']) >= 0)
         {
@@ -620,16 +774,35 @@ class TOC_Shopping_Cart {
         return FALSE;
     }
 
+    /**
+     * Check whether the products is in stock
+     *
+     * @access public
+     * @return boolean
+     */
     function has_stock()
     {
         return $this->products_in_stock;
     }
 
+    /**
+     * Check whether the shopping cart has shipping address
+     *
+     * @access public
+     * @return boolean
+     */
     function has_shipping_address()
     {
         return isset($this->shipping_address) && isset($this->shipping_address['id']);
     }
 
+    /**
+     * Set shipping address
+     *
+     * @access public
+     * @param $address_id
+     * @return void
+     */
     function set_shipping_address($address_id)
     {
         $address_changed = FALSE;
@@ -668,6 +841,13 @@ class TOC_Shopping_Cart {
         }
     }
 
+    /**
+     * Set raw shipping address
+     *
+     * @access public
+     * @param $data
+     * @return void
+     */
     function set_raw_shipping_address($data)
     {
         $this->ci->load->model('address_book_model');
@@ -991,7 +1171,7 @@ class TOC_Shopping_Cart {
                     }
                 }
             }
-            
+
             //if specific order total is not there then return NULL
             return NULL;
         }
@@ -1121,9 +1301,9 @@ class TOC_Shopping_Cart {
 
             $this->ci->load->library('order_total');
             $this->order_totals = $this->ci->order_total->get_result();
-
-            $this->save_session();
         }
+
+        $this->save_session();
     }
 
     function get_contents()

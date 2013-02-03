@@ -48,7 +48,7 @@ class Special_Products_Model extends CI_Model
      */
     public function get_specials($count) 
     {
-        $result = $this->db->select('p.products_id, p.products_price, p.products_tax_class_id, pd.products_name, pd.products_keyword,s.specials_new_products_price as special_price, i.image')
+        $result = $this->db->select('p.products_id, p.products_price, p.products_tax_class_id, pd.products_name, pd.products_keyword, pd.products_short_description as short_description, s.specials_new_products_price as special_price, i.image')
             ->from('products p')
             ->join('products_images i', 'p.products_id = i.products_id', 'left')
             ->join('products_description pd', 'p.products_id = pd.products_id', 'inner')
@@ -60,7 +60,7 @@ class Special_Products_Model extends CI_Model
             ->order_by('s.specials_date_added', 'desc')
             ->limit($count)
             ->get();
-
+            
         if ($result->num_rows() > 0)
         {
             return $result->result_array();

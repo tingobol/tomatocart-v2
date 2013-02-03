@@ -29,7 +29,6 @@
 
 class Shopping_Cart_Model extends CI_Model
 {
-    
     /**
      * Constructor
      *
@@ -40,9 +39,9 @@ class Shopping_Cart_Model extends CI_Model
     {
         parent::__construct();
     }
-
+    
     /**
-     * Get shopping cart content
+     * Get shopping cart contents
      * 
      * @access public
      * @param $customers_id
@@ -50,52 +49,79 @@ class Shopping_Cart_Model extends CI_Model
      */
     public function get_contents($customers_id)
     {
-        $result = $this->db->select('products_id, customers_basket_quantity')->from('customers_basket')->where('customers_id', $customers_id)->get();
+        $result = $this->db->select('products_id, customers_basket_quantity, customers_basket_date_added')->from('customers_basket')->where('customers_id', $customers_id)->get();
 
-        $contents = FALSE;
-        if ($qry->num_rows() > 0)
+        $contents = NULL;
+        if ($result->num_rows() > 0)
         {
             foreach ($result->result_array() as $row)
             {
-                $contents['products_id'] = $row['customers_basket_quantity'];
+                $contents[] = $row;
             }
         }
 
         return $contents;
     }
+    
+    /**
+     * Get shopping cart content
+     * 
+     * @access public
+     * @param $customers_id
+     * @param $products_id_string
+     * @return array
+     */
+    public function get_content($customers_id, $products_id_string) 
+    {
+        $result = $this->db->select('products_id, customers_basket_quantity')
+                           ->from('customers_basket')
+                           ->where('customers_id', $customers_id)
+                           ->where('products_id', $products_id_string)
+                           ->get();
 
+        if ($result->num_rows() > 0)
+        {
+            return $result->row_array();
+        }
+        
+        return NULL;
+    }
+    
     /**
      * Update shopping cart content
      * 
      * @access public
      * @param $customers_id
-     * @param $products_id
+     * @param $products_id_string
      * @param $quantity
-     * @return boolean
+     * @return array
      */
-    public function update_content($customers_id, $products_id, $quantity)
+    public function update_content($customers_id, $products_id_string, $quantity) 
     {
-        $this->db->set('customers_basket_quantity', $quantity);
-        $this->db->where('customers_id', $customers_id);
-        $this->db->where('products_id', $products_id);
-        return $this->db->update('customers_basket');
+        $this->db->where(array('customers_id' => $customers_id, 'products_id' => $products_id_string));
+        $this->db->set('customers_basket_date_added', 'NOW()', FALSE);
+        
+        return $this->db->update('customers_basket', array('customers_basket_quantity' => $quantity));
     }
-
+    
     /**
-     * Insert content
+     * Insert shopping cart content
      * 
      * @access public
      * @param $customers_id
      * @param $products_id
      * @param $quantity
+     * @param $price
      * @return boolean
      */
-    public function insert_content($customers_id, $products_id, $quantity)
+    public function insert_content($customers_id, $products_id, $quantity, $price)
     {
-        $this->db->set('customers_basket_quantity', $quantity);
-        $this->db->set('customers_id', $customers_id);
-        $this->db->set('products_id', $products_id);
-        return $this->db->insert('customers_basket');
+        $this->db->set('customers_basket_date_added', 'NOW()', FALSE);
+        
+        return $this->db->insert('customers_basket', array('customers_basket_quantity' => $quantity,
+                                                           'customers_id' => $customers_id,
+                                                           'products_id' => $products_id,
+                                                           'final_price' => $price));
     }
 
     /**
@@ -105,9 +131,16 @@ class Shopping_Cart_Model extends CI_Model
      * @param $products_id
      * @return boolean
      */
-    public function delete_content($products_id)
+    public function delete_content($customers_id, $products_id = NULL)
     {
-        return $this->db->where('products_id', $products_id)->delete('customers_basket');
+        if ($products_id === NULL) 
+        {
+            return $this->db->delete('customers_basket', array('customers_id' => $customers_id));
+        } 
+        else 
+        {
+            return $this->db->delete('customers_basket', array('customers_id' => $customers_id, 'products_id' => $products_id));
+        }
     }
 
     /**
@@ -119,7 +152,35 @@ class Shopping_Cart_Model extends CI_Model
      */
     public function delete($customers_id)
     {
-        return $this->db->where('customers_id', $customers_id)->delete('customers_basket');
+        return $this->db->delete('customers_basket', array('customers_id' => $customers_id));
+    }
+    
+    /**
+     * Get variant data
+
+     * @param $products_id
+     * @param $variant_group_id
+     * @param $variant_value_id
+     */
+    public function get_variants_data($products_id, $variant_group_id, $variant_value_id) {
+        $result = $this->db->select('pvg.products_variants_groups_name, pvv.products_variants_values_name')
+                           ->from('products_variants pv')
+                           ->join('products_variants_entries pve', 'pv.products_variants_id = pve.products_variants_id')
+                           ->join('products_variants_groups pvg', 'pve.products_variants_groups_id = pvg.products_variants_groups_id')
+                           ->join('products_variants_values pvv', 'pve.products_variants_values_id = pvv.products_variants_values_id')
+                           ->where('pv.products_id', $products_id)
+                           ->where('pve.products_variants_groups_id', $variant_group_id)
+                           ->where('pve.products_variants_values_id', $variant_value_id)
+                           ->where('pvg.language_id', lang_id())
+                           ->where('pvv.language_id', lang_id())
+                           ->get();
+
+        if ($result->num_rows() > 0)
+        {
+            return $result->row_array();
+        }
+
+        return NULL;
     }
 }
 

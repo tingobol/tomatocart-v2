@@ -121,7 +121,7 @@ class TOC_Shipping_table extends TOC_Shipping_Module {
 							$this->config['MODULE_SHIPPING_TABLE_ZONE']);
 
 			$check_flag = FALSE;
-			if ($zone_id !== FALSE) {
+			if ($zones !== NULL) {
 				foreach ($zones as $zone_id) {
 					if ($zone_id < 1) {
 						$check_flag = TRUE;
