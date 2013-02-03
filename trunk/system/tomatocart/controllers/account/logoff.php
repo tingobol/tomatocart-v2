@@ -28,34 +28,40 @@
  */
 
 class Logoff extends TOC_Controller {
-	/**
-	 * Constructor
-	 *
-	 * @access public
-	 * @param string
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
+    /**
+     * Constructor
+     *
+     * @access public
+     * @param string
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
-	/**
-	 * Default Function
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function index()
-	{
-      //set page title
-      $this->template->set_title(lang('sign_out_heading'));
-      
-  		//$this->shopping_cart->reset();
-  		$this->customer->reset();
-  		//$this->wishlist->reset();
-  
-  		$this->template->build('account/logoff');
-	}
+    /**
+     * Default Function
+     *
+     * @access public
+     * @return void
+     */
+    public function index()
+    {
+        //set page title
+        $this->template->set_title(lang('sign_out_heading'));
+        
+        //breadcrumb
+        $this->template->set_breadcrumb(lang('breadcrumb_sign_out'), site_url('account/logoff'));
+
+        //reset shopping cart
+        $this->shopping_cart->reset();
+
+        //reset customer
+        $this->customer->reset();
+
+        //build view
+        $this->template->build('account/logoff');
+    }
 }
 
 /* End of file logoff.php */

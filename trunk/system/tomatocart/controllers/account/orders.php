@@ -38,14 +38,19 @@ class Orders extends TOC_Controller
     public function __construct()
     {
         parent::__construct();
-        
+
         //load model
         $this->load->model('order_model');
-        
+
+        //load order language resources
         $this->lang->db_load('order');
 
         //set page title
-        $this->template->set_title(lang('orders_heading'));
+        $this->set_page_title(lang('orders_heading'));
+
+        //breadcrumb
+        $this->template->set_breadcrumb(lang('breadcrumb_my_account'), site_url('account'));
+        $this->template->set_breadcrumb(lang('breadcrumb_my_orders'), site_url('account/orders'));
     }
 
     /**
@@ -58,29 +63,31 @@ class Orders extends TOC_Controller
     public function index()
     {
         $orders = $this->order_model->get_orders($this->customer->get_id());
-        
+
         if(count($orders) > 0)
         {
             for($i = 0; $i < count($orders); $i++)
             {
                 $orders[$i]['number_of_products'] = $this->order_model->number_of_products($orders[$i]['orders_id']);
             }
-        
+
         }
-        
+
         $data['orders'] = $orders;
-        
+
         //setup view
         $this->template->build('account/account_history.php', $data);
     }
-    
+
     /**
-     * 
+     *
      * @param unknown_type $orders_id
      */
     public function view($orders_id = NULL)
     {
-        $data = $this->order_model->query($orders_id); 
+        $this->template->set_breadcrumb(lang('breadcrumb_my_orders'), site_url('account/orders'));
+        
+        $data = $this->order_model->query($orders_id);
         //setup view
         $this->template->build('account/account_history_info.php', $data);
     }

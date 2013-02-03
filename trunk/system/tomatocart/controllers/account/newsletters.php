@@ -27,60 +27,65 @@
  * @link		http://tomatocart.com/wiki/
  */
 
-class Newsletters extends TOC_Controller {
-  	/**
+class Newsletters extends TOC_Controller
+{
+    /**
      * Constructor
      *
      * @access public
      */
-  	public function __construct()
-  	{
-  		  parent::__construct();
-  	}
-  
+    public function __construct()
+    {
+        parent::__construct();
+
+        //set page title
+        $this->set_page_title(lang('password_forgotten_heading'));
+
+        //breadcrumb
+        $this->template->set_breadcrumb(lang('breadcrumb_my_account'), site_url('account'));
+        $this->template->set_breadcrumb(lang('breadcrumb_newsletters'), site_url('account/newsletters'));
+    }
+
     /**
      * Default Function
      *
      * @access public
      */
-  	public function index()
-  	{
-        //set page title
-        $this->template->set_title(lang('newsletters_heading'));
-        
+    public function index()
+    {
         //setup view
         $this->template->build('account/account_newsletters');
-  	}
-  	
-  	/**
+    }
+     
+    /**
      * Save the newsletter subscriptions
      *
      * @access public
      */
-  	public function save()
-  	{
+    public function save()
+    {
         $general = $this->input->post('newsletter_general');
-        
-  	    if ($this->input->post('newsletter_general') == '0' || $this->input->post('newsletter_general') == '1')
+
+        if ($this->input->post('newsletter_general') == '0' || $this->input->post('newsletter_general') == '1')
         {
             //load model
             $this->load->model('account_model');
-            
+
             if ($this->account_model->update_customers_newsletter($newsletter, $this->customer->get_id()))
             {
                 $this->message_stack->add_session('account', lang('success_newsletter_updated'));
-                
+
                 redirect(site_url('account'));
             }
             else
             {
                 $this->message_stack->add('newsletters', lang('error_database'));
-                
+
                 //setup view
                 $this->template->build('account/account_newsletters');
             }
         }
-  	}
+    }
 }
 
 /* End of file newsletters.php */
