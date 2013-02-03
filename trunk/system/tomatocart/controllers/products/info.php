@@ -110,10 +110,14 @@ class Info extends TOC_Controller {
                 $data['combobox_array'] = $product->get_variants_combobox_array();
 
                 //reviews
-                $data['tab'] = $tab;
+                $data['tab'] = (in_array($tab, array('description', 'reviews', 'accessories')) ? $tab : 'description');
                 $data['reviews'] = $this->products_model->get_review_listing($id);
                 $data['review_count'] = sizeof($data['reviews']);
                 $data['ratings'] = $this->products_model->get_category_ratings($product->get_category_id());
+                $data['ratings'] = $this->products_model->get_category_ratings($product->get_category_id());
+                
+                $data['is_specials'] = ($data['specials_price'] === NULL) ? FALSE : TRUE;
+                $data['is_featured'] = ($data['featured_products_id'] === NULL) ? FALSE : TRUE;
 
                 $this->template->build('products/info', $data);
             }
