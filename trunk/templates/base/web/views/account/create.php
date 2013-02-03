@@ -64,9 +64,8 @@
             <label class="control-label" for="dob_days"><?php echo lang('field_customer_date_of_birth'); ?><em>*</em></label>
             <div class="controls">
                 <div id="dob_days" class="input-append date" data-date="<?php echo set_value('dob_days'); ?>" data-date-format="yyyy-mm-dd">
-                    <input type="text" name="dob_days" /><span class="add-on"><i class="icon-th"></i></span>
+                    <input type="text" name="dob_days" value="<?php echo set_value('dob_days'); ?>" /><span class="add-on"><i class="icon-th"></i></span>
                 </div>
-            	<span class="help-inline">1991-01-01</span>
             </div>
         </div>
         <?php 
@@ -82,7 +81,7 @@
             if (config('ACCOUNT_NEWSLETTER') == '1') :
         ?>
         <div class="control-group">
-            <label class="control-label" for="newsletter"><?php echo lang('field_customer_newsletter'); ?><em>*</em></label>
+            <label class="control-label" for="newsletter"><?php echo lang('field_customer_newsletter'); ?></label>
             <div class="controls">
             	<input type="checkbox" value="1" id="newsletter" name="newsletter" <?php echo set_checkbox('newsletter', '1'); ?> />
             </div>
@@ -110,12 +109,25 @@
     <div class="module-box">
         <h6><?php echo lang('create_account_terms_heading'); ?></h6>
         
-        <?php echo lang('create_account_terms_description'); ?>
+        <?php 
+    	    echo str_replace('<a href="%s">', '<a href="#privacyModal" role="button" data-toggle="modal">', lang('create_account_terms_description')); 
+        ?>
         
         <div class="control-group">
         	<label class="checkbox"  for="privacy_conditions">
             	<input type="checkbox" value="1" id="privacy_conditions" name="privacy_conditions" <?php echo set_checkbox('privacy_conditions', '1'); ?> /><?php echo lang('create_account_terms_confirm'); ?>
             </label>
+        </div>
+    </div>
+    
+    <!-- Modal -->
+    <div id="privacyModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    	<div class="modal-header">
+        	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        	<h3 id="myModalLabel"><?php echo $privacy['title']; ?></h3>
+      	</div>
+        <div class="modal-body">
+        	<p><?php echo $privacy['content']; ?></p>
         </div>
     </div>
     <?php 
