@@ -58,7 +58,7 @@
     
                 <div class="control-group">
                     <div class="controls">
-                        <button type="submit" class="btn btn-small btn-small btn-success pull-right"><i class="icon-ok-sign icon-white"></i> <?php echo lang('button_sign_in'); ?></button>
+                        <button type="submit" class="btn btn-small btn-success pull-right"><i class="icon-ok-sign icon-white"></i> <?php echo lang('button_sign_in'); ?></button>
                     </div>
                 </div>
             </form>
