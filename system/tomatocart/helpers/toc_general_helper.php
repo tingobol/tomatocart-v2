@@ -262,7 +262,8 @@ if( ! function_exists('create_random_string'))
  */
 if( ! function_exists('load_product_library'))
 {
-    function load_product_library($products_id) {
+    function load_product_library($products_id) 
+    {
         $id = get_product_id($products_id); //get products id part and omit the variants part
         
         //get ci instance
