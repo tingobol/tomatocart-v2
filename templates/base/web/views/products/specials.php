@@ -29,7 +29,7 @@
         <p class="name"><a href="<?php echo site_url('product/' . $product['products_id']); ?>"><?php echo $product['product_name']; ?></a></p>
         <a href="<?php echo site_url('product/' . $product['products_id']); ?>"><img src="<?php echo product_image_url($product['product_image']); ?>" title="<?php echo $product['product_name']; ?>" alt="<?php echo $product['product_name']; ?>"/></a>     
         <p class="price"><s><?php echo currencies_format($product['product_price']); ?></s><span class="special"><?php echo currencies_format($product['special_price']); ?></span></p>
-        <a class="btn btn-small btn-small btn-small btn-info" href="<?php echo site_url('cart_add/' . $product['products_id']); ?>">
+        <a class="btn btn-mini btn-info" href="<?php echo site_url('cart_add/' . $product['products_id']); ?>">
         	<i class="icon-shopping-cart icon-white "></i> 
             <?php echo lang('button_add_to_cart'); ?>
         </a>
