@@ -50,9 +50,9 @@ class Address_Model extends CI_Model
     {
         $result = $this->db->select('*')->from('countries')->order_by('countries_name')->get();
 
-        $countries = array();
         if ($result->num_rows() > 0)
         {
+            $countries = array();
             foreach ($result->result_array() as $row)
             {
                 $countries[] = array('id' => $row['countries_id'],
@@ -61,9 +61,11 @@ class Address_Model extends CI_Model
                                      'iso_3' => $row['countries_iso_code_3'],
                                      'format' => $row['address_format']);
             }
+            
+            return $countries;
         }
 
-        return $countries;
+        return NULL;
     }
 
     /**
@@ -76,17 +78,19 @@ class Address_Model extends CI_Model
     public function get_states($countries_id)
     {
         $result = $this->db->select('zone_code, zone_name')->from('zones')->where('zone_country_id', (int) $countries_id)->order_by('zone_name')->get();
-
-        $states = array();
+        
         if ($result->num_rows() > 0)
         {
+            $states = array();
             foreach ($result->result_array() as $row)
             {
                 $states[] = array('id' => $row['zone_code'], 'text' => $row['zone_name']);
             }
+            
+            return $states;
         }
 
-        return $states;
+        return NULL;
     }
 
     /**
@@ -113,7 +117,7 @@ class Address_Model extends CI_Model
      */
     public function get_zone_id($countries_id, $state)
     {
-        $zone_id = FALSE;
+        $zone_id = NULL;
 
         $result = $this->db->select('zone_id')->from('zones')->where('zone_country_id', (int) $countries_id)->where('zone_code', $state)->get();
 
@@ -144,7 +148,7 @@ class Address_Model extends CI_Model
     {
         $result = $this->db->select('zone_id')->from('zones_to_geo_zones')->where('zone_country_id', (int) $country_id)->where('geo_zone_id', (int) $geo_zone_id)->get();
 
-        $zones = FALSE;
+        $zones = NULL;
         if ($result->num_rows() > 0)
         {
             foreach ($result->result_array() as $row)

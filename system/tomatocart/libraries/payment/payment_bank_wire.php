@@ -45,49 +45,49 @@ class TOC_Payment_bank_wire extends TOC_Payment_Module
      * @var array
      */
     var $params = array(
-    array('name' => 'MODULE_PAYMENT_BANK_WIRE_STATUS',
-              'title' => 'Enable Bank Wire Module', 
-              'type' => 'combobox',
-              'mode' => 'local',
-              'value' => 'True',
-              'description' => 'Do you want to accept bank wire payments?',
-              'values' => array(
-    array('id' => 'True', 'text' => 'True'),
-    array('id' => 'False', 'text' => 'False'))),
-    array('name' => 'MODULE_PAYMENT_BANK_WIRE_ZONE',
-              'title' => 'Payment Zone', 
-              'type' => 'combobox',
-              'mode' => 'remote',
-		   	  'value' => '0',
-              'description' => 'If a zone is selected, only enable this payment method for that zone.',
-              'action' => 'config/get_shipping_zone'),
-    array('name' => 'MODULE_PAYMENT_BANK_WIRE_SORT_ORDER',
-              'title' => 'Sort order of display.', 
-              'type' => 'numberfield',
-              'value' => '0',
-              'description' => 'Sort order of display. Lowest is displayed first.'),
-    array('name' => 'MODULE_PAYMENT_BANK_WIRE_ORDER_STATUS_ID',
-              'title' => 'Set Order Status', 
-              'type' => 'combobox',
-              'mode' => 'remote',
-		   	  'value' => '0',
-              'description' => 'Set the status of orders made with this payment module to this value',
-              'action' => 'config/get_order_status'),
-    array('name' => 'MODULE_PAYMENT_BANK_WIRE_DETAIL',
-              'title' => 'Bank Account Owner', 
-              'type' => 'textfield',
-		   	  'value' => '',
-              'description' => 'Bank Account Owner Name'),
-    array('name' => 'MODULE_PAYMENT_BANK_WIRE_DETAIL',
-              'title' => 'Bank Account Detail', 
-              'type' => 'textfield',
-		   	  'value' => '',
-              'description' => 'Bank branch, IBAN number, BIC, etc.'),
-    array('name' => 'MODULE_PAYMENT_BANK_WIRE_BANK_ADDRESS',
-              'title' => 'Bank Account Address', 
-              'type' => 'textfield',
-		   	  'value' => '',
-              'description' => 'Address information of the Bank'));
+        array('name' => 'MODULE_PAYMENT_BANK_WIRE_STATUS',
+                  'title' => 'Enable Bank Wire Module', 
+                  'type' => 'combobox',
+                  'mode' => 'local',
+                  'value' => 'True',
+                  'description' => 'Do you want to accept bank wire payments?',
+                  'values' => array(
+        array('id' => 'True', 'text' => 'True'),
+        array('id' => 'False', 'text' => 'False'))),
+        array('name' => 'MODULE_PAYMENT_BANK_WIRE_ZONE',
+                  'title' => 'Payment Zone', 
+                  'type' => 'combobox',
+                  'mode' => 'remote',
+    		   	  'value' => '0',
+                  'description' => 'If a zone is selected, only enable this payment method for that zone.',
+                  'action' => 'config/get_shipping_zone'),
+        array('name' => 'MODULE_PAYMENT_BANK_WIRE_SORT_ORDER',
+                  'title' => 'Sort order of display.', 
+                  'type' => 'numberfield',
+                  'value' => '0',
+                  'description' => 'Sort order of display. Lowest is displayed first.'),
+        array('name' => 'MODULE_PAYMENT_BANK_WIRE_ORDER_STATUS_ID',
+                  'title' => 'Set Order Status', 
+                  'type' => 'combobox',
+                  'mode' => 'remote',
+    		   	  'value' => '0',
+                  'description' => 'Set the status of orders made with this payment module to this value',
+                  'action' => 'config/get_order_status'),
+        array('name' => 'MODULE_PAYMENT_BANK_WIRE_ACCOUNT_OWNER',
+                  'title' => 'Bank Account Owner', 
+                  'type' => 'textfield',
+    		   	  'value' => '',
+                  'description' => 'Bank Account Owner Name'),
+        array('name' => 'MODULE_PAYMENT_BANK_WIRE_DETAIL',
+                  'title' => 'Bank Account Detail', 
+                  'type' => 'textfield',
+    		   	  'value' => '',
+                  'description' => 'Bank branch, IBAN number, BIC, etc.'),
+        array('name' => 'MODULE_PAYMENT_BANK_WIRE_BANK_ADDRESS',
+                  'title' => 'Bank Account Address', 
+                  'type' => 'textfield',
+    		   	  'value' => '',
+                  'description' => 'Address information of the Bank'));
 
     /**
      * Constructor
@@ -95,7 +95,7 @@ class TOC_Payment_bank_wire extends TOC_Payment_Module
      * @access public
      * @return void
      */
-    function __construct() 
+    function __construct()
     {
         parent::__construct();
 
@@ -110,30 +110,30 @@ class TOC_Payment_bank_wire extends TOC_Payment_Module
      *
      * @access public
      */
-    function initialize() 
+    function initialize()
     {
-        if ($this->status === true) 
+        if ($this->status === true)
         {
-            if ((int)$this->config['MODULE_PAYMENT_BANK_WIRE_ORDER_STATUS_ID'] > 0) 
+            if ((int)$this->config['MODULE_PAYMENT_BANK_WIRE_ORDER_STATUS_ID'] > 0)
             {
                 $this->order_status = $this->config['MODULE_PAYMENT_BANK_WIRE_ORDER_STATUS_ID'];
             }
 
-            if ((int)$this->config['MODULE_PAYMENT_BANK_WIRE_ZONE'] > 0) 
+            if ((int)$this->config['MODULE_PAYMENT_BANK_WIRE_ZONE'] > 0)
             {
                 $zones = $this->ci->address_model->get_zone_id_via_geo_zone($this->ci->shopping_cart->get_billing_address('country_id'), $this->config['MODULE_PAYMENT_BANK_WIRE_ZONE']);
 
                 $check_flag = FALSE;
-                if ($zones !== FALSE) 
+                if ($zones !== NULL)
                 {
-                    foreach($zones as $zone_id) 
+                    foreach($zones as $zone_id)
                     {
-                        if ($zone_id < 1) 
+                        if ($zone_id < 1)
                         {
                             $check_flag = TRUE;
                             break;
-                        } 
-                        elseif ($zone_id == $this->ci->shopping_cart->get_billing_address('zone_id')) 
+                        }
+                        elseif ($zone_id == $this->ci->shopping_cart->get_billing_address('zone_id'))
                         {
                             $check_flag = TRUE;
                             break;
@@ -141,14 +141,14 @@ class TOC_Payment_bank_wire extends TOC_Payment_Module
                     }
                 }
 
-                if ($check_flag == FALSE) 
+                if ($check_flag == FALSE)
                 {
                     $this->status = FALSE;
                 }
             }
         }
     }
-    
+
     /**
      * Get selected payment module
      *
@@ -159,33 +159,33 @@ class TOC_Payment_bank_wire extends TOC_Payment_Module
     {
         return array('id' => $this->code, 'module' => $this->method_title);
     }
-    
+
     /**
      * Get selected payment module
      *
      * @access public
      * @return payment module selection
      */
-    function confirmation() 
+    function confirmation()
     {
         $confirmation = array('title' => $this->method_title,
-                           'fields' => array(array('title' => lang('payment_bank_wire_bank_account_owner'),
+                              'fields' => array(array('title' => lang('payment_bank_wire_bank_account_owner'),
                                                    'field' => $this->config['MODULE_PAYMENT_BANK_WIRE_ACCOUNT_OWNER']),
-        array('title' => lang('payment_bank_wire_bank_detail'),
-                                                   'field' => $this->config['MODULE_PAYMENT_BANK_WIRE_DETAIL']),
-        array('title' => lang('payment_bank_wire_bank_address'),
-                                                   'field' => $this->config['MODULE_PAYMENT_BANK_WIRE_BANK_ADDRESS'])));
+                                                array('title' => lang('payment_bank_wire_bank_detail'),
+                                                                                           'field' => $this->config['MODULE_PAYMENT_BANK_WIRE_DETAIL']),
+                                                array('title' => lang('payment_bank_wire_bank_address'),
+                                                                                           'field' => $this->config['MODULE_PAYMENT_BANK_WIRE_BANK_ADDRESS'])));
 
         return $confirmation;
     }
 
     /**
      * Process the payment module
-     * 
+     *
      * @access public
      * @return void
      */
-    function process() 
+    function process()
     {
         //$this->order_id = osC_Order::insert();
         //osC_Order::process($this->order_id, $this->order_status);

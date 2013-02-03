@@ -116,14 +116,14 @@ class Address_Book_Model extends CI_Model
     public function get_address($customers_id, $address_book_id)
     {
         $result = $this->db->select('ab.address_book_id, ab.entry_gender as gender, ab.entry_firstname as firstname, ab.entry_lastname as lastname, ab.entry_company as company, ab.entry_street_address as street_address, ab.entry_suburb as suburb, ab.entry_postcode as postcode, ab.entry_city as city, ab.entry_zone_id as zone_id, ab.entry_telephone as telephone, z.zone_code as zone_code, z.zone_name as zone_name, ab.entry_country_id as country_id, c.countries_name as countries_name, c.countries_iso_code_2, c.countries_iso_code_3, c.address_format, ab.entry_state as state, ab.entry_fax as fax')
-        ->from('address_book as ab')
-        ->join('zones as z', 'ab.entry_zone_id = z.zone_id', 'left')
-        ->join('countries as c', 'ab.entry_country_id = c.countries_id', 'left')
-        ->where('ab.customers_id', (int) $customers_id)
-        ->where('ab.address_book_id', (int) $address_book_id)
-        ->get();
+            ->from('address_book as ab')
+            ->join('zones as z', 'ab.entry_zone_id = z.zone_id', 'left')
+            ->join('countries as c', 'ab.entry_country_id = c.countries_id', 'left')
+            ->where('ab.customers_id', (int) $customers_id)
+            ->where('ab.address_book_id', (int) $address_book_id)
+            ->get();
 
-        $address_book = FALSE;
+        $address_book = NULL;
         if ($result->num_rows() > 0)
         {
             $address_book = $result->row_array();
@@ -197,16 +197,18 @@ class Address_Book_Model extends CI_Model
             ->where('ab.customers_id', (int) $customers_id)
             ->get();
 
-        $address_books = array();
         if ($result->num_rows() > 0)
         {
+            $address_books = array();
             foreach ($result->result_array() as $row)
             {
                 $address_books[] = $row;
             }
+            
+            return $address_books;
         }
 
-        return $address_books;
+        return NULL;
     }
 
     /**
@@ -220,7 +222,7 @@ class Address_Book_Model extends CI_Model
     {
         $result = $this->db->select('countries_name, countries_iso_code_2, countries_iso_code_3, address_format')->from('countries')->where('countries_id', (int) $countries_id)->get();
 
-        $country = FALSE;
+        $country = NULL;
         if ($result->num_rows() > 0)
         {
             $country = $result->row_array();
@@ -240,7 +242,7 @@ class Address_Book_Model extends CI_Model
     {
         $result = $this->db->select('zone_code, zone_name')->from('zones')->where('zone_id', (int) $zone_id)->get();
 
-        $zone = FALSE;
+        $zone = NULL;
         if ($result->num_rows() > 0)
         {
             $zone = $result->row_array();
@@ -257,14 +259,7 @@ class Address_Book_Model extends CI_Model
      */
     public function number_of_entries($customers_id)
     {
-        static $total_entries;
-        
-        if (!is_numeric($total_entries))
-        {
-            $total_entries = $this->db->from('address_book')->where('customers_id', (int) $customers_id)->count_all_results();
-        }
-        
-        return $total_entries;
+        return $this->db->from('address_book')->where('customers_id', (int) $customers_id)->count_all_results();
     }
     
     /**
@@ -291,10 +286,10 @@ class Address_Book_Model extends CI_Model
     public function check($address_book_id, $customers_id)
     {
         $result = $this->db
-        ->select('address_book_id')
-        ->from('address_book')
-        ->where(array('address_book_id' => (int) $address_book_id, 'customers_id' => (int) $customers_id))
-        ->get();
+            ->select('address_book_id')
+            ->from('address_book')
+            ->where(array('address_book_id' => (int) $address_book_id, 'customers_id' => (int) $customers_id))
+            ->get();
         
         if ($result->num_rows() > 0)
         {

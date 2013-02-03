@@ -288,7 +288,7 @@ class TOC_Product
      */
     public function get_short_description()
     {
-        return $this->data['products_short_description'];
+        return $this->data['short_description'];
     }
 
     /**
@@ -525,6 +525,66 @@ class TOC_Product
     public function get_unit_class()
     {
         return $this->data['unit_class'];
+    }
+    
+    /**
+     * Is featured product
+     * 
+     * @access public
+     * @return boolean
+     */
+    public function is_featured() 
+    {
+        return ($this->data['featured_products_id'] === NULL) ? FALSE : TRUE;
+    }
+    
+    /**
+     * Is specials product
+     * 
+     * @access public
+     * @return boolean
+     */
+    public function is_specials() 
+    {
+        return ($this->data['specials_price'] === NULL) ? FALSE : TRUE;
+    }
+    
+    /**
+     * Get specials price
+     * 
+     * @access public
+     * @return float
+     */    
+    public function get_specials_price() 
+    {
+        if ($this->data['specials_price'] !== NULL) 
+        {
+            return $this->data['specials_price'];
+        }
+        
+        return 0;
+    }
+
+    /**
+     * Has accessories
+     *
+     * @access public
+     * @return boolean
+     */
+    function has_accessories()
+    {
+        return (isset($this->data['accessories']) && !empty($this->data['accessories']));
+    }
+
+    /**
+     * Get accessories
+     *
+     * @access public
+     * @return array
+     */
+    function get_accessories() 
+    {
+      return $this->data['accessories'];
     }
 
     /**

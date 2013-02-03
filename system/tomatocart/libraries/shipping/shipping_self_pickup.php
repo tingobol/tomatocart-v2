@@ -90,7 +90,7 @@ class TOC_Shipping_self_pickup extends TOC_Shipping_Module
             $zones = $this->ci->address_model->get_zone_id_via_geo_zone($this->ci->shopping_cart->get_shipping_address('country_id'), $this->config['MODULE_SHIPPING_FLAT_ZONE']);
 
             $check_flag = FALSE;
-            if ($zone_id !== FALSE)
+            if ($zones !== NULL)
             {
                 foreach($zones as $zone_id)
                 {

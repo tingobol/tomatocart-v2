@@ -189,7 +189,7 @@ class TOC_Shipping
             $module = $this->selected_module;
         }
 
-        list($module_id, $method_id) = explode('_', $module);
+        list($module_id, $method_id) = explode('-', $module);
 
         $rate = array();
 

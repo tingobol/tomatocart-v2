@@ -48,16 +48,16 @@ class Account_Model extends CI_Model
      * @param $email
      * @return mixed
      */
-    public function get_data($email)
+    public function get_data($email_address)
     {
-        $result = $this->db->select('c.*, ab.address_book_id, ab.entry_gender, ab.entry_company, ab.entry_firstname, ab.entry_lastname, ab.entry_street_address, ab.entry_suburb, ab.entry_postcode, ab.entry_city, ab.entry_state, ab.entry_country_id, ab.entry_zone_id, ab.entry_telephone, ab.entry_fax, cg.customers_groups_discount')
+        $result = $this->db->select('c.*, date_format(c.customers_dob, "%Y-%m-%d") as dob_days, ab.address_book_id, ab.entry_gender, ab.entry_company, ab.entry_firstname, ab.entry_lastname, ab.entry_street_address, ab.entry_suburb, ab.entry_postcode, ab.entry_city, ab.entry_state, ab.entry_country_id, ab.entry_zone_id, ab.entry_telephone, ab.entry_fax, cg.customers_groups_discount')
             ->from('customers as c')
             ->join('customers_groups as cg', 'c.customers_groups_id = cg.customers_groups_id', 'left')
             ->join('address_book as ab', 'c.customers_id = ab.customers_id AND ab.address_book_id = c.customers_default_address_id', 'left')
-            ->where('customers_email_address', $email)
+            ->where('customers_email_address', $email_address)
             ->get();
         
-        $data = FALSE;
+        $data = NULL;
         if ($result->num_rows() > 0)
         {
             $data = $result->row_array();
@@ -73,14 +73,24 @@ class Account_Model extends CI_Model
      * @param $email
      * @return boolean
      */
-    public function check_duplicate_entry($email)
+    public function check_duplicate_entry($email, $customers_id = NULL)
     {
-        $result = $this->db
-            ->select('customers_id')
-            ->from('customers')
-            ->where(array('customers_email_address' => $email, 'customers_id !=' => $this->customer->get_id()))
-            ->limit(1)
-            ->get();
+        if ($customers_id == NULL) {
+            $result = $this->db
+                ->select('customers_id')
+                ->from('customers')
+                ->where(array('customers_email_address' => $email))
+                ->limit(1)
+                ->get();
+        } else {
+            $result = $this->db
+                ->select('customers_id')
+                ->from('customers')
+                ->where(array('customers_email_address' => $email, 'customers_id !=' => $customers_id))
+                ->limit(1)
+                ->get();
+        }
+
         
         if ($result->num_rows() == 1)
         {
@@ -230,6 +240,16 @@ class Account_Model extends CI_Model
     public function update_customers_newsletter($newsletter, $customers_id)
     {
         return $this->db->update('customers', array('customers_newsletter' => $newsletter), array('customers_id' => (int) $customers_id));
+    }
+    
+    /**
+     * Save password
+     * 
+     * @param $customers_id
+     * @param $password
+     */
+    public function save_password($customers_id, $password) {
+        return $this->db->update('customers', array('customers_password' => encrypt_password($password), 'date_account_last_modified' => 'now()'), array('customers_id' => (int) $customers_id));
     }
 }
 
