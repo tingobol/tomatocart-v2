@@ -26,7 +26,8 @@
  * @author		TomatoCart Dev Team
  * @link		http://tomatocart.com/wiki/
  */
-class Shopping_Cart extends TOC_Controller {
+class Shopping_Cart extends TOC_Controller 
+{
 
     /**
      * Constructor
@@ -42,13 +43,20 @@ class Shopping_Cart extends TOC_Controller {
 
     /**
      * Default Function
-     *
      * List shopping cart contents
      *
      * @access public
+     * @return void
      */
     public function index()
     {
+        //page title
+        $this->set_page_title(lang('shopping_cart_heading'));
+
+        //breadcrumb
+        $this->template->set_breadcrumb(lang('breadcrumb_checkout_shopping_cart'), site_url('shopping_cart'));
+        
+        //assign data
         $data['has_contents'] = $this->shopping_cart->has_contents();
         $data['has_stock'] = $this->shopping_cart->has_stock();
 

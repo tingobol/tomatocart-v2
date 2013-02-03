@@ -43,32 +43,38 @@ class Cart_Add extends TOC_Controller {
      * Default Function
      *
      * @access public
-     * @param string
+     * @param $id products id
+     * @param $variants variants
      * @return void
      */
-    public function index($id)
+    public function index($id, $variants = NULL)
     {
         if (is_numeric($id))
         {
-            $this->load->library('product', $id, 'product_' . $id);
-            $product = $this->{'product_' . $id};
+            $product = load_product_library($id);
 
             //if product is found
             if ($product->is_valid())
             {
-                //variants
-                $variants = ($this->input->post('variants') === FALSE) ? null : $this->input->post('variants');
-
+                if ($variants === NULL) 
+                {
+                    $variants = $this->input->post('variants');
+                } 
+                else 
+                {
+                    $variants = parse_variants_string($variants);
+                }
+                
                 //quantity
-                $quantity = ($this->input->post('quantity') === FALSE) ? null : $this->input->post('quantity');
+                $quantity = $this->input->post('quantity');
 
                 //add to shopping cart
                 $this->shopping_cart->add($id, $variants, $quantity);
             }
         }
 
-
-        redirect('checkout/shopping_cart');
+        //redirect to shopping cart
+        redirect('shopping_cart');
     }
 }
 
