@@ -20,7 +20,7 @@
   if (config('DISPLAY_CONDITIONS_ON_CHECKOUT') == '1') :
 ?>
 
-<div class="moduleBox">
+<div class="module-box clearfix">
     <h6><?php echo lang('order_conditions_title'); ?></h6>
     
     <div class="content">
@@ -28,13 +28,11 @@
     <label for="conditions"><?php echo lang('order_conditions_acknowledge'); ?></label>
     </div>
 </div>
-
-<div class="clear"></div>
 <?php
   endif;
 ?>
 
-<div class="moduleBox">
+<div class="module-box form-horizontal">
 	<div class="content">
     <?php
         if (sizeof($selection) > 0) :
@@ -134,7 +132,7 @@
 	</div>
 </div>
 
-<div class="moduleBox">
+<div class="module-box clearfix">
     <h6><?php echo lang('add_comment_to_order_title'); ?></h6>
     
     <div class="content">
@@ -142,8 +140,8 @@
     </div>
 </div>
 
-<br />
-    
-<p align="right">
-	<button type="submit" class="btn btn-small btn-small" id="btn-save-payment-form"><?php echo lang('button_continue'); ?></button>
-</p>
+<div class="control-group">
+    <div class="controls">
+  		<button type="submit" class="btn btn-small btn-info pull-right" id="btn-save-payment-form"><i class="icon-chevron-right icon-white"></i> <?php echo lang('button_continue'); ?></button>
+    </div>
+</div>

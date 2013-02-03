@@ -140,49 +140,49 @@
     if ($confirmation) {
 ?>
 
-<div class="moduleBox">
-  <h6><?php echo lang('order_payment_information_title'); ?></h6>
-
-  <div class="content">
-    <p><?php echo $confirmation['title']; ?></p>
-
-<?php
-      if (isset($confirmation['fields'])) {
-?>
-
-    <table cellspacing="3" cellpadding="2">
-
-<?php
-        for ($i=0, $n=sizeof($confirmation['fields']); $i<$n; $i++) {
-?>
-
-      <tr>
-        <td width="10">&nbsp;</td>
-        <td><?php echo $confirmation['fields'][$i]['title']; ?></td>
-        <td width="10">&nbsp;</td>
-        <td><?php echo $confirmation['fields'][$i]['field']; ?></td>
-      </tr>
-
-<?php
-        }
-?>
-
-    </table>
-
-<?php
-      }
-
-      if (isset($confirmation['text'])) {
-?>
-
-    <p><?php echo $confirmation['text']; ?></p>
-
-<?php
-      }
-?>
-
-  </div>
-</div>
+    <div class="moduleBox">
+      <h6><?php echo lang('order_payment_information_title'); ?></h6>
+    
+      <div class="content">
+        <p><?php echo $confirmation['title']; ?></p>
+    
+    <?php
+          if (isset($confirmation['fields'])) {
+    ?>
+    
+        <table cellspacing="3" cellpadding="2">
+    
+    <?php
+            for ($i=0, $n=sizeof($confirmation['fields']); $i<$n; $i++) {
+    ?>
+    
+          <tr>
+            <td width="10">&nbsp;</td>
+            <td><?php echo $confirmation['fields'][$i]['title']; ?></td>
+            <td width="10">&nbsp;</td>
+            <td><?php echo $confirmation['fields'][$i]['field']; ?></td>
+          </tr>
+    
+    <?php
+            }
+    ?>
+    
+        </table>
+    
+    <?php
+          }
+    
+          if (isset($confirmation['text'])) {
+    ?>
+    
+        <p><?php echo $confirmation['text']; ?></p>
+    
+    <?php
+          }
+    ?>
+    
+      </div>
+    </div>
 
 <?php
     }
@@ -193,5 +193,8 @@
     endif;
   
 ?>
-	<div style="text-align:right;"><button type="submit" class="btn btn-small btn-small" id="btn-confirm-order"><?php echo lang('button_continue'); ?></button></div></form>
+	<div style="text-align:right;">
+		<button type="submit" class="btn btn-small btn-small" id="btn-confirm-order"><?php echo lang('button_continue'); ?></button>
+	</div>
+</form>
 </div>

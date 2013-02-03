@@ -20,7 +20,7 @@
   if ($has_quotes) :
 ?>
 
-<div class="moduleBox">
+<div class="module-box form-horizontal">
     <div class="content">
     
     <?php
@@ -110,12 +110,13 @@
             ?>
     	</table>
     </div>
+    <div class="control-group">
+        <div class="controls">
+      		<button type="submit" class="btn btn-small btn-info pull-right" id="btn-save-shipping-method"><i class="icon-chevron-right icon-white"></i> <?php echo lang('button_continue'); ?></button>
+        </div>
+    </div>
 </div>
 <?php
 
   endif;
 ?>
-
-<p align="right">
-    <button type="submit" class="btn btn-small btn-small" id="btn-save-shipping-method"><?php echo lang('button_continue'); ?></button>
-</p>

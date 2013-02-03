@@ -10,65 +10,102 @@
   <Description>TomaoCart Default Template</Description>
 
   <WebLayout>
-    <ContentGroups>
-      <Group>before</Group>
-      <Group>after</Group>
-      <Group>left</Group>
-      <Group>right</Group>
-      <Group>slideshow</Group>
-    </ContentGroups>
-    <Modules>
-      <Module code="categories" sort-order="100" page="*" group="left">
+      <ContentGroups>
+        <Group>before</Group>
+        <Group>after</Group>
+        <Group>left</Group>
+        <Group>right</Group>
+        <Group>slideshow</Group>
+        <Group>footer-col-1</Group>
+        <Group>footer-col-2</Group>
+        <Group>footer-col-3</Group>
+        <Group>footer-col-4</Group>
+      </ContentGroups>
+      <Modules>
+      <Module code="categories" sort-order="100" page="*" Group="left">
        <Param name="MODULE_CATEGORIES_SHOW_PRODUCT_COUNT" value="1" />
       </Module>
-      <Module code="manufacturers" sort-order="100" page="*" group="left" />
-      <Module code="information" sort-order="100" page="*" group="left" />
-      <Module code="whats_new" sort-order="100" page="*" group="left" />
-      <Module code="manufacturer_info" sort-order="100" page="products/info" group="right" />
-      <Module code="order_history" sort-order="100" page="*" group="right" />
-      <Module code="best_sellers" sort-order="100" page="*" group="right" />
-      <Module code="product_notifications" sort-order="100" page="products/info" group="right" />
-      <Module code="tell_a_friend" sort-order="100" page="products/info" group="right" />
-      <Module code="specials" sort-order="100" page="*" group="right" />
-      <Module code="reviews" sort-order="100" page="*" group="right" />
-      <Module code="currencies" sort-order="100" page="*" group="right" />
-      <Module code="slideshows" sort-order="100" page="index/index" group="slideshow">
-        <Param name="MODULE_SLIDESHOW_IMAGE_GROUPS" value="" />
-        <Param name="MODULE_SLIDESHOW_PRELOAD" value="0" />
-        <Param name="MODULE_SLIDESHOW_PLAY_INTERVAL" value="1000" />
-        <Param name="MODULE_SLIDESHOW_PAUSE_INTERVAL" value="2500" />
-        <Param name="MODULE_SLIDESHOW_HOVER_PAUSE" value="1200" />
-      </Module>
-      <Module code="new_products" sort-order="100" page="index/category_listing" group="after" />
-      <Module code="new_products" sort-order="100" page="index/index" group="after" />
-      <Module code="recently_visited" sort-order="100" page="*" group="after" />
-      <Module code="also_purchased_products" sort-order="100" page="products/info" group="after" />
-    </Modules>
+        <Module code="manufacturers" sort-order="100" page="*" Group="left" />
+        <Module code="information" sort-order="100" page="*" Group="left" />
+        <Module code="whats_new" sort-order="100" page="*" Group="left" />
+        <Module code="manufacturer_info" sort-order="100" page="products/info" Group="right" />
+        <Module code="order_history" sort-order="100" page="*" Group="right" />
+        <Module code="best_sellers" sort-order="100" page="*" Group="right" />
+        <Module code="product_notifications" sort-order="100" page="products/info" Group="right" />
+        <Module code="tell_a_friend" sort-order="100" page="products/info" Group="right" />
+        <Module code="specials" sort-order="100" page="*" Group="right" />
+        <Module code="reviews" sort-order="100" page="*" Group="right" />
+        <Module code="currencies" sort-order="100" page="*" Group="right" />
+        <Module code="slide_show" sort-order="100" page="index/index" Group="slideshow" />
+        <Module code="new_products" sort-order="100" page="index/category_listing" Group="after" />
+        <Module code="new_products" sort-order="100" page="index/index" Group="after" />
+        <Module code="recently_visited" sort-order="100" page="*" Group="after" />
+        <Module code="also_purchased_products" sort-order="100" page="products/info" Group="after" />
+      </Modules>
   </WebLayout>
   
   <MobileLayout>
-    <ContentGroups>
-      <Group>before</Group>
-      <Group>after</Group>
-    </ContentGroups>
-    <Modules>
-      <Module code="categories" sort-order="100" page="*" group="after">
-       <Param name="MODULE_CATEGORIES_SHOW_PRODUCT_COUNT" value="1" />
-      </Module>
-      <Module code="slideshows" sort-order="100" page="index/index" group="before">
-        <Param name="MODULE_SLIDESHOW_IMAGE_GROUPS" value="" />
-        <Param name="MODULE_SLIDESHOW_PRELOAD" value="0" />
-        <Param name="MODULE_SLIDESHOW_PLAY_INTERVAL" value="1000" />
-        <Param name="MODULE_SLIDESHOW_PAUSE_INTERVAL" value="2500" />
-        <Param name="MODULE_SLIDESHOW_HOVER_PAUSE" value="1200" />
-      </Module>
-    </Modules>
+      <ContentGroups>
+        <Group>before</Group>
+        <Group>after</Group>
+      </ContentGroups>
+      <Modules>
+        <Module ode="categories" sort-order="100" page="*" Group="left">
+         <Param name="MODULE_CATEGORIES_SHOW_PRODUCT_COUNT" value="1" />
+        </Module>
+        <Module code="manufacturers" sort-order="100" page="*" Group="left" />
+        <Module code="information" sort-order="100" page="*" Group="left" />
+        <Module code="whats_new" sort-order="100" page="*" Group="left" />
+        <Module code="manufacturer_info" sort-order="100" page="products/info" Group="right" />
+        <Module code="order_history" sort-order="100" page="*" Group="right" />
+        <Module code="best_sellers" sort-order="100" page="*" Group="right" />
+        <Module code="product_notifications" sort-order="100" page="products/info" Group="right" />
+        <Module code="tell_a_friend" sort-order="100" page="products/info" Group="right" />
+        <Module code="specials" sort-order="100" page="*" Group="right" />
+        <Module code="reviews" sort-order="100" page="*" Group="right" />
+        <Module code="currencies" sort-order="100" page="*" Group="right" />
+        <Module code="slide_show" sort-order="100" page="index/index" Group="slideshow" />
+        <Module code="new_products" sort-order="100" page="index/category_listing" Group="after" />
+        <Module code="new_products" sort-order="100" page="index/index" Group="after" />
+        <Module code="recently_visited" sort-order="100" page="*" Group="after" />
+        <Module code="also_purchased_products" sort-order="100" page="products/info" Group="after" />
+      </Modules>
   </MobileLayout>
-
-	<Logo width="180" height="50" />
+  
+  <PadLayout>
+      <ContentGroups>
+        <Group>before</Group>
+        <Group>after</Group>
+        <Group>left</Group>
+        <Group>slideshow</Group>
+      </ContentGroups>
+      <Modules>
+        <Module ode="categories" sort-order="100" page="*" Group="left">
+         <Param name="MODULE_CATEGORIES_SHOW_PRODUCT_COUNT" value="1" />
+        </Module>
+        <Module code="manufacturers" sort-order="100" page="*" Group="left" />
+        <Module code="information" sort-order="100" page="*" Group="left" />
+        <Module code="whats_new" sort-order="100" page="*" Group="left" />
+        <Module code="manufacturer_info" sort-order="100" page="products/info" Group="right" />
+        <Module code="order_history" sort-order="100" page="*" Group="right" />
+        <Module code="best_sellers" sort-order="100" page="*" Group="right" />
+        <Module code="product_notifications" sort-order="100" page="products/info" Group="right" />
+        <Module code="tell_a_friend" sort-order="100" page="products/info" Group="right" />
+        <Module code="specials" sort-order="100" page="*" Group="right" />
+        <Module code="reviews" sort-order="100" page="*" Group="right" />
+        <Module code="currencies" sort-order="100" page="*" Group="right" />
+        <Module code="slide_show" sort-order="100" page="index/index" Group="slideshow" />
+        <Module code="new_products" sort-order="100" page="index/category_listing" Group="after" />
+        <Module code="new_products" sort-order="100" page="index/index" Group="after" />
+        <Module code="recently_visited" sort-order="100" page="*" Group="after" />
+        <Module code="also_purchased_products" sort-order="100" page="products/info" Group="after" />
+      </Modules>
+  </PadLayout>
+  
+    <Logo width="180" height="50" />
 
   <Params>
-    <Param name="template_scheme" title="Template Scheme" type="combobox" default="gray" description="Template Schema for Default Template">
+    <Param name="template_scheme" title="Template Color" type="combobox" default="gray" description="Template Schema for Default Template">
       <Option value="gray">Gray Theme</Option>
       <Option value="red">Red Theme</Option>
       <Option value="green">Green Theme</Option>
