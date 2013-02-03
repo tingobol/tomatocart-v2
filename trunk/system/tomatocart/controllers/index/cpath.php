@@ -76,7 +76,7 @@ class Cpath extends TOC_Controller
             $cpath = $this->category_tree->parse_cpath($cpath);
 
             //page title
-            $this->template->set_title(sprintf(lang('index_heading'), config('STORE_NAME')));
+            $this->set_page_title(sprintf(lang('index_heading'), config('STORE_NAME')));
 
             //check whether cpath is exist
             if (isset($cpath) && !empty($cpath))
@@ -123,12 +123,17 @@ class Cpath extends TOC_Controller
                 //check whether this category has products
                 if ($this->categories_model->has_products($current_category_id))
                 {
+                    $pagesize = $this->input->get('pagesize');
+                    $sort = $this->input->get('sort');
+                    $view = $this->input->get('view');
+                    
                     //get page
                     $filter = array(
                         'categories_id' => $current_category_id,
                         'page' => $this->page_num - 1,
-                        'per_page' => config('MAX_DISPLAY_SEARCH_RESULTS'));
-
+                        'per_page' => ($pagesize !== NULL) ? $pagesize : config('MAX_DISPLAY_SEARCH_RESULTS'),
+                        'sort' => $sort);
+                    
                     $products = $this->products_model->get_products($filter);
 
                     //initialize pagination parameters
@@ -139,7 +144,8 @@ class Cpath extends TOC_Controller
 
                     $this->pagination->initialize($pagination);
                     $data['links'] = $this->pagination->create_links();
-
+                    $data['total_pages'] = sprintf(lang('result_set_number_of_products'), ($filter['page'] * $filter['per_page'] + 1), ($filter['page'] * $filter['per_page'] + sizeof($products)), $pagination['total_rows']);
+                    
                     $data['products'] = array();
                     foreach ($products as $product)
                     {
@@ -147,10 +153,18 @@ class Cpath extends TOC_Controller
                             'products_id' => $product['products_id'],
                             'product_name' => $product['products_name'],
                             'product_price' => $product['products_price'],
+                            'specials_price' => $product['specials_price'],
+                            'is_specials' => ($product['specials_price'] === NULL) ? FALSE : TRUE,
+                            'is_featured' => ($product['featured_products_id'] === NULL) ? FALSE : TRUE,
                             'product_image' => $product['image'],
                             'short_description' => $product['products_short_description']);
                     }
-
+                    
+                    $data['pagesize'] = $pagesize;
+                    $data['sort'] = $sort;
+                    $data['view'] = ((empty($view)) && (!in_array($view, array('grid', 'list')))) ? 'grid' : $view;
+                    $data['filter_form_action'] = site_url('cpath/' . $cpath) . '/page';
+                    
                     $this->template->build('index/product_listing', $data);
                 }
                 else
@@ -180,9 +194,10 @@ class Cpath extends TOC_Controller
         //initialize pagination parameters
         $pagination['base_url'] = site_url('cpath/' . $cpath) . '/page';
         $pagination['total_rows'] = $this->products_model->count_products($filter);
-        $pagination['per_page'] = config('MAX_DISPLAY_SEARCH_RESULTS');
+        $pagination['per_page'] = $filter['per_page'];
         $pagination['use_page_numbers'] = TRUE;
         $pagination['uri_segment'] = $this->uri_segment;
+        $pagination['reuse_query_string'] = TRUE;
         
         $pagination['full_tag_open'] = '<ul>';
         $pagination['full_tag_close'] = '</ul>';
