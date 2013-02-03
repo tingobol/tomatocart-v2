@@ -49,7 +49,7 @@ class Index extends TOC_Controller
     public function index()
     {
         //page title
-        $this->template->set_title(sprintf(lang('index_heading'), config('STORE_NAME')));
+        $this->set_page_title(sprintf(lang('index_heading'), config('STORE_NAME')));
 
         //code
         $code = strtoupper($this->lang->get_code());
@@ -65,7 +65,7 @@ class Index extends TOC_Controller
         //set page title
         if (!empty($page_title))
         {
-            $this->template->set_title($page_title);
+            $this->set_page_title($page_title);
         }
 
         //set keywords
