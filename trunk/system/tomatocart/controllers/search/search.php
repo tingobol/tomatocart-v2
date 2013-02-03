@@ -67,39 +67,8 @@ class Search extends TOC_Controller {
             //load model
             $this->load->model('search_model');
 
-            //
-            $page = $this->input->get('p');
-            $filters['page'] = (isset($page) && is_numeric($page)) ? ($page - 1) : 0;
-            $filters['per_page'] = config('MAX_DISPLAY_SEARCH_RESULTS');
-
-            //initialize pagination parameters
-            $pagination['base_url'] = site_url('search?' . implode('&', $this->search_query_string));
-            $pagination['total_rows'] = $this->search_model->count_products($filters);
-            $pagination['per_page'] = config('MAX_DISPLAY_SEARCH_RESULTS');
-            $pagination['use_page_numbers'] = TRUE;
-            $pagination['page_query_string'] = TRUE;
-            $pagination['query_string_segment'] = 'p';
-            
-            $pagination['full_tag_open'] = '<ul>';
-            $pagination['full_tag_close'] = '</ul>';
-            
-            $pagination['first_tag_open'] = '<li>';
-            $pagination['first_tag_close'] = '</li>';
-            
-            $pagination['last_tag_open'] = '<li>';
-            $pagination['last_tag_close'] = '</li>';
-            
-            $pagination['cur_tag_open'] = '<li class="current"><a href="javascript:void(0);">';
-            $pagination['cur_tag_close'] = '</a></li>';
-            
-            $pagination['next_tag_open'] = '<li>';
-            $pagination['next_tag_close'] = '</li>';
-            
-            $pagination['prev_tag_open'] = '<li>';
-            $pagination['prev_tag_close'] = '</li>';
-            
-            $pagination['num_tag_open'] = '<li>';
-            $pagination['num_tag_close'] = '</li>';
+            //get pagination configurations
+            $pagination = $this->get_pagination_config($filters);
 
             //load pagination library
             $this->load->library('pagination');
@@ -107,11 +76,77 @@ class Search extends TOC_Controller {
             $data['links'] = $this->pagination->create_links();
 
             //get products
-            $data['products'] = $this->search_model->get_result($filters);
+            $products = $this->search_model->get_result($filters);
+
+            $data['products'] = array();
+            foreach ($products as $product)
+            {
+                $data['products'][] = array(
+                            'products_id' => $product['products_id'],
+                            'product_name' => $product['products_name'],
+                            'product_price' => $product['products_price'],
+                            'specials_price' => $product['specials_price'],
+                            'is_specials' => ($product['specials_price'] === NULL) ? FALSE : TRUE,
+                            'is_featured' => ($product['featured_products_id'] === NULL) ? FALSE : TRUE,
+                            'product_image' => $product['image'],
+                            'short_description' => $product['products_short_description']);
+            }
+
+            //search filters
+            $data['search_filters'] = $this->search_query_string;
+            $data['pagesize'] = $pagination['per_page'];
+            $data['sort'] = $filters['sort'];
+            $data['view'] = $filters['view'];
+            $data['filter_form_action'] = $pagination['base_url'];
+            $data['total_pages'] = sprintf(lang('result_set_number_of_products'), ($filters['page'] * $filters['per_page'] + 1), ($filters['page'] * $filters['per_page'] + sizeof($products)), $pagination['total_rows']);
 
             //setup view
             $this->template->build('search/results', $data);
         }
+    }
+
+    /**
+     * Get pagination configurations
+     *
+     * @access private
+     * @return array
+     */
+    private function get_pagination_config($filters)
+    {
+        //initialize pagination parameters
+        $pagination['total_rows'] = $this->search_model->count_products($filters);
+        $pagination['per_page'] = $filters['per_page'];
+        $pagination['use_page_numbers'] = TRUE;
+        $pagination['page_query_string'] = TRUE;
+        $pagination['query_string_segment'] = 'p';
+
+        //base url
+        $params = array_merge($this->search_query_string, array('pagesize' => $filters['per_page'], 'sort' => $filters['sort'], 'view' => $filters['view']));
+        $pagination['base_url'] = site_url('search?' . http_build_query($params));
+        
+        
+        $pagination['full_tag_open'] = '<ul>';
+        $pagination['full_tag_close'] = '</ul>';
+
+        $pagination['first_tag_open'] = '<li>';
+        $pagination['first_tag_close'] = '</li>';
+
+        $pagination['last_tag_open'] = '<li>';
+        $pagination['last_tag_close'] = '</li>';
+
+        $pagination['cur_tag_open'] = '<li class="current"><a href="javascript:void(0);">';
+        $pagination['cur_tag_close'] = '</a></li>';
+
+        $pagination['next_tag_open'] = '<li>';
+        $pagination['next_tag_close'] = '</li>';
+
+        $pagination['prev_tag_open'] = '<li>';
+        $pagination['prev_tag_close'] = '</li>';
+
+        $pagination['num_tag_open'] = '<li>';
+        $pagination['num_tag_close'] = '</li>';
+
+        return $pagination;
     }
 
     /**
@@ -129,7 +164,7 @@ class Search extends TOC_Controller {
         {
             $filters['keywords'] = $keywords;
 
-            $this->search_query_string[] = 'keywords=' . $keywords;
+            $this->search_query_string['keywords'] = $keywords;
         }
 
         //pfrom
@@ -144,7 +179,7 @@ class Search extends TOC_Controller {
             {
                 $filters['price_from'] = $pfrom;
 
-                $this->search_query_string[] = 'pfrom=' . $pfrom;
+                $this->search_query_string['pfrom'] = $pfrom;
             }
         }
 
@@ -160,7 +195,7 @@ class Search extends TOC_Controller {
             {
                 $filters['price_to'] = $pto;
 
-                $this->search_query_string[] = 'pto=' . $pto;
+                $this->search_query_string['pto'] = $pto;
             }
         }
 
@@ -176,7 +211,7 @@ class Search extends TOC_Controller {
         {
             $filters['category'] = $cpath;
 
-            $this->search_query_string[] = 'cPath=' . $cpath;
+            $this->search_query_string['cPath'] = $cpath;
 
             $recursive = $this->get_search_filter('recursive');
             if ($recursive != NULL)
@@ -218,22 +253,35 @@ class Search extends TOC_Controller {
         if (($manufacturers != NULL) && is_numeric($manufacturers) && ($manufacturers > 0))
         {
             $filters['manufacturer'] = $manufacturers;
-            
-            $this->search_query_string[] = 'manufacturer=' . $manufacturers;
-        }
 
-        if (is_array($filters) && !empty($filters))
-        {
-            return $filters;
+            $this->search_query_string['manufacturer'] = $manufacturers;
         }
 
         //must enter a search condition
         if (($pfrom == NULL) && ($pto == NULL) && ($keywords == NULL) && ($manufacturers == NULL))
         {
             $this->message_stack->add('search', lang('error_search_at_least_one_input'));
+
+            return NULL;
         }
 
-        return NULL;
+        //page number
+        $page = $this->input->get('p');
+        $filters['page'] = (isset($page) && is_numeric($page)) ? ($page - 1) : 0;
+
+        //pagesize
+        $pagesize = $this->input->get('pagesize');
+        $filters['per_page'] = ($pagesize !== NULL) ? $pagesize : config('MAX_DISPLAY_SEARCH_RESULTS');
+
+        //sort
+        $sort = $this->input->get('sort');
+        $filters['sort'] = $sort;
+
+        //view
+        $view = $this->input->get('view');
+        $filters['view'] = ((empty($view)) && (!in_array($view, array('grid', 'list')))) ? 'grid' : $view;
+
+        return $filters;
     }
 
     /**
@@ -284,9 +332,13 @@ class Search extends TOC_Controller {
         //add the manufacturers
         $data['manufacturers'] = array(array('id' => '', 'text' => lang('filter_all_manufacturers')));
 
-        foreach($this->manufacturers_model->get_manufacturers() as $manufacturer)
+        $manufacturers = $this->manufacturers_model->get_manufacturers();
+        if (!empty($manufacturers))
         {
-            $data['manufacturers'][$manufacturer['manufacturers_id']] = $manufacturer['manufacturers_name'];
+            foreach($this->manufacturers_model->get_manufacturers() as $manufacturer)
+            {
+                $data['manufacturers'][] = array('id' => $manufacturer['manufacturers_id'], 'text' => $manufacturer['manufacturers_name']);
+            }
         }
 
         //setup view
