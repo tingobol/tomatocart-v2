@@ -27,7 +27,7 @@
  * @link		http://tomatocart.com/wiki/
  */
 
-class Create extends TOC_Controller 
+class Create extends TOC_Controller
 {
 
     /**
@@ -40,7 +40,24 @@ class Create extends TOC_Controller
         parent::__construct();
 
         //set page title
-        $this->template->set_title(lang('create_account_heading'));
+        $this->set_page_title(lang('sign_in_heading'));
+
+        //breadcrumb
+        $this->template->set_breadcrumb(lang('breadcrumb_my_account'), site_url('account'));
+        $this->template->set_breadcrumb(lang('create_account_heading'), site_url('account/create'));
+
+        //data
+        $this->data = array();
+
+        if (config('DISPLAY_PRIVACY_CONDITIONS') == '1')
+        {
+            //load model
+            $this->load->model('info_model');
+
+            //get the privacy
+            $privacy = $this->info_model->get_article(INFORMATION_PRIVACY_NOTICE, lang_id());
+            $this->data['privacy'] = array('title' => $privacy['articles_name'], 'content' => $privacy['articles_description']);
+        }
     }
 
     /**
@@ -51,7 +68,7 @@ class Create extends TOC_Controller
     public function index()
     {
         //setup view
-        $this->template->build('account/create');
+        $this->template->build('account/create', $this->data);
     }
 
     /**
@@ -94,9 +111,9 @@ class Create extends TOC_Controller
         }
 
         //validate firstname
-        if (( $this->input->post('firstname') !== NULL) || (strlen(trim( $this->input->post('firstname'))) >= config('ACCOUNT_FIRST_NAME')))
+        if (( $this->input->post('firstname') !== NULL) && (strlen(trim( $this->input->post('firstname'))) >= config('ACCOUNT_FIRST_NAME')))
         {
-            $data['customers_firstname'] = $this->security->xss_clean( $this->input->post('firstname'));
+            $data['customers_firstname'] = $this->input->post('firstname');
         }
         else
         {
@@ -104,9 +121,9 @@ class Create extends TOC_Controller
         }
 
         //validate lastname
-        if (($this->input->post('lastname') !== NULL) || (strlen(trim($this->input->post('lastname'))) >= config('ACCOUNT_LAST_NAME')))
+        if (($this->input->post('lastname') !== NULL) && (strlen(trim($this->input->post('lastname'))) >= config('ACCOUNT_LAST_NAME')))
         {
-            $data['customers_lastname'] = $this->security->xss_clean($this->input->post('lastname'));
+            $data['customers_lastname'] = $this->input->post('lastname');
         }
         else
         {
@@ -119,7 +136,8 @@ class Create extends TOC_Controller
         //validate dob days
         if (config('ACCOUNT_DATE_OF_BIRTH') == '1')
         {
-            if ($this->input->post('dob_days') !== NULL)
+            $dob_days = $this->input->post('dob_days');
+            if (!empty($dob_days))
             {
                 $data['customers_dob'] = $this->input->post('dob_days');
             }
@@ -172,10 +190,15 @@ class Create extends TOC_Controller
             $data['customers_status'] = 1;
 
             //if create account success send email
-            if ($this->account_model->insert($data)) 
+            if ($this->account_model->insert($data))
             {
+                //set data to session
                 $this->customer->set_data($data['customers_email_address']);
-                
+
+                //synchronize shopping cart content with database
+                $this->shopping_cart->synchronize_with_database();
+
+                //send email
                 $this->load->library('email_template');
                 $email = $this->email_template->get_email_template('create_account_email');
                 $email->set_data($data['customers_password']);
@@ -184,15 +207,15 @@ class Create extends TOC_Controller
             }
 
             //set page title
-            $this->template->set_title(lang('create_account_success_heading'));
-            
+            $this->set_page_title(lang('create_account_success_heading'));
+
             //setup view
             $this->template->build('account/create_success');
         }
         else
         {
             //setup view
-            $this->template->build('account/create');
+            $this->template->build('account/create', $this->data);
         }
     }
 }

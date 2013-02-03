@@ -28,44 +28,41 @@
  */
 
 class Index extends TOC_Controller {
-  /**
-   * Constructor
-   *
-   * @access public
-   * @param string
-   */
-  public function __construct()
-  {
-    parent::__construct();
-  }
-
-  /**
-   * Default Function
-   *
-   * @access public
-   * @param string
-   */
-  public function index()
-  {
-    $data = array();
-
-    if ($this->customer->is_logged_on())
+    /**
+     * Constructor
+     *
+     * @access public
+     * @param string
+     */
+    public function __construct()
     {
-      //set page title
-      $this->template->set_title(lang('account_heading'));
-        
-      $data['title'] = lang('account_heading');
-      $this->template->build('account/account', $data);
+        parent::__construct();
     }
-    else
+
+    /**
+     * Default Function
+     *
+     * @access public
+     * @param string
+     */
+    public function index()
     {
-      //set page title
-      $this->template->set_title(lang('sign_in_heading'));
-      
-      $data['title'] = lang('sign_in_heading');
-      $this->template->build('account/login', $data);
+        if ($this->customer->is_logged_on())
+        {
+            //set page title
+            $this->set_page_title(lang('account_heading'));
+
+            //breadcrumb
+            $this->template->set_breadcrumb(lang('breadcrumb_my_account'), site_url('account'));
+
+            //load view
+            $this->template->build('account/account');
+        }
+        else
+        {
+            redirect('account/login');
+        }
     }
-  }
 }
 // END Index Class
 
