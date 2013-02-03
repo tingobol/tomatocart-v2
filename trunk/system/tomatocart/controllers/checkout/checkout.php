@@ -63,7 +63,7 @@ class Checkout extends TOC_Controller {
         $data['is_logged_on'] = $this->customer->is_logged_on();
 
         $data['address_books'] = array();
-        if ($this->customer->is_logged_on()) 
+        if ($this->customer->is_logged_on())
         {
             $data['address_books'] = $this->address_book_model->get_addresses($this->customer->get_id());
         }
@@ -84,10 +84,10 @@ class Checkout extends TOC_Controller {
         $data['billing_country_id'] = isset($billing_address['country_id']) ? $billing_address['country_id'] : config('STORE_COUNTRY');
         $data['billing_telephone'] = isset($billing_address['telephone_number']) ? $billing_address['telephone_number'] : null;
         $data['billing_fax'] = isset($billing_address['fax']) ? $billing_address['fax'] : null;
-        $data['ship_to_this_address'] = (isset($billing_address['ship_to_this_address']) && $billing_address['ship_to_this_address'] == '1') ? TRUE : FALSE;
+        $data['ship_to_this_address'] = (isset($billing_address['ship_to_this_address']) && $billing_address['ship_to_this_address'] == 'on') ? TRUE : FALSE;
 
         $data['create_billing_address'] = FALSE;
-        if (!$this->customer->is_logged_on()) 
+        if (!$this->customer->is_logged_on())
         {
             $data['create_billing_address'] = TRUE;
         }
@@ -147,7 +147,7 @@ class Checkout extends TOC_Controller {
         if (!$this->customer->is_logged_on())
         {
             $billing_email_address = $this->input->post('billing_email_address');
-            if ( ($billing_email_address === FALSE) || (strlen(trim($billing_email_address)) < config('ACCOUNT_EMAIL_ADDRESS')) )
+            if ( ($billing_email_address === NULL) || (strlen(trim($billing_email_address)) < config('ACCOUNT_EMAIL_ADDRESS')) )
             {
                 $errors[] = sprintf(lang('field_customer_email_address_error'), config('ACCOUNT_EMAIL_ADDRESS'));
             }
@@ -162,7 +162,7 @@ class Checkout extends TOC_Controller {
                 {
                     //check whether email exists
                     $data = $this->account_model->get_data($billing_email_address);
-                    if ( $data !== FALSE )
+                    if ($data !== NULL)
                     {
                         $errors[] = lang('field_customer_email_address_exists_error');
                     }
@@ -174,17 +174,18 @@ class Checkout extends TOC_Controller {
             }
 
             //if checkout method is 'register' then check the password
-            $data['password'] = FALSE;
+            $data['password'] = NULL;
             if ($checkout_method == 'register')
             {
                 $billing_password = $this->input->post('billing_password');
                 $confirmation = $this->input->post('confirmation');
 
-                if ( ($billing_password === FALSE) || (($billing_password !== FALSE) && (strlen(trim($billing_password)) < config('ACCOUNT_PASSWORD'))) )
+                if ( ($billing_password === NULL) || (($billing_password !== NULL) && (strlen(trim($billing_password)) < config('ACCOUNT_PASSWORD'))) )
                 {
                     $errors[] = sprintf(lang('field_customer_password_error'), config('ACCOUNT_PASSWORD'));
                 }
-                elseif ( ($confirmation === FALSE) || (($confirmation !== FALSE) && (trim($billing_password) != trim($confirmation))) ) {
+                elseif ( ($confirmation === NULL) || (($confirmation !== NULL) && (trim($billing_password) != trim($confirmation))) )
+                {
                     $errors[] = lang('field_customer_password_mismatch_with_confirmation');
                 }
                 else
@@ -213,12 +214,12 @@ class Checkout extends TOC_Controller {
             }
             else
             {
-                $data['gender'] = ($billing_gender !== FALSE) ? $billing_gender : 'm';
+                $data['gender'] = ($billing_gender !== NULL) ? $billing_gender : 'm';
             }
 
             //firstname
             $billing_firstname = $this->input->post('billing_firstname');
-            if (($billing_firstname !== FALSE) && (strlen(trim($billing_firstname)) >= config('ACCOUNT_FIRST_NAME')))
+            if (($billing_firstname !== NULL) && (strlen(trim($billing_firstname)) >= config('ACCOUNT_FIRST_NAME')))
             {
                 $data['firstname'] = $billing_firstname;
             }
@@ -229,7 +230,7 @@ class Checkout extends TOC_Controller {
 
             //lastname
             $billing_lastname = $this->input->post('billing_lastname');
-            if (($billing_lastname !== FALSE) && (strlen(trim($billing_lastname)) >= config('ACCOUNT_LAST_NAME')))
+            if (($billing_lastname !== NULL) && (strlen(trim($billing_lastname)) >= config('ACCOUNT_LAST_NAME')))
             {
                 $data['lastname'] = $billing_lastname;
             }
@@ -242,7 +243,7 @@ class Checkout extends TOC_Controller {
             if (config('ACCOUNT_COMPANY') > -1)
             {
                 $billing_company = $this->input->post('billing_company');
-                if (($billing_company !== FALSE) && (strlen(trim($billing_company)) >= config('ACCOUNT_COMPANY')))
+                if (($billing_company !== NULL) && (strlen(trim($billing_company)) >= config('ACCOUNT_COMPANY')))
                 {
                     $data['company'] = $billing_company;
                 }
@@ -254,7 +255,7 @@ class Checkout extends TOC_Controller {
 
             //street address
             $billing_street_address = $this->input->post('billing_street_address');
-            if (($billing_street_address !== FALSE) && (strlen(trim($billing_street_address)) >= config('ACCOUNT_STREET_ADDRESS')))
+            if (($billing_street_address !== NULL) && (strlen(trim($billing_street_address)) >= config('ACCOUNT_STREET_ADDRESS')))
             {
                 $data['street_address'] = $billing_street_address;
             } else {
@@ -265,7 +266,7 @@ class Checkout extends TOC_Controller {
             if (config('ACCOUNT_SUBURB') >= 0)
             {
                 $billing_suburb = $this->input->post('billing_suburb');
-                if (($billing_suburb !== FALSE) && (strlen(trim($billing_suburb)) >= config('ACCOUNT_SUBURB')))
+                if (($billing_suburb !== NULL) && (strlen(trim($billing_suburb)) >= config('ACCOUNT_SUBURB')))
                 {
                     $data['suburb'] = $billing_suburb;
                 }
@@ -278,7 +279,7 @@ class Checkout extends TOC_Controller {
             //postcode
             if (config('ACCOUNT_POST_CODE') > -1) {
                 $billing_postcode = $this->input->post('billing_postcode');
-                if (($billing_postcode !== FALSE) && (strlen(trim($billing_postcode)) >= config('ACCOUNT_POST_CODE')))
+                if (($billing_postcode !== NULL) && (strlen(trim($billing_postcode)) >= config('ACCOUNT_POST_CODE')))
                 {
                     $data['postcode'] = $billing_postcode;
                 }
@@ -290,7 +291,7 @@ class Checkout extends TOC_Controller {
 
             //city
             $billing_city = $this->input->post('billing_city');
-            if (($billing_city !== FALSE) && (strlen(trim($billing_city)) >= config('ACCOUNT_CITY')))
+            if (($billing_city !== NULL) && (strlen(trim($billing_city)) >= config('ACCOUNT_CITY')))
             {
                 $data['city'] = $billing_city;
             }
@@ -301,7 +302,7 @@ class Checkout extends TOC_Controller {
 
             //country
             $billing_country = $this->input->post('billing_country');
-            if (($billing_country !== FALSE) && is_numeric($billing_country) && ($billing_country >= 1))
+            if (($billing_country !== NULL) && is_numeric($billing_country) && ($billing_country >= 1))
             {
                 $data['country_id'] = $billing_country;
             }
@@ -319,7 +320,7 @@ class Checkout extends TOC_Controller {
                 if ($this->address_model->check_zone_id($billing_country)) {
                     $zone_id = $this->address_model->get_zone_id($billing_country, $billing_state);
 
-                    if ($zone_id !== FALSE)
+                    if ($zone_id !== NULL)
                     {
                         $data['zone_id'] = $zone_id;
                     }
@@ -356,7 +357,7 @@ class Checkout extends TOC_Controller {
             if (config('ACCOUNT_TELEPHONE') >= 0)
             {
                 $billing_telephone = $this->input->post('billing_telephone');
-                if (($billing_telephone !== FALSE) && (strlen(trim($billing_telephone)) >= config('ACCOUNT_TELEPHONE')))
+                if (($billing_telephone !== NULL) && (strlen(trim($billing_telephone)) >= config('ACCOUNT_TELEPHONE')))
                 {
                     $data['telephone'] = $billing_telephone;
                 }
@@ -370,7 +371,7 @@ class Checkout extends TOC_Controller {
             if (config('ACCOUNT_FAX') >= 0)
             {
                 $billing_fax = $this->input->post('billing_fax');
-                if (($billing_fax !== FALSE) && (strlen(trim($billing_fax)) >= config('ACCOUNT_FAX')))
+                if (($billing_fax !== NULL) && (strlen(trim($billing_fax)) >= config('ACCOUNT_FAX')))
                 {
                     $data['fax'] = $billing_fax;
                 }
@@ -380,7 +381,7 @@ class Checkout extends TOC_Controller {
                 }
             }
         }
-        
+
         if (sizeof($errors) > 0)
         {
             $response = array('success' => FALSE, 'errors' => $errors);
@@ -399,8 +400,8 @@ class Checkout extends TOC_Controller {
             {
                 $data['email_address'] = $this->customer->get_email_address();
                 $data['password'] = '';
-                
-                if(($data['create_billing_address'] !== FALSE) && ($data['create_billing_address'] == 'on'))
+
+                if(($data['create_billing_address'] !== NULL) && ($data['create_billing_address'] == 'on'))
                 {
                     $this->shopping_cart->set_raw_billing_address($data);
 
@@ -477,7 +478,7 @@ class Checkout extends TOC_Controller {
         $data['shipping_fax'] = isset($shipping_address['fax']) ? $shipping_address['fax'] : null;
 
         $data['create_shipping_address'] = FALSE;
-        if (!$this->customer->is_logged_on()) 
+        if (!$this->customer->is_logged_on())
         {
             $data['create_shipping_address'] = TRUE;
         }
@@ -619,7 +620,7 @@ class Checkout extends TOC_Controller {
                 if ($this->address_model->check_zone_id($shipping_country)) {
                     $zone_id = $this->address_model->get_zone_id($shipping_country, $shipping_state);
 
-                    if ($zone_id !== FALSE) {
+                    if ($zone_id !== NULL) {
                         $data['zone_id'] = $zone_id;
                     } else {
                         $errors[] = lang('field_customer_state_select_pull_down_error');
@@ -660,19 +661,19 @@ class Checkout extends TOC_Controller {
             }
         }
 
-        if (sizeof($errors) > 0) 
+        if (sizeof($errors) > 0)
         {
             $response = array('success' => FALSE, 'errors' => $errors);
-        } 
-        else 
+        }
+        else
         {
-            if ($this->customer->is_logged_on()) 
+            if ($this->customer->is_logged_on())
             {
-                if(isset($data['create_shipping_address']) && ($data['create_shipping_address'] == 'on')) 
+                if(isset($data['create_shipping_address']) && ($data['create_shipping_address'] == 'on'))
                 {
                     $this->shopping_cart->set_raw_shipping_address($data);
-                } 
-                else 
+                }
+                else
                 {
                     $this->shopping_cart->set_shipping_address($this->input->post('sel_shipping_address'));
                 }
@@ -685,6 +686,7 @@ class Checkout extends TOC_Controller {
 
         $this->output->set_output(json_encode($response));
     }
+
     /**
      * load shipping method
      */
@@ -708,16 +710,15 @@ class Checkout extends TOC_Controller {
         $this->load->library('payment');
 
         $data = array(
-    	'selection' => $this->payment->selection(),
-      'has_billing_method' => $this->shopping_cart->has_billing_method(),
-      'selected_billing_method_id' => $this->shopping_cart->get_billing_method('id'),
-      'order_conditions' => $this->session->userdata('order_conditions'),
-    	'payment_comments' => $this->session->userdata('payment_comments')
-        );
+        	'selection' => $this->payment->selection(),
+          	'has_billing_method' => $this->shopping_cart->has_billing_method(),
+          	'selected_billing_method_id' => $this->shopping_cart->get_billing_method('id'),
+          	'order_conditions' => $this->session->userdata('order_conditions'),
+        	'payment_comments' => $this->session->userdata('payment_comments'));
 
         $result = array(
-    	'success' => TRUE, 
-    	'form' => $this->template->_find_view('checkout/payment_information_form.php', $data));
+        	'success' => TRUE, 
+        	'form' => $this->template->_find_view('checkout/payment_information_form.php', $data));
 
         $this->output->set_output(json_encode($result));
     }
@@ -887,9 +888,9 @@ class Checkout extends TOC_Controller {
      */
     public function process() {
         $this->load->model('order_model');
-        
+
         $this->order_model->insert_order();
-        
+
         $this->shopping_cart->reset();
 
         redirect('checkout/success');

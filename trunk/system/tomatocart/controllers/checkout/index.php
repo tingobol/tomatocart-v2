@@ -39,82 +39,55 @@ class Index extends TOC_Controller {
         parent::__construct();
     }
 
-    public function load_form($form)
-    {
-        switch ($form) {
-            case 'login':
-                $this->lang->db_load('account');
-                $this->template->set_layout(FALSE)->build('checkout/login_form');
-                break;
-            case 1:
-                echo "i equals 1";
-                break;
-            case 2:
-                echo "i equals 2";
-                break;
-        }
-    }
 
     /**
-     * Index Page for this controller.
+     * Default Controller
      *
-     * Maps to the following URL
-     * 		http://example.com/index.php/welcome
-     *	- or -
-     * 		http://example.com/index.php/welcome/index
-     *	- or -
-     * Since this controller is set as the default controller in
-     * config/routes.php, it's displayed at http://example.com/
-     *
-     * So any other public methods not prefixed with an underscore will
-     * map to /index.php/welcome/<method_name>
-     * @see http://codeigniter.com/user_guide/general/urls.html
+     * @access public
+     * @return void
      */
     public function index()
     {
-        $data['title'] = 'Shopping Cart';
-        $data['shopping_cart_heading_text'] = 'Shopping Cart';
-        $data['data_added_text'] = 'Date Added:';
-        $data['checkout_text'] = 'Check Out';
-        $data['update_text'] = 'Update';
-        $data['continue_text'] = 'Continue Shopping';
+        //if there is no products in the shopping cart then redirect to shopping cart
+        if (!$this->shopping_cart->has_contents()) {
+            redirect('shopping_cart');
+        } else {
+            //check the products stock in the cart
+            if (config('STOCK_ALLOW_CHECKOUT') == '-1') {
+                $products = $this->shopping_cart->get_products();
 
-
-        $contents = $this->shopping_cart->get_contents();
-
-        $products = array();
-        if (sizeof($contents) > 0)
-        {
-            foreach ($contents as $content)
-            {
-                $products[] = array(
-          'id' => $content['id'],
-          'name' => $content['name'],
-          'type' => '0',
-          'keyword' => null,
-          'sku' =>'',
-          'image' => $content['image'],
-          'price' => '400',
-          'final_price' => '400',
-          'quantity' => '1',
-          'weight' => '10.00',
-          'tax_class_id' => '0',
-          'date_added' => '07/14/2011',
-          'weight_class_id' => '2',
-          'link' => site_url('products/' . $content['id']),
-          'gc_data' => null
-
-                );
+                foreach($products as $product) {
+                    if ($this->shopping_cart->is_in_stock($product['id']) === FALSE) {
+                        redirect('shopping_cart');
+                    }
+                }
             }
         }
-         
-        $data['products'] = $products;
+        
+        var_dump($this->shopping_cart->has_billing_method());
 
-        $data['cart_update_link'] = '';
-        $data['cart_remove_link'] = '';
+        if ($this->shopping_cart->has_billing_method()) {
+            // load selected payment module
+            include('includes/classes/payment.php');
+            $osC_Payment = new osC_Payment($this->shopping_cart->getBillingMethod('id'));
 
+            $payment_error = $osC_Payment->get_error();
+
+            if (is_array($payment_error) && !empty($payment_error)) {
+                $messageStack->add('payment_error_msg', '<strong>' . $payment_error['title'] . '</strong> ' . $payment_error['error']);
+            }
+        }
+
+        //page title
+        $this->set_page_title(lang('checkout'));
+
+        //breadcrumb
+        $this->template->set_breadcrumb(lang('breadcrumb_checkout'), site_url('checkout'));
+
+        //data
         $data['logged_on'] = $this->customer->is_logged_on();
 
+        //load template
         $this->template->build('checkout/checkout', $data);
     }
 }
