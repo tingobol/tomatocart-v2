@@ -36,7 +36,7 @@ class Info extends TOC_Controller {
     public function __construct()
     {
         parent::__construct();
-        
+
         //load model
         $this->load->model('info_model');
     }
@@ -48,7 +48,6 @@ class Info extends TOC_Controller {
      */
     public function index($id = NULL)
     {
-        $id = $this->info_model->parse_articles_id($id);
         if ($id !== NULL)
         {
             //get the article
@@ -58,7 +57,11 @@ class Info extends TOC_Controller {
             if ($information != NULL)
             {
                 //set page title
-                $this->template->set_title($information['articles_name']);
+                $this->set_page_title($information['articles_name']);
+
+                //breadcrumb
+                $this->template->set_breadcrumb($information['articles_categories_name'], site_url('articles_categories/' . $information['articles_categories_id']));
+                $this->template->set_breadcrumb($information['articles_name'], site_url('info/' . $id));
 
                 //add the meta title
                 if (!empty($information['page_title']))

@@ -48,8 +48,6 @@ class Articles_Categories extends TOC_Controller {
      */
     public function index($articles_categories_id = NULL)
     {
-        var_dump($articles_categories_id);
-        $articles_categories_id = $this->info_model->parse_articles_categories_id($articles_categories_id);
         if ($articles_categories_id !== NULL)
         {
             //get the article category
@@ -59,7 +57,10 @@ class Articles_Categories extends TOC_Controller {
             if ($article_category != NULL)
             {
                 //set page title
-                $this->template->set_title($article_category['articles_categories_name']);
+                $this->set_page_title($article_category['articles_categories_name']);
+
+                //breadcrumb
+                $this->template->set_breadcrumb($article_category['articles_categories_name'], site_url('articles_categories/' . $articles_categories_id));
 
                 //add the meta title
                 if (!empty($article_category['articles_categories_page_title']))
@@ -83,7 +84,7 @@ class Articles_Categories extends TOC_Controller {
                 $data['articles_categories_name'] = $article_category['articles_categories_name'];
 
                 //articles
-                $data['articles'] = $this->info_model->get_articles($articles_categories_id);
+                $data['articles'] = $this->info_model->get_articles($article_category['articles_categories_id']);
 
                 //setup view
                 $this->template->build('info/articles_categories', $data);
@@ -91,7 +92,7 @@ class Articles_Categories extends TOC_Controller {
             else
             {
                 //set page title
-                $this->template->set_title(lang('info_not_found_heading'));
+                $this->set_page_title(lang('info_not_found_heading'));
 
                 //setup view
                 $this->template->build('info/info_not_found');
@@ -100,7 +101,7 @@ class Articles_Categories extends TOC_Controller {
         else
         {
             //set page title
-            $this->template->set_title(lang('info_not_found_heading'));
+            $this->set_page_title(lang('info_not_found_heading'));
 
             //setup view
             $this->template->build('info/info_not_found');

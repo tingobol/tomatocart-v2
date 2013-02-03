@@ -27,7 +27,8 @@
  * @link    http://tomatocart.com/wiki/
  */
 
-class Faqs extends TOC_Controller {
+class Faqs extends TOC_Controller
+{
     /**
      * Constructor
      *
@@ -36,8 +37,11 @@ class Faqs extends TOC_Controller {
     public function __construct()
     {
         parent::__construct();
+        
+        //load model
+        $this->load->model('info_model');
     }
-  
+
     /**
      * Default Function
      *
@@ -46,20 +50,20 @@ class Faqs extends TOC_Controller {
     public function index($id = NULL)
     {
         //set page title
-        $this->template->set_title(lang('info_faqs_heading'));
-        
-        //load model
-        $this->load->model('info_model');
-        
+        $this->set_page_title(lang('info_faqs_heading'));
+
+        //breadcrumb
+        $this->template->set_breadcrumb(lang('info_faqs_heading'), site_url('info/faqs'));
+
         //setup view data
-        $data['faqs'] = $this->info_model->get_faqs(lang_id());
-        
+        $data['faqs'] = $this->info_model->get_faqs();
+
         //Which faq should be actived
         if (is_numeric($id))
         {
             $data['active'] = $id;
         }
-        
+
         //setup view
         $this->template->build('info/faqs', $data);
     }

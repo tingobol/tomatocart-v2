@@ -37,7 +37,7 @@ class Sitemap extends TOC_Controller {
     {
         parent::__construct();
     }
-  
+
     /**
      * Default Function
      *
@@ -46,16 +46,19 @@ class Sitemap extends TOC_Controller {
     public function index()
     {
         //set page title
-        $this->template->set_title(lang('info_sitemap_heading'));
-        
+        $this->set_page_title(lang('info_sitemap_heading'));
+
+        //breadcrumb
+        $this->template->set_breadcrumb(lang('breadcrumb_sitemap'), site_url('info/sitemap'));
+
         //load library
         $this->load->library('category_tree');
         $this->category_tree->reset();
         $this->category_tree->set_show_category_product_count(FALSE);
-        
+
         //setup view data
         $data['category_tree'] = $this->category_tree->build_tree();
-        
+
         //setup view
         $this->template->build('info/sitemap', $data);
     }
