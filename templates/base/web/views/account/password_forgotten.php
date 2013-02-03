@@ -18,7 +18,9 @@
 
 <h1><?php echo lang('password_forgotten_heading'); ?></h1>
 
-<form name="password_forgotten" action="<?php echo site_url('password_forgotten/process');?>" method="post">
+<?php echo toc_validation_errors('password_forgotten'); ?>
+
+<form name="password_forgotten" action="<?php echo site_url('account/password_forgotten/process');?>" method="post">
 
     <div class="module-box">
         <h6 class="title"><?php echo lang('password_forgotten_heading'); ?></h6>
