@@ -192,6 +192,7 @@ class Products_Model extends CI_Model
                 ->join('products_variants_groups as pvg', 'pve.products_variants_groups_id = pvg.products_variants_groups_id', 'inner')
                 ->join('products_variants_values as pvv', 'pve.products_variants_values_id = pvv.products_variants_values_id', 'inner')
                 ->where('pvg.language_id = ' . lang_id())
+                ->where('pvv.language_id = ' . lang_id())
                 ->where('pve.products_variants_id = ' . $variant['products_variants_id'])
                 ->order_by('pve.products_variants_groups_id')
                 ->get();

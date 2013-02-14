@@ -62,8 +62,8 @@ class Tax_Model extends CI_Model
             ->where('tr.tax_class_id', (int) $tax_class_id)
             ->group_by('tr.tax_priority')
             ->get();
-
-        $tax_rates = FALSE;
+            
+        $tax_rates = NULL;
         if ($qry->num_rows() > 0)
         {
             $tax_rates = $qry->result_array();
@@ -94,10 +94,15 @@ class Tax_Model extends CI_Model
             ->group_by('tr.tax_priority')
             ->get();
 
-        $descriptions = FALSE;
+        $descriptions = NULL;
         if ($qry->num_rows() > 0)
         {
-            $descriptions = $qry->result_array();
+            $rows = $qry->result_array();
+            
+            foreach ($rows as $row)
+            {
+                $descriptions[] = $row['tax_description'];
+            }
         }
 
         return $descriptions;
