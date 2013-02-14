@@ -70,11 +70,11 @@ class TOC_Tax
         }
 
         //if the tax rate is not set
-        if (isset($this->tax_rates[$class_id][$country_id][$zone_id]['rate']) == FALSE)
+        if (!isset($this->tax_rates[$class_id][$country_id][$zone_id]['rate']))
         {
             $tax_rates = $this->ci->tax_model->get_tax_rate($country_id, $zone_id, $class_id);
 
-            if ($tax_rates !== FALSE)
+            if ($tax_rates !== NULL)
             {
                 $tax_multiplier = 1.0;
                 foreach($tax_rates as $tax_rate)
@@ -104,9 +104,10 @@ class TOC_Tax
      */
     function get_tax_rate_description($class_id, $country_id, $zone_id)
     {
-        if (isset($this->tax_rates[$class_id][$country_id][$zone_id]['description']) == FALSE)
+        if (!isset($this->tax_rates[$class_id][$country_id][$zone_id]['description']))
         {
             $descriptons = $this->ci->tax_model->get_tax_rate_description($country_id, $zone_id, $class_id);
+
             if ($descriptons !== FALSE)
             {
                 $this->tax_rates[$class_id][$country_id][$zone_id]['description'] = implode(' + ', $descriptons);
@@ -137,7 +138,7 @@ class TOC_Tax
      * @param $value
      * @param $padding
      */
-    function display_tax_rate_value($value, $padding = null)
+    function display_tax_rate_value($value, $padding = NULL)
     {
         if (!is_numeric($padding))
         {

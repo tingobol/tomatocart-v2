@@ -463,7 +463,7 @@ class TOC_Shopping_Cart
                                                       'tax_class_id' => $product->get_tax_class_id(),
                                                       'date_added' => get_date_short(get_date_now()),
                                                       'weight_class_id' => $product->get_weight_class());
-
+                
                 //set in stock status
                 $this->contents[$products_id_string]['in_stock'] = $this->is_in_stock($products_id_string);
 
@@ -858,7 +858,7 @@ class TOC_Shopping_Cart
         $zone_id = isset($data['zone_id']) ? $data['zone_id'] : 0;
 
         if (!empty($zone_id)) {
-            $zone = $this->ci->address_book_model->get_zone_data($data['country_id']);
+            $zone = $this->ci->address_book_model->get_zone_data($zone_id);
 
             $state = (!empty($state)) ? $state : $zone['zone_name'];
             $zone_code = $zone['zone_code'];
@@ -1005,7 +1005,7 @@ class TOC_Shopping_Cart
         $zone_id = isset($data['zone_id']) ? $data['zone_id'] : 0;
 
         if (!empty($zone_id)) {
-            $zone = $this->ci->address_book_model->get_zone_data($data['country_id']);
+            $zone = $this->ci->address_book_model->get_zone_data($zone_id);
 
             $state = (!empty($state)) ? $state : $zone['zone_name'];
             $zone_code = $zone['zone_code'];
@@ -1230,6 +1230,7 @@ class TOC_Shopping_Cart
                 }
 
                 $tax = $this->ci->tax->get_tax_rate($data['tax_class_id'], $this->get_taxing_address('country_id'), $this->get_taxing_address('zone_id'));
+                
                 $tax_description = $this->ci->tax->get_tax_rate_description($data['tax_class_id'], $this->get_taxing_address('country_id'), $this->get_taxing_address('zone_id'));
 
                 $shown_price = $this->ci->currencies->add_tax_rate_to_price($data['final_price'], $tax, $data['quantity']);

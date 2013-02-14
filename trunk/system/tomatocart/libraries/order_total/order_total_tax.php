@@ -85,6 +85,8 @@ class TOC_Order_Total_tax extends TOC_Order_Total_Module
     {
         $this->output = array();
 
+        //var_dump($this->ci->shopping_cart->get_tax_groups());exit;
+        
         foreach ($this->ci->shopping_cart->get_tax_groups() as $key => $value)
         {
             if ($value > 0)

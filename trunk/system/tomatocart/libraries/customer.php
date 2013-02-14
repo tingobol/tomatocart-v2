@@ -209,7 +209,8 @@ class TOC_Customer {
      *
      * @return boolean
      */
-    public function has_default_address() {
+    public function has_default_address() 
+    {
         if (isset($this->data['default_address_id']) && is_numeric($this->data['default_address_id'])) {
             return TRUE;
         }
