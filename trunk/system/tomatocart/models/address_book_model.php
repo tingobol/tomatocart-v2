@@ -54,6 +54,16 @@ class Address_Book_Model extends CI_Model
     {
         $result = FALSE;
         
+        //process data
+        $data['entry_gender'] = ((config('ACCOUNT_GENDER') > -1) && isset($data['entry_gender']) && (($data['entry_gender'] == 'm') || ($data['entry_gender'] == 'f'))) ? $data['entry_gender'] : '';
+        $data['entry_company'] = (config('ACCOUNT_COMPANY') > -1) ? $data['entry_company'] : '';
+        $data['entry_suburb'] = (config('ACCOUNT_SUBURB') > -1) ? $data['entry_suburb'] : '';
+        $data['entry_suburb'] = (config('ACCOUNT_POST_CODE') > -1) ? $data['entry_suburb'] : '';
+        $data['entry_state'] = (config('ACCOUNT_STATE') > -1) ? ((isset($data['entry_zone_id']) && ($data['entry_zone_id'] > 0)) ? '' : $data['entry_state']) : '';
+        $data['entry_zone_id'] = (config('ACCOUNT_STATE') > -1) ? ((isset($data['entry_zone_id']) && ($data['entry_zone_id'] > 0)) ? $data['entry_zone_id'] : 0) : '';
+        $data['entry_telephone'] = (config('ACCOUNT_TELEPHONE') > -1) ? $data['entry_telephone'] : '';
+        $data['entry_fax'] = (config('ACCOUNT_FAX') > -1) ? $data['entry_fax'] : '';
+        
         //update or insert the address book
         if (is_numeric($id))
         {
