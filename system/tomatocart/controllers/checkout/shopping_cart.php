@@ -52,6 +52,9 @@ class Shopping_Cart extends TOC_Controller
     {
         //page title
         $this->set_page_title(lang('shopping_cart_heading'));
+        
+        //
+        $this->lang->db_load('products');
 
         //breadcrumb
         $this->template->set_breadcrumb(lang('breadcrumb_checkout_shopping_cart'), site_url('shopping_cart'));

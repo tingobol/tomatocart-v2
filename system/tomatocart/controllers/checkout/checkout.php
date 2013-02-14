@@ -72,7 +72,7 @@ class Checkout extends TOC_Controller {
         $billing_address = $this->shopping_cart->get_billing_address();
 
         $data['billing_email_address'] = isset($billing_address['email_address']) ? $billing_address['email_address'] : null;
-        $data['billing_gender'] = isset($billing_address['gender']) ? $billing_address['gender'] : null;
+        $data['billing_gender'] = isset($billing_address['gender']) ? $billing_address['gender'] : 'm';
         $data['billing_firstname'] = isset($billing_address['firstname']) ? $billing_address['firstname'] : null;
         $data['billing_lastname'] = isset($billing_address['lastname']) ? $billing_address['lastname'] : null;
         $data['billing_company'] = isset($billing_address['company']) ? $billing_address['company'] : null;
@@ -80,6 +80,7 @@ class Checkout extends TOC_Controller {
         $data['billing_suburb'] = isset($billing_address['suburb']) ? $billing_address['suburb'] : null;
         $data['billing_postcode'] = isset($billing_address['postcode']) ? $billing_address['postcode'] : null;
         $data['billing_city'] = isset($billing_address['city']) ? $billing_address['city'] : null;
+        $data['zone_code'] = isset($billing_address['zone_code']) ? $billing_address['zone_code'] : null;
         $data['billing_state'] = isset($billing_address['state']) ? $billing_address['state'] : null;
         $data['billing_country_id'] = isset($billing_address['country_id']) ? $billing_address['country_id'] : config('STORE_COUNTRY');
         $data['billing_telephone'] = isset($billing_address['telephone_number']) ? $billing_address['telephone_number'] : null;
@@ -317,7 +318,8 @@ class Checkout extends TOC_Controller {
                 $this->load->model('address_model');
 
                 $billing_state = $this->input->post('billing_state');
-                if ($this->address_model->check_zone_id($billing_country)) {
+                if ($this->address_model->has_zones($billing_country))
+                {
                     $zone_id = $this->address_model->get_zone_id($billing_country, $billing_state);
 
                     if ($zone_id !== NULL)
@@ -472,6 +474,7 @@ class Checkout extends TOC_Controller {
         $data['shipping_suburb'] = isset($shipping_address['suburb']) ? $shipping_address['suburb'] : null;
         $data['shipping_postcode'] = isset($shipping_address['postcode']) ? $shipping_address['postcode'] : null;
         $data['shipping_city'] = isset($shipping_address['city']) ? $shipping_address['city'] : null;
+        $data['zone_code'] = isset($shipping_address['zone_code']) ? $shipping_address['zone_code'] : null;
         $data['shipping_state'] = isset($shipping_address['state']) ? $shipping_address['state'] : null;
         $data['shipping_country_id'] = isset($shipping_address['country_id']) ? $shipping_address['country_id'] : config('STORE_COUNTRY');
         $data['shipping_telephone'] = isset($shipping_address['telephone_number']) ? $shipping_address['telephone_number'] : null;
@@ -617,7 +620,7 @@ class Checkout extends TOC_Controller {
                 $this->load->model('address_model');
 
                 $shipping_state = $this->input->post('shipping_state');
-                if ($this->address_model->check_zone_id($shipping_country)) {
+                if ($this->address_model->has_zones($shipping_country)) {
                     $zone_id = $this->address_model->get_zone_id($shipping_country, $shipping_state);
 
                     if ($zone_id !== NULL) {
@@ -747,7 +750,7 @@ class Checkout extends TOC_Controller {
             'number_of_tax_groups' => $this->shopping_cart->number_of_tax_groups(),
             'products' => $this->shopping_cart->get_products(),
             'order_totals' => $this->shopping_cart->get_order_totals(),
-            'comments' => $this->session->userdata('comments'),
+            'payment_comments' => $this->session->userdata('payment_comments'),
             'has_action_url' => $this->payment->has_action_url(),
             'form_action_url' => $this->payment->has_action_url() ? $this->payment->get_action_url() : site_url('checkout/checkout/process'),
             'has_active_payment' => $this->payment->has_active(),
@@ -887,9 +890,115 @@ class Checkout extends TOC_Controller {
      * checkout success
      */
     public function process() {
+        //if shopping cart does not has content and redirec to home
+        if (!$this->shopping_cart->has_contents()) 
+        {
+            redirect(site_url());
+        }
+        
+        //create account
+        if (!$this->customer->is_logged_on())
+        {
+            //get billing address
+            $billing_address = $this->shopping_cart->get_billing_address();
+
+            $data['customers_gender'] = $billing_address['gender'];
+            $data['customers_firstname'] = $billing_address['firstname'];
+            $data['customers_lastname'] = $billing_address['lastname'];
+            $data['customers_newsletter'] = 0;
+            $data['customers_dob'] = NULL;
+            $data['customers_email_address'] = $billing_address['email_address'];
+            $data['customers_password'] = encrypt_password($billing_address['password']);
+            $data['customers_status'] = 1;
+
+            //load model
+            $this->load->model('account_model');
+
+            if ($this->account_model->insert($data))
+            {
+                //set data to session
+                $this->customer->set_data($data['customers_email_address']);
+            }
+        }
+        else
+        {
+            //get billing address
+            //$billing_address = $this->shopping_cart->get_billing_address();
+            
+            //if create billing address
+            if (isset($billing_address['create_billing_address']) && ($billing_address['create_billing_address'] == 'on')) 
+            {
+                $data['entry_gender'] = $billing_address['gender'];
+                $data['entry_firstname'] = $billing_address['firstname'];
+                $data['entry_lastname'] = $billing_address['lastname'];
+                $data['entry_company'] = $billing_address['company'];
+                $data['entry_street_address'] = $billing_address['street_address'];
+                $data['entry_suburb'] = $billing_address['suburb'];
+                $data['entry_postcode'] = $billing_address['postcode'];
+                $data['entry_city'] = $billing_address['city'];
+                $data['entry_country_id'] = $billing_address['country_id'];
+                $data['entry_zone_id'] = $billing_address['zone_id'];
+                $data['entry_telephone'] = $billing_address['telephone_number'];
+                $data['entry_fax'] = $billing_address['fax'];
+                $primary = $this->customer->has_default_address() ? FALSE : TRUE;
+                
+                //load model
+                $this->load->model('address_book_model');
+                
+                //save billing address
+                if (!$this->address_book_model->save($data, $this->customer->get_id(), NULL, $primary))
+                {
+                    //log message here
+                }
+            }
+            
+            $shipping_address = $this->shopping_cart->get_shipping_address();
+            
+            //create shipping address
+            if (isset($shipping_address['create_shipping_address']) && ($shipping_address['create_shipping_address'] == '1')) 
+            {
+                $data['entry_gender'] = $shipping_address['gender'];
+                $data['entry_firstname'] = $shipping_address['firstname'];
+                $data['entry_lastname'] = $shipping_address['lastname'];
+                $data['entry_company'] = $shipping_address['company'];
+                $data['entry_street_address'] = $shipping_address['street_address'];
+                $data['entry_suburb'] = $shipping_address['suburb'];
+                $data['entry_postcode'] = $shipping_address['postcode'];
+                $data['entry_city'] = $shipping_address['city'];
+                $data['entry_country_id'] = $shipping_address['country_id'];
+                $data['entry_zone_id'] = $shipping_address['zone_id'];
+                $data['entry_telephone'] = $shipping_address['telephone_number'];
+                $data['entry_fax'] = $shipping_address['fax'];
+                
+                //load model
+                $this->load->model('address_book_model');
+                
+                //save billing address
+                if (!$this->address_book_model->save($data, $this->customer->get_id()))
+                {
+                    //log message here
+                }
+            }
+        }
+
+        /*
+         include('includes/classes/order.php');
+
+         if ($osC_ShoppingCart->hasBillingMethod()) {
+         $osC_Payment->process();
+         } else {
+         $orders_id = osC_Order::insert();
+         osC_Order::process($orders_id, ORDERS_STATUS_PAID);
+         }
+         */
         $this->load->model('order_model');
 
         $this->order_model->insert_order();
+        
+        echo 'a';
+
+        exit;
+
 
         $this->shopping_cart->reset();
 
@@ -899,18 +1008,29 @@ class Checkout extends TOC_Controller {
     /**
      * get country states
      */
-    public function get_country_states() {
+    public function get_country_states() 
+    {
         $this->load->model('address_model');
 
         $countries_id = $this->input->get_post('countries_id');
+        $type = $this->input->get_post('type');
+        $type = ($type === NULL) ? 'billing' : 'shipping';
 
         //states
         $states = $this->address_model->get_states($countries_id);
 
         $options = '';
-        foreach ($states as $state) {
-            $states_array[$state['id']] = $state['text'];
-            $options .= '<option value="' . $state['id'] . '">' . $state['text'] . '</option>';
+        if (($states !== NULL) && sizeof($states) > 0) 
+        {
+            foreach ($states as $state) {
+                $states_array[$state['id']] = $state['text'];
+            }
+
+            $options = form_dropdown($type . 'state', $states_array, NULL, 'id="' . $type . '_state"');
+        }
+        else 
+        {
+            $options = '<input type="text" id="' . $type . '_state" name="' . $type . '_state" />';
         }
 
         $result = array('success' => TRUE, 'options' => $options);
