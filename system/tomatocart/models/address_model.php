@@ -94,13 +94,13 @@ class Address_Model extends CI_Model
     }
 
     /**
-     * Check zone id
+     * Check whether a country has zones
      *
      * @access public
      * @param int
      * @return boolean
      */
-    public function check_zone_id($countries_id)
+    public function has_zones($countries_id)
     {
         $result = $this->db->select('zone_id')->from('zones')->where('zone_country_id', (int) $countries_id)->get();
 
@@ -108,7 +108,7 @@ class Address_Model extends CI_Model
     }
 
     /**
-     * Get zone id
+     * Get zone id from countries_id & state code
      *
      * @access public
      * @param int
@@ -121,13 +121,17 @@ class Address_Model extends CI_Model
 
         $result = $this->db->select('zone_id')->from('zones')->where('zone_country_id', (int) $countries_id)->where('zone_code', $state)->get();
 
-        if ($result->num_rows() > 0){
+        if ($result->num_rows() > 0)
+        {
             $row = $result->row_array();
             $zone_id = $row['zone_id'];
-        } else {
+        } 
+        else 
+        {
             $result = $this->db->select('zone_id')->from('zones')->where('zone_country_id', (int) $countries_id)->where('zone_code', $state, 'after')->get();
 
-            if ($result->num_rows() > 0){
+            if ($result->num_rows() > 0)
+            {
                 $row = $result->row_array();
                 $zone_id = $row['zone_id'];
             }
