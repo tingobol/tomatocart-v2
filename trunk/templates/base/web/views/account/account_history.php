@@ -21,25 +21,22 @@
 <?php
     if (isset($orders) && is_array($orders) && (count($orders) > 0) ) :
         foreach ($orders as $order):
-            if (!empty($order['delivery_name'])) :
-                $order_type = lang('order_shipped_to');
-                $order_name = $order['delivery_name'];
-            else :
-                $order_type = lang('order_billed_to');
-                $order_name = $order['billing_name'];
-            endif;
 ?>
 <h6><span class="pull-right"><?php echo lang('order_status') . ' ' . $order['orders_status_name']; ?></span><?php echo lang('order_number') . ' ' . $order['orders_id']; ?></h6>
 
-<div class="module-box row-fluid">
-	<div class="span4">
-		<?php echo '<b>' . lang('order_date') . '</b> ' . $order['date_purchased'] . '<br /><b>' . $order_type . '</b> ' . $order_name; ?>
-	</div>
-	<div class="span4">
-		<?php echo '<b>' . lang('order_products') . '</b> ' . $order['number_of_products'] . '<br /><b>' . lang('order_cost') . '</b> ' . strip_tags($order['order_total']); ?>
-	</div>
-	<div class="span4">
-		<a class="btn btn-small btn-mini btn-info pull-right" href="<?php echo site_url('account/orders/view/' . $order['orders_id']); ?>" class="button"><i class="icon-list-alt icon-white"></i> <?php echo lang('button_view'); ?></a>
+<div class="module-box">
+	<div class="content row-fluid">
+    	<div class="span6">
+    		<p><b><?php echo lang('order_date'); ?> </b><?php echo $order['date_purchased']; ?></p>
+    		<p><b><?php echo $order['order_type']; ?> </b><?php echo $order['order_name']; ?></p>
+    	</div>
+    	<div class="span4">
+    		<p><b><?php echo lang('order_products'); ?> </b><?php echo $order['number_of_products']; ?></p>
+    		<p><b><?php echo lang('order_cost'); ?> </b><?php echo strip_tags($order['order_total']); ?></p>
+    	</div>
+    	<div class="span2">
+    		<a class="btn btn-mini btn-info pull-right" href="<?php echo site_url('account/orders/view/' . $order['orders_id']); ?>" class="button"><i class="icon-list-alt icon-white"></i> <?php echo lang('button_view'); ?></a>
+    	</div>
 	</div>
 </div>
 <?php
