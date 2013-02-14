@@ -110,9 +110,7 @@
             <?php 
                 if (isset($info['tax_groups']) && sizeof($info['tax_groups']) > 1) :
             ?>
-            
-            <td valign="top" align="right"><?php echo osC_Tax::displayTaxRateValue($product['tax']); ?></td>
-            
+            <td valign="top" align="right"><?php echo display_tax_rate_value($product['tax']); ?></td>
             <?php 
                 endif;
             ?>
@@ -129,16 +127,16 @@
     <p>&nbsp;</p>
 
     <table width="100%" cellspacing="0" cellpadding="2">
-    <?php
-        foreach ($totals as $total) :
-    ?>
+        <?php
+            foreach ($totals as $total) :
+        ?>
     	<tr>
         	<td align="right"><?php echo $total['title']; ?></td>
          	<td align="right" width="100"><?php echo $total['text']; ?></td>
 		</tr>
-    <?php
-        endforeach;
-    ?>
+        <?php
+            endforeach;
+        ?>
     </table>
 </div>
 
@@ -161,18 +159,17 @@
 
 <div class="module-box">
 	<table width="100%" cellspacing="0" cellpadding="2">
-
-<?php
-    foreach($status_history as $status):
-?>
+        <?php
+            foreach($status_history as $status):
+        ?>
 		<tr>
 			<td valign="top" width="70"><?php echo get_date_short($status['date_added']); ?></td>
 			<td valign="top" width="70"><?php echo $status['orders_status_name']; ?></td>
 			<td valign="top" width="70"><?php echo (!empty($status['comments']) ? nl2br($status['comments']) : '&nbsp;'); ?></td>
 		</tr>
-<?php
-    endforeach;
-?>
+        <?php
+            endforeach;
+        ?>
     </table>
 </div>
 

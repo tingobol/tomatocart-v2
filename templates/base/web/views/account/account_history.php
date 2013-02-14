@@ -27,7 +27,7 @@
 <div class="module-box">
 	<div class="content row-fluid">
     	<div class="span6">
-    		<p><b><?php echo lang('order_date'); ?> </b><?php echo $order['date_purchased']; ?></p>
+    		<p><b><?php echo lang('order_date'); ?> </b><?php echo get_date_long($order['date_purchased']); ?></p>
     		<p><b><?php echo $order['order_type']; ?> </b><?php echo $order['order_name']; ?></p>
     	</div>
     	<div class="span4">
