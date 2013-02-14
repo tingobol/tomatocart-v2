@@ -120,22 +120,22 @@
             </div>
         </div>
         <?php
-            if ((config('ACCOUNT_STATE') > -1) && isset($states) && !empty($states)) :
+            if (config('ACCOUNT_STATE') > -1) :
         ?>
         <div class="control-group">
             <label class="control-label" for="state"><?php echo lang('field_customer_state') . (config('ACCOUNT_STATE') > 0 ? '<em>*</em>' : '') ;?></label>
-            <div class="controls">
-                <select id="state" name="state">
-                
-                    <?php
-                        foreach($states as $state) :
-                    ?>
-                    <option value="<?php echo $state['id']; ?>" <?php echo set_select('state', $state['id'], isset($state_code) && ($state_code == $state['id'])); ?>><?php echo $state['text']; ?></option>
-                    <?php
-                        endforeach;
-                    ?>
-                
-                </select>
+            <div id="li-state" class="controls">
+                <?php 
+                    if (count($states) > 0) :
+                ?>
+                    <?php echo form_dropdown('state', $states, $zone_code, 'id="state"'); ?>
+                <?php 
+                    else :
+                ?>
+        			<input type="text" id="state" name="state" value="<?php echo $state; ?>" />
+                <?php   
+                    endif;
+                ?>
             </div>
         </div>
         <?php
@@ -196,15 +196,13 @@
             $.ajax({
               type: 'post',
               cache: 'false',
-              url: '<?php echo site_url('account/address_book/get_states') ?>',
-              data: {country_id: $('#country').val()},
+              url: '<?php echo site_url('account/address_book/get_country_states') ?>',
+              data: {countries_id: $('#country').val()},
               dataType: 'json',
-              success: function(states) {
-                 $('#state').empty();
-                 
-                 $.each(states, function(index, state) {
-                    $('#state').append('<option value="' + state.id + '">' + state.text + '</option>');
-                 });
+              success: function(response) {
+                  if (response.success == true) {
+                      $('#li-state').html(response.options);
+                  }
               }
             });
         });
