@@ -28,6 +28,8 @@
             </div>
         </div>
         
+        <?php
+        /* comment out by lei 
         <div class="control-group">
             <div class="controls">
             	<label class="radio inline" for="checkout_method_guest">
@@ -35,6 +37,8 @@
             	</label>
             </div>
         </div>
+        */
+        ?>
     
         <p><?php echo lang('login_new_customer_text');?></p>
     

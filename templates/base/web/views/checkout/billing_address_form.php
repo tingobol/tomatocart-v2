@@ -23,7 +23,7 @@
     <div class="control-group">
         <label class="control-label" for="billing_email_address"><?php echo lang('field_customer_email_address'); ?><em>*</em></label>
         <div class="controls">
-        	<input type="text" id="billing_email_address" name="billing_email_address" value="<?php echo set_value('billing_email_address'); ?>" />
+        	<input type="text" id="billing_email_address" name="billing_email_address" value="<?php echo $billing_email_address; ?>" />
         </div>
     </div>
     <?php 
@@ -36,14 +36,14 @@
     <div class="control-group">
         <label class="control-label" for="billing_password"><?php echo lang('field_customer_password'); ?><em>*</em></label>
         <div class="controls">
-        	<input type="text" id="billing_password" name="billing_password" value="<?php echo set_value('billing_password'); ?>" />
+        	<input type="password" id="billing_password" name="billing_password" />
         </div>
     </div>
     
     <div class="control-group">
         <label class="control-label" for="confirmation"><?php echo lang('field_customer_password_confirmation'); ?><em>*</em></label>
         <div class="controls">
-        	<input type="text" id="confirmation" name="confirmation" value="<?php echo set_value('confirmation'); ?>" />
+        	<input type="password" id="confirmation" name="confirmation" />
         </div>
     </div>
     <?php 
@@ -166,15 +166,15 @@
         	<label class="control-label" for="billing_state"><?php echo lang('field_customer_state') . ((config('ACCOUNT_STATE') > 0) ? '<em>*</em>' : ''); ?></label>
             <div class="controls">
             <?php 
-              if (count($states) > 0) :
+                if (count($states) > 0) :
             ?>
-                <?php echo form_dropdown('billing_state', $states, $billing_state, 'id="billing_state"'); ?>
+                <?php echo form_dropdown('billing_state', $states, $zone_code, 'id="billing_state"'); ?>
             <?php 
-              else :
+                else :
             ?>
     			<input type="text" id="billing_state" name="billing_state" value="<?php echo $billing_state; ?>" />
             <?php   
-              endif;
+                endif;
             ?>
             </div>
         </div>

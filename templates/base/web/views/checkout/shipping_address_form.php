@@ -134,7 +134,7 @@
             <?php 
               if (count($states) > 0) :
             ?>
-                <?php echo form_dropdown('shipping_state', $states, $shipping_state, 'id="shipping_state"'); ?>
+                <?php echo form_dropdown('shipping_state', $states, $zone_code, 'id="shipping_state"'); ?>
             <?php 
               else :
             ?>
