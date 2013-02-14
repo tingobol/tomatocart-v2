@@ -64,8 +64,6 @@ class Index extends TOC_Controller {
             }
         }
         
-        var_dump($this->shopping_cart->has_billing_method());
-
         if ($this->shopping_cart->has_billing_method()) {
             // load selected payment module
             include('includes/classes/payment.php');
