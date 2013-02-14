@@ -68,6 +68,19 @@ class Orders extends TOC_Controller
         {
             for($i = 0; $i < count($orders); $i++)
             {
+                if (!empty($orders[$i]['delivery_name'])) 
+                {
+                    $orders[$i]['order_type'] = lang('order_shipped_to');
+                    $orders[$i]['order_name'] = $orders[$i]['delivery_name'];                
+                }
+                else 
+                {
+                    $orders[$i]['order_type'] = lang('order_billed_to');
+                    $orders[$i]['order_name'] = $orders[$i]['billing_name'];
+                }
+            
+                $orders[$i]['number_of_products'] = $this->order_model->number_of_products($orders[$i]['orders_id']);
+                
                 $orders[$i]['number_of_products'] = $this->order_model->number_of_products($orders[$i]['orders_id']);
             }
 
