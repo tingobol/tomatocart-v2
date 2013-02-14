@@ -219,17 +219,32 @@ class Address_Book extends TOC_Controller
         //validate state
         if (config('ACCOUNT_STATE') >= 0)
         {
+            $this->load->model('address_model');
+
             $state = $this->input->post('state');
-
-            $zone_id = $this->address_model->get_zone_id($country, $state);
-
-            if ($zone_id !== NULL)
+            if ($this->address_model->has_zones($country))
             {
-                $data['entry_zone_id'] = $zone_id;
+                $zone_id = $this->address_model->get_zone_id($country, $state);
+
+                if ($zone_id !== NULL)
+                {
+                    $data['entry_zone_id'] = $zone_id;
+                }
+                else
+                {
+                    $this->message_stack->add('address_book', lang('field_customer_state_select_pull_down_error'));
+                }
             }
             else
             {
-                $this->message_stack->add('address_book', lang('field_customer_state_select_pull_down_error'));
+                if (strlen(trim($state)) >= config('ACCOUNT_STATE'))
+                {
+                    $data['entry_state'] = $state;
+                }
+                else
+                {
+                    $this->message_stack->add('address_book', sprintf(lang('field_customer_state_error'), config('ACCOUNT_STATE')));
+                }
             }
         }
 
@@ -383,8 +398,21 @@ class Address_Book extends TOC_Controller
                 //setup view data
                 $data = $this->address_book_model->get_address($this->customer->get_id(), $address_book_id);
                 $data['countries'] = $this->address_model->get_countries();
-                $data['states'] = $this->address_model->get_states($data['country_id']);
                 $data['display_primary'] = ($this->customer->get_default_address_id() != $data['address_book_id']) ? TRUE : FALSE;
+
+                //get states
+                $states = $this->address_model->get_states($data['country_id']);
+
+                $data['states'] = NULL;
+                if (($states !== NULL) && sizeof($states) > 0) 
+                {
+                    foreach ($states as $state) 
+                    {
+                        $states_array[$state['id']] = $state['text'];
+                    }
+    
+                    $data['states'] = $states_array;
+                }
 
                 //setup view
                 $this->template->build('account/address_book_form', $data);
@@ -427,13 +455,48 @@ class Address_Book extends TOC_Controller
      * Handle the ajax request to get the states for the currenty selected country
      *
      * @access public
-     * @return json
+     * @return string
      */
     public function get_states()
     {
         $states = $this->address_model->get_states($this->input->post('country_id'));
 
         echo json_encode($states);
+    }
+
+
+    /**
+     * get country states
+     *
+     * @access public
+     * @return string
+     */
+    public function get_country_states()
+    {
+        $this->load->model('address_model');
+
+        $countries_id = $this->input->get_post('countries_id');
+
+        //states
+        $states = $this->address_model->get_states($countries_id);
+
+        $options = '';
+        if (($states !== NULL) && sizeof($states) > 0)
+        {
+            foreach ($states as $state) {
+                $states_array[$state['id']] = $state['text'];
+            }
+
+            $options = form_dropdown('state', $states_array, NULL, 'id="state"');
+        }
+        else
+        {
+            $options = '<input type="text" id="state" name="state" />';
+        }
+
+        $result = array('success' => TRUE, 'options' => $options);
+
+        $this->output->set_output(json_encode($result));
     }
 }
 
