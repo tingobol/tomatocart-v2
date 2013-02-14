@@ -31,6 +31,7 @@ ul, li {
     list-style: none outside none;
 }
 a {
+    color: #333333;
   -webkit-transition: all 0.2s ease-in-out 0s;
      -moz-transition: all 0.2s ease-in-out 0s;
        -o-transition: all 0.2s ease-in-out 0s;
@@ -171,21 +172,29 @@ s {
     margin: 15px 0 15px 0;
 }
 .box h4 {
+    color: #666666;
+    font-size: 13px;
+    text-shadow: 0 1px 0 #FFFFFF;
     background-color: #FBFBFB;
-    background-image: -moz-linear-gradient(center top , #FFFFFF, #F5F5F5);
     background-repeat: repeat-x;
-    border: 1px solid #DDDDDD;
+    border: 1px solid #CDCDCD;
     border-radius: 3px 3px 0px 0px;
     box-shadow: 0 1px 0 #FFFFFF inset;
     margin: 0 0 0px;
     padding: 7px 14px;
+    background-image: -moz-linear-gradient(top, #FDFDFD, #EAEAEA);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#FDFDFD), to(#EAEAEA));
+    background-image: -webkit-linear-gradient(top, #FDFDFD, #EAEAEA);
+    background-image: -o-linear-gradient(top, #FDFDFD, #EAEAEA);
+    background-image: linear-gradient(to bottom, #FDFDFD, #EAEAEA);
+    filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ffFDFDFD', endColorstr='#ffEAEAEA', GradientType=0);
 }
 .box .contents {
     padding: 8px 15px; 
 	border-top: 1px solid #FFFFFF;
-    border-left: 1px solid #DDDDDD;
-    border-right: 1px solid #DDDDDD;
-    border-bottom: 1px solid #DDDDDD;
+    border-left: 1px solid #CDCDCD;
+    border-right: 1px solid #CDCDCD;
+    border-bottom: 1px solid #CDCDCD;
 }
 .box a {
     color: #333333;
@@ -305,7 +314,7 @@ s {
 }
 .box .content {
     background-color: #F3F3F3;
-    border-color: #DDDDDD #DDDDDD #8B8A8A;
+    border-color: #CDCDCD #CDCDCD #8B8A8A;
     border-style: solid;
     border-width: 1px;
     margin-bottom: 5px;
@@ -374,7 +383,7 @@ s {
      background-image: -o-linear-gradient(top, #FFFFFF, #F5F5F5);
      background-image: linear-gradient(to bottom, #FFFFFF, #F5F5F5);
      background-repeat: repeat-x;
-     border: 1px solid #DDDDDD;
+     border: 1px solid #CDCDCD;
      border-radius: 3px 3px 3px 3px;
      box-shadow: 0 1px 0 #FFFFFF inset;
      margin: 0 0 0px;
@@ -437,8 +446,8 @@ s {
 ul.grid { 
 	list-style: none; 
 	margin: 0 auto;
-    border-top: 1px solid #DDDDDD; 
-    border-left: 1px solid #DDDDDD; 
+    border-top: 1px solid #CDCDCD; 
+    border-left: 1px solid #CDCDCD; 
 }
 ul.grid li { 
     position: relative; 
@@ -446,8 +455,8 @@ ul.grid li {
     float: left; 
     width: 33.333333%; 
     height: 290px; 
-    border-right: 1px solid #DDDDDD; 
-    border-bottom: 1px solid #DDDDDD; 
+    border-right: 1px solid #CDCDCD; 
+    border-bottom: 1px solid #CDCDCD; 
     padding: 20px; 
     box-sizing: border-box; 
     -moz-box-sizing: border-box; 
@@ -469,7 +478,7 @@ ul.grid li div.left h3 {
 ul.grid li div.left p.description { 
     height: 40px; 
     overflow: hidden; 
-    color: #999999;
+    color: #707070;
 }
 ul.grid li div.right span.price { 
     display: block; 
@@ -505,15 +514,15 @@ ul.list {
     list-style: none; 
     width: 100%; 
     margin-left: 0;
-    border-top: 1px solid #DDDDDD; 
-    border-left: 1px solid #DDDDDD; 
-    border-right: 1px solid #DDDDDD; 
+    border-top: 1px solid #CDCDCD; 
+    border-left: 1px solid #CDCDCD; 
+    border-right: 1px solid #CDCDCD; 
 }
 ul.list li { 
     position: relative; 
     display: block; 
     padding: 20px 15px; 
-    border-bottom: 1px solid #DDDDDD; 
+    border-bottom: 1px solid #CDCDCD; 
 }
  
 ul.list li div.left { display: block; float: left; width: 500px; position: relative; padding-left: 20px; }
@@ -533,7 +542,7 @@ ul.list li div.left h3 {
 ul.list li div.left p.description { 
     height: 40px; 
     overflow: hidden; 
-    color: #999999;
+    color: #707070;
 }
 
 ul.list li div.left img.thumb { float: left; margin-right: 10px; }
@@ -541,7 +550,7 @@ ul.list li div.left img.thumb { float: left; margin-right: 10px; }
 ul.list li div.left p.description { 
     height: 60px; 
     overflow: hidden; 
-    color: #999999;
+    color: #707070;
 }
 
 ul.list li div.right span.price { 
@@ -598,7 +607,7 @@ ul.list li div.right span.price {
     font-size: 24px;
     font-weight: bold;
 }
-#product-info .price-info .tax {color: #999999;}
+#product-info .price-info .tax {color: #707070;}
 #product-info  .variantCombobox select{width: 140px;}
 #product-info input {width: 30px;}
 #product-info p.short-description {
@@ -661,18 +670,176 @@ ul.list li div.right span.price {
     padding: 0;
 }
 /*******************************************
- *         Product Info Page
+ *         Checkout Form
 *******************************************/
-#checkoutForm {
-    border-bottom: 1px solid #8B8A8A;
-    margin: 0 0 15px;
+
+#checkoutForm .accordion-group {
+    border: 1px solid #CDCDCD;
 }
-#checkoutForm li {
+#checkoutForm .accordion-heading {
+    background-color: #FBFBFB;
+    background-repeat: repeat-x;
+    border-bottom: 1px solid #CDCDCD;
+    border-radius: 3px 3px 0px 0px;
+    margin: 0 0 0px;
+    background-image: -moz-linear-gradient(top, #FDFDFD, #EAEAEA);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#FDFDFD), to(#EAEAEA));
+    background-image: -webkit-linear-gradient(top, #FDFDFD, #EAEAEA);
+    background-image: -o-linear-gradient(top, #FDFDFD, #EAEAEA);
+    background-image: linear-gradient(to bottom, #FDFDFD, #EAEAEA);
+    filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ffFDFDFD', endColorstr='#ffEAEAEA', GradientType=0);
+}
+#checkoutForm .accordion-heading a {
+    color: #666666;
+    font-size: 13px;
+    text-shadow: 0 1px 0 #FFFFFF;
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-block;
+}
+#checkoutForm .accordion-heading a.modify {
+    float: right;
+    color: #0088CC;
+    text-decoration: none;
+    display: inline-block;
+    padding: 8px 15px;
+}
+#checkoutForm .accordion-inner {
+    padding: 10px;
+}
+
+#checkoutForm table {
+    margin: 8px 0;
+}
+
+#checkoutForm table input {
+    margin: 0;
+}
+
+.loadmask {
+    z-index: 100;
+    position: absolute;
+    top:0;
+    left:0;
+    -moz-opacity: 0.5;
+    opacity: .50;
+    filter: alpha(opacity=50);
+    background-color: #CCC;
+    width: 100%;
+    height: 100%;
+    zoom: 1;
+}
+.loadmask-msg {
+    z-index: 20001;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border:1px solid #6593cf;
+    background: #c3daf9;
+    padding:2px;
+}
+.loadmask-msg div {
+    padding:5px 10px 5px 25px;
+    background: url("../images/loading.gif") no-repeat scroll 5px 5px #FBFBFB;
+    line-height: 16px;
+    border:1px solid #a3bad9;
+    color:#222;
+    font:normal 11px tahoma, arial, helvetica, sans-serif;
+    cursor:wait;
+}
+.masked {
+    overflow: hidden !important;
+}
+.masked-relative {
+    position: relative !important;
+}
+.masked-hidden {
+    visibility: hidden !important;
+}
+
+.accordion-inner {
+    border-top: none;
     padding: 0;
 }
-#checkoutForm li.collapse {
-    background: none repeat scroll 0 0 #BCBCBC;
+
+#checkoutForm .module-box {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: none;
+    border-radius: none;
+    box-shadow: none;
+    margin-bottom: 0;
+    padding: 10px;
 }
+
+
+#checkoutForm .control-group {
+    margin-bottom: 5px;
+}
+.accordion-body {
+    padding: 10px 20px 20px 20px;
+    background: none repeat scroll 0 0 #ffffff;
+}
+
+.collapse {
+    padding: 0;
+}
+
+.loadmask {
+    z-index: 100;
+    position: absolute;
+    top:0;
+    left:0;
+    -moz-opacity: 0.5;
+    opacity: .50;
+    filter: alpha(opacity=50);
+    background-color: #CCC;
+    width: 100%;
+    height: 100%;
+    zoom: 1;
+}
+.loadmask-msg {
+    z-index: 20001;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border:1px solid #6593cf;
+    background: #c3daf9;
+    padding:2px;
+}
+.loadmask-msg div {
+    padding:5px 10px 5px 25px;
+    background: url("../images/loading.gif") no-repeat scroll 5px 5px #FBFBFB;
+    line-height: 16px;
+    border:1px solid #a3bad9;
+    color:#222;
+    font:normal 11px tahoma, arial, helvetica, sans-serif;
+    cursor:wait;
+}
+
+.masked {
+    overflow: hidden !important;
+}
+.masked-relative {
+    position: relative !important;
+}
+.masked-hidden {
+    visibility: hidden !important;
+}
+
+.accordion-inner {
+    border-top: none;
+    padding: 0;
+}
+
+#checkoutForm .module-box {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: none;
+    border-radius: none;
+    box-shadow: none;
+    margin-bottom: 0;
+    padding: 10px;
+}
+
 .formHeader {
     background-color: #333333;
     border-left: 1px solid #8B8A8A;
@@ -710,8 +877,8 @@ ul.list li div.right span.price {
 }
 #checkoutForm .formBody {
     background-color: #F3F3F3;
-    border-left: 1px solid #DDDDDD;
-    border-right: 1px solid #DDDDDD;
+    border-left: 1px solid #CDCDCD;
+    border-right: 1px solid #CDCDCD;
     padding: 10px;
 }
 #checkoutForm .moduleBox h6 {
@@ -759,18 +926,6 @@ ul.list li div.right span.price {
 #sel_billing_address, #sel_shipping_address {
     width: 500px;
 }
-
-.accordion-heading {
-    background-color: #FBFBFB;
-    background-image: -moz-linear-gradient(center top , #FFFFFF, #F5F5F5);
-    background-repeat: repeat-x;
-    border-bottom: 1px solid #E5E5E5;
-    border-radius: 3px 3px 0 0;
-    box-shadow: 0 1px 0 #FFFFFF inset;
-    margin: 0;
-    padding: 7px 14px;
-}
-
 
 
 
@@ -840,83 +995,7 @@ left: 100%;
 #guestbooks dt{margin-bottom: 4px}
 #guestbooks dd {margin-bottom: 10px}
 
-#checkoutForm .accordion-heading a {
-    font-weight: bold;
-    color: #000;
-    text-decoration: none;
-}
 
-#checkoutForm .accordion-heading a.modify {
-    float: right;
-    color: #0088CC;
-    text-decoration: underline;
-}
-#checkoutForm .control-group {
-    margin-bottom: 5px;
-}
-.accordion-body {
-    padding: 10px 20px 20px 20px;
-    background: none repeat scroll 0 0 #ffffff;
-}
-
-.collapse {
-	padding: 0;
-}
-
-.loadmask {
-    z-index: 100;
-    position: absolute;
-    top:0;
-    left:0;
-    -moz-opacity: 0.5;
-    opacity: .50;
-    filter: alpha(opacity=50);
-    background-color: #CCC;
-    width: 100%;
-    height: 100%;
-    zoom: 1;
-}
-.loadmask-msg {
-    z-index: 20001;
-    position: absolute;
-    top: 0;
-    left: 0;
-    border:1px solid #6593cf;
-    background: #c3daf9;
-    padding:2px;
-}
-.loadmask-msg div {
-    padding:5px 10px 5px 25px;
-    background: #fbfbfb url('../images/loading.gif') 5px 5px;
-    line-height: 16px;
-    border:1px solid #a3bad9;
-    color:#222;
-    font:normal 11px tahoma, arial, helvetica, sans-serif;
-    cursor:wait;
-}
-.masked {
-    overflow: hidden !important;
-}
-.masked-relative {
-    position: relative !important;
-}
-.masked-hidden {
-    visibility: hidden !important;
-}
-
-.accordion-inner {
-    border-top: none;
-    padding: 0;
-}
-
-#checkoutForm .module-box {
-    background: none repeat scroll 0 0 #FFFFFF;
-    border: none;
-    border-radius: none;
-    box-shadow: none;
-    margin-bottom: 0;
-    padding: 10px;
-}
 
 .markProductOutOfStock {
     color: red;
