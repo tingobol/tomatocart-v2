@@ -28,6 +28,7 @@
 jQuery.Toc.Checkout = function(config) {
     config = config || {};
     
+    //all the checkout steps
     config.steps = {
         checkoutMethodForm : 1,
         billingInformationForm : 2,
@@ -36,6 +37,9 @@ jQuery.Toc.Checkout = function(config) {
         paymentInformationForm : 5,
         orderConfirmationForm : 6
     };
+    
+    //current step
+    config.currentStep = 0;
     
     config.checkoutMethodBody = $("#checkoutMethodForm .collapse");
     config.billingInformationBody = $("#billingInformationForm .collapse");
@@ -98,13 +102,6 @@ jQuery.Toc.override(jQuery.Toc.Checkout, {
     },
     
     /**
-     * Update step 
-     */    
-    updateStep: function() {
-        $this.currentStep = scope.steps['checkoutMethodForm'];
-    },
-    
-    /**
      * Load Checkout Method Form
      */
     loadCheckoutMethodForm : function() {
@@ -116,25 +113,42 @@ jQuery.Toc.override(jQuery.Toc.Checkout, {
                 //Set checkout method form content
                 $('#checkoutMethodForm .accordion-body .accordion-inner').html(response.form);
                 
+                
                 //show checkout method form
                 $this.checkoutMethodBody.collapse('show');
+                
+                //update the current step
+                $this.currentStep = $this.steps.checkoutMethodForm;
             }
         });
     },
-
+    
     /**
      * Initialize Checkout Forms.
      */
     iniCheckoutForms : function() {
         var $this = this;
 
-        // process btn new customer
-        $('#checkoutForm .accordion-heading a.modify').live('click', function() {
-            var $this = $(this);
-            var form = $this.parent().parent().attr('id');
-    
+        // process the modify button
+        $('#checkoutForm .accordion-heading a.modify').live('click', function(e) {
+            e.preventDefault();
+            
+            var $me = $(this);
+            var form = $me.parent().parent().attr('id');
+            
+            console.log($this.currentStep);
+            console.log($this.steps[form]);
+            
+            //if the current step is large than the clicked page
             if ($this.currentStep > $this.steps[form]) {
-                alert('1');
+                //hide the active panel
+                $me.parent().parent().parent().find('> .accordion-group > .in').collapse('hide');
+
+                //active the current pagel
+                $me.parent().next().collapse('show');
+                
+                //set the current step
+                $this.currentStep = $this.steps[form];
             }
         });
         
@@ -376,21 +390,6 @@ jQuery.Toc.override(jQuery.Toc.Checkout, {
     });
     },
 
-    loadPaymentInformationForm : function() {
-        var $this = this;
-        
-        this.sendRequest({
-            url : base_url + 'checkout/checkout/load_payment_information_form',
-            success : function(response) {
-                $('#paymentInformationForm .accordion-body').html(response.form);
-                
-                $this.shippingMethodBody.collapse('hide');
-
-                $this.paymentInformationBody.collapse('show');
-            }
-        });
-    },
-
     /**
      * Load Billing Information Form
      */
@@ -403,13 +402,16 @@ jQuery.Toc.override(jQuery.Toc.Checkout, {
             success : function(response) {
                 if (response.success == true) {
                     //set billing information content 
-                    $('#billingInformationForm .accordion-body').html(response.form);
+                    $('#billingInformationForm .accordion-inner').html(response.form);
                     
                     // close checkout method form
                     $this.checkoutMethodBody.collapse('hide');
                     
                     // open billing information form
                     $this.billingInformationBody.collapse('show');
+                    
+                    //update the current step
+                    $this.currentStep = $this.steps.billingInformationForm;
                 }
             },
             beforeSend : function() {
@@ -460,13 +462,16 @@ jQuery.Toc.override(jQuery.Toc.Checkout, {
             url : base_url + 'checkout/checkout/load_shipping_form',
             success : function(response) {
                 // open billing information form
-                $('#shippingInformationForm .accordion-body').html(response.form);
+                $('#shippingInformationForm .accordion-inner').html(response.form);
                 
                 // open billing information form
                 $this.billingInformationBody.collapse('hide');
                 
                 // open billing information form
                 $this.shippingInformationBody.collapse('show');
+                
+                //update the current step
+                $this.currentStep = $this.steps.shippingInformationForm;
             },
             beforeSend : function() {
                 $("#billingInformationForm .accordion-body").mask('Loading...');
@@ -510,7 +515,7 @@ jQuery.Toc.override(jQuery.Toc.Checkout, {
             success : function(response) {
                 if (response.success == true) {
                     //set content
-                    $('#shippingMethodForm .accordion-body').html(response.form);
+                    $('#shippingMethodForm .accordion-inner').html(response.form);
                     
                     if ($('#ship_to_this_address').attr('checked') == 'checked') {
                         // open billing information form
@@ -522,6 +527,9 @@ jQuery.Toc.override(jQuery.Toc.Checkout, {
                     
                     // open billing information form
                     $this.shippingMethodBody.collapse('show');
+
+                    //update the current step
+                    $this.currentStep = $this.steps.shippingMethodForm;
                 } else {
                     alert(response.errors.join("\n"));
                 }
@@ -535,6 +543,24 @@ jQuery.Toc.override(jQuery.Toc.Checkout, {
         });
     },
 
+    loadPaymentInformationForm : function() {
+        var $this = this;
+        
+        this.sendRequest({
+            url : base_url + 'checkout/checkout/load_payment_information_form',
+            success : function(response) {
+                $('#paymentInformationForm .accordion-inner').html(response.form);
+                
+                $this.shippingMethodBody.collapse('hide');
+
+                $this.paymentInformationBody.collapse('show');
+
+                //update the current step
+                $this.currentStep = $this.steps.paymentInformationForm;
+            }
+        });
+    },
+
     loadOrderConfirmationForm: function() {
         var $this = this;
         
@@ -542,13 +568,16 @@ jQuery.Toc.override(jQuery.Toc.Checkout, {
             url : base_url + 'checkout/checkout/load_order_confirmation_form',
             success : function(response) {
                 if (response.success == true) {
-                    $('#orderConfirmationForm .accordion-body').html(response.form);
+                    $('#orderConfirmationForm .accordion-inner').html(response.form);
 
                     // close checkout method form
                     $this.paymentInformationBody.collapse('hide');
                     
                     // open billing information form
                     $this.orderConfirmationBody.collapse('show');
+
+                    //update the current step
+                    $this.currentStep = $this.steps.orderConfirmationForm;
                 } else {
                     alert(response.errors.join("\n"));
                 }

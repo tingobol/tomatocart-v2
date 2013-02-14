@@ -54,7 +54,7 @@
                             	<b><?php echo $quote['module']; ?></b>&nbsp;
                             	<?php 
                             	    if (isset($quote['icon']) && !empty($quote['icon'])) :
-                                        echo '<image src="' . $quote['icon'] . '" />'; 
+                                        //echo '<image src="' . $quote['icon'] . '" />'; 
                                     endif; 
                                 ?>
                             </td>

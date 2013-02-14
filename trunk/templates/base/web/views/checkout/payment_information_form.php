@@ -32,20 +32,20 @@
   endif;
 ?>
 
-<div class="module-box form-horizontal">
+<div class="module-box clearfix">
 	<div class="content">
     <?php
         if (sizeof($selection) > 0) :
     ?>
         <div style="float: right; padding: 0px 0px 10px 20px; text-align: center;">
-          <?php echo '<b>' . lang('please_select'); ?>
+          <b><?php echo lang('please_select'); ?></b>
         </div>
 
-    	<p style="margin-top: 0px;"><?php echo lang('choose_payment_method'); ?></p>
+    	<p><?php echo lang('choose_payment_method'); ?></p>
     <?php
         else :
     ?>
-    	<p style="margin-top: 0px;"><?php echo lang('only_one_payment_method_available'); ?></p>
+    	<p><?php echo lang('only_one_payment_method_available'); ?></p>
     <?php
         endif;
     ?>
@@ -130,18 +130,17 @@
         ?>
     	</table>
 	</div>
-</div>
-
-<div class="module-box clearfix">
-    <h6><?php echo lang('add_comment_to_order_title'); ?></h6>
-    
-    <div class="content">
-        <?php echo form_textarea(array('id' => 'payment_comments', 'name' => 'payment_comments', 'value' => $payment_comments, 'style' => 'width: 98%;')); ?>
+    <div class="control-group">
+        <h6><?php echo lang('add_comment_to_order_title'); ?></h6>
+        
+        <div class="controls">
+            <?php echo form_textarea(array('id' => 'payment_comments', 'name' => 'payment_comments', 'value' => $payment_comments, 'rows' => '3', 'style' => 'width: 98%')); ?>
+        </div>
     </div>
-</div>
-
-<div class="control-group">
-    <div class="controls">
-  		<button type="submit" class="btn btn-small btn-info pull-right" id="btn-save-payment-form"><i class="icon-chevron-right icon-white"></i> <?php echo lang('button_continue'); ?></button>
+    
+    <div class="control-group">
+        <div class="controls">
+      		<button type="submit" class="btn btn-small btn-info pull-right" id="btn-save-payment-form"><i class="icon-chevron-right icon-white"></i> <?php echo lang('button_continue'); ?></button>
+        </div>
     </div>
 </div>

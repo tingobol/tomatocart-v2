@@ -29,12 +29,14 @@
           
           			<p><b><?php echo lang('order_shipping_method_title'); ?></b></p>
 
-                <?php
+                    <?php
                         if ($has_shipping_method) :
-                ?>
+                    ?>
 					<p><?php echo $shipping_method; ?></p>
-                <?php
+                    <?php
                         endif;
+                    ?>
+                <?php 
                     endif;
                 ?>
 				</td>
@@ -86,9 +88,15 @@
                             ?>
                             	</td>
                             <?php     
-                                if ($number_of_tax_groups > 1) {
-                                  //echo '                <td valign="top" align="right">' . osC_Tax::displayTaxRateValue(get_tax_rate($product['tax_class_id'], $osC_ShoppingCart->getTaxingAddress('country_id'), $osC_ShoppingCart->getTaxingAddress('zone_id'))) . '</td>' . "\n";
-                                }
+                                if ($number_of_tax_groups > 1) :
+                            ?>
+								<td valign="top" align="right">
+									<?php 
+									    $shopping_cart = get_shopping_cart();
+									    echo display_tax_rate_value(get_tax_rate($product['tax_class_id'], $shopping_cart->get_taxing_address('country_id'), $shopping_cart->get_taxing_address('zone_id')));
+									?>
+                            <?php 
+                                endif;
                             ?>
                             	<td align="right" valign="top"><?php echo currencies_display_price($product['final_price'], $product['tax_class_id'], $product['quantity']); ?></td>
                             </tr>
@@ -117,84 +125,76 @@
 </div>
 
 <?php
-    if ($comments !== FALSE) :
+    if ($payment_comments !== FALSE) :
 ?>
 
 <div class="moduleBox">
-    <h6><?php echo '<b>' . lang('order_comments_title') . '</b> '; ?></h6>
+    <h6><?php echo lang('order_comments_title'); ?></h6>
     
     <div class="content">
-        <?php //echo nl2br($comments) . osc_draw_hidden_field('comments', $comments); ?>
+        <?php echo nl2br($payment_comments) . form_hidden(array('name' => 'payment_comments', 'value' => $payment_comments)); ?>
     </div>
 </div>
 <?php
     endif;
 ?>
 
-<div class="submitFormButtons">
-
-<?php
-  echo '<form name="checkout_confirmation" action="' . $form_action_url . '" method="post">';
-
-  if ($has_active_payment) {
-    if ($confirmation) {
-?>
-
-    <div class="moduleBox">
-      <h6><?php echo lang('order_payment_information_title'); ?></h6>
+<div class="submitFormButtons clearfix">
+	<form name="checkout_confirmation" action="<?php echo $form_action_url; ?>" method="post">
+	
+        <?php
+            if ($has_active_payment) :
+                if ($confirmation) :
+        ?>
+        <div class="moduleBox">
+    		<h6><?php echo lang('order_payment_information_title'); ?></h6>
+        
+    		<div class="content">
+    			<p><?php echo $confirmation['title']; ?></p>
+        
+                <?php
+                    if (isset($confirmation['fields'])) :
+                ?>
+            	<table cellspacing="3" cellpadding="2">
+                    <?php
+                        for ($i=0, $n=sizeof($confirmation['fields']); $i<$n; $i++) :
+                    ?>
+                    <tr>
+                        <td width="10">&nbsp;</td>
+                        <td><?php echo $confirmation['fields'][$i]['title']; ?></td>
+                        <td width="10">&nbsp;</td>
+                        <td><?php echo $confirmation['fields'][$i]['field']; ?></td>
+                    </tr>
+                    <?php
+                        endfor;
+                    ?>
+    			</table>
+                <?php
+                    endif;
+                ?>
+                
+                <?php 
+                    if (isset($confirmation['text'])) :
+                ?>
+                <p><?php echo $confirmation['text']; ?></p>
+                <?php
+                    endif;
+                ?>
+            </div>
+    	</div>
     
-      <div class="content">
-        <p><?php echo $confirmation['title']; ?></p>
-    
-    <?php
-          if (isset($confirmation['fields'])) {
-    ?>
-    
-        <table cellspacing="3" cellpadding="2">
-    
-    <?php
-            for ($i=0, $n=sizeof($confirmation['fields']); $i<$n; $i++) {
-    ?>
-    
-          <tr>
-            <td width="10">&nbsp;</td>
-            <td><?php echo $confirmation['fields'][$i]['title']; ?></td>
-            <td width="10">&nbsp;</td>
-            <td><?php echo $confirmation['fields'][$i]['field']; ?></td>
-          </tr>
-    
-    <?php
-            }
-    ?>
-    
-        </table>
-    
-    <?php
-          }
-    
-          if (isset($confirmation['text'])) {
-    ?>
-    
-        <p><?php echo $confirmation['text']; ?></p>
-    
-    <?php
-          }
-    ?>
-    
-      </div>
-    </div>
-
-<?php
-    }
-  }
-  
-    if ($has_active_payment) :
-        echo $process_button;
-    endif;
-  
-?>
-	<div style="text-align:right;">
-		<button type="submit" class="btn btn-small btn-small" id="btn-confirm-order"><?php echo lang('button_continue'); ?></button>
-	</div>
-</form>
+        <?php
+                endif;
+            endif;
+          
+            if ($has_active_payment) :
+                echo $process_button;
+            endif;
+        ?>
+        <div class="control-group">
+            <div class="controls">
+          		<button type="submit" class="btn btn-small btn-info pull-right" id="btn-confirm-order"><i class="icon-chevron-right icon-white"></i> <?php echo lang('button_continue'); ?></button>
+            </div>
+        </div>
+	</form>
 </div>
