@@ -262,16 +262,16 @@ if( ! function_exists('create_random_string'))
  */
 if( ! function_exists('load_product_library'))
 {
-    function load_product_library($products_id) 
+    function load_product_library($products_id)
     {
         $id = get_product_id($products_id); //get products id part and omit the variants part
-        
+
         //get ci instance
         $CI =& get_instance();
-        
+
         //load library
         $CI->load->library('product', $products_id, 'product_' . $products_id);
-        
+
         //return the object
         return $CI->{'product_' . $products_id};
     }
@@ -285,11 +285,11 @@ if( ! function_exists('load_product_library'))
  */
 if( ! function_exists('is_logged_on'))
 {
-    function is_logged_on() 
+    function is_logged_on()
     {
         //get ci instance
         $CI =& get_instance();
-        
+
         return $CI->customer->is_logged_on();
     }
 }
@@ -303,11 +303,11 @@ if( ! function_exists('is_logged_on'))
  */
 if( ! function_exists('is_logged_on'))
 {
-    function is_logged_on() 
+    function is_logged_on()
     {
         //get ci instance
         $CI =& get_instance();
-        
+
         return $CI->customer->is_logged_on();
     }
 }
@@ -321,15 +321,15 @@ if( ! function_exists('is_logged_on'))
  */
 if( ! function_exists('cart_item_count'))
 {
-    function cart_item_count() 
+    function cart_item_count()
     {
         //get ci instance
         $CI =& get_instance();
-        
+
         return $CI->shopping_cart->number_of_items();
     }
 }
-        
+
 
 /**
  * Short function to get login status of customer
@@ -339,13 +339,31 @@ if( ! function_exists('cart_item_count'))
  */
 if( ! function_exists('is_logged_on'))
 {
-    function is_logged_on() 
+    function is_logged_on()
     {
         //get ci instance
         $CI =& get_instance();
-        
+
         return $CI->customer->is_logged_on();
     }
 }
+
+/**
+ * Return shopping cart object
+ *
+ * @access public
+ * @return object
+ */
+if( ! function_exists('get_shopping_cart'))
+{
+    function get_shopping_cart()
+    {
+        //get ci instance
+        $CI =& get_instance();
+
+        return $CI->shopping_cart;
+    }
+}
+
 /* End of file general_helper.php */
 /* Location: ./system/tomatocart/helpers/general_helper.php */
