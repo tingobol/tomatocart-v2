@@ -1689,6 +1689,16 @@ Note: If you did not request this action via our password forgotten page, please
       <group>general</group>
     </definition>
     <definition>
+      <key>table_heading_product</key>
+      <value><![CDATA[Product]]></value>
+      <group>checkout</group>
+    </definition>
+    <definition>
+      <key>table_heading_total</key>
+      <value><![CDATA[Total]]></value>
+      <group>checkout</group>
+    </definition>
+    <definition>
       <key>breadcrumb_checkout</key>
       <value><![CDATA[Checkout]]></value>
       <group>checkout</group>
