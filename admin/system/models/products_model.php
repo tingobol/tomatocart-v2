@@ -512,6 +512,7 @@ class Products_Model extends CI_Model
         {
             if (is_numeric($id))
             {
+                echo 'delete';
                 $this->db->delete('products_accessories', array('products_id' => $products_id));
             }
             
@@ -676,9 +677,15 @@ class Products_Model extends CI_Model
                                                    'products_weight' => $data['variants_weight'][$key], 
                                                    'products_status' => $data['variants_status'][$key], 
                                                    'filename' => '', 
-                                                   'cache_filename' => '');
+                                                   'cache_filename' => '',
+                                                   'products_images_id' => '');
                     
-                    $products_images_id = is_numeric($data['variants_image'][$key]) ? $data['variants_image'][$key] : $images[$data['variants_image'][$key]];
+                    $products_images_id = '';
+                    if (is_numeric($data['variants_image'][$key])) {
+                        $products_images_id = $data['variants_image'][$key];
+                    } else if (isset($images[$data['variants_image'][$key]])) {
+                        $products_images_id = $images[$data['variants_image'][$key]];
+                    }
                     $product_variants_data['products_images_id'] = $products_images_id;
                     
                     if ($variants_id > 0)

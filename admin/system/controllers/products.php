@@ -345,9 +345,11 @@ class Products extends TOC_Controller
         $products = $this->products_model->get_accessories($products_id);
         
         $records = array();
-        if ($products != NULL)
+        if ($products !== NULL)
         {
-            $records = $products;
+            foreach ($products as $product) {
+                $records[] = array('accessories_id' => $product['products_id'], 'products_name' => $product['products_name']);
+            }
         }
         
         $this->output->set_output(json_encode(array(EXT_JSON_READER_TOTAL => sizeof($records), 
