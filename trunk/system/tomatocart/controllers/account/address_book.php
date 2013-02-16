@@ -61,10 +61,7 @@ class Address_Book extends TOC_Controller
         //the customer has no default address
         if ($this->customer->has_default_address() === FALSE)
         {
-            //set page title
-            $this->set_page_title(lang('address_book_heading'));
-
-            $this->template->build('account/address_book_form');
+            $this->add();
         }
         else
         {
@@ -356,9 +353,21 @@ class Address_Book extends TOC_Controller
         }
         else
         {
+            //get states
+            $states = $this->address_model->get_states(config('STORE_COUNTRY'));
+
+            $states_array = NULL;
+            if (($states !== NULL) && sizeof($states) > 0)
+            {
+                foreach ($states as $state)
+                {
+                    $states_array[$state['id']] = $state['text'];
+                }
+            }
+
             //setup view data
             $data = array('countries' => $this->address_model->get_countries(),
-                          'states' => $this->address_model->get_states(config('STORE_COUNTRY')),
+                          'states' => $states_array,
                           'gender' => $this->customer->get_gender(),
                           'firstname' => $this->customer->get_firstname(),
                           'lastname' => $this->customer->get_lastname(),
@@ -404,13 +413,13 @@ class Address_Book extends TOC_Controller
                 $states = $this->address_model->get_states($data['country_id']);
 
                 $data['states'] = NULL;
-                if (($states !== NULL) && sizeof($states) > 0) 
+                if (($states !== NULL) && sizeof($states) > 0)
                 {
-                    foreach ($states as $state) 
+                    foreach ($states as $state)
                     {
                         $states_array[$state['id']] = $state['text'];
                     }
-    
+
                     $data['states'] = $states_array;
                 }
 
