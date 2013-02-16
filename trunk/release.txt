@@ -1,3 +1,16 @@
+2013/2/16 TomatoCart v2.0 alpha4
+
+  Features included in this release:
+  1. Upgrade CodeIgniter v2.1 to v3 dev
+  2. Fix bugs in store frontend and administration panel
+  3. Web based Installation tool for TomatoCart Installation
+  4. Create Sample Data For Demo Store
+  5. Use Twitter Bootstrap css Framework for TomatoCart Store frontend and severl template module
+     -- Drop Down Categories Nagivation Menu
+     -- Products Grid & List View
+     -- One Page Checkout
+  
+
 2012/08/27 TomatoCart v2.0 alpha2
   TomatoCart v2.0 is in development, please do not use it in production enviroment. This release is an evaluation version 
   for community developers and users who are participating in the development and are providing feedback.
