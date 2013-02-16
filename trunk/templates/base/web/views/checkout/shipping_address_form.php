@@ -176,17 +176,11 @@
     </div>
     
     <li style="height:10px;line-height:10px">&nbsp;</li>
-<?php 
-    if ($create_shipping_address) :
-?>
     <div class="control-group">
         <div class="controls">
     		<label class="control-label checkbox" for="create_shipping_address"><?php echo form_checkbox('create_shipping_address', 'on', $create_shipping_address, 'id="create_shipping_address"'); ?> <?php echo lang('create_new_shipping_address'); ?></label>
         </div>
     </div>
-<?php 
-    endif; 
-?>
     <div class="control-group">
         <div class="controls">
       		<button type="submit" class="btn btn-small btn-info pull-right" id="btn-save-shipping-form"><i class="icon-chevron-right icon-white"></i> <?php echo lang('button_continue'); ?></button>

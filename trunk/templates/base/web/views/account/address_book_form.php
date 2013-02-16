@@ -128,7 +128,7 @@
                 <?php 
                     if (count($states) > 0) :
                 ?>
-                    <?php echo form_dropdown('state', $states, $zone_code, 'id="state"'); ?>
+                    <?php echo form_dropdown('state', $states, isset($zone_code) ? $zone_code : NULL, 'id="state"'); ?>
                 <?php 
                     else :
                 ?>

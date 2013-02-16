@@ -209,17 +209,11 @@
     ?>
     </div>
     
-<?php 
-    if ($create_billing_address) :
-?>
     <div class="control-group">
         <div class="controls">
     		<label class="control-label checkbox" for="create_billing_address"><?php echo form_checkbox('create_billing_address', 'on', $create_billing_address, 'id="create_billing_address"'); ?> <?php echo lang('create_new_billing_address'); ?></label>
         </div>
     </div>
-<?php 
-    endif;
-?>
     
 <?php 
     if ($is_virtual_cart === FALSE) :
