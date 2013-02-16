@@ -108,7 +108,7 @@ class TOC_Tax
         {
             $descriptons = $this->ci->tax_model->get_tax_rate_description($country_id, $zone_id, $class_id);
 
-            if ($descriptons !== FALSE)
+            if ($descriptons !== NULL)
             {
                 $this->tax_rates[$class_id][$country_id][$zone_id]['description'] = implode(' + ', $descriptons);
             }

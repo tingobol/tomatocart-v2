@@ -145,7 +145,6 @@ class Order_Model extends CI_Model
                 'products_quantity' => $product['quantity']);
 
             $this->db->insert('orders_products', $data);
-            echo $this->db->last_query();
 
             //variants
             $order_products_id = $this->db->insert_id();
@@ -178,10 +177,7 @@ class Order_Model extends CI_Model
                             'products_variants_values_id' => $variants['variants_values_id'],
                             'products_variants_values' => $row['products_variants_values_name']);
                         
-                        print_r($data);
-
                         $this->db->insert('orders_products_variants', $data);
-                        echo $this->db->last_query();
                     }
                 }
             }

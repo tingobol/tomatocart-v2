@@ -981,25 +981,10 @@ class Checkout extends TOC_Controller {
             }
         }
 
-        /*
-         include('includes/classes/order.php');
-
-         if ($osC_ShoppingCart->hasBillingMethod()) {
-         $osC_Payment->process();
-         } else {
-         $orders_id = osC_Order::insert();
-         osC_Order::process($orders_id, ORDERS_STATUS_PAID);
-         }
-         */
         $this->load->model('order_model');
 
         $this->order_model->insert_order();
         
-        echo 'a';
-
-        exit;
-
-
         $this->shopping_cart->reset();
 
         redirect('checkout/success');
