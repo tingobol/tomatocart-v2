@@ -189,7 +189,7 @@ jQuery.Toc.override(jQuery.Toc.Checkout, {
             var $this = $(this);
             
             if ($('#sel_billing_address').length > 0) {
-                if ($this.attr('checked') == true) {
+                if ($this.attr('checked') == 'checked') {
                     $('#billingAddressDetails').show();
                 } else {
                     $('#billingAddressDetails').hide();
@@ -234,7 +234,7 @@ jQuery.Toc.override(jQuery.Toc.Checkout, {
             var $this = $(this);
             
             if ($('#sel_shipping_address').length > 0) {
-                if ($this.attr('checked') == true) {
+                if ($this.attr('checked') == 'checked') {
                     $('#shippingAddressDetails').show();
                 } else {
                     $('#shippingAddressDetails').hide();
@@ -404,8 +404,11 @@ jQuery.Toc.override(jQuery.Toc.Checkout, {
                     //set billing information content 
                     $('#billingInformationForm .accordion-inner').html(response.form);
                     
-                    // close checkout method form
-                    $this.checkoutMethodBody.collapse('hide');
+                    //if the customer is logged on, load checkout method form
+                    if ($this.logged_on == false) {
+                        // close checkout method form
+                        $this.checkoutMethodBody.collapse('hide');
+                    }
                     
                     // open billing information form
                     $this.billingInformationBody.collapse('show');
