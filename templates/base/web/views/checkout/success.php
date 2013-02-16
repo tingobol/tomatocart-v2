@@ -34,6 +34,6 @@
     </div>
     
     <div class="submitFormButtons" style="text-align: right;">
-    	<button type="submit" class="small button"><?php echo lang('button_continue'); ?></button>
+    	<button type="submit" class="btn btn-info btn-small"><i class="icon-chevron-right icon-white"></i><?php echo lang('button_continue'); ?></button>
     </div>
 </form>
