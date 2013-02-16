@@ -74,6 +74,7 @@ $route['product/(:any)'] = "products/info/index/$1";
 $route['cpath/(:any)'] = "index/cpath/index/$1";
 
 $route['info/faqs'] = "info/faqs/index";
+$route['info/faqs/(:any)'] = "info/faqs/index/$1";
 $route['info/guestbooks'] = "info/guestbooks/index";
 $route['info/guestbooks/add'] = "info/guestbooks/add";
 $route['info/guestbooks/save'] = "info/guestbooks/save";
@@ -84,7 +85,7 @@ $route['articles/(:any)'] = "info/articles/index/$1";
 
 $route['index/(:any)'] = "index/index/index/$1";
 $route['cart_add/(:num)'] = "checkout/cart_add/index/$1";
-$route['cart_delete/(:num)'] = "checkout/cart_delete/index/$1";
+$route['cart_delete/(:any)'] = "checkout/cart_delete/index/$1";
 $route['cart_update'] = "checkout/cart_update/index";
 $route['shopping_cart'] = "checkout/shopping_cart/index";
 
