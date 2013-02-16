@@ -1652,7 +1652,6 @@
       <value><![CDATA[可下载的产品下载目录没有存放在：%s。如果该目录不创建，可下载产品将无法工作。]]></value>
       <group>general</group>
     </definition>
-    
     <definition>
       <key>table_heading_product</key>
       <value><![CDATA[产品]]></value>
@@ -1663,8 +1662,6 @@
       <value><![CDATA[小计]]></value>
       <group>checkout</group>
     </definition>
-    <definition>
-    
     <definition>
       <key>breadcrumb_checkout</key>
       <value><![CDATA[结算中心]]></value>
