@@ -73,7 +73,7 @@ class Setting extends TOC_Controller
 
         //parse http, get http server & http path
         $http_url = parse_url($www);
-        $http_server = rtrim($http_url['scheme'] . '://' . $http_url['host'] . $http_url['path'], '/');
+        $http_server = $http_url['scheme'] . '://' . $http_url['host'];
         $http_path = $http_url['path'];
         if (isset($http_url['port']) && !empty($http_url['port'])) {
             $http_server .= ':' . $http_url['port'];
@@ -87,12 +87,13 @@ class Setting extends TOC_Controller
         //write store frontend config file
         $this->write_config_file($http_server, $http_path, $http_url);
 
+
         //write store admin config file
         $this->write_admin_config_file($http_server, $http_path, $http_url);
 
         //write database configuration file
         $this->write_database_file('../local/config/database.php', $db_config);
-        
+
         //import sample data
         if ($sample == 'on') {
             //import sample sql data
@@ -153,7 +154,7 @@ class Setting extends TOC_Controller
         foreach ($lines as $line) {
             //config -- base url
             if (strpos($line, '$config[\'base_url\']') === 0) {
-                $output[] = '$config[\'base_url\']	= \'' . $http_server . '/\';';
+                $output[] = '$config[\'base_url\']	= \'' . $http_server . $http_path . '\';';
             }
             //config -- cookie domain
             else if (strpos($line, '$config[\'cookie_domain\']') === 0) {
@@ -189,7 +190,7 @@ class Setting extends TOC_Controller
         foreach ($lines as $line) {
             //config -- base url
             if (strpos($line, '$config[\'base_url\']') === 0) {
-                $output[] = '$config[\'base_url\']	= \'' . $http_server . '/admin/\';';
+                $output[] = '$config[\'base_url\']	= \'' . $http_server . $http_path . 'admin/\';';
             }
             //config -- cookie domain
             else if (strpos($line, '$config[\'cookie_domain\']') === 0) {
