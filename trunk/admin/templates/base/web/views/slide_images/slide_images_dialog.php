@@ -128,10 +128,7 @@ Ext.define('Toc.slideImages.SlideImagesDialog', {
       queryMode: 'local',
       displayField: 'text',
       valueField: 'id',
-      editable: false,
-      forceSelection: true,
-      allowBlank: false
-      
+      editable: false
     });
     
     var pnlData = Ext.create('Ext.Panel', {
