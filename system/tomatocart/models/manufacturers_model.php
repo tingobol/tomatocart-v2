@@ -46,13 +46,26 @@ class Manufacturers_Model extends CI_Model
      * @access public
      * @return array
      */
-    public function get_manufacturers()
+    public function get_manufacturers($categories_id = null)
     {
-        $result = $this->db
-            ->select('manufacturers_id, manufacturers_name, manufacturers_image')
-            ->from('manufacturers')
-            ->order_by('manufacturers_name')
-            ->get();
+        if (isset($categories_id) && !empty($categories_id)) {
+            $result = $this->db
+                ->select('m.manufacturers_id id, m.manufacturers_name name, m.manufacturers_image image')
+                ->from('products p')
+                ->join('products_to_categories p2c', 'p.products_id = p2c.products_id', 'inner')
+                ->join('manufacturers m', 'p.manufacturers_id = m.manufacturers_id', 'inner')
+                ->where('p.products_status', 1)
+                ->where_in('p2c.categories_id', $categories_id)
+                ->order_by('manufacturers_name')
+                ->distinct()
+                ->get();
+        } else {
+            $result = $this->db
+                ->select('manufacturers_id, manufacturers_name, manufacturers_image')
+                ->from('manufacturers')
+                ->order_by('manufacturers_name')
+                ->get();
+        }
         
         if ($result->num_rows() > 0) 
         {
