@@ -1384,7 +1384,6 @@ DROP TABLE IF EXISTS `toc_templates_modules`;
 CREATE TABLE IF NOT EXISTS `toc_templates_modules` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `templates_id` int(11) NOT NULL,
-  `medium` varchar(45) NOT NULL,
   `module` varchar(45) NOT NULL,
   `status` tinyint(4) NOT NULL,
   `content_page` varchar(255) NOT NULL,
@@ -6658,26 +6657,19 @@ INSERT INTO `toc_templates` VALUES
 
 
 INSERT INTO `toc_templates_modules` VALUES
-(1, 1, 'mobile', 'slideshows', 1, 'index/index', 'before', 0, 0, '{"MODULE_SLIDESHOW_IMAGE_GROUPS":"pad_home_slide","MODULE_SLIDESHOW_SLIDE_WIDTH":"480","MODULE_SLIDESHOW_SLIDE_HEIGHT":"210","MODULE_SLIDESHOW_PLAY_INTERVAL":"3000","MODULE_SLIDESHOW_PAUSE_INTERVAL":"2000","MODULE_SLIDESHOW_HOVER_PAUSE":"true"}'),
-(2, 1, 'mobile', 'categories', 1, '*', 'after', 0, 0, '{"MODULE_CATEGORIES_SHOW_PRODUCT_COUNT":"1"}'),
-(3, 1, 'pad', 'categories', 1, '*', 'left', 0, 0, '{"MODULE_CATEGORIES_SHOW_PRODUCT_COUNT":"1"}'),
-(4, 1, 'pad', 'information', 1, '*', 'left', 30, 0, 'false'),
-(5, 1, 'pad', 'new_products', 1, 'index/index', 'after', 0, 0, '{"MODULE_CONTENT_NEW_PRODUCTS_MAX_DISPLAY":"9","MODULE_NEW_PRODUCTS_CACHE":"60"}'),
-(6, 1, 'pad', 'special_products', 1, 'index/index', 'after', 1, 0, '{"MODULE_SPECIAL_MAX_DISPLAY":"9","MODULE_SPECIAL_CACHE":"60"}'),
-(7, 1, 'pad', 'slideshows', 1, 'index/index', 'slideshow', 0, 0, '{"MODULE_SLIDESHOW_IMAGE_GROUPS":"pad_home_slide","MODULE_SLIDESHOW_SLIDE_WIDTH":"1024","MODULE_SLIDESHOW_SLIDE_HEIGHT":"224","MODULE_SLIDESHOW_PLAY_INTERVAL":"3000","MODULE_SLIDESHOW_PAUSE_INTERVAL":"2000","MODULE_SLIDESHOW_HOVER_PAUSE":"true"}'),
-(8, 1, 'web', 'categories', 1, '*', 'left', 1, 0, '{"MODULE_CATEGORIES_SHOW_PRODUCT_COUNT":"1"}'),
-(9, 1, 'web', 'manufacturers', 1, '*', 'left', 2, 0, '{"BOX_MANUFACTURERS_LIST_TYPE":"Image List","BOX_MANUFACTURERS_LIST_SIZE":"4"}'),
-(10, 1, 'web', 'article_categories', 1, '*', 'left', 3, 0, '{"MODULE_ARTICLES_CATEGORIES_MAX_LIST":"4"}'),
-(11, 1, 'web', 'popular_search_terms', 1, '*', 'left', 4, 0, '{"MODULE_POPULAR_SEARCH_TERM_CACHE":"60"}'),
-(12, 1, 'web', 'shop_by_price', 1, '*', 'left', 5, 0, '{"MODULE_SHOP_BY_PRICE_USD":"50;100;200;500;1000","MODULE_SHOP_BY_PRICE_EUR":"50;100;200;500;1000","MODULE_SHOP_BY_PRICE_GBP":"50;100;200;500;1000"}'),
-(13, 1, 'web', 'slideshows', 1, 'index/index', 'slideshow', 0, 0, '{"MODULE_SLIDESHOW_IMAGE_GROUPS":"home_slide","MODULE_SLIDESHOW_SLIDE_WIDTH":"960","MODULE_SLIDESHOW_SLIDE_HEIGHT":"210","MODULE_SLIDESHOW_PLAY_INTERVAL":"3000","MODULE_SLIDESHOW_DISPLAY_CAROUSEL_CONTROL":"true","MODULE_SLIDESHOW_DISPLAY_SLIDE_INFO":"true"}'),
-(14, 1, 'web', 'new_products', 1, '*', 'after', 0, 0, '{"MODULE_CONTENT_NEW_PRODUCTS_MAX_DISPLAY":"9","MODULE_NEW_PRODUCTS_CACHE":"60"}'),
-(15, 1, 'web', 'feature_products', 1, '*', 'after', 0, 0, '{"MODULE_FEATURE_PRODUCTS_MAX_DISPLAY":"9"}'),
-(16, 1, 'web', 'special_products', 1, '*', 'after', 0, 0, '{"MODULE_SPECIAL_MAX_DISPLAY":"9","MODULE_SPECIAL_CACHE":"60"}'),
-(17, 1, 'web', 'information', 1, '*', 'footer-col-1', 0, 0, 'null'),
-(18, 1, 'web', 'article_categories', 1, '*', 'footer-col-2', 0, 0, '{"MODULE_ARTICLES_CATEGORIES_MAX_LIST":"10"}'),
-(19, 1, 'web', 'follow_us', 1, '*', 'footer-col-3', 0, 0, '{"MODULE_FOLLOW_US_FACEBOOK_LINK":"https://www.facebook.com/tomatocart","MODULE_FOLLOW_US_TWITTER_LINK":"https://twitter.com/tomatocart","MODULE_FOLLOW_US_GOOGLE_PLUS_LINK":"https://plus.google.com/109588253708268031594"}'),
-(21, 1, 'web', 'contact_us', 1, '*', 'footer-col-4', 0, 0, 'null');
+(1, 1, 'categories', 1, '*', 'left', 1, 0, '{"MODULE_CATEGORIES_SHOW_PRODUCT_COUNT":"1"}'),
+(2, 1, 'manufacturers', 1, '*', 'left', 2, 0, '{"BOX_MANUFACTURERS_LIST_TYPE":"Image List","BOX_MANUFACTURERS_LIST_SIZE":"4"}'),
+(3, 1, 'article_categories', 1, '*', 'left', 3, 0, '{"MODULE_ARTICLES_CATEGORIES_MAX_LIST":"4"}'),
+(4, 1, 'popular_search_terms', 1, '*', 'left', 4, 0, '{"MODULE_POPULAR_SEARCH_TERM_CACHE":"60"}'),
+(5, 1, 'shop_by_price', 1, '*', 'left', 5, 0, '{"MODULE_SHOP_BY_PRICE_USD":"50;100;200;500;1000","MODULE_SHOP_BY_PRICE_EUR":"50;100;200;500;1000","MODULE_SHOP_BY_PRICE_GBP":"50;100;200;500;1000"}'),
+(6, 1, 'slideshows', 1, 'index/index', 'slideshow', 0, 0, '{"MODULE_SLIDESHOW_IMAGE_GROUPS":"home_slide","MODULE_SLIDESHOW_PLAY_INTERVAL":"3000","MODULE_SLIDESHOW_DISPLAY_CAROUSEL_CONTROL":"true","MODULE_SLIDESHOW_DISPLAY_SLIDE_INFO":"true"}'),
+(7, 1, 'new_products', 1, '*', 'after', 0, 0, '{"MODULE_CONTENT_NEW_PRODUCTS_MAX_DISPLAY":"9","MODULE_NEW_PRODUCTS_CACHE":"60"}'),
+(8, 1, 'feature_products', 1, '*', 'after', 0, 0, '{"MODULE_FEATURE_PRODUCTS_MAX_DISPLAY":"9"}'),
+(9, 1, 'special_products', 1, '*', 'after', 0, 0, '{"MODULE_SPECIAL_MAX_DISPLAY":"9","MODULE_SPECIAL_CACHE":"60"}'),
+(10, 1, 'information', 1, '*', 'footer-col-1', 0, 0, 'null'),
+(11, 1, 'article_categories', 1, '*', 'footer-col-2', 0, 0, '{"MODULE_ARTICLES_CATEGORIES_MAX_LIST":"10"}'),
+(12, 1, 'follow_us', 1, '*', 'footer-col-3', 0, 0, '{"MODULE_FOLLOW_US_FACEBOOK_LINK":"https://www.facebook.com/tomatocart","MODULE_FOLLOW_US_TWITTER_LINK":"https://twitter.com/tomatocart","MODULE_FOLLOW_US_GOOGLE_PLUS_LINK":"https://plus.google.com/109588253708268031594"}'),
+(13, 1, 'contact_us', 1, '*', 'footer-col-4', 0, 0, 'null');
 
 
 INSERT INTO `toc_extensions` VALUES
