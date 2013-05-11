@@ -132,24 +132,12 @@ Ext.define('Toc.templates.TemplatesLayoutsDialog', {
   buildForm: function(templatesId, code) {
     this.pnlModules = Ext.create('Toc.templates.ModulesPanel');
     this.pnlWebContentGroups = Ext.create('Toc.templates.ModulesGroupsPanel', {templatesId: templatesId, code: code, medium: 'web', parent: this});
-    this.pnlMobileContentGroups = Ext.create('Toc.templates.ModulesGroupsPanel', {templatesId: templatesId, code: code, medium: 'mobile', parent: this});
-    this.pnlPadContentGroups = Ext.create('Toc.templates.ModulesGroupsPanel', {templatesId: templatesId, code: code, medium: 'pad', parent: this});
     this.pnlModuleSettings = Ext.create('Toc.templates.ModulesSettingsPanel');
     
     //register module event for web layout
     this.pnlWebContentGroups.on('modulechanged', this.onModuleChanged, this);
     this.pnlWebContentGroups.on('moduleremoved', this.onModulesRemoved, this);
     this.pnlWebContentGroups.on('portletdropped', this.onPortletsDropped, this);
-    
-    //register module event for mobile layout  
-    this.pnlMobileContentGroups.on('modulechanged', this.onModuleChanged, this);
-    this.pnlMobileContentGroups.on('moduleremoved', this.onModulesRemoved, this);
-    this.pnlMobileContentGroups.on('portletdropped', this.onPortletsDropped, this);
-    
-    //register module event for pad layout  
-    this.pnlPadContentGroups.on('modulechanged', this.onModuleChanged, this);
-    this.pnlPadContentGroups.on('moduleremoved', this.onModulesRemoved, this);
-    this.pnlPadContentGroups.on('portletdropped', this.onPortletsDropped, this);
     
     this.pnlModuleSettings.on('savesuccess', this.onSettingsSaveSuccess, this);
     
@@ -166,9 +154,7 @@ Ext.define('Toc.templates.TemplatesLayoutsDialog', {
         	xtype: 'tabpanel',
         	region: 'center',
         	items: [
-        		this.pnlWebContentGroups,
-        		this.pnlMobileContentGroups,
-        		this.pnlPadContentGroups
+        		this.pnlWebContentGroups
         	]
         },
         this.pnlModuleSettings
