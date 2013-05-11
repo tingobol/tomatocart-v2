@@ -38,7 +38,11 @@ class Templates extends TOC_Controller
     {
         parent::__construct();
 
+        //load model
         $this->load->model('templates_model');
+
+        //load helper
+        $this->load->helper('template');
     }
 
     // --------------------------------------------------------------------
@@ -183,7 +187,6 @@ class Templates extends TOC_Controller
                     //save to modules array
                     $modules[] = array(
                         'code' => (string) $attributes['code'],
-                        'medium' => 'web',
                         'sort-order' => (string) $attributes['sort-order'],
                         'page'	=>  (string) $attributes['page'],
                         'group'	=>  (string) $attributes['group'],
@@ -191,49 +194,6 @@ class Templates extends TOC_Controller
                 }
             }
             $data['web_layout']['modules'] = $modules;
-
-            //mobile layout modules
-            $modules = array();
-            if ( isset($info->MobileLayout->Modules->Module) )
-            {
-                foreach ($info->MobileLayout->Modules->Module as $moduleEl)
-                {
-                    //Get module attributes
-                    $attributes = $moduleEl->attributes();
-
-                    //get template module meta info
-                    $module = $this->get_template_module_info((string) $attributes['code']);
-
-                    //get module configuration params
-                    $params = $module['params'];
-
-                    //if the module has param elements
-                    $values = array();
-                    if ( isset($moduleEl->Param) )
-                    {
-                        foreach ($moduleEl->Param as $paramEl)
-                        {
-                            $attrib = $paramEl->attributes();
-
-                            $values[(string)$attrib['name']] = (string) $attrib['value'];
-                        }
-                    }
-
-                    //copy values to configuration params array
-                    $params = $this->copy_param_values($params, $values);
-                    $params = $this->convert_key_value_pairs($params);
-
-                    //save to modules array
-                    $modules[] = array(
-                      	'code' => (string) $attributes['code'],
-                        'medium' => 'mobile',
-                        'sort-order' => (string) $attributes['sort-order'],
-                        'page'	=>  (string) $attributes['page'],
-                      	'group'	=>  (string) $attributes['group'],
-                        'params' => $params);
-                }
-            }
-            $data['mobile_layout']['modules'] = $modules;
 
             $this->templates_model->install($data);
 
@@ -270,7 +230,7 @@ class Templates extends TOC_Controller
 
         if($error === false)
         {
-            if ($this->templates_model->remove($code))
+            if ($this->templates_model->uninstall($code))
             {
                 $response = array('success' => true, 'feedback' => lang('ms_success_action_performed'));
             }
@@ -453,7 +413,7 @@ class Templates extends TOC_Controller
     public function get_modules_tree()
     {
         //get template modules
-        $modules = $this->get_template_modules_meta_data();
+        $modules = get_template_modules_meta_data();
 
         foreach ($modules as $key => $module) {
             $modules[$key]['id'] = $module['code'];
@@ -466,45 +426,6 @@ class Templates extends TOC_Controller
     // --------------------------------------------------------------------
 
     /**
-     * Get all template modules meta data
-     *
-     * @access private
-     * @return array
-     */
-    private function get_template_modules_meta_data() {
-        //load language resources
-        $this->lang->db_load('modules-boxes');
-
-        //modules paths
-        $path_array = array('../local/modules/', '../system/tomatocart/modules/');
-
-        $modules = array();
-        $loaded = array();
-        foreach($path_array as $path) {
-            $directories = directory_map($path, 1, TRUE);
-
-            require_once '../system/tomatocart/libraries/module.php';
-            foreach ($directories as $directory)
-            {
-                $file = $path . $directory . '/' . $directory . '.php';
-                if ( file_exists($file) && !in_array($directory, $loaded) )
-                {
-                    require_once $file;
-
-                    $class = new $directory(array());
-
-                    $loaded[] = $directory;
-                    $modules[] = array('code' => $class->get_code(), 'text' => $class->get_title(), 'params' => $class->get_params());
-                }
-            }
-        }
-
-        return $modules;
-    }
-
-    // --------------------------------------------------------------------
-
-    /**
      * Get layout data
      *
      * @access public
@@ -512,117 +433,11 @@ class Templates extends TOC_Controller
      */
     public function get_layout_data()
     {
-        $mediums = array('web', 'mobile', 'pad');
-        $templates_id = $this->input->post('templates_id');
         $templates_code = $this->input->post('code');
 
-        $data = array();
-        foreach ($mediums as $medium) {
-            $data[$medium] = $this->get_medium_modules($templates_code, $medium);
-        }
+        $data = array('web' => get_layout_modules($templates_code));
 
         $this->output->set_output(json_encode(array('success' => true, 'layout' => $data)));
-    }
-
-    // --------------------------------------------------------------------
-
-    /**
-     * Get modules for each groups
-     *
-     * @access private
-     * @param string $templates_code
-     * @param string $medium
-     * @return string
-     */
-    private function get_medium_modules($templates_code, $medium)
-    {
-        $info = simplexml_load_file('../templates/' . $templates_code . '/template.xml');
-        $template_modules = $this->get_template_modules_meta_data();
-
-        if ($medium == 'web')
-        {
-            $groupsEl = $info->WebLayout->ContentGroups->Group;
-        }
-        else if ($medium == 'mobile')
-        {
-            $groupsEl = $info->MobileLayout->ContentGroups->Group;
-        }
-        else if ($medium == 'pad')
-        {
-            $groupsEl = $info->PadLayout->ContentGroups->Group;
-        }
-
-        //modules
-        $modules = $this->templates_model->get_medium_modules($templates_code, $medium);
-        foreach ($modules as $index => $module)
-        {
-            $modules[$index]['title'] = $this->get_module_title($module['module']);
-
-            foreach ($template_modules as $template_module)
-            {
-                if ($module['module'] == $template_module['code'])
-                {
-                    //copy values to configuration params array
-                    $modules[$index]['params'] = $this->copy_param_values($template_module['params'], $module['params']);
-                }
-            }
-        }
-
-        //groups
-        $groups = array();
-        if (sizeof($groupsEl) > 0)
-        {
-            foreach ($groupsEl as $groupEl)
-            {
-                $group['name'] = (string) $groupEl;
-                $group['modules'] = array();
-
-                foreach ($modules as $module)
-                {
-                    if ($module['content_group'] == (string) $groupEl)
-                    {
-                        $group['modules'][] = $module;
-                    }
-                }
-
-                $groups[] = $group;
-            }
-        }
-
-        return $groups;
-    }
-
-    // --------------------------------------------------------------------
-
-    /**
-     * Get box module Title
-     *
-     * @access public
-     * @param string $code
-     * @return mixed
-     */
-    public function get_module_title($code)
-    {
-        require_once '../system/tomatocart/libraries/module.php';
-
-        //get module configuration params and insert default value into database
-        $path_array = array('../local/modules/', '../system/tomatocart/modules/');
-
-        $params = array();
-        foreach($path_array as $path)
-        {
-            $file = $path . $code . '/' . $code . '.php';
-            if (file_exists($file))
-            {
-                require_once $file;
-
-                $class = new $code(array());
-
-                return $class->get_title();
-            }
-        }
-
-        return NULL;
     }
 
     // --------------------------------------------------------------------
@@ -633,7 +448,7 @@ class Templates extends TOC_Controller
      * @access public
      * @return string
      */
-    public function delete_template_module ()
+    public function delete_template_module()
     {
         $module_id = $this->input->post('mid');
 
@@ -659,21 +474,24 @@ class Templates extends TOC_Controller
      */
     public function add_template_module()
     {
+        //load the module parent class
+        load_front_library('module.php');
+
         //load language resources
         $this->lang->db_load('modules-boxes');
 
         $code = $this->input->post('code');
-        $medium = $this->input->post('medium');
         $group = $this->input->post('group');
         $templates_id = $this->input->post('templates_id');
 
         //get module configuration params and insert default value into database
-        $path_array = array('../local/modules/', '../system/tomatocart/modules/');
+        $path_array = array(
+            store_front_path() . 'local/modules/',
+            store_front_path() . 'system/tomatocart/modules/');
 
         $result = FALSE;
         $data = array();
 
-        require_once '../system/tomatocart/libraries/module.php';
         foreach($path_array as $path)
         {
             $directories = directory_map($path, 1, TRUE);
@@ -687,7 +505,7 @@ class Templates extends TOC_Controller
 
                     $class = new $directory(array());
 
-                    $result = $class->install($templates_id, $medium, $group);
+                    $result = $class->install($templates_id, $group);
 
                     if ($result !== FALSE)
                     {
@@ -695,7 +513,6 @@ class Templates extends TOC_Controller
                         	'id' => $result, 
                         	'templates_id' => $templates_id, 
                             'title' => $class->get_title(),
-                        	'medium' => $medium,
                           	'module' => $code,
                         	'status' => 0,
                         	'content_page' => '*',
@@ -865,28 +682,6 @@ class Templates extends TOC_Controller
         }
 
         $this->output->set_output(json_encode($response));
-    }
-
-    // --------------------------------------------------------------------
-
-    /**
-     * Copy param values from values array to param array
-     *
-     * @param array $params param array
-     * @param array $values values array
-     */
-    private function copy_param_values($params, $values) {
-        if (is_array($params)) {
-            foreach ($params as $key => $param) {
-                $name = $param['name'];
-
-                if (isset($values[$name])) {
-                    $params[$key]['value'] = $values[$name];
-                }
-            }
-        }
-
-        return $params;
     }
 
     // --------------------------------------------------------------------
