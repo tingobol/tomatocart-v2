@@ -128,11 +128,10 @@ class TOC_Module {
      *
      * @access public
      * @param $templates_id
-     * @param $medium
      * @param $group
      * @return mixed
      */
-    public function install($templates_id, $medium, $group)
+    public function install($templates_id, $group)
     {
         $languages = $this->ci->lang->get_languages();
         foreach ($languages as $key => $language) 
@@ -144,7 +143,6 @@ class TOC_Module {
 
         $data = array(
             'templates_id' => $templates_id, 
-            'medium' => $medium,
             'module' => $this->code,
             'status' => 0,
             'content_page' => '*',
