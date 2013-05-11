@@ -76,20 +76,6 @@ class Slideshows extends TOC_Module
               'description' => 'The image groups to choose',
               'url' => 'slide_images/get_image_groups'),
     
-        //MODULE_SLIDESHOW_SLIDE_WIDTH
-        array('name' => 'MODULE_SLIDESHOW_SLIDE_WIDTH',
-              'title' => 'Slideshow Width', 
-              'type' => 'numberfield',
-              'value' => '940',
-              'description' => 'Slideshow Wdith'),
-        
-        //MODULE_SLIDESHOW_SLIDE_HEIGHT
-        array('name' => 'MODULE_SLIDESHOW_SLIDE_HEIGHT',
-              'title' => 'Slideshow Height', 
-              'type' => 'numberfield',
-              'value' => '210',
-              'description' => 'Slideshow Height'),
-    
         //MODULE_SLIDESHOW_PLAY_INTERVAL
         array('name' => 'MODULE_SLIDESHOW_PLAY_INTERVAL',
               'title' => 'Slideshow Play Interval', 
@@ -147,8 +133,6 @@ class Slideshows extends TOC_Module
     {
         //Create a rand div id for slideshow
         $mid = 'slides_' . rand();
-        //
-        $this->ci->template->add_stylesheet_block('#' . $mid . ' .carousel-inner {display: block; margin: 0 auto; width: ' . $this->config['MODULE_SLIDESHOW_SLIDE_WIDTH'] . 'px; height: ' . $this->config['MODULE_SLIDESHOW_SLIDE_HEIGHT'] . 'px}');
         
         //load products
         $slides = $this->slideshows->get_slides($this->config['MODULE_SLIDESHOW_IMAGE_GROUPS']);
