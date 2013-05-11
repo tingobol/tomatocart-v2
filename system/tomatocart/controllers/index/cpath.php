@@ -92,6 +92,7 @@ class Cpath extends TOC_Controller
                 //model
                 $this->load->model('categories_model');
                 $this->load->model('products_model');
+                $this->load->model('manufacturers_model');
 
                 //breadcrumb
                 $categories = $this->category_tree->get_full_cpath_info($cpath);
@@ -119,6 +120,15 @@ class Cpath extends TOC_Controller
                 {
                     $this->template->add_meta_tags('description', $meta_description);
                 }
+                
+                //set category data
+                $data['category'] = $this->category_tree->get_data($current_category_id);
+                
+                //get sub categories
+                $data['sub_categories'] = get_sub_categories();
+                
+                //get manufacturers
+                $data['manufacturers'] = get_manufacturers();
 
                 //check whether this category has products
                 if ($this->categories_model->has_products($current_category_id))
@@ -160,21 +170,18 @@ class Cpath extends TOC_Controller
                             'short_description' => $product['products_short_description']);
                     }
                     
+                    $data['has_products'] = true;
                     $data['pagesize'] = $pagesize;
                     $data['sort'] = $sort;
                     $data['view'] = ((empty($view)) && (!in_array($view, array('grid', 'list')))) ? 'grid' : $view;
                     $data['filter_form_action'] = site_url('cpath/' . $cpath) . '/page';
-                    
-                    $this->template->build('index/product_listing', $data);
                 }
                 else
                 {
-                    $children = array();
-
-                    $data['categories'] = $this->category_tree->get_children($current_category_id, $children);
-
-                    $this->template->build('index/category_listing', $data);
+                    $data['has_products'] = false;
                 }
+                
+                $this->template->build('index/product_listing', $data);
             }
         }
         else
