@@ -179,6 +179,7 @@ if( ! function_exists('encrypt_password'))
         return $password;
     }
 }
+
 // ------------------------------------------------------------------------
 
 /**
@@ -297,5 +298,61 @@ if( ! function_exists('toc_gd_resize'))
         } else {
             return FALSE;
         }
+    }
+}
+
+// ------------------------------------------------------------------------
+
+/**
+ * Return store front path
+ *
+ * @access public
+ * @return string store front path
+ */
+if( ! function_exists('store_front_path'))
+{
+    function store_front_path()
+    {
+        return realpath(APPPATH . '../../') . '/';
+    }
+}
+
+// ------------------------------------------------------------------------
+
+/**
+ * Load front class, library, helper, etc
+ *
+ * @access public
+ * @return boolean
+ */
+if( ! function_exists('load_front'))
+{
+    function load_front($class, $type = 'libraries')
+    {
+        $path = store_front_path() . 'system/tomatocart/' . $type . '/' . $class;
+        if (file_exists($path)) 
+        {
+            require_once $path;
+            
+            return TRUE;
+        }
+        
+        return FALSE;
+    }
+}
+
+// ------------------------------------------------------------------------
+
+/**
+ * Return store front path
+ *
+ * @access public
+ * @return string store front path
+ */
+if( ! function_exists('load_front_library'))
+{
+    function load_front_library($library)
+    {
+        return load_front($library);
     }
 }
