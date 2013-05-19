@@ -1132,3 +1132,7 @@ left: 100%;
 .box .short a {font-size: 10px; color: #777777; line-height: 11px}
 .box .price {margin: 5px 0; font-size: 12px; font-weight: 700; line-height: 16px}
 .box .cart {margin: 5px 0;}
+
+.submitFormButtons {margin: 8px 0; *zoom: 1;}
+.submitFormButtons:after {clear: both;}
+.submitFormButtons:before, .submitFormButtons:after {content: "";display: table;line-height: 0;}
