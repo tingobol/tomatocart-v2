@@ -41,9 +41,6 @@ require_once 'helpers/general_helper.php';
     
     <script type="text/javascript" src="<?php echo base_url();?>templates/base/web/javascript/jquery/jquery-1.8.2.min.js"></script>
     <script type="text/javascript" src="<?php echo base_url();?>templates/base/web/javascript/jquery/jquery.loadmask.min.js"></script>
-    <script type="text/javascript" src="<?php echo base_url();?>templates/base/web/javascript/bootstrap/bootstrap.min.js"></script>
-    <script type="text/javascript" src="<?php echo base_url();?>templates/base/web/javascript/bootstrap/select2.js"></script>
-    <script type="text/javascript" src="<?php echo base_url();?>templates/base/web/javascript/toc.js"></script>
     <?php echo $template['javascripts'];?>
 	<script type="text/javascript">
 		var base_url = '<?php echo base_url(); ?>';
@@ -102,6 +99,7 @@ require_once 'helpers/general_helper.php';
                     <div class="main-nav">
                         <a href="<?php echo base_url(); ?>"><?php echo lang('home'); ?></a>&nbsp;&nbsp;|&nbsp;&nbsp;
                         <a href="<?php echo site_url('account'); ?>"><?php echo lang('my_account'); ?></a>&nbsp;&nbsp;|&nbsp;&nbsp;
+                        <a href="<?php echo site_url('wishlist'); ?>"><?php echo lang('my_wishlist'); ?></a>&nbsp;&nbsp;|&nbsp;&nbsp;
                     	<a href="<?php echo site_url('checkout/shopping_cart'); ?>"><?php echo lang('cart_contents'); ?></a>&nbsp;&nbsp;|&nbsp;&nbsp;
                         <a href="<?php echo site_url('checkout'); ?>"><?php echo lang('checkout'); ?></a>&nbsp;&nbsp;|&nbsp;&nbsp;
                     <?php 
@@ -263,6 +261,10 @@ require_once 'helpers/general_helper.php';
 ?>
 <!--  END: Run Service -->
   
+<script type="text/javascript" src="<?php echo base_url();?>templates/base/web/javascript/bootstrap/bootstrap.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url();?>templates/base/web/javascript/bootstrap/select2.js"></script>
+<script type="text/javascript" src="<?php echo base_url();?>templates/base/web/javascript/toc.js"></script>
+
 <script type="text/javascript">
 	$original = $('.navbar .nav > li.active');
 	$('.navbar .nav > li').mouseenter(function() {
