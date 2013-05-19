@@ -89,6 +89,16 @@ $route['cart_delete/(:any)'] = "checkout/cart_delete/index/$1";
 $route['cart_update'] = "checkout/cart_update/index";
 $route['shopping_cart'] = "checkout/shopping_cart/index";
 
+$route['wishlist'] = "account/wishlist";
+$route['wishlist/add/(:any)'] = "account/wishlist/add/$1";
+$route['wishlist/delete/(:any)'] = "account/wishlist/delete/$1";
+$route['wishlist/update'] = "account/wishlist/update";
+
+$route['compare'] = "products/compare";
+$route['compare/add/(:any)'] = "products/compare/add/$1";
+$route['compare/delete/(:any)'] = "products/compare/delete/$1";
+$route['compare/clear'] = "products/compare/clear";
+
 $route['latest'] = "products/latest";
 $route['latest/(:any)'] = "products/latest/index/$1";
 $route['specials'] = "products/specials";
@@ -99,7 +109,7 @@ $route['checkout'] = "checkout/index";
 
 $route['search'] = "search/search/index";
 
-$route['contact_us'] = "info/contact_us";
+$route['contact_us'] = "info/contactus";
 $route['sitemap'] = "info/sitemap";
 $route['contact_save'] = "info/contact_us/save";
 
