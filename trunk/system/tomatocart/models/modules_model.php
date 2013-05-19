@@ -47,17 +47,16 @@ class Modules_Model extends CI_Model
      * @access public
      * @param $group
      * @param $page
-     * @param $medium
      * @return array
      */
-    public function get_modules($group, $page, $medium)
+    public function get_modules($group, $page)
     {
         $data = array();
 
         $content_pages = array('*', $group . '/*', $group . '/' . $page);
 
         //page has specific module
-        $result = $this->db->select('id, content_group, module, params')->from('templates_modules')->where('page_specific', '1')->where('templates_id', $this->template->get_id())->where_in('content_page', $content_pages)->where('medium', $medium)->where('status', 1)->order_by('content_group')->order_by('sort_order')->get();
+        $result = $this->db->select('id, content_group, module, params')->from('templates_modules')->where('page_specific', '1')->where('templates_id', $this->template->get_id())->where_in('content_page', $content_pages)->where('status', 1)->order_by('content_group')->order_by('sort_order')->get();
         if ($result->num_rows() > 0)
         {
             foreach($result->result_array() as $row)
@@ -70,7 +69,7 @@ class Modules_Model extends CI_Model
         {
             $data = array();
 
-            $result = $this->db->select('id, content_group, content_page, module, params')->from('templates_modules')->where('templates_id', $this->template->get_id())->where_in('content_page', $content_pages)->where('medium', $medium)->where('status', 1)->order_by('content_group')->order_by('sort_order')->get();
+            $result = $this->db->select('id, content_group, content_page, module, params')->from('templates_modules')->where('templates_id', $this->template->get_id())->where_in('content_page', $content_pages)->where('status', 1)->order_by('content_group')->order_by('sort_order')->get();
             if ($result->num_rows() > 0)
             {
                 foreach($result->result_array() as $row)
