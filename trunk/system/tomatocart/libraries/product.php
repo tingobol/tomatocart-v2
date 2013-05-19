@@ -630,26 +630,7 @@ class TOC_Product
      */
     public function get_price_formated($with_special = false)
     {
-        global $osC_Services, $osC_Specials, $osC_Currencies;
-
-        $price = '';
-        if ($this->is_gift_certificate() && $this->is_open_amount_gift_certificate())
-        {
-            $price = $osC_Currencies->display_price($this->data['open_amount_min_value'], $this->data['tax_class_id']) . ' ~ ' . $price = $osC_Currencies->displayPrice($this->data['open_amount_max_value'], $this->data['tax_class_id']);;
-        }
-        else
-        {
-            if (($with_special === true) && is_object($osC_Services) && $osC_Services->isStarted('specials') && ($new_price = $osC_Specials->getPrice($this->data['id'])))
-            {
-                $price = '<s>' . $osC_Currencies->displayPrice($this->data['price'], $this->data['tax_class_id']) . '</s> <span class="productSpecialPrice">' . $osC_Currencies->displayPrice($new_price, $this->data['tax_class_id']) . '</span>';
-            }
-            else
-            {
-                $price = $osC_Currencies->displayPrice($this->getPrice(), $this->data['tax_class_id']);
-            }
-        }
-
-        return $price;
+        return currencies_display_price($this->get_price(), $this->get_tax_class_id());
     }
 
     /**
