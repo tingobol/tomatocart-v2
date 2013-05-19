@@ -16,106 +16,111 @@
  */
 ?>
 
-<h1>
-	<?php echo lang('title');?>
-</h1>
+<h1><?php echo lang('wishlist_heading');?></h1>
 
-<div class="box">
-	<?php if (is_array($wishlist_products) && !is_null($wishlist_products)):?>
+<?php echo toc_validation_errors('wishlist'); ?>
 
-	<form name="update_wishlist" method="post"
-		action="<?php echo site_url($link_wishlist); ?>">
+<div class="module-box">
+	<?php 
+	    if (is_array($products) && !is_null($products)):
+	?>
 
-		<table width="100%" cellspacing="0" cellpadding="10"
-			class="productListing">
-			<thead>
-				<tr>
-					<th class="productListing-heading" align="center"><?php echo lang('text_product'); ?>
-					</th>
-					<th class="productListing-heading"><?php echo lang('text_comments'); ?></th>
-					<th class="productListing-heading" align="center" width="70"><?php echo lang('text_date'); ?>
-					</th>
-					<th class="productListing-heading"></th>
-				</tr>
-			</thead>
-			<tfoot></tfoot>
+	<form name="update_wishlist" method="post" action="<?php echo site_url('wishlist/update'); ?>">
+
+		<table class="table table-hover table-striped">
+          	<thead>
+                <tr>
+                  <th align="center"><?php echo lang('listing_products_heading'); ?></th>
+                  <th><?php echo lang('listing_comments_heading'); ?></th>
+                  <th width="100" class="visible-desktop"><?php echo lang('listing_date_added_heading'); ?></th>
+                  <th class="visible-desktop"></th>
+                </tr>
+          	</thead>
 			<tbody>
-				<?php $rows=0; ?>
-				<?php foreach ($wishlist_products as $product):?>
-				<?php $rows++; ?>
-				<tr
-					class="<?php echo ((($rows/2) == floor($rows/2)) ? 'productListing-even' : 'productListing-odd'); ?>">
-					<td align="center"><a href="<?php echo $product['link'];?>"><img
-							src="<?php echo image_url($product['image']); ?>" title="<?php echo $product['name']; ?>"
-							alt="<?php echo $product['name']; ?>"> </a><br /> <span><?php echo $product['name']; ?>
-					</span><br /> <span><?php echo $product['price']; ?> </span></td>
-					<td valign="top"><textarea id="comments_<?php echo $product['id'];?>"
-							rows="5" cols="20" name="comments[<?php echo $product['id'];?>]"></textarea>
-					</td>
-					<td align="center" valign="top"><?php echo $product['date_added']; ?></td>
-					<td align="center" valign="top"><a class="button"
-						href="<?php echo site_url($link_delete); ?>"><?php echo lang('text_delete');?> </a> <br />&nbsp;<br />
-						<a class="button" href="<?php echo site_url($link_cart); ?>"><?php echo lang('text_cart');?> </a>
-					</td>
-				</tr>
+				<?php 
+				    foreach ($products as $product): 
+				?>
+                <tr>        
+                    <td class="center" width="150">
+                		<a href="<?php echo site_url('product/' . $product['products_id']); ?>">
+                			<img src="<?php echo product_image_url($product['image']); ?>" title="<?php echo $product['name']; ?>" alt="<?php echo $product['name']; ?>"> 
+                		</a>
+                		<p><?php echo $product['name']; ?></p>
+                		<p><?php echo currencies_format($product['price']); ?> </p>
+                    <td>
+                    	<textarea id="comments[<?php echo $product['products_id']; ?>]" rows="5" cols="20" name="comments[<?php echo $product['products_id']; ?>]"><?php echo $product['comments']; ?></textarea>
+                    </td>
+                    <td width="96" class="visible-desktop"><?php echo get_date_short($product['date_added']); ?></td>
+                    <td class="center btn-toolbar visible-desktop">
+            			<a href="<?php echo site_url('wishlist/delete/' . $product['products_id']); ?>" class="btn btn-mini pull-left"><?php echo lang('button_delete'); ?></a>&nbsp;
+						<a href="<?php echo site_url('cart_add/' . $product['products_id']); ?>" class="btn btn-mini"><?php echo lang('button_buy_now'); ?></a>
+                    </td>
+                </tr>   
 				<?php endforeach;?>
 			</tbody>
 		</table>
 
-		<div class="submitFormButtons" style="text-align: right;">
-			<a class="button" href="<?php echo site_url($link_update); ?>"><?php echo lang('text_update');?> </a>
-			<a class="button" href="<?php echo site_url($link_back); ?>"><?php echo lang('text_back');?> </a>
+		<div class="submitFormButtons right">
+            <a href="javascript:void(0);" class="btn btn-info pull-left" onclick="javascript:window.history.go(-1);return false;"><i class="icon-chevron-left icon-white"></i> <?php echo lang('button_back'); ?></a>
+            
+            <button type="submit" class="btn btn-info pull-right"><i class="icon-ok-sign icon-white"></i> <?php echo lang('button_continue'); ?></button>
 		</div>
 	</form>
-	<?php else : ?>
-	<div class="content">
-		<span><?php echo lang('text_empty'); ?> </span>
+	<?php 
+	    else : 
+	?>
+	<div class="content btop">
+		<p><?php echo lang('wishlist_empty'); ?> </p>
 	</div>
 
-	<div class="submitFormButtons" style="text-align: right;">
-		<a class="button" href="<?php echo site_url($link_update); ?>"><?php echo lang('text_update');?> </a>
-		<a class="button" href="<?php echo site_url($link_back); ?>"><?php echo lang('text_back');?> </a>
-	</div>
-	<?php endif;?>
+    <div class="submitFormButtons right clearfix">
+	    <a href="javascript:void(0);" class="btn btn-info pull-left" onclick="javascript:window.history.go(-1);return false;"><i class="icon-chevron-left icon-white"></i> <?php echo lang('button_back'); ?></a>
+    </div>
+	<?php 
+	    endif;
+	?>
 
-	<?php if (is_array($wishlist_products) && !is_null($wishlist_products)):?>
+	<?php 
+	    if (is_array($products) && !is_null($products)):
+	?>
 	<div class="box">
+		<h4><em class="pull-right"><?php echo lang('form_required_information'); ?></em><?php echo lang('share_your_wishlist_title'); ?></h4>
 
-		<h6>
-			<em><?php echo lang('text_required'); ?> </em>
-			<?php echo lang('text_share'); ?>
-		</h6>
-
-		<form name="share_wishlist" id="share_wishlist" method="post"
-			action="<?php echo site_url($link_share); ?>">
-			<div class="content">
-				<p>
-					<label for="wishlist_customer"><?php echo lang('text_name'); ?><em>*</em> </label>
-					<input type="text" value="<?php echo set_value($value_name);?>" id="wishlist_customer"
-						name="wishlist_customer">
-				</p>
-				<p>
-					<label for="wishlist_from_email"><?php echo lang('text_from_email'); ?><em>*</em>
-					</label> <input type="text" value="<?php echo set_value($value_from_email);?>"
-						id="wishlist_from_email" name="wishlist_from_email">
-				</p>
-				<p>
-					<label for="wishlist_emails"><?php echo lang('text_emails'); ?><em>*</em> </label>
-					<textarea id="wishlist_emails" rows="5" cols="40"
-						name="wishlist_emails"></textarea>
-				
-				
-				<p>
-					<label for="wishlist_message"><?php echo lang('text_message'); ?><em>*</em> </label>
-					<textarea id="wishlist_message" rows="5" cols="40"
-						name="wishlist_message"></textarea>
-				</p>
-			</div>
-			<div class="submitFormButtons" style="text-align: right;">
-				<a class="button" href="<?php echo site_url($link_continue); ?>"><?php echo lang('text_continue'); ?>
-				</a>
-			</div>
-		</form>
+        <form name="share_wishlist" id="share_wishlist" method="post" action="<?php echo site_url('account/wishlist/share'); ?>" class="form-horizontal">     
+            <div class="content">   
+                <div class="control-group">
+                    <label class="control-label" for="wishlist_customer"><?php echo lang('field_share_wishlist_customer_name'); ?><em>*</em></label>
+                    <div class="controls">
+            			<input type="text" id="wishlist_customer" name="wishlist_customer" value="<?php echo $customers_name; ?>" />
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="wishlist_from_email"><?php echo lang('field_share_wishlist_customer_email'); ?><em>*</em></label>
+                    <div class="controls">
+                    	<input type="text" id="wishlist_from_email" name="wishlist_from_email" value="<?php echo $customers_email; ?>" />
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="wishlist_emails"><?php echo lang('field_share_wishlist_emails'); ?><em>*</em></label>
+                    <div class="controls">
+						<textarea id="wishlist_emails" rows="5" cols="40" name="wishlist_emails"></textarea>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="wishlist_message"><?php echo lang('field_share_wishlist_message'); ?><em>*</em></label>
+                    <div class="controls">
+                    	<textarea id="wishlist_message" rows="5" cols="40" name="wishlist_message"></textarea>
+                    </div>
+                </div>
+            </div>   
+            
+            <div class="submitFormButtons right">
+                <button type="submit" class="btn btn-info pull-right"><i class="icon-ok-sign icon-white"></i> <?php echo lang('button_continue'); ?></button>
+            </div>
+        </form>
 	</div>
 	<?php endif;?>
 </div>
