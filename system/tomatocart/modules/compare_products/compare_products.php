@@ -18,7 +18,7 @@
 // ------------------------------------------------------------------------
 
 /**
- * Module Currencies Controller
+ * Module Compare Products Controller
  *
  * @package     TomatoCart
  * @subpackage  tomatocart
@@ -26,20 +26,20 @@
  * @author      TomatoCart Dev Team
  * @link        http://tomatocart.com/wiki/
  */
-class Mod_Currencies extends TOC_Module
+class Mod_Compare_Products extends TOC_Module
 {
     /**
      * Template Module Code
      *
-     * @access private
+     * @access protected
      * @var string
      */
-    protected $code = 'currencies';
+    protected $code = 'compare_products';
 
     /**
      * Template Module Author Name
      *
-     * @access private
+     * @access protected
      * @var string
      */
     protected $author_name = 'TomatoCart';
@@ -47,7 +47,7 @@ class Mod_Currencies extends TOC_Module
     /**
      * Template Module Author Url
      *
-     * @access private
+     * @access protected
      * @var string
      */
     protected $author_url = 'http://www.tomatocart.com';
@@ -55,7 +55,7 @@ class Mod_Currencies extends TOC_Module
     /**
      * Template Module Version
      *
-     * @access private
+     * @access protected
      * @var string
      */
     protected $version = '1.0';
@@ -66,11 +66,16 @@ class Mod_Currencies extends TOC_Module
      * @access public
      * @param string
      */
-    public function __construct()
+    public function __construct($config)
     {
         parent::__construct();
 
-        $this->title = lang('box_currencies_heading');
+        if (!empty($config) && is_string($config))
+        {
+            $this->config = json_decode($config, TRUE);
+        }
+
+        $this->title = lang('box_compare_products_heading');
     }
 
     /**
@@ -81,22 +86,24 @@ class Mod_Currencies extends TOC_Module
      */
     public function index()
     {
-        $currencies = $this->ci->currencies->get_data();
-        if (is_array($currencies))
+        $ids = $this->ci->compare_products->get_products();
+
+        if (is_array($ids) && !empty($ids))
         {
-            foreach($currencies as $code => $currency)
+            $products = array();
+            foreach ($ids as $products_id)
             {
-                $data['currencies'][$code] = $currency['title'];
+                $product = load_product_library($products_id);
+
+                $products[] = array(
+                    'products_id' => $products_id,
+                    'products_name' => $product->get_title());
             }
-
-            $data['currency_code'] = $this->ci->currencies->get_code();
-             
-            return $this->load_view('index.php', $data);
+            
+            return $this->load_view('index.php', array('products' => $products));
         }
-
-        return NULL;
     }
 }
 
-/* End of file currencies.php */
-/* Location: ./system/tomatocart/modules/currencies/currencies.php */
+/* End of file categories.php */
+/* Location: ./system/tomatocart/modules/compare_products/compare_products.php */

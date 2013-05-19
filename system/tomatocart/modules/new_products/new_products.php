@@ -26,7 +26,7 @@
  * @author		TomatoCart Dev Team
  * @link		http://tomatocart.com/wiki/
  */
-class New_Products extends TOC_Module
+class Mod_New_Products extends TOC_Module
 {
     /**
      * Template Module Code

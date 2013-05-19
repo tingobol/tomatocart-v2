@@ -26,7 +26,7 @@
  * @author      TomatoCart Dev Team
  * @link        http://tomatocart.com/wiki/
  */
-class Faqs_List extends TOC_Module 
+class Mod_Faqs_List extends TOC_Module 
 {
     /**
      * Template Module Code

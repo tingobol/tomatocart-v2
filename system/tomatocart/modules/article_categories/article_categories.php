@@ -27,7 +27,7 @@
  * @link        http://tomatocart.com/wiki/
  */
 
-class Article_Categories extends TOC_Module 
+class Mod_Article_Categories extends TOC_Module 
 {
     /**
      * Template Module Code

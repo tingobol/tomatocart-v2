@@ -27,7 +27,7 @@
  * @link        http://tomatocart.com/wiki/
  */
 
-class My_account extends TOC_Module 
+class Mod_My_account extends TOC_Module 
 {
     /**
      * Template Module Code
