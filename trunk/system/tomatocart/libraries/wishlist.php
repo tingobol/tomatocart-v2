@@ -157,6 +157,8 @@ class TOC_Wishlist
         $this->contents = array();
         $this->wishlists_id = NULL;
         $this->token = NULL;
+        
+        $this->save_session();
     }
 
     /**
