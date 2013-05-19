@@ -93,6 +93,9 @@ class Login extends TOC_Controller
 
                 //synchronize shopping cart content with database
                 $this->shopping_cart->synchronize_with_database();
+                
+                //synchronize wishlist with database
+                $this->wishlist->synchronize_with_database(); 
 
                 //remove current url from nagivation history
                 $this->navigation_history->remove_current_page();
@@ -149,6 +152,9 @@ class Login extends TOC_Controller
 
                 //synchronize shopping cart content with database
                 $this->shopping_cart->synchronize_with_database();
+                
+                //synchronize wishlist with database
+                $this->wishlist->synchronize_with_database(); 
             }
             else
             {

@@ -198,6 +198,9 @@ class Create extends TOC_Controller
                 //synchronize shopping cart content with database
                 $this->shopping_cart->synchronize_with_database();
 
+                //synchronize wishlist with database
+                $this->wishlist->synchronize_with_database();
+
                 //send email
                 $this->load->library('email_template');
                 $email = $this->email_template->get_email_template('create_account_email');
