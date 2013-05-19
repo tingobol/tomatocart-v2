@@ -66,7 +66,10 @@ if( ! function_exists('get_template_modules_meta_data'))
 
         $modules = array();
         $loaded = array();
-        foreach($path_array as $path) {
+        
+        //check all path and find modules
+        foreach($path_array as $path) 
+        {
             $directories = directory_map($path, 1, TRUE);
 
             foreach ($directories as $directory)
@@ -75,10 +78,17 @@ if( ! function_exists('get_template_modules_meta_data'))
                 if ( file_exists($file) && !in_array($directory, $loaded) )
                 {
                     require_once $file;
+                    
+                    //class name
+                    $class_name = 'Mod_' . $directory;
 
-                    $class = new $directory(array());
+                    //create new instance
+                    $class = new $class_name(array());
 
+                    //append loaded module
                     $loaded[] = $directory;
+                    
+                    //append data
                     $modules[] = array('code' => $class->get_code(), 'text' => $class->get_title(), 'params' => $class->get_params());
                 }
             }
@@ -181,8 +191,10 @@ if( ! function_exists('get_module_title'))
             if (file_exists($file))
             {
                 require_once $file;
+                
+                $class_name = 'Mod_' . $code;
 
-                $class = new $code(array());
+                $class = new $class_name(array());
 
                 return $class->get_title();
             }
