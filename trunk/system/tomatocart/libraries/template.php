@@ -340,6 +340,9 @@ class Template
      */
     public function build($view, $data = array(), $return = FALSE)
     {
+        //add current page to the navigation history
+        $this->_ci->navigation_history->add_current_page();
+        
         // Set whatever values are given. These will be available to all view files
         is_array($data) OR $data = (array) $data;
 
@@ -366,11 +369,12 @@ class Template
                 if (isset($module['module']) && !empty($module['module']))
                 {
                     $code = $module['module'];
+                    $class = 'Mod_' . $code;
                     $this->_ci->load->library('module');
 
                     include_once 'system/tomatocart/modules/' . $module['module'] . '/' . $module['module'] . EXT;
 
-                    $obj = new $module['module']($module['params']);
+                    $obj = new $class($module['params']);
 
                     $module_groups[$name] .= $obj->index();
                 }
