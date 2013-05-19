@@ -266,7 +266,6 @@ Ext.define('Toc.templates.ModulesSettingsPanel', {
                     this.module.sort_order = action.result.data.sort_order;
                     
                     if (!Ext.isEmpty(this.module.params)) {
-                    	console.log('length:' + this.module.params.length);
                     	for(i = 0; i < this.module.params.length; i++) {
                     		var field = this.module.params[i];
                     		

@@ -181,7 +181,6 @@ Ext.define('Toc.templates.TemplatesLayoutsDialog', {
   },
   
   onSettingsSaveSuccess: function(module) {
-  console.log(module);
     this.setModule(module);
   },
   
