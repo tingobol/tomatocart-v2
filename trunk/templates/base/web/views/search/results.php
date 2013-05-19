@@ -123,8 +123,8 @@
                     	<i class="icon-shopping-cart icon-white "></i> 
                     	<?php echo lang('button_buy_now'); ?>
                     </a><br />
-                    <a class="wishlist" href="javascript:void(0);"><?php echo lang('add_to_wishlist'); ?></a><br />
-                    <a class="compare" href="javascript:void(0);"><?php echo lang('add_to_compare'); ?></a>
+                    <a class="wishlist" href="<?php echo site_url('wishlist/add/' . $product['products_id']); ?>"><?php echo lang('add_to_wishlist'); ?></a><br />
+                    <a class="compare" href="<?php echo site_url('compare/add/' . $product['products_id']); ?>"><?php echo lang('add_to_compare'); ?></a>
                 </span>
             </div>
         </li>
