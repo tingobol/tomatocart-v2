@@ -76,10 +76,8 @@ class TOC_Controller extends CI_Controller
         $this->load->library('template');
         $this->load->model('modules_model');
 
-        $medium = $this->agent->get_medium();
-
         //load modules according to the module and page
-        $this->modules = $this->modules_model->get_modules($module, $class, $medium);
+        $this->modules = $this->modules_model->get_modules($module, $class);
         $this->template->add_modules($this->modules);
 
         //set breadcrumb
@@ -95,14 +93,17 @@ class TOC_Controller extends CI_Controller
      * @access protected
      * @return void
      */
-    protected function validate_customer_access() {
-        if ($this->customer->is_logged_on() === FALSE) {
+    protected function validate_customer_access() 
+    {
+        if ($this->customer->is_logged_on() === FALSE) 
+        {
             $group = $this->uri->segment(1);
             $controller = $this->uri->segment(2);
 
-            if ( ($group == 'account') && !in_array($controller, array('login', 'create', 'password_forgotten', 'wishlist')) ) {
+            if ( ($group == 'account') && !in_array($controller, array('login', 'create', 'password_forgotten', 'wishlist')) ) 
+            {
                 $this->navigation_history->add_current_page();
-
+                
                 redirect('account/login');
             }
         }
