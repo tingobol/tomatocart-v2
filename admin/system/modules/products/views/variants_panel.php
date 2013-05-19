@@ -51,7 +51,6 @@ Ext.define('Toc.products.VariantsPanel', {
         text: '<?php echo lang('button_manage_variants_groups'); ?>',
         iconCls : 'add',
         handler: function() {
-          console.log('run');
           this.fireEvent('addvariantsgroups', this.groupIds);
         },
         scope: this
