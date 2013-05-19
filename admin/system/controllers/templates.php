@@ -503,7 +503,9 @@ class Templates extends TOC_Controller
                 {
                     require_once $file;
 
-                    $class = new $directory(array());
+                    $class_name = 'Mod_' . $directory;
+                    
+                    $class = new $class_name(array());
 
                     $result = $class->install($templates_id, $group);
 
@@ -626,8 +628,10 @@ class Templates extends TOC_Controller
             $file = $path . $code . '/' . $code . '.php';
             if (file_exists($file)) {
                 require_once $file;
+                
+                $class_name = 'Mod_' . $code;
 
-                $class = new $code(array());
+                $class = new $class_name(array());
 
                 $module = array('code' => $class->get_code(), 'text' => $class->get_title(), 'params' => $class->get_params());
             }
