@@ -167,9 +167,9 @@
                 	<button class="btn btn-info" title="<?php echo lang('button_add_to_cart'); ?>"><i class="icon-shopping-cart icon-white "></i> <?php echo lang('button_add_to_cart'); ?></button>
                 </div>
                 <div>
-                	<a href="javascript:void(0);"><?php echo lang('add_to_compare'); ?></a>
+                	<a href="<?php echo site_url('compare/add/' . $products_id); ?>"><?php echo lang('add_to_compare'); ?></a>
             		&nbsp;<span>|</span>&nbsp;
-            		<a href="javascript:void(0);"><?php echo lang('add_to_wishlist'); ?></a>
+            		<a href="<?php echo site_url('wishlist/add/' . $products_id); ?>"><?php echo lang('add_to_wishlist'); ?></a>
                 </div>
                 <div class="divider"></div>
                 <div class="description">
@@ -365,8 +365,8 @@
                             	<i class="icon-shopping-cart icon-white "></i> 
                             	<?php echo lang('button_buy_now'); ?>
                             </a><br />
-                            <a class="wishlist" href="javascript:void(0);"><?php echo lang('add_to_wishlist'); ?></a><br />
-                            <a class="compare" href="javascript:void(0);"><?php echo lang('add_to_compare'); ?></a>
+                            <a class="wishlist" href="<?php echo site_url('wishlist/add/' . $product->get_id()); ?>"><?php echo lang('add_to_wishlist'); ?></a><br />
+                            <a class="compare" href="<?php echo site_url('compare/add/' . $product->get_id()); ?>"><?php echo lang('add_to_compare'); ?></a>
                         </span>
                     </div>
                 </li>
