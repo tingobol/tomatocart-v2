@@ -59,6 +59,9 @@ class Logoff extends TOC_Controller {
         //reset customer
         $this->customer->reset();
 
+        //reset wishlist
+        $this->wishlist->reset();
+
         //build view
         $this->template->build('account/logoff');
     }
