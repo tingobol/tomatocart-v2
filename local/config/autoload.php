@@ -78,7 +78,7 @@ $autoload['packages'] = array();
 |	$autoload['libraries'] = array('database', 'session', 'xmlrpc');
 */
 
-$autoload['libraries'] = array('database', 'session', 'configuration', 'registry', 'customer', 'shopping_cart', 'currencies', 'message_stack', 'user_agent', 'navigation_history', 'service', 'tax');
+$autoload['libraries'] = array('database', 'session', 'configuration', 'registry', 'customer', 'shopping_cart', 'wishlist', 'compare_products', 'currencies', 'message_stack', 'user_agent', 'navigation_history', 'service', 'tax');
 
 /*
 | -------------------------------------------------------------------
@@ -89,7 +89,7 @@ $autoload['libraries'] = array('database', 'session', 'configuration', 'registry
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('url', 'language', 'form', 'html', 'date', 'toc_general', 'toc_currencies', 'toc_languages', 'toc_datetime', 'toc_form', 'toc_products', 'toc_tax');
+$autoload['helper'] = array('url', 'language', 'form', 'html', 'date', 'toc_general', 'toc_currencies', 'toc_languages', 'toc_datetime', 'toc_form', 'toc_products', 'toc_tax', 'toc_template');
 
 
 /*
