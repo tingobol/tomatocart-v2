@@ -27,7 +27,7 @@
  * @link        http://tomatocart.com/wiki/
  */
 
-class Contact_us extends TOC_Module 
+class Mod_Contact_us extends TOC_Module 
 {
     /**
      * Template Module Code

@@ -27,7 +27,7 @@
  * @link        http://tomatocart.com/wiki/
  */
 
-class Shop_By_Price extends TOC_Module {
+class Mod_Shop_By_Price extends TOC_Module {
     /**
      * Template Module Code
      *

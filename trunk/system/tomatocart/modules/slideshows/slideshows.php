@@ -26,7 +26,7 @@
  * @author		TomatoCart Dev Team
  * @link		http://tomatocart.com/wiki/
  */
-class Slideshows extends TOC_Module
+class Mod_Slideshows extends TOC_Module
 {
     /**
      * Template Module Code

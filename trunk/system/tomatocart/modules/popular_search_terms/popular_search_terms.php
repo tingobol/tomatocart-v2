@@ -26,7 +26,7 @@
  * @author		TomatoCart Dev Team
  * @link		http://tomatocart.com/wiki/
  */
-class Popular_Search_Terms extends TOC_Module
+class Mod_Popular_Search_Terms extends TOC_Module
 {
     /**
      * Template Module Code
