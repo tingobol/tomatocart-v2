@@ -58,6 +58,7 @@ if( ! function_exists('get_sub_categories'))
                 'id' => $id,
                 'cpath' => $category['id'],
                 'name' => $category['info']['name'],
+                'image' => $category['info']['image'],
                 'url' => site_url('cpath/' . $category['id'])
             );
         }
