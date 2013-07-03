@@ -27,7 +27,31 @@
 <h1><?php echo $title; ?></h1>
 
 <?php 
-    if (count($products) > 0):
+    //sub categories
+    if (isset($sub_categories) && count($sub_categories) > 0):
+?>
+    <div class="col3 clearfix">
+        <?php 
+            foreach($sub_categories as $category) :
+        ?>
+        <div class="pull-left center">
+            <a href="<?php echo site_url('cpath/' . $category['id']); ?>">
+                <img src="<?php echo image_url('categories/' . $category['image']); ?>" alt="<?php echo $category['name']; ?>" title="<?php echo $category['name']; ?>" />
+                <br/>
+                <span><?php echo $category['name']; ?></span>
+            </a>
+        </div>
+        <?php 
+            endforeach; 
+        ?>
+    </div>
+<?php 
+    endif;
+?>
+
+<?php 
+    //products
+    if ($has_products):
 ?>
 	<div class="products-listing-action">
 		<form id="products-filter-top" class="form-inline" action="<?php echo $filter_form_action; ?>" method="get">
@@ -36,7 +60,7 @@
             	    <label><?php echo lang('label_products_per_page'); ?></label>&nbsp;
             	    <?php echo form_dropdown('pagesize', $pagesize_array, $pagesize, 'id="pagesize-top"'); ?>
 				</div>
-				<div class="span4" align="center">
+				<div class="span4 center">
             	    <label><?php echo lang('label_select_view'); ?></label>&nbsp;
                     <div class="btn-group">
                     	<a class="btn btn-small view-type <?php echo (($view == 'list') ? 'active' : ''); ?>" href="javascript:;"><i class="icon-th-list"></i></a> 
@@ -46,10 +70,8 @@
                     </div>
 				</div>
 				<div class="span4">
-					<div class="pull-right">
                 	    <label><?php echo lang('label_sorting'); ?></label>&nbsp;
                         <?php echo form_dropdown('sort', $sort_array, $sort, 'id="sort-top"'); ?>
-					</div>
 				</div>
 			</div>
         </form>
@@ -111,7 +133,7 @@
                 	    endif;
                 	?>
                     <?php echo currencies_format($product['product_price']); ?></span>
-                <span class="buttons">
+                <span class="buttons hidden-phone">
                     <a class="btn btn-small btn-info" href="<?php echo site_url('cart_add/' . $product['products_id']); ?>">
                     	<i class="icon-shopping-cart icon-white "></i> 
                     	<?php echo lang('button_buy_now'); ?>
