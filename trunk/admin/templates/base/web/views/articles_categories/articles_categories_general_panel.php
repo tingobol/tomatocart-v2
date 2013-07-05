@@ -88,7 +88,7 @@ Ext.define('Toc.articles_categories.GeneralPanel', {
     
     items.push(pnlPublish);
     
-    items.push({xtype: 'numberfield', id: 'articles_categories_order', name: 'articles_categories_order', fieldLabel: '<?php echo lang('field_articles_order'); ?>', allowBlank: false});
+    items.push({xtype: 'numberfield', id: 'articles_categories_order', name: 'articles_categories_order', fieldLabel: '<?php echo lang('field_articles_order'); ?>', allowBlank: false, value: 0});
     
     return items;
   }
