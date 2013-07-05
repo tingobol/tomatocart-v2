@@ -19,7 +19,7 @@
 <h1><?php echo lang('success_heading'); ?></h1>
 
 <form name="order" action="<?php echo base_url(); ?>" method="post">
-    <div>
+    <div class="module-box">
         <div style="padding-top: 30px;">
           <p><?php echo lang('order_processed_successfully'); ?></p>
         

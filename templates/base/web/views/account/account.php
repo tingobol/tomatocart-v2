@@ -24,10 +24,9 @@
     <h6><?php echo lang('my_account_title');?></h6>
     
     <div class="row-fluid">
-        <div class="span2">
-    		<img title="<?php echo lang('my_account_title');?>" alt="<?php echo lang('my_account_title');?>" src="<?php echo image_url('my_account.png');?>">
+        <div class="span2 visible-desktop">
+    		<img title="<?php echo lang('my_account_title');?>" alt="<?php echo lang('my_account_title');?>" src="<?php echo image_url('my_account.png');?>" />
         </div>
-        
         <ul class="span10">
             <li><a href="<?php echo site_url('account/edit');?>"><?php echo lang('my_account_information');?></a></li>
             <li><a href="<?php echo site_url('account/address_book');?>"><?php echo lang('my_account_address_book');?></a></li>
@@ -40,13 +39,11 @@
     <h6><?php echo lang('my_orders_title');?></h6>
     
     <div class="row-fluid">
-        <div class="span2">
-            <img title="<?php echo lang('my_orders_title');?>" alt="<?php echo lang('my_orders_title');?>" src="<?php echo image_url('my_orders.png');?>">
+        <div class="span2 visible-desktop">
+            <img title="<?php echo lang('my_orders_title');?>" alt="<?php echo lang('my_orders_title');?>" src="<?php echo image_url('my_orders.png');?>" />
         </div>
-        
         <ul class="span10">
             <li><a href="<?php echo site_url('account/orders');?>"><?php echo lang('my_orders_view');?></a></li>
-            
         </ul>
     </div>
 </div>
@@ -55,13 +52,12 @@
     <h6><?php echo lang('my_notifications_title');?></h6>
     
     <div class="row-fluid">
-        <div class="span2">
-            <img title="<?php echo lang('my_notifications_title');?>" alt="<?php echo lang('my_notifications_title');?>" src="<?php echo image_url('my_notifications.png');?>">
+        <div class="span2 visible-desktop">
+            <img title="<?php echo lang('my_notifications_title');?>" alt="<?php echo lang('my_notifications_title');?>" src="<?php echo image_url('my_notifications.png');?>" />
         </div>
         
         <ul class="span10">
-            <li><a href="<?php echo site_url('account/newsletters');?>"><?php echo lang('my_notifications_newsletters');?></li>
-           <!-- <li><a href="<?php echo site_url('account/notifications');?>"><?php echo lang('my_notifications_products');?></li> --> 
+            <li><a href="<?php echo site_url('account/newsletters');?>"><?php echo lang('my_notifications_newsletters');?></a></li>
         </ul>
     </div>
 </div>

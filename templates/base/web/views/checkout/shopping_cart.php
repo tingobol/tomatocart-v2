@@ -32,9 +32,9 @@
         	<table class="" width="100%">
         		<thead>
         			<tr>
-        				<th colspan="2" class="product"><?php echo lang('table_heading_product'); ?></th>
+        				<th class="product"><?php echo lang('table_heading_product'); ?></th>
         				<th colspan="2"><?php echo lang('table_heading_quantity'); ?></th>
-        				<th class="price"><?php echo lang('table_heading_price'); ?></th>
+        				<th class="price visible-desktop"><?php echo lang('table_heading_price'); ?></th>
         				<th class="total"><?php echo lang('table_heading_total'); ?></th>
         			</tr>
         		</thead>
@@ -43,45 +43,45 @@
                     foreach ($products as $product_id => $product) :
                 ?>
                     <tr>
-                    	<td class="image">
-                            <a href="<?php echo site_url('product/' . $product['id']); ?>">
+                    	<td class="product">
+                            <a class="image visible-desktop" href="<?php echo site_url('product/' . $product['id']); ?>">
     							<img alt="<?php echo $product['name']; ?>" title="<?php echo $product['name']; ?>" src="<?php echo product_image_url($product['image'], 'mini'); ?>" alt="default thumb" class="thumb" />
                             </a>
-                    	</td>
-                        <td class="product">
-                            <a class="name" href="<?php echo site_url('product/' . get_product_id($product['id']));?>"><?php echo $product['name']?></a>
-                            <span class="sku"><?php echo lang('field_sku') . ' ' . $product['sku']; ?></span>
-                            <?php 
-                                if ( (config('STOCK_CHECK') == '1') && ($product['in_stock'] === FALSE) ) :
-                            ?>
-                            <span class="markProductOutOfStock"><?php echo config('STOCK_MARK_PRODUCT_OUT_OF_STOCK') ; ?></span>
-                            <?php 
-                                endif;
-                            ?>
-                            
-                            <?php 
-                                if (isset($product['variants']) && !empty($product['variants'])) :
-                            ?>
-                            	<ul class="variants">
+                            <div class="info">
+                                <a class="name" href="<?php echo site_url('product/' . get_product_id($product['id']));?>"><?php echo $product['name']?></a>
+                                <span class="sku"><?php echo lang('field_sku') . ' ' . $product['sku']; ?></span>
                                 <?php 
-                                        foreach ($product['variants'] as $variants):  
+                                    if ( (config('STOCK_CHECK') == '1') && ($product['in_stock'] === FALSE) ) :
                                 ?>
-                        			<li>- <?php echo $variants['groups_name'];?> : <?php echo $variants['values_name'];?></li>
-                                <?php
-                                        endforeach;
+                                <span class="markProductOutOfStock"><?php echo config('STOCK_MARK_PRODUCT_OUT_OF_STOCK') ; ?></span>
+                                <?php 
+                                    endif;
                                 ?>
-    							</ul>                        
-                            <?php 
-                                endif;
-                            ?>
-                            
-                            <?php 
-                                if (isset($products['error'])) {
-                            ?>
-                            <br /><span class="markProductError"><?php echo $products['error']; ?></span>
-                            <?php 
-                                }
-                            ?>
+                                
+                                <?php 
+                                    if (isset($product['variants']) && !empty($product['variants'])) :
+                                ?>
+                                	<ul class="variants">
+                                    <?php 
+                                            foreach ($product['variants'] as $variants):  
+                                    ?>
+                            			<li>- <?php echo $variants['groups_name'];?> : <?php echo $variants['values_name'];?></li>
+                                    <?php
+                                            endforeach;
+                                    ?>
+        							</ul>                        
+                                <?php 
+                                    endif;
+                                ?>
+                                
+                                <?php 
+                                    if (isset($products['error'])) {
+                                ?>
+                                <br /><span class="markProductError"><?php echo $products['error']; ?></span>
+                                <?php 
+                                    }
+                                ?>
+                            </div>
                         </td>
                         <td class="quantity">
     						<input type="text" style="width: 20px" size="4" id="product[<?php echo $product_id; ?>]" value="<?php echo $product['quantity'];?>" name="product[<?php echo $product_id; ?>]" />
@@ -98,7 +98,7 @@
                             ?>
                             <a class="btn btn-mini" href="<?php echo $url; ?>"><i title="<?php echo lang('button_delete');?>" class="icon-trash"></i></a>
                         </td>
-                        <td class="price"><?php echo currencies_display_price($product['final_price'], $product['tax_class_id']); ?></td>
+                        <td class="price visible-desktop"><?php echo currencies_display_price($product['final_price'], $product['tax_class_id']); ?></td>
                         <td class="total"><?php echo currencies_display_price($product['final_price'], $product['tax_class_id'], $product['quantity']); ?></td>
                     </tr>
                 <?php

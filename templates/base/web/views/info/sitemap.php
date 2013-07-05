@@ -47,3 +47,7 @@
         </div>
     </div>
 </div>
+
+<div class="controls clearfix">
+	<a href="<?php echo site_url(); ?>" class="btn btn-small btn-info pull-right"><i class="icon-chevron-right icon-white"></i><?php echo lang('button_continue'); ?></a>
+</div>
