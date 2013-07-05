@@ -113,11 +113,16 @@
                 	<?php 
                 	    if ($product['is_specials'] === TRUE):
                 	?>
-                		<s><?php echo currencies_format($product['specials_price']); ?></s>
+                		<s><?php echo currencies_format($product['product_price']); ?></s>
+                		<font class="special"><?php echo currencies_format($product['specials_price']); ?></font>
+                	<?php 
+                	    else:
+                	?>
+                    <?php echo currencies_format($product['product_price']); ?>
                 	<?php     
                 	    endif;
                 	?>
-                    <?php echo currencies_format($product['product_price']); ?></span>
+               	</span>
                 <span class="buttons">
                     <a class="btn btn-small btn-info" href="<?php echo site_url('cart_add/' . $product['products_id']); ?>">
                     	<i class="icon-shopping-cart icon-white "></i> 
