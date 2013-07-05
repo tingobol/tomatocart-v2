@@ -30,7 +30,7 @@
     //sub categories
     if (isset($sub_categories) && count($sub_categories) > 0):
 ?>
-    <div class="col3 clearfix">
+    <div class="module-box col3 clearfix">
         <?php 
             foreach($sub_categories as $category) :
         ?>
@@ -164,10 +164,8 @@
                     </div>							
 				</div>
 				<div class="span4">
-					<div class="pull-right">
-                	    <label><?php echo lang('label_sorting'); ?></label>&nbsp;
-                        <?php echo form_dropdown('sort', $sort_array, $sort, 'id="sort-bottom"'); ?>
-					</div>
+            	    <label><?php echo lang('label_sorting'); ?></label>&nbsp;
+                    <?php echo form_dropdown('sort', $sort_array, $sort, 'id="sort-bottom"'); ?>
 				</div>
 			</div>
         </form>

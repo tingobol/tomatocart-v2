@@ -21,35 +21,62 @@
 <?php 
     if (sizeof($products) > 0): 
 ?>
-<div class="module-box col3 clearfix">
-<?php 
-    foreach($products as $product):
-?>
-    <div class="center">
-        <a href="<?php echo site_url('product/' . $product['products_id']); ?>">
-        	<img alt="<?php echo $product['product_name']; ?>" title="<?php echo $product['product_name']; ?>" src="<?php echo product_image_url($product['product_image']); ?>">
-        </a>
-        <div class="info">
-			<a href="<?php echo site_url('product/' . $product['products_id']); ?>"><?php echo $product['product_name']; ?></a>
-        	<p class="description">
-                <?php echo $product['short_description']; ?>
-          	</p>
-        </div>  
-        <span class="price"><?php echo currencies_format($product['product_price']); ?></span>
-        <div class="buttons">
-          	<a class="btn btn-mini btn-info" href="<?php echo site_url('cart_add/' . $product['products_id']); ?>">
-            	<i class="icon-shopping-cart icon-white "></i> 
-            	<?php echo lang('button_add_to_cart'); ?>
-          	</a>
-        </div>
+    <ul class="products-list grid clearfix">
+    <?php 
+        foreach ($products as $product):
+    ?>
+        <li class="clearfix">
+    	<?php 
+    	    if ($product['is_specials'] === TRUE):
+    	?>
+    		<div class="specials-banner"></div>
+    	<?php   
+    	    elseif ($product['is_featured'] === TRUE):  
+    	?>
+    		<div class="featured-banner"></div>
+    	<?php   
+    	    endif;
+    	?>
+            <div class="left">
+                 <a href="<?php echo site_url('product/' . $product['products_id']); ?>">
+                      <img alt="<?php echo $product['product_name']; ?>" title="<?php echo $product['product_name']; ?>" src="<?php echo product_image_url($product['product_image']); ?>" alt="default thumb" class="thumb" />
+                 </a>
+                <h3>
+                	<a href="<?php echo site_url('product/' . $product['products_id']); ?>">
+                        <?php echo $product['product_name']; ?>
+                    </a>
+                </h3>
+                <p class="description">
+                    <?php echo $product['short_description']; ?>
+                </p>
+            </div>
+            <div class="right">
+                <span class="price">
+                	<?php 
+                	    if ($product['is_specials'] === TRUE):
+                	?>
+                		<s><?php echo currencies_format($product['specials_price']); ?></s>
+                	<?php     
+                	    endif;
+                	?>
+                    <?php echo currencies_format($product['product_price']); ?></span>
+                <span class="buttons">
+                    <a class="btn btn-small btn-info" href="<?php echo site_url('cart_add/' . $product['products_id']); ?>">
+                    	<i class="icon-shopping-cart icon-white "></i> 
+                    	<?php echo lang('button_buy_now'); ?>
+                    </a><br />
+                    <a class="wishlist" href="<?php echo site_url('wishlist/add/' . $product['products_id']); ?>"><?php echo lang('add_to_wishlist'); ?></a><br />
+                    <a class="compare" href="<?php echo site_url('compare/add/' . $product['products_id']); ?>"><?php echo lang('add_to_compare'); ?></a>
+                </span>
+            </div>
+        </li>
+    <?php 
+        endforeach;
+    ?>
+    </ul>
+    <div class="pagination clearfix">
+        <?php  echo $links; ?>
     </div>
-<?php
-    endforeach;
-?>
-</div>
-<div class="pagination clearfix">
-    <?php  echo $links; ?>
-</div>
 <?php 
     endif; 
 ?>

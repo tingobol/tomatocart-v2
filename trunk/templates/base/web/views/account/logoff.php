@@ -20,11 +20,11 @@
 
 <div class="module-box">
 	<div class="row-fluid">
-        <div class="span3">
+        <div class="span3 hidden-phone">
             <img src="<?php echo image_url('account_successs.png'); ?>" />
         </div>
         
-        <div class="span9">
+        <div class="span8">
           <p><?php echo lang('sign_out_text'); ?></p>
         </div>
     </div>

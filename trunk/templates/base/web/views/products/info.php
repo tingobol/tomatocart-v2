@@ -18,7 +18,7 @@
 
 <h1><?php echo $name; ?></h1>
 
-<div class="module-box" style="position: relative">
+<div id="product-info" class="module-box" style="position: relative">
 	<?php 
 	    if ($is_specials === TRUE):
 	?>
@@ -34,7 +34,7 @@
     <div class="content row-fluid clearfix">
         
         <!--Product Images-->
-        <div class="span5">
+        <div class="span5 clearfix">
             <div id="product-images">
                 <a id="default-image" href="<?php echo product_image_url($default_image, 'large'); ?>" rel="showTitle:false, smoothMove:15,zoomWidth:400, zoomHeight:300, adjustY:0, adjustX:10" class="cloud-zoom">
                 	<img title="<?php echo $name; ?>" alt="<?php echo $name; ?>" src="<?php echo product_image_url($default_image, 'product_info'); ?>">
@@ -53,7 +53,7 @@
         <!--END: Product Images-->
         
         <!--Add to Cart Form-->
-        <form class="form-inline span7" id="cart-quantity" name="cart-quantity" action="<?php echo site_url('cart_add/' . $products_id); ?>" method="post">
+        <form class="form-inline span7 clearfix" id="cart-quantity" name="cart-quantity" action="<?php echo site_url('cart_add/' . $products_id); ?>" method="post">
         	<div id="product-info">
         		<div class="price-info">
         			<span class="price"><?php echo currencies_format($price); ?></span>
@@ -161,12 +161,12 @@
               endif;
             ?>  
             <!--Variants-->
-                <div>
+                <div class="center">
                 	<b><?php echo lang('field_short_quantity'); ?></b>&nbsp;
                 	<input type="text" size="3" value="<?php echo $moq?>" id="quantity" name="quantity">&nbsp;
                 	<button class="btn btn-info" title="<?php echo lang('button_add_to_cart'); ?>"><i class="icon-shopping-cart icon-white "></i> <?php echo lang('button_add_to_cart'); ?></button>
                 </div>
-                <div>
+                <div class="center">
                 	<a href="<?php echo site_url('compare/add/' . $products_id); ?>"><?php echo lang('add_to_compare'); ?></a>
             		&nbsp;<span>|</span>&nbsp;
             		<a href="<?php echo site_url('wishlist/add/' . $products_id); ?>"><?php echo lang('add_to_wishlist'); ?></a>

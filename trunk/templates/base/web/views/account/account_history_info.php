@@ -178,5 +178,5 @@
 ?>
 
 <div class="control-group clearfix">
-	<a href="<?php echo site_url('account/orders'); ?>" class="btn btn-small btn-small pull-left"><i class="icon-chevron-left"></i> <?php echo lang('button_back'); ?></a>
+	<a href="<?php echo site_url('account/orders'); ?>" class="btn btn-info btn-small pull-left"><i class="icon-chevron-left icon-white"></i> <?php echo lang('button_back'); ?></a>
 </div>
