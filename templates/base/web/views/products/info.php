@@ -56,7 +56,17 @@
         <form class="form-inline span7 clearfix" id="cart-quantity" name="cart-quantity" action="<?php echo site_url('cart_add/' . $products_id); ?>" method="post">
         	<div id="product-info">
         		<div class="price-info">
+        			<?php 
+        			    if ($is_specials === TRUE):
+        			?>
+        			<span class="price"><s><?php echo currencies_format($price); ?></s>&nbsp;&nbsp;<font class="special"><?php echo currencies_format($specials_price); ?></font></span>
+        			<?php 
+        			    else: 
+        			?>
         			<span class="price"><?php echo currencies_format($price); ?></span>
+        			<?php 
+        			    endif;
+        			?>
         			<span class="tax"><?php echo ( (config('DISPLAY_PRICE_WITH_TAX') == '1') ? lang('including_tax') : '' ); ?></span>
         			<img src="<?php echo image_url('stars_' . $rating . '.png'); ?>" alt="<?php echo sprintf(lang('rating_of_5_stars'), $rating); ?>" title="<?php echo sprintf(lang('rating_of_5_stars'), $rating); ?>" />
         		</div>

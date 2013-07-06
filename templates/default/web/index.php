@@ -19,10 +19,10 @@ require_once 'helpers/general_helper.php';
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?php echo get_lang_code(); ?>">
 <head>
 	<meta charset="utf-8">
-    <link rel="shortcut icon" href="images/tomatocart.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="<?php echo base_url('images/tomatocart.ico'); ?>" type="image/x-icon" />
     <title><?php echo $template['title'];?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
@@ -34,17 +34,27 @@ require_once 'helpers/general_helper.php';
     <?php echo $template['meta_tags'];?>
     
     <base href="<?php echo base_url();?>" />
-    <link rel="stylesheet" href="<?php echo base_url();?>templates/base/web/css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>templates/base/web/css/select2.css" />
-    <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>templates/default/web/css/stylesheet.css" />
+    <link rel="stylesheet" href="<?php echo base_url('templates/base/web/css/bootstrap.min.css');?>" />
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url('templates/base/web/css/select2.css');?>" />
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url('templates/default/web/css/stylesheet.css');?>" />
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url('templates/default/web/css/stylesheet.responsive.css');?>" />
     <?php echo $template['stylesheets'];?>
     
-    <script type="text/javascript" src="<?php echo base_url();?>templates/base/web/javascript/jquery/jquery-1.8.2.min.js"></script>
-    <script type="text/javascript" src="<?php echo base_url();?>templates/base/web/javascript/jquery/jquery.loadmask.min.js"></script>
+    <script type="text/javascript" src="<?php echo base_url('templates/base/web/javascript/jquery/jquery-1.8.2.min.js');?>"></script>
+    <script type="text/javascript" src="<?php echo base_url('templates/base/web/javascript/jquery/jquery.loadmask.min.js');?>"></script>
+	<script type="text/javascript" src="<?php echo base_url();?>templates/base/web/javascript/toc.js"></script>
     <?php echo $template['javascripts'];?>
 	<script type="text/javascript">
 		var base_url = '<?php echo base_url(); ?>';
 	</script>
+
+    <!-- touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="<?php echo base_url('images/apple-touch-icon-144-precomposed.png'); ?>">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="<?php echo base_url('images/apple-touch-icon-114-precomposed.png'); ?>">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="<?php echo base_url('images/apple-touch-icon-72-precomposed.png'); ?>">
+    <link rel="apple-touch-icon-precomposed" href="<?php echo base_url('images/apple-touch-icon-57-precomposed.png'); ?>">
+	
+	<meta name="Generator" content="TomatoCart" />
 </head>
 <body>
   <!--  page header  -->
@@ -52,9 +62,9 @@ require_once 'helpers/general_helper.php';
     <div id="header">
         <div class="container">
         	<div class="row-fluid">
-        		<div class="span4">
+        		<div class="span4 logo">
                     <a href="<?php echo base_url(); ?>">
-                    	<img src="<?php echo image_url('store_logo.png'); ?>" alt="<?php echo config('STORE_NAME'); ?>" title="<?php echo config('STORE_NAME'); ?>" />
+                    	<img src="<?php echo base_url('images/store_logo.png'); ?>" alt="<?php echo config('STORE_NAME'); ?>" title="<?php echo config('STORE_NAME'); ?>" />
                     </a>  
         		</div>
         		<div class="span8">
@@ -97,22 +107,24 @@ require_once 'helpers/general_helper.php';
                         </div>
                     </div>
                     <div class="main-nav">
-                        <a href="<?php echo base_url(); ?>"><?php echo lang('home'); ?></a>&nbsp;&nbsp;|&nbsp;&nbsp;
-                        <a href="<?php echo site_url('account'); ?>"><?php echo lang('my_account'); ?></a>&nbsp;&nbsp;|&nbsp;&nbsp;
-                        <a href="<?php echo site_url('wishlist'); ?>"><?php echo lang('my_wishlist'); ?></a>&nbsp;&nbsp;|&nbsp;&nbsp;
-                    	<a href="<?php echo site_url('checkout/shopping_cart'); ?>"><?php echo lang('cart_contents'); ?></a>&nbsp;&nbsp;|&nbsp;&nbsp;
-                        <a href="<?php echo site_url('checkout'); ?>"><?php echo lang('checkout'); ?></a>&nbsp;&nbsp;|&nbsp;&nbsp;
-                    <?php 
-                        if (is_logged_on()) : 
-                    ?>
-                        <a href="<?php echo site_url('account/logoff'); ?>"><?php echo lang('logoff'); ?></a>
-                    <?php 
-                        else : 
-                    ?>
-                        <a href="<?php echo site_url('account/login'); ?>"><?php echo lang('login'); ?></a>
-                    <?php 
-                        endif; 
-                    ?>
+                    	<ul>
+                            <li class="visible-desktop"><a href="<?php echo base_url(); ?>"><?php echo lang('home'); ?></a></li>
+                            <li><a href="<?php echo base_url('wishlist'); ?>"><?php echo lang('my_wishlist'); ?></a></li>
+                            <li><a href="<?php echo site_url('account'); ?>"><?php echo lang('my_account'); ?></a></li>
+                        <?php 
+                            if (is_logged_on()) : 
+                        ?>
+                            <li><a href="<?php echo site_url('account/logoff'); ?>"><?php echo lang('logoff'); ?></a></li>
+                        <?php 
+                            else : 
+                        ?>
+                            <li><a href="<?php echo site_url('account/login'); ?>"><?php echo lang('login'); ?></a></li>
+                        <?php 
+                            endif; 
+                        ?>
+                            <li><a href="<?php echo site_url('shopping_cart'); ?>"><?php echo lang('checkout'); ?></a></li>
+                            <li><a href="<?php echo site_url('contact_us'); ?>"><?php echo lang('contact_us'); ?></a></li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -124,11 +136,18 @@ require_once 'helpers/general_helper.php';
     <div class="container">
     	<div class="navbar navbar-inverse">
     		<div class="navbar-inner">
-    			<?php echo build_categories_dropdown_menu(); ?>
+                <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                </button>
                 <form name="search_post" method="post" action="<?php echo site_url('search'); ?>" class="navbar-search pull-right">
                     <input type="text" name="keywords" class="search-query" placeholder="Search" />
                     <div class="icon-search"></div>
                 </form>
+    			<div class="nav-collapse collapse">
+        			<?php echo build_categories_dropdown_menu(); ?>
+                </div>
             </div>
         </div>
     </div>
@@ -136,7 +155,7 @@ require_once 'helpers/general_helper.php';
     
     <!-- BEGIN: Breadcrumb -->
     <div class="container">
-        <ul class="breadcrumb">
+        <ul class="breadcrumb hidden-phone">
         <?php 
             foreach($template['breadcrumbs'] as $breadcrumb) : 
         ?>
@@ -165,16 +184,17 @@ require_once 'helpers/general_helper.php';
         <!--  left module group  -->
         <?php 
             $has_left = isset($template['module_groups']['left']) && !empty($template['module_groups']['left']);
+            $has_right = isset($template['module_groups']['right']) && !empty($template['module_groups']['right']);
             if ($has_left) 
             {
         ?>
-            <div id="content-left" class="span<?php echo $has_left ? 3 : 0; ?>"><?php echo $template['module_groups']['left']; ?></div> 
+            <div id="content-left" class="span3  hidden-phone"><?php echo $template['module_groups']['left']; ?></div> 
         <?php 
             }  
         ?>
         <!--  END: left module group  -->
     
-        <div  id="content-center" class="span<?php echo 12 - ($has_left ? 3 : 0); ?>">
+        <div  id="content-center" class="span<?php echo 12 - ($has_left ? 3 : 0) - ($has_right ? 3 : 0); ?>">
             <!--  before module group  -->
             <?php 
               if (isset($template['module_groups']['before'])) {
@@ -202,10 +222,10 @@ require_once 'helpers/general_helper.php';
     
         <!--  right module group  -->
         <?php 
-            if (isset($template['module_groups']['right'])) 
+            if ($has_right) 
             {
         ?>
-            <div id="content-right" class="span<?php echo isset($template['module_groups']['right']) ? 3 : 0; ?>"><?php echo $template['module_groups']['right']; ?></div> 
+            <div id="content-right" class="span3 hidden-phone"><?php echo $template['module_groups']['right']; ?></div> 
         <?php 
             }  
         ?>
@@ -246,7 +266,9 @@ require_once 'helpers/general_helper.php';
     	</div>
     </div>
     <p class="copyright pull-right">
-    	Copyright &copy; 2011 <a href="index.php">TomatoCart Demo Store</a><br />Powered by <a href="http://www.tomatocart.com" target="_blank">TomatoCart</a>
+		<?php 
+            echo sprintf(lang('footer'), date('Y'), site_url(), config('STORE_NAME'));
+		?>    
     </p>
 </div>
 <!--  END: Page Footer -->
@@ -263,20 +285,8 @@ require_once 'helpers/general_helper.php';
   
 <script type="text/javascript" src="<?php echo base_url();?>templates/base/web/javascript/bootstrap/bootstrap.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url();?>templates/base/web/javascript/bootstrap/select2.js"></script>
-<script type="text/javascript" src="<?php echo base_url();?>templates/base/web/javascript/toc.js"></script>
 
 <script type="text/javascript">
-	$original = $('.navbar .nav > li.active');
-	$('.navbar .nav > li').mouseenter(function() {
-		$(this).parent().find('li').removeClass('active');
-		$(this).addClass('active');
-    });
-	$('.navbar .nav').mouseleave(function() {
-		$(this).parent().find('li').removeClass('active');
-		$original.addClass('active');
-    });
-
-	$('.dropdown-toggle').dropdown();
 	$('.popup-cart').popover({
 	    animation: true,
 	    trigger: 'hover',
@@ -286,20 +296,6 @@ require_once 'helpers/general_helper.php';
 	    content: '<?php echo get_shopping_cart_contents(); ?>'
 	});
 </script>
-
-<script type="text/javascript">
-
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-37863867-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
-</script>
-  <!--  END: page footer -->
+<!--  END: page footer -->
 </body>
 </html>
