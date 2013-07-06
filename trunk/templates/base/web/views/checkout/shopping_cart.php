@@ -29,7 +29,7 @@
         </h6>
     
         <div class="content clearfix">
-        	<table class="" width="100%">
+        	<table class="table-gradient" width="100%">
         		<thead>
         			<tr>
         				<th class="product"><?php echo lang('table_heading_product'); ?></th>
