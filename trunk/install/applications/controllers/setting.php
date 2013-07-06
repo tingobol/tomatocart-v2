@@ -55,7 +55,7 @@ class Setting extends TOC_Controller
         $password = trim(urldecode($this->input->post('CFG_ADMINISTRATOR_PASSWORD')));
         $sample = trim(urldecode($this->input->post('DB_INSERT_SAMPLE_DATA')));
         $db_config = $this->session->userdata('db_config');
-        
+
         //connect to database
         $this->load->database($db_config);
 
@@ -68,7 +68,7 @@ class Setting extends TOC_Controller
         $this->settings_model->save_setting('STORE_OWNER', $store_owner_name);
         $this->settings_model->save_setting('STORE_OWNER_EMAIL_ADDRESS', $email);
         $this->settings_model->save_setting('EMAIL_FROM', '"' . $store_owner_name . '" <' . $email . '>');
-        
+
         $this->administrators_model->create($username, $password, $email);
 
         //parse http, get http server & http path
@@ -98,17 +98,49 @@ class Setting extends TOC_Controller
         if ($sample == 'on') {
             //import sample sql data
             $this->import_sample_sql();
-        
+
             //copy sample data
             toc_copy('samples/images', '../images');
+
+            //resize images
+            $this->resize_product_images();
         }
-        
+
         $this->output->set_output(json_encode(array('success' => TRUE)));
     }
-    
+
+    /**
+     * Resize product images
+     *
+     * @access private
+     * @return void
+     */
+    public function resize_product_images() {
+        $directories = directory_map('samples/images/products/originals', 1, TRUE);
+        $images_groups = array(
+            'thumbnails' => array('width' => 140, 'height' => 140),
+            'product_info' => array('width' => 285, 'height' => 255),
+            'large' => array('width' => 480, 'height' => 360),
+            'mini' => array('width' => 57, 'height' => 57)
+        );
+        
+        foreach ($directories as $file)
+        {
+            if ((strpos($file, '.jpg') !== FALSE) || (strpos($file, '.png') !== FALSE))
+            {
+                foreach ($images_groups as $name => $size) {
+                    $original_image = 'samples/images/products/originals/' . $file;
+                    $dest_image = '../images/products/' . $name . '/' . $file;
+                    
+                    toc_gd_resize($original_image, $dest_image, $size['width'], $size['width']);
+                }
+            }
+        }
+    }
+
     /**
      * Import sample sql data
-     * 
+     *
      * @access private
      * @return boolean
      */
@@ -118,7 +150,7 @@ class Setting extends TOC_Controller
 
         //connect to database
         $this->load->database($config);
-        
+
         //database is connected
         if ($this->db) {
             $sql_data = $this->load->file(realpath(dirname(__FILE__) . '/../../../') . '/install/tomatocart_sample_data.sql', TRUE);
@@ -131,10 +163,10 @@ class Setting extends TOC_Controller
             foreach ($statements as $statement) {
                 $this->db->query($statement);
             }
-            
+
             return TRUE;
-        } 
-        
+        }
+
         return FALSE;
     }
 
@@ -212,7 +244,7 @@ class Setting extends TOC_Controller
 
     /**
      * Write database config file
-     * 
+     *
      * @access private
      * @param string $location
      * @param array $config
@@ -256,11 +288,11 @@ class Setting extends TOC_Controller
         $fp = @fopen($location, 'w');
         if ($fp !== FALSE) {
             @fputs($fp, implode("\n", $output));
-            @fclose($fp);        
-            
+            @fclose($fp);
+
             return TRUE;
         }
-        
+
         return FALSE;
     }
 }
