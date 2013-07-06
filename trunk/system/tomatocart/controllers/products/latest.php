@@ -72,11 +72,14 @@ class Latest extends TOC_Controller
             foreach ($new_products as $product)
             {
                 $products[] = array(
-                    'products_id' => $product['products_id'],
-                    'product_name' => $product['products_name'],
-                    'short_description' => $product['products_short_description'],
-                    'product_image' => $product['image'],
-                    'product_price' => $product['products_price']);
+                            'products_id' => $product['products_id'],
+                            'product_name' => $product['products_name'],
+                            'product_price' => $product['products_price'],
+                            'specials_price' => $product['specials_price'],
+                            'is_specials' => ($product['specials_price'] === NULL) ? FALSE : TRUE,
+                            'is_featured' => ($product['featured_products_id'] === NULL) ? FALSE : TRUE,
+                            'product_image' => $product['image'],
+                            'short_description' => $product['products_short_description']);
             }
         }
         $data['products'] = $products;
