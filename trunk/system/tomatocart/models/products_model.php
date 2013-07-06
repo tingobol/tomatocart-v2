@@ -513,13 +513,13 @@ class Products_Model extends CI_Model
      */
     public function get_new_products($filter = array())
     {
-        $result = $this->db->select('p.products_id, p.products_tax_class_id, p.products_price, pd.products_name, pd.products_keyword, pd.products_short_description, i.image')
+        $result = $this->db->select('p.products_id, p.products_tax_class_id, p.products_price, pd.products_name, pd.products_keyword, pd.products_short_description, i.image, s.specials_new_products_price as specials_price, f.products_id as featured_products_id')
             ->from('products p')
-            ->join('products_images i', 'p.products_id = i.products_id', 'left')
-            ->join('products_description pd', 'p.products_id = pd.products_id', 'inner')
+            ->join('products_description as pd', 'p.products_id = pd.products_id and pd.language_id =' . lang_id(), 'inner')
+            ->join('products_frontpage as f', 'p.products_id = f.products_id', 'left')
+            ->join('products_images as i', 'p.products_id = i.products_id and i.default_flag = 1', 'left')
+            ->join('specials as s', 'p.products_id = s.products_id and s.status = 1 and s.start_date <= now() and s.expires_date >= now()', 'left')
             ->where('p.products_status = 1')
-            ->where('pd.language_id', lang_id())
-            ->where('i.default_flag = 1')
             ->order_by('p.products_date_added desc')
             ->limit($filter['per_page'], $filter['page'] * $filter['per_page'])
             ->get();
@@ -621,11 +621,12 @@ class Products_Model extends CI_Model
      */
     public function get_special_products($filter)
     {
-        $result = $this->db->select('p.products_id, p.products_price, p.products_tax_class_id, pd.products_name, pd.products_keyword,s.specials_new_products_price, i.image')
+        $result = $this->db->select('p.products_id, p.products_price, p.products_tax_class_id, pd.products_name, pd.products_short_description, pd.products_keyword,s.specials_new_products_price as specials_price, i.image, f.products_id as featured_products_id')
             ->from('products p')
             ->join('products_images i', 'p.products_id = i.products_id', 'left')
             ->join('products_description pd', 'p.products_id = pd.products_id', 'inner')
             ->join('specials s', 's.products_id = p.products_id', 'inner')
+            ->join('products_frontpage as f', 'p.products_id = f.products_id', 'left')
             ->where('p.products_status = 1')
             ->where('pd.language_id', lang_id())
             ->where('i.default_flag', 1)
