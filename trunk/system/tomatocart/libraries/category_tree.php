@@ -237,7 +237,7 @@ class TOC_Category_Tree
             //if load from cache
             if ($load_from_cache === TRUE)
             {
-                $this->data = $this->ci->cache->get('category_tree-' . $this->ci->lang->get_code());
+                $this->data = FALSE; //$this->ci->cache->get('category_tree-' . $this->ci->lang->get_code());
                 if ($this->data != FALSE) {
                     $is_cache_loaded = TRUE;
                 }
