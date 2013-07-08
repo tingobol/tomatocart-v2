@@ -123,11 +123,11 @@ Ext.define('Toc.guest_book.GuestBookDialog', {
         anchor: '98%'
       },
       items: [
-        {xtype:'textfield',fieldLabel: '<?php echo lang('field_title'); ?>', name: 'title'},
+        {xtype:'textfield',fieldLabel: '<?php echo lang('field_title'); ?>', name: 'title', allowBlank: false},
         this.cboLanguages,
         {xtype:'textfield', fieldLabel: '<?php echo lang('field_email'); ?>', name: 'email'},
         {xtype:'textfield', fieldLabel: '<?php echo lang('field_url'); ?>', name: 'url'},
-        {xtype:'textarea', fieldLabel: '<?php echo lang('field_content'); ?>', name: 'content', height: 200},
+        {xtype:'textarea', fieldLabel: '<?php echo lang('field_content'); ?>', name: 'content', height: 200, allowBlank: false},
         {
           xtype: 'radiogroup',
           fieldLabel: '<?php echo lang('field_status'); ?>',
