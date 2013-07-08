@@ -64,7 +64,7 @@ class Faqs_Model extends CI_Model
             $this->db->like('fd.faqs_question', $search);
         }
         
-        $this->db->order_by('f.faqs_order, f.faqs_id');
+        $this->db->order_by('f.faqs_id desc');
         
         if ($start !== NULL && $limit !== NULL)
         {
