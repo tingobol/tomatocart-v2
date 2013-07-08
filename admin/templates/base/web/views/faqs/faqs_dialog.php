@@ -140,7 +140,7 @@ Ext.define('Toc.faqs.FaqsDialog', {
             }
           ]
         },
-        {xtype:'numberfield', fieldLabel: '<?php echo lang('field_order'); ?>', name: 'faqs_order'}
+        {xtype:'numberfield', fieldLabel: '<?php echo lang('field_order'); ?>', name: 'faqs_order', value: 0}
       ]
     });
     
