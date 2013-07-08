@@ -208,7 +208,7 @@ Ext.define('Toc.articles.ArticlesDialog', {
               ]
             },
             this.cboCategories,
-            {xtype:'numberfield', fieldLabel: '<?php echo lang('field_order'); ?>', name: 'articles_order', id: 'articles_order'},
+            {xtype:'numberfield', fieldLabel: '<?php echo lang('field_order'); ?>', name: 'articles_order', id: 'articles_order', value: 0},
             {xtype:'fileuploadfield', fieldLabel: '<?php echo lang('field_image'); ?>', name: 'articles_image'}
           ]
         },

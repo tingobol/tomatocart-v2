@@ -67,10 +67,10 @@ class Articles_Model extends CI_Model
         
         if ($search !== NULL)
         {
-            $this->db
-                ->like('ad.articles_name', $search)
-                ->order_by('a.articles_id');
+            $this->db->like('ad.articles_name', $search);
         }
+        
+        $this->db->order_by('a.articles_order, a.articles_date_added desc');
         
         if ($start !== NULL && $limit !== NULL)
         {
@@ -99,9 +99,13 @@ class Articles_Model extends CI_Model
      */
     public function save($id = NULL, $data)
     {
+        //load libraries
         $this->load->library(array('image', 'upload'));
+        
+        //load helpers
         $this->load->helper(array('html_output', 'directory'));
         
+        //flag to check errors
         $error = FALSE;
         
         //start transaction
@@ -112,12 +116,14 @@ class Articles_Model extends CI_Model
                               'articles_order' => $data['articles_order'], 
                               'articles_categories_id' => $data['articles_categories']);
         
+        //editing article
         if (is_numeric($id))
         {
             $article_info['articles_last_modified'] = date('Y-m-d H:i:s');
             
             $this->db->update('articles', $article_info, array('articles_id' => $id));
         }
+        //creating new article
         else
         {
             $article_info['articles_date_added'] = date('Y-m-d H:i:s');
@@ -132,6 +138,7 @@ class Articles_Model extends CI_Model
         }
         else
         {
+            //get the article id as inserting the new article
             $articles_id = is_numeric($id) ? $id : $this->db->insert_id();
         }
         
@@ -151,19 +158,29 @@ class Articles_Model extends CI_Model
         //upload article image
         if ($error === FALSE)
         {
-            if (directory_make(ROOTPATH . 'images/articles') && directory_make(ROOTPATH . 'images/articles/originals'))
+            //create the directory to store articles images
+            if (!is_dir(ROOTPATH . 'images/articles'))
+            {
+                directory_make(ROOTPATH . 'images/articles');
+                directory_make(ROOTPATH . 'images/articles/originals');
+            }   
+            
+            //check whether the uploaded image is existed
+            if (isset($_FILES[$data['articles_image']]) && isset($_FILES[$data['articles_image']]['tmp_name']) && !empty($_FILES[$data['articles_image']]['tmp_name']) && is_uploaded_file($_FILES[$data['articles_image']]['tmp_name']))
             {
                 $config['upload_path'] = ROOTPATH . 'images/articles/originals';
-                $config['allowed_types'] = 'gif|jpg|png';
+                
+                //only the gif, jpg, png, jpeg are allowed to be uploaded
+                $config['allowed_types'] = 'gif|jpg|png|jpeg';
                 
                 $this->upload->initialize($config);
                 
+                //upload the image now
                 if ($this->upload->do_upload($data['articles_image']))
                 {
-                    $upload_info = $this->upload->data();
-                    
-                    $this->db->update('articles', array('articles_image' => $upload_info['file_name']), array('articles_id' => $articles_id));
-                    
+                    //upload the articles image field in the database
+                    $this->db->update('articles', array('articles_image' => $this->upload->data('file_name')), array('articles_id' => $articles_id));
+                
                     if ($this->db->trans_status() === FALSE)
                     {
                         $error = TRUE;
@@ -175,15 +192,22 @@ class Articles_Model extends CI_Model
                         {
                             if ($group['id'] !== 1)
                             {
-                                $this->image->resize($upload_info['file_name'], $group['id'], 'articles');
+                                $this->image->resize($this->upload->data('file_name'), $group['id'], 'articles');
                             }
                         }
                     }
                 }
+                
+                //upload the article image failed
+                else
+                {
+                    $error = TRUE;
+                }
             }
         }
         
-        //Process Languages
+        
+        //Process articles description for each language
         if ($error === FALSE)
         {
             foreach(lang_get_all() as $l)
@@ -194,10 +218,12 @@ class Articles_Model extends CI_Model
                                               'articles_page_title' => $data['page_title'][$l['id']], 
                                               'articles_meta_keywords' => $data['meta_keywords'][$l['id']], 
                                               'articles_meta_description' => $data['meta_description'][$l['id']]);
+                //editing article
                 if (is_numeric($id))
                 {
                     $this->db->update('articles_description', $articles_description, array('articles_id' => $articles_id, 'language_id' => $l['id']));
                 }
+                //creating new article
                 else
                 {
                     $articles_description['articles_id'] = $articles_id;
