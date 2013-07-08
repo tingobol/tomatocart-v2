@@ -85,7 +85,7 @@ Ext.define('Toc.slideImages.SlideImagesGrid', {
       }
     ];
     
-	var dsGroups = Ext.create('Ext.data.Store', {
+	this.dsGroups = Ext.create('Ext.data.Store', {
       fields: ['id', 'text'],
       proxy: {
         type: 'ajax',
@@ -101,7 +101,7 @@ Ext.define('Toc.slideImages.SlideImagesGrid', {
     
     this.cboGroups = Ext.create('Ext.form.ComboBox', {
       fieldLabel: '<?php echo lang('table_heading_group'); ?>',
-      store: dsGroups,
+      store: this.dsGroups,
       name: 'group', 
       queryMode: 'local',
       displayField: 'text',
@@ -290,6 +290,7 @@ Ext.define('Toc.slideImages.SlideImagesGrid', {
   
   onRefresh: function() {
     this.getStore().load();
+    this.dsGroups.load();
   }
 });
 
