@@ -56,7 +56,7 @@ class Articles_Categories_Model extends CI_Model
             ->from('articles_categories c')
             ->join('articles_categories_description cd', 'c.articles_categories_id = cd.articles_categories_id and c.articles_categories_id > 1')
             ->where('cd.language_id', lang_id())
-            ->order_by('c.articles_categories_order, c.articles_categories_id desc');
+            ->order_by('c.articles_categories_id desc');
         
         if ($start !== NULL && $limit !== NULL)
         {
