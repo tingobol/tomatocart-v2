@@ -25,7 +25,7 @@ Ext.define('Toc.slideImages.SlideImagesDialog', {
     config.layout = 'fit';
     config.modal = true;
     config.width = 600;
-    config.height = 450;
+    config.height = 500;
     config.iconCls = 'icon-slide_images-win';
     config.items = this.buildForm();
     
@@ -227,7 +227,8 @@ Ext.define('Toc.slideImages.SlideImagesDialog', {
                   xtype: "fileuploadfield",
                   width: 400,
                   fieldLabel: "' . lang('field_slide_image') . '",
-                  name: "image' . $l['id'] . '"
+                  name: "image' . $l['id'] . '",
+                  allowBlank: false
                 },
                 {
                   xtype: "panel",
