@@ -70,7 +70,7 @@ class Articles_Model extends CI_Model
             $this->db->like('ad.articles_name', $search);
         }
         
-        $this->db->order_by('a.articles_order, a.articles_date_added desc');
+        $this->db->order_by('a.articles_id desc');
         
         if ($start !== NULL && $limit !== NULL)
         {
