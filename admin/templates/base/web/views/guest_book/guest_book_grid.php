@@ -239,6 +239,7 @@ Ext.define('Toc.guest_book.GuestBookGrid', {
         if (result.success == true) {
           var store = this.getStore();
           store.getAt(index).set('guest_books_status', flag);
+          store.getAt(index).commit();
           
           this.fireEvent('notifysuccess', result.feedback);
         }
