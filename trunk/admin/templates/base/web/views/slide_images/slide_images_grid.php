@@ -278,6 +278,7 @@ Ext.define('Toc.slideImages.SlideImagesGrid', {
           var store = this.getStore();
           
           store.getAt(index).set('status', flag);
+          store.getAt(index).commit();
           
           this.fireEvent('notifysuccess', result.feedback);
         }else {
