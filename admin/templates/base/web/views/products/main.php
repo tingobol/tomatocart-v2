@@ -55,7 +55,7 @@ Ext.override(Toc.desktop.ProductsWindow, {
 
       win = desktop.createWindow({
         id: 'products-win',
-        title:'products',
+        title:'<?php echo lang('heading_products_title'); ?>',
         width:870,
         height:400,
         iconCls: 'icon-products-win',

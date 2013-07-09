@@ -8,7 +8,7 @@
 # it under the terms of the GNU General Public License v2 (1991)
 # as published by the Free Software Foundation.
 
-heading_title = Products
+heading_products_title = Products
 heading_attachments_title = Attachments
 heading_title_new_product = New Product
 heading_title_new_attachment = New Attachment

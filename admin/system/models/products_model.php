@@ -1052,7 +1052,7 @@ class Products_Model extends CI_Model
      */
     public function get_totals($search = NULL, $in_categories = NULL)
     {
-        if (empty($search))
+        if ($search === NULL && $in_categories === NULL)
         {
             return $this->db->count_all('products');
         }
@@ -1063,7 +1063,7 @@ class Products_Model extends CI_Model
             ->from('products p')
             ->join('products_description pd', 'p.products_id = pd.products_id', 'inner');
                  
-            if (!empty($in_categories))
+            if (count($in_categories) > 0)
             {
                 $this->db
                 ->join('products_to_categories p2c', 'p.products_id = p2c.products_id', 'inner')
@@ -1072,7 +1072,7 @@ class Products_Model extends CI_Model
             
             $this->db->where('pd.language_id', lang_id());
             
-            if (!empty($search))
+            if ($search !== NULL)
             {
                 $this->db->like('pd.products_name', $search);
             }
