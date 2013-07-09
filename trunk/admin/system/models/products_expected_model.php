@@ -86,8 +86,7 @@ Class Products_Expected_Model extends CI_Model
      */
     public function save_date_available($id, $data)
     {
-        $this->db->update('products', array('products_date_available' => date('Y-m-d') < $data['date_available'] ? $data['date_available'] : 'null', 
-                                            'products_last_modified' => date('Y-m-d H:i:s')), 
+        $this->db->update('products', array('products_date_available' => (date('Y-m-d') < $data['date_available'] ? $data['date_available'] : null)), 
                                       array('products_id' => $id));
                                       
         if ($this->db->affected_rows() > 0)
