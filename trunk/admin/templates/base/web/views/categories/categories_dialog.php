@@ -97,7 +97,7 @@ Ext.define('Toc.categories.CategoriesDialog', {
       
     } else {
       this.pnlGeneral.dsParentCategories.on('load', function() {
-        this.pnlGeneral.cboParentCategories.setValue(0);
+        this.pnlGeneral.cboParentCategories.setValue(parseInt(this.categoriesId));
       }, this);
       this.pnlGeneral.dsParentCategories.load();
           
@@ -106,7 +106,7 @@ Ext.define('Toc.categories.CategoriesDialog', {
     
   },
   
-  buildForm: function() {
+  buildForm: function(categoriesId) {
     this.pnlGeneral = Ext.create('Toc.categories.GeneralPanel');
     this.pnlMetaInfo = Ext.create('Toc.categories.MetaInfoPanel');
     
@@ -201,7 +201,6 @@ Ext.define('Toc.categories.CategoriesDialog', {
     }
   }
 });
-
 
 /* End of file categories_dialog.php */
 /* Location: ./templates/base/web/views/categories/categories_dialog.php */

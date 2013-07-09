@@ -107,7 +107,7 @@ Ext.define('Toc.categories.GeneralPanel', {
       }]
     });
     
-    items.push({xtype: 'numberfield', fieldLabel: '<?php echo lang("field_sort_order"); ?>', name: 'sort_order'});
+    items.push({xtype: 'numberfield', fieldLabel: '<?php echo lang("field_sort_order"); ?>', name: 'sort_order', value: 0});
     
     return items;
   }

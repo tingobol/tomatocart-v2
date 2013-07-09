@@ -107,7 +107,7 @@ Ext.define('Toc.categories.CategoriesGrid', {
       {
         text: TocLanguage.btnAdd,
         iconCls: 'add',
-        handler: function() {this.fireEvent('create');},
+        handler: function() {this.fireEvent('create', this.categoriesId);},
         scope: this
       },
       '-', 
@@ -158,6 +158,8 @@ Ext.define('Toc.categories.CategoriesGrid', {
   },
   
   refreshGrid: function (categoriesId) {
+    this.categoriesId = categoriesId;
+    
     var store = this.getStore();
 
     store.getProxy().extraParams['categories_id'] = categoriesId;
