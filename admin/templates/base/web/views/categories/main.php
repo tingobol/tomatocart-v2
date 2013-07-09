@@ -52,8 +52,8 @@ Ext.override(Toc.desktop.CategoriesWindow, {
     win.show();
   },
   
-  onCreateCategory: function(pnlCategoriesTree) {
-    var dlg = this.createCategoriesDialog();
+  onCreateCategory: function(pnlCategoriesTree, categoriesId) {
+    var dlg = this.createCategoriesDialog(categoriesId);
     
     this.onSaveSuccess(dlg, pnlCategoriesTree);
     
@@ -107,12 +107,12 @@ Ext.override(Toc.desktop.CategoriesWindow, {
     });
   },
   
-  createCategoriesDialog: function() {
+  createCategoriesDialog: function(categoriesId) {
     var desktop = this.app.getDesktop();
     var dlg = desktop.getWindow('categories-dialog-win');
     
     if (!dlg) {
-      dlg = desktop.createWindow({}, Toc.categories.CategoriesDialog);
+      dlg = desktop.createWindow({categoriesId: categoriesId}, Toc.categories.CategoriesDialog);
       
       dlg.on('savesuccess', this.onShowNotification, this);
     }
@@ -138,8 +138,8 @@ Ext.override(Toc.desktop.CategoriesWindow, {
       this.onDeleteCategorySuccess(pnlCategories.pnlCategoriesTree, feedback);
     }, this);
     
-    pnlCategories.grdCategories.on('create', function() {
-      this.onCreateCategory(pnlCategories.pnlCategoriesTree);
+    pnlCategories.grdCategories.on('create', function(categoriesId) {
+      this.onCreateCategory(pnlCategories.pnlCategoriesTree, categoriesId);
     }, this);
     
     pnlCategories.grdCategories.on('edit', function(rec) {

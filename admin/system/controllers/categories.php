@@ -111,7 +111,7 @@ class Categories extends TOC_Controller
     {
         $categories_id = $this->input->post('categories_id');
     
-        if (!empty($categories_id) && $this->categories_model->delete($categories_id))
+        if ((int)$categories_id > 0 && $this->categories_model->delete($categories_id))
         {
             $response = array('success' => TRUE ,'feedback' => lang('ms_success_action_performed'));
         }
@@ -149,11 +149,11 @@ class Categories extends TOC_Controller
     
         if ($error === FALSE)
         {
-            $response = array('success' => true ,'feedback' => lang('ms_success_action_performed'));
+            $response = array('success' => TRUE ,'feedback' => lang('ms_success_action_performed'));
         }
         else
         {
-            $response = array('success' => false, 'feedback' => lang('ms_error_action_not_performed'));
+            $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed'));
         }
         
         $this->output->set_output(json_encode($response));
@@ -174,7 +174,7 @@ class Categories extends TOC_Controller
         $records = array(array('id' => 0,
                                'text' => lang('top_category')));
     
-        foreach ($this->category_tree->getTree() as $value) 
+        foreach ($this->category_tree->get_tree() as $value) 
         {
             $category_id = strval($value['id']);
             $margin = 0;

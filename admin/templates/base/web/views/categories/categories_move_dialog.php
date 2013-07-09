@@ -109,11 +109,7 @@ Ext.define('Toc.categories.CategoriesMoveDialog', {
       pageSize: Toc.CONF.GRID_PAGE_SIZE,
       proxy: {
         type: 'ajax',
-        url : Toc.CONF.CONN_URL,
-        extraParams: {
-          module: 'categories',
-          action: 'list_parent_category'
-        },
+        url : '<?php echo site_url('categories/list_parent_category'); ?>',
         reader: {
           type: 'json',
           root: Toc.CONF.JSON_READER_ROOT,

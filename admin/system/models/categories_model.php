@@ -92,9 +92,9 @@ class Categories_Model extends CI_Model
         
         if (is_numeric($categories_id))
         {
-            $this->category_tree->setBreadcrumbUsage(FALSE);
+            $this->category_tree->set_breadcrumb_usage(FALSE);
             
-            $categories = array_merge(array(array('id' => $categories_id, 'text' => '')), $this->category_tree->getTree($categories_id));
+            $categories = array_merge(array(array('id' => $categories_id, 'text' => '')), $this->category_tree->get_tree($categories_id));
             $products = array();
             $products_delete = array();
           
