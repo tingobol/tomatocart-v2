@@ -279,6 +279,8 @@ Ext.define('Toc.products.ProductsGrid', {
             store.getAt(index).set('products_status', flag);
           }
           
+          store.getAt(index).commit();
+          
           this.fireEvent('notifysuccess', result.feedback);
         }else {
           Ext.MessageBox.alert(TocLanguage.msgErrTitle, result.feedback);
@@ -304,6 +306,9 @@ Ext.define('Toc.products.ProductsGrid', {
     var store = this.getStore();
 
     store.getProxy().extraParams['categories_id'] = categoriesId;
+    
+    //reset the start page
+    store.currentPage = 1
     store.load();
   }
 });
