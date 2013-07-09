@@ -57,6 +57,7 @@ Ext.define('Toc.product_variants.MainPanel', {
     var record = this.grdVariantsGroups.getSelectionModel().getLastSelected() || null;
     if (record) {
       record.set('total_entries', this.grdVariantsEntries.getStore().getCount());
+      record.commit();
     }
   } 
 });

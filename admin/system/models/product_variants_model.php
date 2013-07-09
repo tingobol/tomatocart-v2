@@ -357,7 +357,7 @@ class Product_Variants_Model extends CI_Model
         {
             $result = $this->db
                 ->select_max('products_variants_groups_id')
-                ->from('products_variants_values_to_products_variants_groups')
+                ->from('products_variants_groups')
                 ->get();
             
             $max_groups = $result->row_array();
