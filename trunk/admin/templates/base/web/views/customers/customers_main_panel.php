@@ -42,7 +42,7 @@ Ext.define('Toc.customers.mainPanel', {
     
     this.addEvents({'createcustomer': true, 'editcustomer': true, 'createaddress': true, 'editaddress': true, 'notifysuccess': true});
     
-    this.callParent([config]); 
+    this.callParent([config]);
   },
   
   onGrdCustomersLoad: function() {
@@ -52,7 +52,7 @@ Ext.define('Toc.customers.mainPanel', {
       
       this.onGrdCustomersSelectChange(record);
     } else {
-      this.pnlAccordion.grdAddressBook.doLayout();
+      this.pnlAccordion.grdAddressBook.reset();
     }
   },
 

@@ -204,6 +204,12 @@ Ext.define('Toc.customers.AddressBookGrid', {
     } else {
       Ext.MessageBox.alert(TocLanguage.msgInfoTitle, TocLanguage.msgMustSelectOne);
     }
+  },
+  
+  reset: function() {
+    this.setTitle('<?php echo lang('section_address_book'); ?>');
+    this.customersId = null;
+    this.getStore().removeAll();
   }
 });
 

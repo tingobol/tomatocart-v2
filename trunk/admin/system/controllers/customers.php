@@ -313,13 +313,23 @@ class Customers extends TOC_Controller
 
         $customers_id = $this->input->get_post('customers_id');
         $addresses = $this->customers_model->get_addressbook_data($customers_id);
-
+        
+        //get the default address book id of current customers id
+        $customers_info = $this->customers_model->get_data($customers_id);
+        $default_address_id = $customers_info['customers_default_address_id'];
+        
         $records = array();
         if ($addresses !== NULL)
         {
             foreach($addresses as $address)
             {
                 $address_html= $this->address->format($address, '<br />');
+                
+                //the address book is the default address book
+                if ($default_address_id == $address['address_book_id'])
+                {
+                    $address_html .= '<strong><i>&nbsp;(' . lang('primary_address') . ')</i></strong>';
+                }
 
                 $records[] = array(
                     'address_book_id' => $address['address_book_id'],
@@ -342,14 +352,37 @@ class Customers extends TOC_Controller
     public function delete_address_book()
     {
         $address_book_id = $this->input->post('address_book_id');
-
-        if ($this->customers_model->delete_address($address_book_id))
+        $customers_id = $this->input->post('customers_id');
+        
+        //flag to check the error
+        $error = FALSE;
+        $feedback = array();
+        
+        //get the current customer infomation
+        $customer_info = $this->customers_model->get_data($customers_id);
+        
+        //forbidden to delete the default address book
+        if ($customer_info['customers_default_address_id'] == $address_book_id)
         {
-            $response = array('success' => TRUE, 'feedback' => lang('ms_success_action_performed'));
+            $error = TRUE;
+            $feedback[] = lang('delete_warning_primary_address_book_entry');
+        }
+        
+        if ($error === FALSE)
+        {
+            //delete the address book
+            if ($this->customers_model->delete_address($address_book_id))
+            {
+                $response = array('success' => TRUE, 'feedback' => lang('ms_success_action_performed'));
+            }
+            else
+            {
+                $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed'));
+            }
         }
         else
         {
-            $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed'));
+            $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed') . '<br />' . implode('<br />', $feedback));
         }
 
         $this->output->set_output(json_encode($response));
@@ -613,29 +646,44 @@ class Customers extends TOC_Controller
      */
     public function delete_address_books()
     {
+        //flag to check error
         $error = FALSE;
+        $feedback = array();
 
         $batch = json_decode($this->input->post('batch'));
-
-        if (is_array($batch) && count($batch) > 0)
+        
+        //forbidden to delete the default address book
+        $customer_info = $this->customers_model->get_data($this->input->post('customers_id'));
+        if (in_array($customer_info['customers_default_address_id'], $batch))
         {
-            foreach($batch as $id)
+            $error = TRUE;
+            $feedback[] = lang('delete_warning_primary_address_book_entry');
+        }
+        
+        //delete the address books
+        if ($error === FALSE)
+        {
+            if (is_array($batch) && count($batch) > 0)
             {
-                if ($this->customers_model->delete_address($id) === FALSE)
+                foreach($batch as $id)
                 {
-                    $error = TRUE;
-                    break;
+                    if ($this->customers_model->delete_address($id) === FALSE)
+                    {
+                        $error = TRUE;
+                        break;
+                    }
                 }
             }
+            
         }
-
+        
         if ($error === FALSE)
         {
             $response = array('success' => TRUE, 'feedback' => lang('ms_success_action_performed'));
         }
         else
         {
-            $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed'));
+            $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed') . '<br />' . implode('<br />', $feedback));
         }
 
         $this->output->set_output(json_encode($response));
