@@ -74,19 +74,13 @@ class TOC_Order_Total
 
         //load extensions model
         $this->ci->load->model('extensions_model');
-        //$this->quotes = $this->shopping_cart->get_shipping_quotes();
         $this->modules = $this->ci->extensions_model->get_modules('order_total');
         
-        if (empty($this->modules) === FALSE)
+        //load language resources
+        $this->ci->lang->db_load('modules-order_total');
+        
+        if (!empty($this->modules))
         {
-            if ((empty($module) === FALSE) && in_array(substr($module, 0, strpos($module, '_')), $this->modules))
-            {
-                $this->selected_module = $module;
-                $this->modules = array(substr($module, 0, strpos($module, '_')));
-            }
-
-            $this->ci->lang->db_load('modules-order_total');
-
             //load shipping libraries
             foreach ($this->modules as $module)
             {
@@ -110,6 +104,8 @@ class TOC_Order_Total
     function get_result()
     {
         $this->data = array();
+        
+        var_dump($this->modules);
 
         foreach ($this->modules as $module)
         {
@@ -120,12 +116,13 @@ class TOC_Order_Total
                 //use the cart total value to caculate the tax of order total module
                 //cart total value before module process
                 $pre_total = $this->ci->shopping_cart->get_total();
-
+                
+                //process order total module
                 $this->ci->$module_class->process();
 
                 //cart total value after module process
                 $post_total = $this->ci->shopping_cart->get_total();
-
+                
                 foreach ($this->ci->$module_class->get_output() as $output) 
                 {
                     if (!empty($output['title']) && !empty($output['text'])) 
@@ -140,7 +137,7 @@ class TOC_Order_Total
                 }
             }
         }
-
+        
         return $this->data;
     }
 
