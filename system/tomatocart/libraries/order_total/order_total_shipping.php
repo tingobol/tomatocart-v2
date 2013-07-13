@@ -69,8 +69,6 @@ class TOC_Order_Total_shipping extends TOC_Order_Total_Module
     function __construct() {
         parent::__construct();
 
-        $this->output = array();
-
         $this->code = 'shipping';
         $this->title = lang('order_total_shipping_title');
         $this->description = lang('order_total_shipping_description');
@@ -102,19 +100,19 @@ class TOC_Order_Total_shipping extends TOC_Order_Total_Module
 
                 if ($this->ci->shopping_cart->get_shipping_method('tax_class_id') > 0)
                 {
-                    $tax = $osC_Tax->getTaxRate($this->ci->shopping_cart->get_shipping_method('tax_class_id'), $this->ci->shopping_cart->getShippingAddress('country_id'), $this->ci->shopping_cart->getShippingAddress('zone_id'));
-                    $tax_description = $osC_Tax->getTaxRateDescription($this->ci->shopping_cart->get_shipping_method('tax_class_id'), $this->ci->shopping_cart->getShippingAddress('country_id'), $this->ci->shopping_cart->getShippingAddress('zone_id'));
+                    $tax = $this->ci->tax->get_tax_rate($this->ci->shopping_cart->get_shipping_method('tax_class_id'), $this->ci->shopping_cart->get_shipping_address('country_id'), $this->ci->shopping_cart->get_shipping_address('zone_id'));
+                    $tax_description = $this->ci->tax->get_tax_rate_description($this->ci->shopping_cart->get_shipping_method('tax_class_id'), $this->ci->shopping_cart->get_shipping_address('country_id'), $this->ci->shopping_cart->get_shipping_address('zone_id'));
 
-                    $this->ci->shopping_cart->addTaxAmount($osC_Tax->calculate($this->ci->shopping_cart->get_shipping_method('cost'), $tax));
-                    $this->ci->shopping_cart->addTaxGroup($tax_description, $osC_Tax->calculate($this->ci->shopping_cart->get_shipping_method('cost'), $tax));
+                    $this->ci->shopping_cart->add_tax_amount($this->ci->tax->calculate($this->ci->shopping_cart->get_shipping_method('cost'), $tax));
+                    $this->ci->shopping_cart->add_tax_group($tax_description, $this->ci->tax->calculate($this->ci->shopping_cart->get_shipping_method('cost'), $tax));
 
                     //osc3 bug
-                    $this->ci->shopping_cart->add_to_total($osC_Tax->calculate($this->ci->shopping_cart->get_shipping_method('cost'), $tax));
+                    $this->ci->shopping_cart->add_to_total($this->ci->tax->calculate($this->ci->shopping_cart->get_shipping_method('cost'), $tax));
 
-                    if (DISPLAY_PRICE_WITH_TAX == '1') {
-                        $this->ci->shopping_cart->_shipping_method['cost'] += $osC_Tax->calculate($this->ci->shopping_cart->get_shipping_method('cost'), $tax);
+                    if (config('DISPLAY_PRICE_WITH_TAX') == '1') {
+                        $this->ci->shopping_cart->shipping_method['cost'] += $this->ci->tax->calculate($this->ci->shopping_cart->get_shipping_method('cost'), $tax);
                         //osc3 bug, no matter tax is displayed or not, all tax has to be add to total
-                        //$this->ci->shopping_cart->add_to_total($osC_Tax->calculate($this->ci->shopping_cart->get_shipping_method('cost'), $tax));
+                        //$this->ci->shopping_cart->add_to_total($this->ci->tax->calculate($this->ci->shopping_cart->get_shipping_method('cost'), $tax));
                     }
                 }
 

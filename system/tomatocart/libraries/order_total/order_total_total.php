@@ -70,8 +70,6 @@ class TOC_Order_Total_total extends TOC_Order_Total_Module
     {
         parent::__construct();
 
-        $this->output = array();
-
         $this->title = lang('order_total_total_title');
         $this->description = lang('order_total_total_description');
         $this->status = (isset($this->config['MODULE_ORDER_TOTAL_TOTAL_STATUS']) && ($this->config['MODULE_ORDER_TOTAL_TOTAL_STATUS'] == 'true') ? TRUE : FALSE);

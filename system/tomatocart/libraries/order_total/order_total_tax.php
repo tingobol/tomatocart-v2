@@ -69,8 +69,6 @@ class TOC_Order_Total_tax extends TOC_Order_Total_Module
     function __construct() {
         parent::__construct();
 
-        $this->output = array();
-
         $this->title = lang('order_total_tax_title');
         $this->description = lang('order_total_tax_description');
         $this->status = (isset($this->config['MODULE_ORDER_TOTAL_TAX_STATUS']) && ($this->config['MODULE_ORDER_TOTAL_TAX_STATUS'] == 'true') ? TRUE : FALSE);
@@ -85,8 +83,6 @@ class TOC_Order_Total_tax extends TOC_Order_Total_Module
     {
         $this->output = array();
 
-        //var_dump($this->ci->shopping_cart->get_tax_groups());exit;
-        
         foreach ($this->ci->shopping_cart->get_tax_groups() as $key => $value)
         {
             if ($value > 0)
@@ -98,4 +94,3 @@ class TOC_Order_Total_tax extends TOC_Order_Total_Module
         }
     }
 }
-?>

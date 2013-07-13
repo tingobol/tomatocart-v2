@@ -70,8 +70,6 @@ class TOC_Order_Total_sub_total extends TOC_Order_Total_Module
     {
         parent::__construct();
 
-        $this->output = array();
-
         $this->title = lang('order_total_subtotal_title');
         $this->description = lang('order_total_subtotal_description');
         $this->status = (isset($this->config['MODULE_ORDER_TOTAL_SUBTOTAL_STATUS']) && ($this->config['MODULE_ORDER_TOTAL_SUBTOTAL_STATUS'] == 'true') ? TRUE : FALSE);
@@ -86,6 +84,8 @@ class TOC_Order_Total_sub_total extends TOC_Order_Total_Module
      */
     function process() 
     {
+        $this->output = array();
+        
         $this->output[] = array('title' => $this->title . ':',
                                 'text' => $this->ci->currencies->format($this->ci->shopping_cart->get_sub_total()),
                                 'value' => $this->ci->shopping_cart->get_sub_total());

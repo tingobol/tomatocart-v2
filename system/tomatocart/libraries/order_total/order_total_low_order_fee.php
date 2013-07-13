@@ -20,7 +20,7 @@
 require_once 'order_total_module.php';
 
 /**
- * Free Shipping -- Shipping Module Class
+ * Low Order Fee -- Shipping Module Class
  *
  * @package		TomatoCart
  * @subpackage	tomatocart
@@ -128,8 +128,6 @@ class TOC_Order_Total_low_order_fee extends TOC_Order_Total_Module
     function __construct() {
         parent::__construct();
 
-        $this->output = array();
-
         $this->code = 'low_order_fee';
         $this->title = lang('order_total_loworderfee_title');
         $this->description = lang('order_total_loworderfee_description');
@@ -141,8 +139,6 @@ class TOC_Order_Total_low_order_fee extends TOC_Order_Total_Module
      * Process the total
      */
     function process() {
-        global $osC_Tax, $osC_ShoppingCart, $osC_Currencies;
-
         $this->output = array();
 
         if ($this->config['MODULE_ORDER_TOTAL_LOWORDERFEE_LOW_ORDER_FEE'] == 'true')
@@ -173,16 +169,16 @@ class TOC_Order_Total_low_order_fee extends TOC_Order_Total_Module
 
             if ( ($pass == true) && ($this->ci->shopping_cart->get_sub_total() < $this->config['MODULE_ORDER_TOTAL_LOWORDERFEE_ORDER_UNDER']) )
             {
-                $tax = $osC_Tax->getTaxRate(MODULE_ORDER_TOTAL_LOWORDERFEE_TAX_CLASS, $osC_ShoppingCart->getTaxingAddress('country_id'), $osC_ShoppingCart->getTaxingAddress('zone_id'));
-                $tax_description = $osC_Tax->getTaxRateDescription(MODULE_ORDER_TOTAL_LOWORDERFEE_TAX_CLASS, $osC_ShoppingCart->getTaxingAddress('country_id'), $osC_ShoppingCart->getTaxingAddress('zone_id'));
+                $tax = $this->ci->tax->get_tax_rate($this->config['MODULE_ORDER_TOTAL_LOWORDERFEE_TAX_CLASS'], $this->ci->shopping_cart->get_taxing_address('country_id'), $this->ci->shopping_cart->get_taxing_address('zone_id'));
+                $tax_description = $this->ci->tax->get_tax_rate_description($this->config['MODULE_ORDER_TOTAL_LOWORDERFEE_TAX_CLASS'], $this->ci->shopping_cart->get_taxing_address('country_id'), $this->ci->shopping_cart->get_taxing_address('zone_id'));
 
-                $osC_ShoppingCart->addTaxAmount($osC_Tax->calculate(MODULE_ORDER_TOTAL_LOWORDERFEE_FEE, $tax));
-                $osC_ShoppingCart->addTaxGroup($tax_description, $osC_Tax->calculate(MODULE_ORDER_TOTAL_LOWORDERFEE_FEE, $tax));
-                $osC_ShoppingCart->addToTotal(MODULE_ORDER_TOTAL_LOWORDERFEE_FEE + $osC_Tax->calculate(MODULE_ORDER_TOTAL_LOWORDERFEE_FEE, $tax));
+                $this->ci->shopping_cart->add_tax_amount($this->ci->tax->calculate($this->config['MODULE_ORDER_TOTAL_LOWORDERFEE_FEE'], $tax));
+                $this->ci->shopping_cart->add_tax_group($tax_description, $this->ci->tax->calculate($this->config['MODULE_ORDER_TOTAL_LOWORDERFEE_FEE'], $tax));
+                $this->ci->shopping_cart->add_to_total($this->config['MODULE_ORDER_TOTAL_LOWORDERFEE_FEE'] + $this->ci->tax->calculate($this->config['MODULE_ORDER_TOTAL_LOWORDERFEE_FEE'], $tax));
 
                 $this->output[] = array('title' => $this->title . ':',
-                                        'text' => $osC_Currencies->displayPriceWithTaxRate(MODULE_ORDER_TOTAL_LOWORDERFEE_FEE, $tax),
-                                        'value' => $osC_Currencies->addTaxRateToPrice(MODULE_ORDER_TOTAL_LOWORDERFEE_FEE, $tax));
+                                        'text' => $this->ci->currencies->display_price_with_tax_rate($this->config['MODULE_ORDER_TOTAL_LOWORDERFEE_FEE'], $tax),
+                                        'value' => $this->ci->currencies->add_tax_rate_to_price($this->config['MODULE_ORDER_TOTAL_LOWORDERFEE_FEE'], $tax));
             }
         }
     }
