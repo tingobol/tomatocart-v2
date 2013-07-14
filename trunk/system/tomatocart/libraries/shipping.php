@@ -82,12 +82,12 @@ class TOC_Shipping
         //load extensions model
         $this->ci->load->model('extensions_model');
 
-        //$this->quotes = $this->shopping_cart->get_shipping_quotes();
+        //get shipping modules
         $this->modules = $this->ci->extensions_model->get_modules('shipping');
 
-        if (empty($this->modules) === FALSE)
+        if (!empty($this->modules))
         {
-            if ((empty($module) === FALSE) && in_array(substr($module, 0, strpos($module, '_')), $this->modules))
+            if (!empty($module) && in_array(substr($module, 0, strpos($module, '_')), $this->modules))
             {
                 $this->selected_module = $module;
                 $this->modules = array(substr($module, 0, strpos($module, '_')));
@@ -103,7 +103,7 @@ class TOC_Shipping
 
                 //load library
                 $this->ci->load->library('shipping/' . $module_class);
-                
+
                 //initialize
                 $this->ci->{$module_class}->initialize();
             }
@@ -111,10 +111,7 @@ class TOC_Shipping
             usort($this->modules, array('TOC_Shipping', 'usort_modules'));
         }
 
-        if ( empty($this->quotes) )
-        {
-            $this->calculate();
-        }
+        $this->calculate();
     }
 
     /**
@@ -202,10 +199,10 @@ class TOC_Shipping
                     if ($method['id'] == $method_id)
                     {
                         $rate = array('id' => $module,
-                            'title' => $quote['module'] . ((empty($method['title']) === FALSE) ? ' (' . $method['title'] . ')' : ''),
-                            'cost' => $method['cost'],
-                            'tax_class_id' => $quote['tax_class_id'],
-                            'is_cheapest' => null);
+                                      'title' => $quote['module'] . ((empty($method['title']) === FALSE) ? ' (' . $method['title'] . ')' : ''),
+                                      'cost' => $method['cost'],
+                                      'tax_class_id' => $quote['tax_class_id'],
+                                      'is_cheapest' => null);
 
                         break 2;
                     }
@@ -229,10 +226,10 @@ class TOC_Shipping
                     if (empty($rate) || ($method['cost'] < $rate['cost']))
                     {
                         $rate = array('id' => $quote['id'] . '_' . $method['id'],
-                            'title' => $quote['module'] . ((empty($method['title']) === FALSE) ? ' (' . $method['title'] . ')' : ''),
-                            'cost' => $method['cost'],
-                            'tax_class_id' => $quote['tax_class_id'],
-                            'is_cheapest' => FALSE);
+                                      'title' => $quote['module'] . ((empty($method['title']) === FALSE) ? ' (' . $method['title'] . ')' : ''),
+                                      'cost' => $method['cost'],
+                                      'tax_class_id' => $quote['tax_class_id'],
+                                      'is_cheapest' => FALSE);
                     }
                 }
             }
@@ -270,7 +267,7 @@ class TOC_Shipping
 
     /**
      * Calcuate shipping costs
-     * 
+     *
      * @access private
      * @return void
      */
@@ -282,19 +279,12 @@ class TOC_Shipping
         {
             $include_quotes = array();
 
-            if (isset($this->ci->shipping_free) && $this->ci->shipping_free->is_enabled())
+            foreach ($this->modules as $module)
             {
-                $include_quotes[] = 'shipping_free';
-            }
-            else
-            {
-                foreach ($this->modules as $module)
+                $module_class = strtolower('shipping_' . $module);
+                if ($this->ci->$module_class->is_enabled())
                 {
-                    $module_class = strtolower('shipping_' . $module);
-                    if ($this->ci->$module_class->is_enabled())
-                    {
-                        $include_quotes[] = $module_class;
-                    }
+                    $include_quotes[] = $module_class;
                 }
             }
 

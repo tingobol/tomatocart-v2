@@ -252,7 +252,9 @@ class TOC_Payment_paypal_standard extends TOC_Payment_Module
      */
     function confirmation()
     {
-        //$this->order_id = osC_Order::insert(ORDERS_STATUS_PREPARING);
+        $this->ci->load->model('order_model');
+
+        $this->order_id = $this->ci->order_model->insert_order();
     }
 
     /**
@@ -266,7 +268,7 @@ class TOC_Payment_paypal_standard extends TOC_Payment_Module
         $process_button_string = '';
         $params = array('business' => $this->config['MODULE_PAYMENT_PAYPAL_STANDARD_ID'],
                       'currency_code' => $this->ci->currencies->get_code(),
-                      'invoice' => 1, //$this->order_id,
+                      'invoice' => $this->order_id,
                       'custom' => $this->ci->customer->get_id(),
                       'no_note' => '1',
                       'notify_url' =>  site_url('checkout/callback/' . $this->code),
@@ -478,7 +480,7 @@ class TOC_Payment_paypal_standard extends TOC_Payment_Module
     }
 
     function process() {
-        if (isset($_POST['invoice']) && is_numeric($_POST['invoice']) && isset($_POST['receiver_email']) && ($_POST['receiver_email'] == MODULE_PAYMENT_PAYPAL_STANDARD_ID) && isset($_POST['verify_sign']) && (empty($_POST['verify_sign']) === FALSE) && isset($_POST['txn_id']) && (empty($_POST['txn_id']) === FALSE)) {
+        if (isset($_POST['invoice']) && is_numeric($_POST['invoice']) && isset($_POST['receiver_email']) && ($_POST['receiver_email'] == config('MODULE_PAYMENT_PAYPAL_STANDARD_ID')) && isset($_POST['verify_sign']) && (empty($_POST['verify_sign']) === FALSE) && isset($_POST['txn_id']) && (empty($_POST['txn_id']) === FALSE)) {
             unset($_SESSION['prepOrderID']);
         }
     }

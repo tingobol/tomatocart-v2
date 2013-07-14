@@ -121,6 +121,7 @@ class Mod_Special_Products extends TOC_Module
                     'products_name' => $product['products_name'],
                     'products_image' => $product['image'],
                     'products_price' => $product['products_price'],
+                    'tax_class_id' => $product['products_tax_class_id'],
                     'short_description' => $product['short_description'],
                     'special_price' => $product['special_price']);
             }

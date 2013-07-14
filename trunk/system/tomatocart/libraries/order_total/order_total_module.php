@@ -148,13 +148,21 @@ class TOC_Order_Total_Module {
         $data = $this->ci->extensions_model->get_module($this->group, $this->code);
         
         if ($data == NULL) {
+            $config = array();
+            
+            if (isset($this->params) && is_array($this->params)) {
+                foreach ($this->params as $param) {
+                    $config[$param['name']] = $param['value'];
+                }
+            }
+            
             $data = array(
                 'title' => $this->title,
                 'code' => $this->code,
                 'author_name' => '',
                 'author_www' => '',
                 'modules_group' => $this->group,
-                'params' => json_encode($this->params));
+                'params' => json_encode($config));
             
             $result = $this->ci->extensions_model->install($data);
             

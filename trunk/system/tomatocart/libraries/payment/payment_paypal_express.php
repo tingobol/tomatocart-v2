@@ -148,7 +148,7 @@ class TOC_Payment_paypal_express extends TOC_Payment_Module
             $this->paypal_url = 'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout';
         }
 
-        if ($this->status === TRUE)
+        if ($this->status === true)
         {
             $this->order_status = $this->config['MODULE_PAYMENT_PAYPAL_EXPRESS_ORDER_STATUS_ID'] > 0 ? (int) $this->config['MODULE_PAYMENT_PAYPAL_EXPRESS_ORDER_STATUS_ID'] : (int)config('ORDERS_STATUS_PAID');
 
@@ -197,16 +197,16 @@ class TOC_Payment_paypal_express extends TOC_Payment_Module
     }
 
     function selection() {
-        if (isset($_SESSION['ppe_token'])) {
-            return array('id' => $this->_code,
-                 'module' => $this->_method_title);
-        }else {
-            return false;
-        }
+        //if (isset($_SESSION['ppe_token'])) {
+            return array('id' => $this->code,
+                 'module' => $this->method_title);
+        //}else {
+          //  return false;
+        //}
     }
 
     function pre_confirmation_check() {
-        return osc_href_link(FILENAME_CHECKOUT,'callback&module=paypal_express');
+        //return osc_href_link(FILENAME_CHECKOUT,'callback&module=paypal_express');
     }
 
     function confirmation() {

@@ -105,8 +105,6 @@ class TOC_Order_Total
     {
         $this->data = array();
         
-        var_dump($this->modules);
-
         foreach ($this->modules as $module)
         {
             $module_class = strtolower('order_total_' . $module);

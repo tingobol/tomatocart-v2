@@ -46,7 +46,7 @@ class Index extends TOC_Controller {
      * @access public
      * @return void
      */
-    public function index()
+    public function index($view = NULL)
     {
         //if there is no products in the shopping cart then redirect to shopping cart
         if (!$this->shopping_cart->has_contents()) {
@@ -66,14 +66,14 @@ class Index extends TOC_Controller {
         
         if ($this->shopping_cart->has_billing_method()) {
             // load selected payment module
-            include('includes/classes/payment.php');
-            $osC_Payment = new osC_Payment($this->shopping_cart->getBillingMethod('id'));
+            //include('includes/classes/payment.php');
+            //$osC_Payment = new osC_Payment($this->shopping_cart->getBillingMethod('id'));
 
-            $payment_error = $osC_Payment->get_error();
+            //$payment_error = $osC_Payment->get_error();
 
-            if (is_array($payment_error) && !empty($payment_error)) {
-                $messageStack->add('payment_error_msg', '<strong>' . $payment_error['title'] . '</strong> ' . $payment_error['error']);
-            }
+            //if (is_array($payment_error) && !empty($payment_error)) {
+            //    $messageStack->add('payment_error_msg', '<strong>' . $payment_error['title'] . '</strong> ' . $payment_error['error']);
+            //}
         }
 
         //page title

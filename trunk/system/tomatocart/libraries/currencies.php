@@ -77,7 +77,7 @@ class TOC_Currencies
             $this->ci->session->set_userdata('currency', $session_currency);
         }
     }
-
+    
     /**
      * Format currency value with currency symbol
      *

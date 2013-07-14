@@ -46,13 +46,8 @@ class Cart_Delete extends TOC_Controller {
      * @param string
      * @return void
      */
-    public function index($id, $variants = NULL)
+    public function index($products_id_string)
     {
-        $products_id_string = $id;
-        if ($variants !== NULL) {
-            $products_id_string .= '#' . urldecode($variants);
-        }
-
         //if it exists in the shopping cart
         if ($this->shopping_cart->exists($products_id_string))
         {

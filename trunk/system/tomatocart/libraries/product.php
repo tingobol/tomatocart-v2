@@ -526,42 +526,42 @@ class TOC_Product
     {
         return $this->data['unit_class'];
     }
-    
+
     /**
      * Is featured product
-     * 
+     *
      * @access public
      * @return boolean
      */
-    public function is_featured() 
+    public function is_featured()
     {
         return ($this->data['featured_products_id'] === NULL) ? FALSE : TRUE;
     }
-    
+
     /**
      * Is specials product
-     * 
+     *
      * @access public
      * @return boolean
      */
-    public function is_specials() 
+    public function is_specials()
     {
         return ($this->data['specials_price'] === NULL) ? FALSE : TRUE;
     }
-    
+
     /**
      * Get specials price
-     * 
+     *
      * @access public
      * @return float
-     */    
-    public function get_specials_price() 
+     */
+    public function get_specials_price()
     {
-        if ($this->data['specials_price'] !== NULL) 
+        if ($this->data['specials_price'] !== NULL)
         {
             return $this->data['specials_price'];
         }
-        
+
         return 0;
     }
 
@@ -582,9 +582,9 @@ class TOC_Product
      * @access public
      * @return array
      */
-    function get_accessories() 
+    function get_accessories()
     {
-      return $this->data['accessories'];
+        return $this->data['accessories'];
     }
 
     /**
@@ -698,31 +698,33 @@ class TOC_Product
      */
     public function get_image()
     {
-        $default_image = null;
-        $default_variant_image = null;
+        $default_image = NULL;
+        $default_variant_image = NULL;
 
-        foreach ($this->data['images'] as $image)
-        {
-            //get variant default image
-            if ($this->has_variants())
+        if (isset($this->data['images']) && count($this->data['images']) > 0) {
+            foreach ($this->data['images'] as $image)
             {
-                if (is_array($this->data['default_variant']) && !empty($this->data['default_variant']))
+                //get variant default image
+                if ($this->has_variants())
                 {
-                    if (!empty($this->data['default_variant']['image']) && ($image['id'] == $this->data['default_variant']['image']))
+                    if (is_array($this->data['default_variant']) && !empty($this->data['default_variant']))
                     {
-                        $default_variant_image = $image['image'];
+                        if (!empty($this->data['default_variant']['image']) && ($image['id'] == $this->data['default_variant']['image']))
+                        {
+                            $default_variant_image = $image['image'];
+                        }
                     }
                 }
-            }
 
-            //get default image
-            if ($image['default_flag'] == '1')
-            {
-                $default_image = $image['image'];
+                //get default image
+                if ($image['default_flag'] == '1')
+                {
+                    $default_image = $image['image'];
+                }
             }
         }
 
-        if ($default_variant_image != null)
+        if ($default_variant_image != NULL)
         {
             return $default_variant_image;
         }

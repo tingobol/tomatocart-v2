@@ -184,8 +184,6 @@ class TOC_Compare_Products
             {
                 $products[] = load_product_library($products_id);
             }
-
-            var_dump($products);
         }
     }
 
