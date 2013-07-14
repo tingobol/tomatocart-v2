@@ -126,11 +126,11 @@ class TOC_Shipping_free extends TOC_Shipping_Module
      */
     public function quote() {
         $this->quotes = array('id' => $this->code,
-                            'module' => $this->title,
-                            'methods' => array(array('id' => $this->code,
+                              'module' => $this->title,
+                              'methods' => array(array('id' => $this->code,
                                                      'title' => sprintf(lang('shipping_free_for_amount'), $this->ci->currencies->format($this->config['MODULE_SHIPPING_FREE_MINIMUM_ORDER'])),
                                                      'cost' => 0)),
-                            'tax_class_id' => 0);
+                              'tax_class_id' => 0);
 
         if (!empty($this->icon)) $this->quotes['icon'] = image_url('images/shipping/' . $this->icon, $this->title);
 

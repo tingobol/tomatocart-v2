@@ -93,12 +93,8 @@ class TOC_Shipping_table extends TOC_Shipping_Module {
 		// $this->icon = 'table.jpg';
 		$this->title = lang('shipping_table_title');
 		$this->description = lang('shipping_table_description');
-		$this->status = (isset($this->config['MODULE_SHIPPING_TABLE_STATUS'])
-				&& ($this->config['MODULE_SHIPPING_TABLE_STATUS'] == 'True')) ? TRUE
-				: FALSE;
-		$this->sort_order = isset(
-				$this->config['MODULE_SHIPPING_TABLE_SORT_ORDER']) ? $this
-						->config['MODULE_SHIPPING_TABLE_SORT_ORDER'] : null;
+		$this->status = (isset($this->config['MODULE_SHIPPING_TABLE_STATUS']) && ($this->config['MODULE_SHIPPING_TABLE_STATUS'] == 'True')) ? TRUE : FALSE;
+		$this->sort_order = isset($this->config['MODULE_SHIPPING_TABLE_SORT_ORDER']) ? $this->config['MODULE_SHIPPING_TABLE_SORT_ORDER'] : NULL;
 	}
 
 	/**
@@ -110,70 +106,74 @@ class TOC_Shipping_table extends TOC_Shipping_Module {
 
 		$this->tax_class = $this->config['MODULE_SHIPPING_TABLE_TAX_CLASS'];
 
-		if (($this->status === TRUE)
-				&& ((int) $this->config['MODULE_SHIPPING_TABLE_ZONE'] > 0)) {
+		if (($this->status === TRUE) && ((int) $this->config['MODULE_SHIPPING_TABLE_ZONE'] > 0)) {
 			$this->ci->load->model('address_model');
 
-			$zones = $this->ci->address_model
-					->get_zone_id_via_geo_zone(
-							$this->ci->shopping_cart
-									->get_shipping_address('country_id'),
-							$this->config['MODULE_SHIPPING_TABLE_ZONE']);
+			$zones = $this->ci->address_model->get_zone_id_via_geo_zone($this->ci->shopping_cart->get_shipping_address('country_id'), $this->config['MODULE_SHIPPING_TABLE_ZONE']);
+		
+            $check_flag = FALSE;
+            if ($zones !== NULL)
+            {
+                foreach($zones as $zone_id)
+                {
+                    if ($zone_id < 1) {
+                        $check_flag = TRUE;
+                        break;
+                    }
+                    elseif ($zone_id == $this->ci->shopping_cart->get_shipping_address('zone_id'))
+                    {
+                        $check_flag = TRUE;
+                        break;
+                    }
+                }
+            }
 
-			$check_flag = FALSE;
-			if ($zones !== NULL) {
-				foreach ($zones as $zone_id) {
-					if ($zone_id < 1) {
-						$check_flag = TRUE;
-						break;
-					} elseif ($zone_id
-							== $this->ci->shopping_cart
-									->get_shipping_address('zone_id')) {
-						$check_flag = TRUE;
-						break;
-					}
-				}
-			}
-
-			if ($check_flag == FALSE) {
-				$this->status = FALSE;
-			}
+            if ($check_flag == FALSE) 
+            {
+                $this->status = FALSE;
+            }
 		}
 	}
 
 	public function quote() {
 		$this->ci->load->library('weight');
-		if ($this->config['MODULE_SHIPPING_TABLE_MODE'] == 'price') {
+		
+		if ($this->config['MODULE_SHIPPING_TABLE_MODE'] == 'price') 
+		{
 			$order_total = $this->ci->shopping_cart->get_sub_total();
-		} else {
-			$order_total = $this->ci->weight
-					->convert($this->ci->shopping_cart->get_weight(),
-							config('SHIPPING_WEIGHT_UNIT'),
-							$this->config['MODULE_SHIPPING_TABLE_WEIGHT_UNIT']);
+		} 
+		else 
+		{
+			$order_total = $this->ci->weight->convert($this->ci->shopping_cart->get_weight(), config('SHIPPING_WEIGHT_UNIT'), $this->config['MODULE_SHIPPING_TABLE_WEIGHT_UNIT']);
 		}
-		$table_cost = split("[:,]", $this->config['MODULE_SHIPPING_TABLE_COST']);
+		
+		$table_cost = preg_split("/[:,]/", $this->config['MODULE_SHIPPING_TABLE_COST']);
 		$size = sizeof($table_cost);
-		for ($i = 0, $n = $size; $i < $n; $i += 2) {
-			if ($order_total <= $table_cost[$i]) {
+		
+		for ($i = 0, $n = $size; $i < $n; $i += 2) 
+		{
+			if ($order_total <= $table_cost[$i]) 
+			{
 				$shipping = $table_cost[$i + 1];
 				break;
 			}
 		}
-
-		if ($this->config['MODULE_SHIPPING_TABLE_MODE'] == 'weight') {
-			// $shipping = $shipping * $osC_ShoppingCart->numberOfShippingBoxes();
+		
+		if ($this->config['MODULE_SHIPPING_TABLE_MODE'] == 'weight') 
+		{
+			$shipping = $shipping * $this->ci->shopping_cart->number_of_shipping_boxes();
 		}
 
-		$this->quotes = array('id' => $this->code, 'module' => $this->title,
-				'methods' => array(
-						array('id' => $this->code,
-								'title' => lang('shipping_table_method'),
-								'cost' => $shipping)),
-				'tax_class_id' => $this->tax_class);
+		$this->quotes = array('id' => $this->code, 
+		                      'module' => $this->title,
+				              'methods' => array(
+                                  array('id' => $this->code,
+                                		'title' => lang('shipping_table_method'),
+                                		'cost' => $shipping)),
+				              'tax_class_id' => $this->tax_class);
 
 		if (!empty($this->icon))
-			$this->quotes['icon'] = image_url('shipping/' . $this->icon,
-					$this->title);
+			$this->quotes['icon'] = image_url('shipping/' . $this->icon, $this->title);
 
 		return $this->quotes;
 	}

@@ -366,6 +366,50 @@ if( ! function_exists('get_shopping_cart'))
 }
 
 /**
+ * Get the IP address of the client
+ *
+ * @access public
+ */
+if (!function_exists('get_ip_address'))
+{
+    function get_ip_address()
+    {
+        if (isset($_SERVER))
+        {
+            if (isset($_SERVER['HTTP_X_FORWARDED_FOR']))
+            {
+                $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            }
+            elseif (isset($_SERVER['HTTP_CLIENT_IP']))
+            {
+                $ip = $_SERVER['HTTP_CLIENT_IP'];
+            }
+            else
+            {
+                $ip = $_SERVER['REMOTE_ADDR'];
+            }
+        }
+        else
+        {
+            if (getenv('HTTP_X_FORWARDED_FOR'))
+            {
+                $ip = getenv('HTTP_X_FORWARDED_FOR');
+            }
+            elseif (getenv('HTTP_CLIENT_IP'))
+            {
+                $ip = getenv('HTTP_CLIENT_IP');
+            }
+            else
+            {
+                $ip = getenv('REMOTE_ADDR');
+            }
+        }
+
+        return $ip;
+    }
+}
+
+/**
  * Truncate Html
  *
  * @access public
@@ -386,7 +430,7 @@ if( ! function_exists('truncate_html'))
             } else {
                 $total_length = strlen($ending);
             }
-            
+
             $open_tags = array();
             $truncate = '';
             foreach ($lines as $line_matchings) {

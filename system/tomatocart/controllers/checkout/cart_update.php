@@ -48,15 +48,13 @@ class Cart_Update extends TOC_Controller {
 	 */
 	public function index()
 	{
-		$products = $this->input->post('product');
+		$products = $this->input->post('products');
 		
 		//if products is an array
 		if (($products !== FALSE) && is_array($products)) 
 		{
 			foreach ($products as $products_id => $quantity) 
 			{
-			    //decode product id string
-			    $products_id = decode_product_id_string($products_id);
 			    //get variants from product id string
 			    $variants = parse_variants_from_id_string($products_id);
 			    //update shopping cart

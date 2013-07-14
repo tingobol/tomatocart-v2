@@ -43,7 +43,7 @@ class TOC_Shopping_Cart
      * @access protected
      * @var string
      */
-    protected $ci = null;
+    protected $ci = NULL;
 
     /**
      * shopping cart content
@@ -107,7 +107,7 @@ class TOC_Shopping_Cart
      * @access protected
      * @var array
      */
-    protected $shipping_address = null;
+    protected $shipping_address = NULL;
 
     /**
      * shopping cart billing address
@@ -115,7 +115,7 @@ class TOC_Shopping_Cart
      * @access protected
      * @var array
      */
-    protected $billing_address = null;
+    protected $billing_address = NULL;
 
     /**
      * products tax total
@@ -143,28 +143,41 @@ class TOC_Shopping_Cart
 
         // Grab the shopping cart array from the session table, if it exists
         $cart_contents = $this->ci->session->userdata('cart_contents');
-        if (($cart_contents !== FALSE) && ($cart_contents != NULL))
+        if ($cart_contents !== NULL)
         {
-            $cart_contents = $this->ci->session->userdata('cart_contents');
-
             $this->contents = $cart_contents['contents'];
             $this->subtotal = $cart_contents['subtotal'];
             $this->total = $cart_contents['total'];
             $this->weight = $cart_contents['weight'];
             $this->tax = $cart_contents['tax'];
             $this->tax_groups = $cart_contents['tax_groups'];
-            $this->shipping_boxes_weight =& $cart_contents['shipping_boxes_weight'];
-            $this->shipping_boxes =& $cart_contents['shipping_boxes'];
+            $this->shipping_boxes_weight =$cart_contents['shipping_boxes_weight'];
+            $this->shipping_boxes =$cart_contents['shipping_boxes'];
             $this->shipping_address = $cart_contents['shipping_address'];
-            $this->shipping_method =& $cart_contents['shipping_method'];
+            $this->shipping_method =$cart_contents['shipping_method'];
             $this->billing_address = $cart_contents['billing_address'];
-            $this->billing_method =& $cart_contents['billing_method'];
-            $this->shipping_quotes =& $cart_contents['shipping_quotes'];
-            $this->order_totals =& $cart_contents['order_totals'];
+            $this->billing_method = $cart_contents['billing_method'];
+            $this->shipping_quotes = $cart_contents['shipping_quotes'];
+            $this->order_totals = $cart_contents['order_totals'];
         }
         else
         {
-            $this->reset();
+            $this->contents = array();
+            $this->subtotal = 0;
+            $this->total = 0;
+            $this->weight = 0;
+            $this->tax = 0;
+            $this->tax_groups = array();
+            $this->content_type = NULL;
+
+            $this->shipping_boxes_weight = 0;
+            $this->shipping_boxes = 1;
+            $this->shipping_address = array('zone_id' => config('STORE_ZONE'), 'country_id' => config('STORE_COUNTRY'));
+            $this->shipping_method = array();
+            $this->billing_address = array('zone_id' => config('STORE_ZONE'), 'country_id' => config('STORE_COUNTRY'));
+            $this->billing_method = array();
+            $this->shipping_quotes = array();
+            $this->order_totals = array();
         }
 
         log_message('debug', "TOC Shopping Cart Class Initialized");
@@ -203,12 +216,10 @@ class TOC_Shopping_Cart
      */
     function update()
     {
-        $this->calculate();
-
-        //    if ( !isset($_SESSION['cartID']) )
-        //    {
-        //
-        //    }
+        $cart_id = $this->ci->session->userdata('cart_id');
+        if ($cart_id === NULL) {
+            $this->calculate();
+        }
     }
 
     /**
@@ -260,21 +271,18 @@ class TOC_Shopping_Cart
                 $product = load_product_library($products_id);
                 if ($product->is_valid()) {
                     $this->contents[$products_id] = array('id' => $products_id,
-                                                      'name' => $product->get_title(),
-                                                      'type' => $product->get_product_type(),
-                                                      'keyword' => $product->get_keyword(),
-                                                      'sku' => $product->get_sku($variants),
-                                                      'image' => $product->get_image(),
-                                                      'price' => $product->get_price($variants, $quantity),
-                                                      'final_price' => $product->get_price($variants, $quantity),
-                                                      'quantity' => ($quantity > $product->get_quantity($products_id)) ? $product->get_quantity($products_id) : $quantity,
-                                                      'weight' => $product->get_weight($variants),
-                                                      'tax_class_id' => $product->get_tax_class_id(),
-                                                      'date_added' => get_date_short($data['customers_basket_date_added']),
-                                                      'weight_class_id' => $product->get_weight_class());
-
-                    //set in stock status
-                    $this->contents[$products_id]['in_stock'] = $this->is_in_stock($products_id);
+                                                          'name' => $product->get_title(),
+                                                          'type' => $product->get_product_type(),
+                                                          'keyword' => $product->get_keyword(),
+                                                          'sku' => $product->get_sku($variants),
+                                                          'image' => $product->get_image(),
+                                                          'price' => $product->get_price($variants, $quantity),
+                                                          'final_price' => $product->get_price($variants, $quantity),
+                                                          'quantity' => ($quantity > $product->get_quantity($products_id)) ? $product->get_quantity($products_id) : $quantity,
+                                                          'weight' => $product->get_weight($variants),
+                                                          'tax_class_id' => $product->get_tax_class_id(),
+                                                          'date_added' => get_date_short($data['customers_basket_date_added']),
+                                                          'weight_class_id' => $product->get_weight_class());
 
                     if ($variants !== NULL) {
                         foreach ($variants as $group_id => $value_id) {
@@ -282,9 +290,9 @@ class TOC_Shopping_Cart
 
                             if ($data !== NULL) {
                                 $this->contents[$products_id]['variants'][$group_id] = array('groups_id' => $group_id,
-                                                                                         'variants_values_id' => $value_id,
-                                                                                         'groups_name' => $data['products_variants_groups_name'],
-                                                                                         'values_name' => $data['products_variants_values_name']);
+                                                                                             'variants_values_id' => $value_id,
+                                                                                             'groups_name' => $data['products_variants_groups_name'],
+                                                                                             'values_name' => $data['products_variants_values_name']);
                             }
                         }
                     }
@@ -332,6 +340,9 @@ class TOC_Shopping_Cart
         $this->reset_billing_method();
 
         $this->save_session();
+        
+        //unset cart id
+        $this->ci->session->unset_userdata('cart_id');
     }
 
     /**
@@ -347,7 +358,7 @@ class TOC_Shopping_Cart
         //load product object
         $product = load_product_library($products_id_string);
 
-        if ($product->get_id() > 0)
+        if ($product->is_valid())
         {
             //if product has variants and variants is not given
             if ($product->has_variants() && ($variants == NULL)) {
@@ -417,6 +428,8 @@ class TOC_Shopping_Cart
                 }
 
                 $price = $product->get_price($variants, $quantity);
+                
+                //specials
 
                 $this->contents[$products_id_string]['quantity'] = $quantity;
                 $this->contents[$products_id_string]['price'] = $price;
@@ -451,19 +464,19 @@ class TOC_Shopping_Cart
 
                 $price = $product->get_price($variants, $quantity);
                 $this->contents[$products_id_string] = array('id' => $products_id_string,
-                                                      'name' => $product->get_title(),
-                                                      'type' => $product->get_product_type(),
-                                                      'keyword' => $product->get_keyword(),
-                                                      'sku' => $product->get_sku($variants),
-                                                      'image' => $product->get_image(),
-                                                      'price' => $price,
-                                                      'final_price' => $price,
-                                                      'quantity' => $quantity,
-                                                      'weight' => $product->get_weight($variants),
-                                                      'tax_class_id' => $product->get_tax_class_id(),
-                                                      'date_added' => get_date_short(get_date_now()),
-                                                      'weight_class_id' => $product->get_weight_class());
-                
+                                                             'name' => $product->get_title(),
+                                                             'type' => $product->get_product_type(),
+                                                             'keyword' => $product->get_keyword(),
+                                                             'sku' => $product->get_sku($variants),
+                                                             'image' => $product->get_image(),
+                                                             'price' => $price,
+                                                             'final_price' => $price,
+                                                             'quantity' => $quantity,
+                                                             'weight' => $product->get_weight($variants),
+                                                             'tax_class_id' => $product->get_tax_class_id(),
+                                                             'date_added' => get_date_short(get_date_now()),
+                                                             'weight_class_id' => $product->get_weight_class());
+
                 //set in stock status
                 $this->contents[$products_id_string]['in_stock'] = $this->is_in_stock($products_id_string);
 
@@ -655,14 +668,27 @@ class TOC_Shopping_Cart
         return $this->weight;
     }
 
+    /**
+     * Generate Cart ID
+     * 
+     * @access public
+     * @param $length
+     * @return string
+     */
     function generate_cart_id($length = 5)
     {
-        return osc_create_random_string($length, 'digits');
+        return create_random_string($length, 'digits');
     }
 
+    /**
+     * Get Cart ID
+     * 
+     * @access public
+     * @return mixed
+     */
     function get_cart_id()
     {
-        return $_SESSION['cartID'];
+        $this->ci->session->userdata('cart_id');
     }
 
     /**
@@ -816,28 +842,32 @@ class TOC_Shopping_Cart
         $address_book = $this->ci->address_book_model->get_address($this->ci->customer->get_id(), $address_id);
 
         $this->shipping_address = array('id' => $address_id,
-                                       'gender' => $address_book['gender'],
-                                       'firstname' => $address_book['firstname'],
-                                       'lastname' => $address_book['lastname'],
-                                       'company' => $address_book['company'],
-                                       'street_address' => $address_book['street_address'],
-                                       'suburb' => $address_book['suburb'],
-                                       'city' => $address_book['city'],
-                                       'postcode' => $address_book['postcode'],
-                                       'state' => (!empty($address_book['state'])) ? $address_book['state'] : $address_book['zone_name'],
-                                       'zone_id' => $address_book['zone_id'],
-                                       'zone_code' => $address_book['zone_code'],
-                                       'country_id' => $address_book['country_id'],
-                                       'country_title' => $address_book['countries_name'],
-                                       'country_iso_code_2' => $address_book['countries_iso_code_2'],
-                                       'country_iso_code_3' => $address_book['countries_iso_code_3'],
-                                       'format' => $address_book['address_format'],
-                                       'telephone_number' => $address_book['telephone'],
-                                       'fax' => $address_book['fax']);
+                                        'gender' => $address_book['gender'],
+                                        'firstname' => $address_book['firstname'],
+                                        'lastname' => $address_book['lastname'],
+                                        'company' => $address_book['company'],
+                                        'street_address' => $address_book['street_address'],
+                                        'suburb' => $address_book['suburb'],
+                                        'city' => $address_book['city'],
+                                        'postcode' => $address_book['postcode'],
+                                        'state' => (!empty($address_book['state'])) ? $address_book['state'] : $address_book['zone_name'],
+                                        'zone_id' => $address_book['zone_id'],
+                                        'zone_code' => $address_book['zone_code'],
+                                        'country_id' => $address_book['country_id'],
+                                        'country_title' => $address_book['countries_name'],
+                                        'country_iso_code_2' => $address_book['countries_iso_code_2'],
+                                        'country_iso_code_3' => $address_book['countries_iso_code_3'],
+                                        'format' => $address_book['address_format'],
+                                        'telephone_number' => $address_book['telephone'],
+                                        'fax' => $address_book['fax']);
 
         if ($address_changed === FALSE)
         {
             $this->calculate();
+        }
+        else
+        {
+            $this->save_session();
         }
     }
 
@@ -889,16 +919,29 @@ class TOC_Shopping_Cart
         $this->calculate();
     }
 
+    /**
+     * Get shipping address
+     * 
+     * @access public
+     * @param $key
+     * @return mixed
+     */
     function get_shipping_address($key = '')
     {
         if (empty($key))
         {
             return $this->shipping_address;
         }
-        //    debug_print_backtrace();
+        
         return $this->shipping_address[$key];
     }
 
+    /**
+     * Reset shipping address
+     * 
+     * @access public
+     * @return void
+     */
     function reset_shipping_address()
     {
         $this->shipping_address = array('zone_id' => config('STORE_ZONE'), 'country_id' => config('STORE_COUNTRY'));
@@ -909,18 +952,35 @@ class TOC_Shopping_Cart
         }
     }
 
+    /**
+     * Set shipping method
+     * 
+     * @access public
+     * @param $shipping_array
+     * @param $calculate_total
+     * @return void
+     */
     function set_shipping_method($shipping_array, $calculate_total = TRUE)
     {
         $this->shipping_method = $shipping_array;
 
         if ($calculate_total === TRUE)
         {
-            $this->calculate(TRUE);
+            $this->calculate(FALSE);
         }
-
-        $this->save_session();
+        else 
+        {
+            $this->save_session();
+        }
     }
 
+    /**
+     * Get shipping method
+     * 
+     * @access public
+     * @param $key
+     * @return mixed
+     */
     function get_shipping_method($key = '')
     {
         if (empty($key))
@@ -932,28 +992,50 @@ class TOC_Shopping_Cart
             return $this->shipping_method[$key];
         }
 
-        return FALSE;
+        return NULL;
     }
 
+    /**
+     * Reset shipping method
+     * 
+     * @access public
+     * @return void
+     */
     function reset_shipping_method()
     {
         $this->shipping_method = array();
 
         $this->calculate();
-
-        $this->save_session();
     }
 
+    /**
+     * Has shipping method
+     * 
+     * @access public
+     * @return boolean
+     */
     function has_shipping_method()
     {
         return !empty($this->shipping_method);
     }
 
-    function has_billing_ddress()
+    /**
+     * Has billing address
+     * 
+     * @access public
+     * @return boolean
+     */
+    function has_billing_address()
     {
         return isset($this->billing_address) && isset($this->billing_address['id']);
     }
 
+    /**
+     * Set billing address
+     * 
+     * @access public
+     * @return boolean
+     */
     function set_billing_address($address_id)
     {
         $address_changed = FALSE;
@@ -966,24 +1048,24 @@ class TOC_Shopping_Cart
         $address_book = $this->ci->address_book_model->get_address($this->ci->customer->get_id(), $address_id);
 
         $this->billing_address = array('id' => $address_id,
-                                     'gender' => $address_book['gender'],
-                                     'firstname' => $address_book['firstname'],
-                                     'lastname' => $address_book['lastname'],
-                                     'company' => $address_book['company'],
-                                     'street_address' => $address_book['street_address'],
-                                     'suburb' => $address_book['suburb'],
-                                     'city' => $address_book['city'],
-                                     'postcode' => $address_book['postcode'],
-                                     'state' => (!empty($address_book['state'])) ? $address_book['state'] : $address_book['zone_name'],
-                                     'zone_id' => $address_book['zone_id'],
-                                     'zone_code' => $address_book['zone_code'],
-                                     'country_id' => $address_book['country_id'],
-                                     'country_title' => $address_book['countries_name'],
-                                     'country_iso_code_2' => $address_book['countries_iso_code_2'],
-                                     'country_iso_code_3' => $address_book['countries_iso_code_3'],
-                                     'format' => $address_book['address_format'],
-                                     'telephone_number' => $address_book['telephone'],
-                                     'fax' => $address_book['fax']);
+                                       'gender' => $address_book['gender'],
+                                       'firstname' => $address_book['firstname'],
+                                       'lastname' => $address_book['lastname'],
+                                       'company' => $address_book['company'],
+                                       'street_address' => $address_book['street_address'],
+                                       'suburb' => $address_book['suburb'],
+                                       'city' => $address_book['city'],
+                                       'postcode' => $address_book['postcode'],
+                                       'state' => (!empty($address_book['state'])) ? $address_book['state'] : $address_book['zone_name'],
+                                       'zone_id' => $address_book['zone_id'],
+                                       'zone_code' => $address_book['zone_code'],
+                                       'country_id' => $address_book['country_id'],
+                                       'country_title' => $address_book['countries_name'],
+                                       'country_iso_code_2' => $address_book['countries_iso_code_2'],
+                                       'country_iso_code_3' => $address_book['countries_iso_code_3'],
+                                       'format' => $address_book['address_format'],
+                                       'telephone_number' => $address_book['telephone'],
+                                       'fax' => $address_book['fax']);
 
         if ($address_changed === FALSE)
         {
@@ -995,6 +1077,12 @@ class TOC_Shopping_Cart
         }
     }
 
+    /**
+     * Set raw billing address
+     * 
+     * @access public
+     * @return void
+     */
     function set_raw_billing_address($data)
     {
         $this->ci->load->model('address_book_model');
@@ -1040,6 +1128,12 @@ class TOC_Shopping_Cart
         $this->calculate();
     }
 
+    /**
+     * Get billing address
+     * 
+     * @access public
+     * @return void
+     */
     function get_billing_address($key = '')
     {
         if (empty($key)) {
@@ -1049,6 +1143,12 @@ class TOC_Shopping_Cart
         return $this->billing_address[$key];
     }
 
+    /**
+     * Reset billing address
+     * 
+     * @access public
+     * @return void
+     */
     function reset_billing_address()
     {
         $this->billing_address = array('zone_id' => config('STORE_ZONE'), 'country_id' => config('STORE_COUNTRY'));
@@ -1059,6 +1159,12 @@ class TOC_Shopping_Cart
         }
     }
 
+    /**
+     * Set billing method
+     * 
+     * @access public
+     * @return void
+     */
     function set_billing_method($billing_array)
     {
         $this->billing_method = $billing_array;
@@ -1066,6 +1172,12 @@ class TOC_Shopping_Cart
         $this->calculate();
     }
 
+    /**
+     * Get billing method
+     * 
+     * @access public
+     * @return void
+     */
     function get_billing_method($key = '')
     {
         if (empty($key))
@@ -1077,9 +1189,16 @@ class TOC_Shopping_Cart
         {
             return $this->billing_method[$key];
         }
-
+    
+        return NULL;
     }
 
+    /**
+     * Reset billing method
+     * 
+     * @access public
+     * @return void
+     */
     function reset_billing_method($calculate = TRUE)
     {
         $this->billing_method = array();
@@ -1090,11 +1209,23 @@ class TOC_Shopping_Cart
         }
     }
 
+    /**
+     * Has billing method
+     * 
+     * @access public
+     * @return boolean
+     */
     function has_billing_method()
     {
-        return FALSE; //is_array($this->billing_method) && !empty($this->billing_method);
+        return is_array($this->billing_method) && !empty($this->billing_method);
     }
 
+    /**
+     * Get taxing address
+     * 
+     * @access public
+     * @return boolean
+     */
     function get_taxing_address($id = '')
     {
         if ($this->get_content_type() == 'virtual')
@@ -1106,9 +1237,11 @@ class TOC_Shopping_Cart
     }
 
     /**
-     *
-     * Enter description here ...
-     * @param unknown_type $amount
+     * Add tax amount
+     * 
+     * @access public
+     * @param $amount
+     * @return void
      */
     function add_tax_amount($amount)
     {
@@ -1116,8 +1249,10 @@ class TOC_Shopping_Cart
     }
 
     /**
-     *
-     * Enter description here ...
+     * Get shopping cart tax
+     * 
+     * @access public
+     * @return float
      */
     function get_tax()
     {
@@ -1125,19 +1260,23 @@ class TOC_Shopping_Cart
     }
 
     /**
-     *
-     * Enter description here ...
+     * Get number of tax groups
+     * 
+     * @access public
+     * @return void
      */
     function number_of_tax_groups()
     {
-        return sizeof($this->tax_groups);
+        return count($this->tax_groups);
     }
 
     /**
-     *
-     * Enter description here ...
-     * @param unknown_type $group
-     * @param unknown_type $amount
+     * Add tax group
+     * 
+     * @access public
+     * @param $group
+     * @param $amount
+     * @return void
      */
     function add_tax_group($group, $amount)
     {
@@ -1150,17 +1289,22 @@ class TOC_Shopping_Cart
     }
 
     /**
-     *
-     * Enter description here ...
-     * @param unknown_type $amount
+     * Add to total 
+     * 
+     * @access public
+     * @param $amount
+     * @return void
      */
     function add_to_total($amount) {
         $this->total += $amount;
     }
 
     /**
-     *
-     * Enter description here ...
+     * Get order total modules
+     * 
+     * @access public
+     * @param $code
+     * @return void
      */
     function get_order_totals($code = NULL) {
         if ($code != NULL) {
@@ -1202,7 +1346,9 @@ class TOC_Shopping_Cart
     /**
      * Caculate Shopping Cart
      *
+     * @access public
      * @param $set_shipping
+     * @return void
      */
     function calculate($set_shipping = TRUE)
     {
@@ -1218,6 +1364,10 @@ class TOC_Shopping_Cart
 
         $this->ci->load->library('weight');
         $this->ci->load->library('tax');
+        
+        //generate temp cart id
+        $cart_id = $this->generate_cart_id();
+        $this->ci->session->set_userdata('cart_id', $cart_id);
 
         if ($this->has_contents())
         {
@@ -1230,7 +1380,6 @@ class TOC_Shopping_Cart
                 }
 
                 $tax = $this->ci->tax->get_tax_rate($data['tax_class_id'], $this->get_taxing_address('country_id'), $this->get_taxing_address('zone_id'));
-                
                 $tax_description = $this->ci->tax->get_tax_rate_description($data['tax_class_id'], $this->get_taxing_address('country_id'), $this->get_taxing_address('zone_id'));
 
                 $shown_price = $this->ci->currencies->add_tax_rate_to_price($data['final_price'], $tax, $data['quantity']);
@@ -1246,7 +1395,6 @@ class TOC_Shopping_Cart
                 {
                     $tax_amount = ($tax / 100) * $shown_price;
 
-                    //oscommerce 3 bug, no matter the tax is displayed or not, tax should not be add to total
                     $this->total += $tax_amount;
                 }
 
@@ -1255,7 +1403,9 @@ class TOC_Shopping_Cart
                 if (isset($this->tax_groups[$tax_description]))
                 {
                     $this->tax_groups[$tax_description] += $tax_amount;
-                } else {
+                } 
+                else 
+                {
                     $this->tax_groups[$tax_description] = $tax_amount;
                 }
             }
@@ -1306,56 +1456,44 @@ class TOC_Shopping_Cart
 
         $this->save_session();
     }
-
+    
+    /**
+     * Get contents
+     * 
+     * @access public
+     * @return array
+     */
     function get_contents()
     {
         return $this->contents;
     }
-
-    function get_shipping_quotes() {
-
+    
+    /**
+     * Get tax groups
+     * 
+     * @access public
+     * @return array
+     */
+    function get_tax_groups()
+    {
+        return $this->tax_groups;
     }
 
-    function set_shipping_quotes() {
-
-    }
-
-    function get_cart_billing_methods() {
-        $payment_methods = array();
-
-        if ($this->has_billing_method()) {
-            $payment_methods[] = $this->get_billing_method('title');
-        }
-
-        return $payment_methods;
-    }
-
-    function get_cart_billing_modules() {
-        $payment_modules = array();
-
-        if ($this->has_billing_method()) {
-            $module_class = 'payment_' . $this->get_billing_method('id');
-            $payment_modules[] = $this->$module_class->getCode();
-        }
-
-        return $payment_modules;
-    }
-
-    function _uasort_products_by_date_added($a, $b) {
+    /**
+     * Sort products by date added
+     * 
+     * @access public
+     * @param $a
+     * @param $b
+     * @return boolean
+     */
+    function _uasort_products_by_date_added($a, $b) 
+    {
         if ($a['date_added'] == $b['date_added']) {
             return strnatcasecmp($a['name'], $b['name']);
         }
 
         return ($a['date_added'] > $b['date_added']) ? -1 : 1;
-    }
-
-    function insert_order() {
-
-    }
-
-    function get_tax_groups()
-    {
-        return $this->tax_groups;
     }
 }
 

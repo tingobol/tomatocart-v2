@@ -137,7 +137,8 @@ class Address_Book extends TOC_Controller
         }
 
         //validate company
-        if (config('ACCOUNT_COMPANY') > -1)
+        $data['entry_company'] = NULL;
+        if (config('ACCOUNT_COMPANY') > 0)
         {
             $company = trim($this->input->post('company'));
             if (!empty($company) && (strlen($company) >= config('ACCOUNT_COMPANY')))
@@ -162,7 +163,8 @@ class Address_Book extends TOC_Controller
         }
 
         //validate suburb
-        if (config('ACCOUNT_SUBURB') >= 0)
+        $data['entry_suburb'] = NULL;
+        if (config('ACCOUNT_SUBURB') > 0)
         {
             $suburb = trim($this->input->post('suburb'));
 
@@ -260,6 +262,7 @@ class Address_Book extends TOC_Controller
         }
 
         //validate fax
+        $data['entry_fax'] = NULL;
         if (config('ACCOUNT_FAX') >= 0)
         {
             $fax = trim($this->input->post('fax'));
@@ -288,7 +291,6 @@ class Address_Book extends TOC_Controller
             if ($this->address_book_model->save($data, $this->customer->get_id(), empty($address_book_id) ? NULL : $address_book_id, $primary))
             {
                 $this->message_stack->add_session('address_book', lang('success_address_book_entry_updated'), 'success');
-
                 redirect(site_url('account/address_book'));
             }
             else

@@ -67,7 +67,7 @@ if( ! function_exists('get_product_id_string'))
             }
 
             if ($variants_check === true) {
-                $string .= '#' . implode(';', $variants_ids);
+                $string .= '::' . implode('-', $variants_ids);
             }
         }
 
@@ -91,7 +91,7 @@ if( ! function_exists('get_product_id'))
             return $id;
         }
 
-        $product = explode('#', $id, 2);
+        $product = explode('::', $id, 2);
 
         return (int) $product[0];
     }
@@ -113,7 +113,7 @@ if( ! function_exists('get_product_variants_string'))
             return NULL;
         }
 
-        $product = explode('#', $id, 2);
+        $product = explode('::', $id, 2);
         if (isset($product[1])) 
         {
             return $product[1];
@@ -132,7 +132,7 @@ if( ! function_exists('parse_variants_string'))
 {
     function parse_variants_string($variants_string)
     {
-        $variants = explode(';',$variants_string);
+        $variants = explode('-',$variants_string);
         $variants_array = array();
 
         foreach($variants as $variant)
@@ -164,7 +164,7 @@ if( ! function_exists('parse_variants_from_id_string'))
 
         if (!is_numeric($products_id_string))
         {
-            $tmp = explode('#', $products_id_string);
+            $tmp = explode('::', $products_id_string);
             if(isset($tmp[1]))
             $variants = parse_variants_string($tmp[1]);
         }

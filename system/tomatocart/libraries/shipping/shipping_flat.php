@@ -127,6 +127,11 @@ class TOC_Shipping_flat extends TOC_Shipping_Module
         }
     }
 
+    /**
+     * Calculate the shipping module quote
+     *
+     * @access public
+     */
     public function quote() {
         $this->quotes = array('id' => $this->code,
                           	  'module' => $this->title,
@@ -140,4 +145,6 @@ class TOC_Shipping_flat extends TOC_Shipping_Module
         return $this->quotes;
     }
 }
-?>
+
+/* End of file shipping_free.php */
+/* Location: ./system/tomatocart/libraries/shipping/shipping_free.php */

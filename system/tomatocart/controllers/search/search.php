@@ -86,6 +86,7 @@ class Search extends TOC_Controller {
                             'product_name' => $product['products_name'],
                             'product_price' => $product['products_price'],
                             'specials_price' => $product['specials_price'],
+                    		'tax_class_id' => $product['products_tax_class_id'],
                             'is_specials' => ($product['specials_price'] === NULL) ? FALSE : TRUE,
                             'is_featured' => ($product['featured_products_id'] === NULL) ? FALSE : TRUE,
                             'product_image' => $product['image'],

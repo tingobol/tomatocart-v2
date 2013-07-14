@@ -33,12 +33,12 @@ class TOC_Shipping_Module {
 
     /**
      * Module group
-     * 
+     *
      * @access private
      * @var string
      */
     private $group = 'shipping';
-    
+
     /**
      * ci instance
      *
@@ -129,64 +129,72 @@ class TOC_Shipping_Module {
     {
         // Set the super object to a local variable for use later
         $this->ci =& get_instance();
-            
+
         // Load extension model
         $this->ci->load->model('extensions_model');
-        
+
         // Get extension params
         $data = $this->ci->extensions_model->get_module('shipping', $this->code);
 
         // Load data
-        if ($data !== NULL) 
+        if ($data !== NULL)
         {
             $this->config = json_decode($data['params'], TRUE);
         }
     }
-    
+
     /**
      * Install module
-     * 
+     *
      * @access public
      * @return boolean
      */
     public function install() {
         //load extensions model
         $this->ci->load->model('extensions_model');
-        
+
         //check whether the module is installed
         $data = $this->ci->extensions_model->get_module($this->group, $this->code);
-        
+
         if ($data == NULL) {
+            $config = array();
+
+            if (isset($this->params) && is_array($this->params)) {
+                foreach ($this->params as $param) {
+                    $config[$param['name']] = $param['value'];
+                }
+            }
+
             $data = array(
                 'title' => $this->title,
                 'code' => $this->code,
                 'author_name' => '',
                 'author_www' => '',
                 'modules_group' => $this->group,
-                'params' => json_encode($this->params));
-            
+                'params' => json_encode($config));
+
             $result = $this->ci->extensions_model->install($data);
-            
+
             //insert language definition
             if ($result) {
                 $languages_all = $this->ci->lang->get_all();
-                
+
                 foreach ($languages_all as $l)
                 {
                     $xml_file = '../system/tomatocart/language/' . $l['code'] . '/modules/' . $this->group . '/' . $this->code . '.xml';
                     $this->ci->lang->import_xml($xml_file, $l['id']);
                 }
             }
-            
+
             return TRUE;
         }
-        
+
         return FALSE;
     }
-    
+
     /**
      * Uninstall module
-     * 
+     *
      * @access public
      * @return boolean
      */
@@ -195,23 +203,23 @@ class TOC_Shipping_Module {
         $this->ci->load->model('extensions_model');
 
         $result = $this->ci->extensions_model->uninstall($this->group, $this->code);
-        
+
         //remove language definition
         if ($result) {
             $languages_all = $this->ci->lang->get_all();
-            
+
             foreach ($languages_all as $l)
             {
                 $xml_file = '../system/tomatocart/language/' . $l['code'] . '/modules/' . $this->group . '/' . $this->code . '.xml';
                 $this->ci->lang->remove_xml($xml_file, $l['id']);
             }
-            
+
             return TRUE;
         }
-        
+
         return FALSE;
     }
-    
+
     /**
      * Get Shipping Module Code
      *
@@ -266,7 +274,7 @@ class TOC_Shipping_Module {
     {
         return $this->params;
     }
-    
+
     /**
      * Whether the payment module is installed
      *
@@ -277,7 +285,7 @@ class TOC_Shipping_Module {
     {
         return is_array($this->config) && !empty($this->config);
     }
-        
+
     /**
      * Whether the shipping module is enabled
      *

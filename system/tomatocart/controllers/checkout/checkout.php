@@ -891,100 +891,25 @@ class Checkout extends TOC_Controller {
      */
     public function process() {
         //if shopping cart does not has content and redirec to home
-        if (!$this->shopping_cart->has_contents()) 
+        if (!$this->shopping_cart->has_contents())
         {
             redirect(site_url());
         }
-        
-        //create account
-        if (!$this->customer->is_logged_on())
+
+        if ($this->shopping_cart->has_billing_method()) {
+            // load selected payment module
+            $payment_method = $this->shopping_cart->get_billing_method('id');
+
+            //load payment library
+            $this->load->library('payment', (($payment_method !== FALSE) ? $payment_method : $this->shopping_cart->get_billing_method('id')));
+
+            $this->{'payment_' . $payment_method}->process();
+        } 
+        else  
         {
-            //get billing address
-            $billing_address = $this->shopping_cart->get_billing_address();
 
-            $data['customers_gender'] = $billing_address['gender'];
-            $data['customers_firstname'] = $billing_address['firstname'];
-            $data['customers_lastname'] = $billing_address['lastname'];
-            $data['customers_newsletter'] = 0;
-            $data['customers_dob'] = NULL;
-            $data['customers_email_address'] = $billing_address['email_address'];
-            $data['customers_password'] = encrypt_password($billing_address['password']);
-            $data['customers_status'] = 1;
-
-            //load model
-            $this->load->model('account_model');
-
-            if ($this->account_model->insert($data))
-            {
-                //set data to session
-                $this->customer->set_data($data['customers_email_address']);
-            }
-        }
-        else
-        {
-            //get billing address
-            //$billing_address = $this->shopping_cart->get_billing_address();
-            
-            //if create billing address
-            if (isset($billing_address['create_billing_address']) && ($billing_address['create_billing_address'] == 'on')) 
-            {
-                $data['entry_gender'] = $billing_address['gender'];
-                $data['entry_firstname'] = $billing_address['firstname'];
-                $data['entry_lastname'] = $billing_address['lastname'];
-                $data['entry_company'] = $billing_address['company'];
-                $data['entry_street_address'] = $billing_address['street_address'];
-                $data['entry_suburb'] = $billing_address['suburb'];
-                $data['entry_postcode'] = $billing_address['postcode'];
-                $data['entry_city'] = $billing_address['city'];
-                $data['entry_country_id'] = $billing_address['country_id'];
-                $data['entry_zone_id'] = $billing_address['zone_id'];
-                $data['entry_telephone'] = $billing_address['telephone_number'];
-                $data['entry_fax'] = $billing_address['fax'];
-                $primary = $this->customer->has_default_address() ? FALSE : TRUE;
-                
-                //load model
-                $this->load->model('address_book_model');
-                
-                //save billing address
-                if (!$this->address_book_model->save($data, $this->customer->get_id(), NULL, $primary))
-                {
-                    //log message here
-                }
-            }
-            
-            $shipping_address = $this->shopping_cart->get_shipping_address();
-            
-            //create shipping address
-            if (isset($shipping_address['create_shipping_address']) && ($shipping_address['create_shipping_address'] == '1')) 
-            {
-                $data['entry_gender'] = $shipping_address['gender'];
-                $data['entry_firstname'] = $shipping_address['firstname'];
-                $data['entry_lastname'] = $shipping_address['lastname'];
-                $data['entry_company'] = $shipping_address['company'];
-                $data['entry_street_address'] = $shipping_address['street_address'];
-                $data['entry_suburb'] = $shipping_address['suburb'];
-                $data['entry_postcode'] = $shipping_address['postcode'];
-                $data['entry_city'] = $shipping_address['city'];
-                $data['entry_country_id'] = $shipping_address['country_id'];
-                $data['entry_zone_id'] = $shipping_address['zone_id'];
-                $data['entry_telephone'] = $shipping_address['telephone_number'];
-                $data['entry_fax'] = $shipping_address['fax'];
-                
-                //load model
-                $this->load->model('address_book_model');
-                
-                //save billing address
-                if (!$this->address_book_model->save($data, $this->customer->get_id()))
-                {
-                    //log message here
-                }
-            }
         }
 
-        $this->load->model('order_model');
-
-        $this->order_model->insert_order();
-        
         $this->shopping_cart->reset();
 
         redirect('checkout/success');
@@ -993,7 +918,7 @@ class Checkout extends TOC_Controller {
     /**
      * get country states
      */
-    public function get_country_states() 
+    public function get_country_states()
     {
         $this->load->model('address_model');
 
@@ -1005,7 +930,7 @@ class Checkout extends TOC_Controller {
         $states = $this->address_model->get_states($countries_id);
 
         $options = '';
-        if (($states !== NULL) && sizeof($states) > 0) 
+        if (($states !== NULL) && sizeof($states) > 0)
         {
             foreach ($states as $state) {
                 $states_array[$state['id']] = $state['text'];
@@ -1013,7 +938,7 @@ class Checkout extends TOC_Controller {
 
             $options = form_dropdown($type . 'state', $states_array, NULL, 'id="' . $type . '_state"');
         }
-        else 
+        else
         {
             $options = '<input type="text" id="' . $type . '_state" name="' . $type . '_state" />';
         }

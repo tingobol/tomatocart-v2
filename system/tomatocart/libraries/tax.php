@@ -129,7 +129,7 @@ class TOC_Tax
      */
     function calculate($price, $tax_rate)
     {
-        return round($price * $tax_rate / 100, $this->ci->currencies->currencies[config('DEFAULT_CURRENCY')]['decimal_places']);
+        return round($price * $tax_rate / 100, $this->ci->currencies->get_decimal_places());
     }
 
     /**

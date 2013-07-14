@@ -18,7 +18,7 @@
 // ------------------------------------------------------------------------
 
 /**
- * Departments_Model
+ * Shopping_Cart_Model
  *
  * @package   TomatoCart
  * @subpackage  tomatocart

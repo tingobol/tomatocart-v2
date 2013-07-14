@@ -51,8 +51,7 @@ class TOC_Payment_paypal_direct extends TOC_Payment_Module
               'mode' => 'local',
               'value' => 'True',
               'description' => 'Do you want to accept PayPal Direct payments?',
-              'values' => array(
-                                array('id' => 'True', 'text' => 'True'),
+              'values' => array(array('id' => 'True', 'text' => 'True'),
                                 array('id' => 'False', 'text' => 'False'))),
         array('name' => 'MODULE_PAYMENT_PAYPAL_DIRECT_API_USERNAME',
               'title' => 'API Username', 
@@ -75,18 +74,16 @@ class TOC_Payment_paypal_direct extends TOC_Payment_Module
               'mode' => 'local',
               'value' => 'Sandbox',
               'description' => 'The server to perform transactions in.',
-              'values' => array(
-                    array('id' => 'Production', 'text' => 'Production'),
-                    array('id' => 'Sandbox', 'text' => 'Sandbox'))),
+              'values' => array(array('id' => 'Production', 'text' => 'Production'),
+                                array('id' => 'Sandbox', 'text' => 'Sandbox'))),
         array('name' => 'MODULE_PAYMENT_PAYPAL_DIRECT_METHOD',
               'title' => 'Transaction Method', 
               'type' => 'combobox',
               'mode' => 'local',
               'value' => 'Sandbox',
               'description' => 'The method to perform transactions in.',
-              'values' => array(
-                    array('id' => 'Athorization', 'text' => 'Athorization'),
-                    array('id' => 'Sale', 'text' => 'Sale'))),
+              'values' => array(array('id' => 'Athorization', 'text' => 'Athorization'),
+                                array('id' => 'Sale', 'text' => 'Sale'))),
         array('name' => 'MODULE_PAYMENT_PAYPAL_DIRECT_SORT_ORDER',
               'title' => 'Sort order of display.', 
               'type' => 'numberfield',
@@ -125,14 +122,14 @@ class TOC_Payment_paypal_direct extends TOC_Payment_Module
         $this->title = lang('payment_paypal_direct_title');
         $this->method_title = lang('payment_paypal_direct_method_title');
         $this->status = (isset($this->config['MODULE_PAYMENT_PAYPAL_DIRECT_STATUS']) && ($this->config['MODULE_PAYMENT_PAYPAL_DIRECT_STATUS'] == 'True')) ? TRUE : FALSE;
-        $this->sort_order = isset($this->config['MODULE_PAYMENT_PAYPAL_DIRECT_SORT_ORDER']) ? $this->config['MODULE_PAYMENT_PAYPAL_DIRECT_SORT_ORDER'] : null;
+        $this->sort_order = isset($this->config['MODULE_PAYMENT_PAYPAL_DIRECT_SORT_ORDER']) ? $this->config['MODULE_PAYMENT_PAYPAL_DIRECT_SORT_ORDER'] : NULL;
 
-        $this->cc_types = array('VISA'     => 'Visa',
-                              'MASTERCARD' => 'MasterCard',
-                              'DISCOVER'   => 'Discover Card',
-                              'AMEX'       => 'American Express',
-                              'SWITCH'     => 'Maestro',
-                              'SOLO'       => 'Solo');
+        $this->cc_types = array('VISA'       => 'Visa',
+                                'MASTERCARD' => 'MasterCard',
+                                'DISCOVER'   => 'Discover Card',
+                                'AMEX'       => 'American Express',
+                                'SWITCH'     => 'Maestro',
+                                'SOLO'       => 'Solo');
     }
 
     /**
@@ -204,95 +201,112 @@ class TOC_Payment_paypal_direct extends TOC_Payment_Module
      * @return payment module selection
      */
     function confirmation() {
-        global $osC_ShoppingCart, $osC_Language;
-
         $types_array = array();
         foreach($this->cc_types as $key => $value) {
-            $types_array[] = array('id' => $key,
-                               'text' => $value);
+            $types_array[$key] = $value;
         }
 
         $today = getdate();
 
         $months_array = array();
         for ($i=1; $i<13; $i++) {
-            $months_array[] = array('id' => sprintf('%02d', $i), 'text' => strftime('%B',mktime(0,0,0,$i,1,2000)));
+            $months_array[sprintf('%02d', $i)] = strftime('%B',mktime(0,0,0,$i,1,2000));
         }
 
         $year_valid_from_array = array();
         for ($i=$today['year']-10; $i < $today['year']+1; $i++) {
-            $year_valid_from_array[] = array('id' => strftime('%Y',mktime(0,0,0,1,1,$i)), 'text' => strftime('%Y',mktime(0,0,0,1,1,$i)));
+            $year_valid_from_array[strftime('%Y',mktime(0,0,0,1,1,$i))] = strftime('%Y',mktime(0,0,0,1,1,$i));
         }
 
         $year_expires_array = array();
         for ($i=$today['year']; $i < $today['year']+10; $i++) {
-            $year_expires_array[] = array('id' => strftime('%Y',mktime(0,0,0,1,1,$i)), 'text' => strftime('%Y',mktime(0,0,0,1,1,$i)));
+            $year_expires_array[strftime('%Y',mktime(0,0,0,1,1,$i))] = strftime('%Y',mktime(0,0,0,1,1,$i));
         }
 
-        $confirmation = array('fields' => array(array('title' => $osC_Language->get('payment_paypal_direct_card_owner'),
-                                                    'field' => osc_draw_input_field('cc_owner', $osC_ShoppingCart->getBillingAddress('firstname') . ' ' . $osC_ShoppingCart->getBillingAddress('lastname'))),
-        array('title' => $osC_Language->get('payment_paypal_direct_card_type'),
-                                                    'field' => osc_draw_pull_down_menu('cc_type', $types_array)),
-        array('title' => $osC_Language->get('payment_paypal_direct_card_number'),
-                                                    'field' => osc_draw_input_field('cc_number_nh-dns')),
-        array('title' => $osC_Language->get('payment_paypal_direct_card_valid_from'),
-                                                    'field' => osc_draw_pull_down_menu('cc_starts_month', $months_array) . '&nbsp;' . osc_draw_pull_down_menu('cc_starts_year', $year_valid_from_array) . ' ' . $osC_Language->get('payment_paypal_direct_card_valid_from_info')),
-        array('title' => $osC_Language->get('payment_paypal_direct_card_expires'),
-                                                    'field' => osc_draw_pull_down_menu('cc_expires_month', $months_array) . '&nbsp;' . osc_draw_pull_down_menu('cc_expires_year', $year_expires_array)),
-        array('title' => $osC_Language->get('payment_paypal_direct_card_cvc'),
-                                                    'field' => osc_draw_input_field('cc_cvc_nh-dns', '', 'size="5" maxlength="4"')),
-        array('title' => $osC_Language->get('payment_paypal_direct_card_issue_number'),
-                                                    'field' => osc_draw_input_field('cc_issue_nh-dns', '', 'size="3" maxlength="2"') . ' ' . $osC_Language->get('payment_paypal_direct_card_issue_number_info'))));
+        $confirmation = array('fields' => array(array('title' => lang('payment_paypal_direct_card_owner'),
+                                                      'field' => form_input('cc_owner', $this->ci->shopping_cart->get_billing_address('firstname') . ' ' . $this->ci->shopping_cart->get_billing_address('lastname'))),
+                                                array('title' => lang('payment_paypal_direct_card_type'),
+                                                      'field' => form_dropdown('cc_type', $types_array)),
+                                                array('title' => lang('payment_paypal_direct_card_number'),
+                                                      'field' => form_input('cc_number_nh-dns')),
+                                                array('title' => lang('payment_paypal_direct_card_valid_from'),
+                                                      'field' => form_dropdown('cc_starts_month', $months_array) . '&nbsp;' . form_dropdown('cc_starts_year', $year_valid_from_array) . ' ' . lang('payment_paypal_direct_card_valid_from_info')),
+                                                array('title' => lang('payment_paypal_direct_card_expires'),
+                                                      'field' => form_dropdown('cc_expires_month', $months_array) . '&nbsp;' . form_dropdown('cc_expires_year', $year_expires_array)),
+                                                array('title' => lang('payment_paypal_direct_card_cvc'),
+                                                      'field' => form_input('cc_cvc_nh-dns', '', 'size="5" maxlength="4"')),
+                                                array('title' => lang('payment_paypal_direct_card_issue_number'),
+                                                      'field' => form_input('cc_issue_nh-dns', '', 'size="3" maxlength="2"') . ' ' . lang('payment_paypal_direct_card_issue_number_info'))));
 
         return $confirmation;
     }
 
+    /**
+     * Process Button
+     *
+     * @access public
+     * @return boolean 
+     */
     function process_button() {
         return false;
     }
 
+    /**
+     * Payment process
+     * 
+     * @access public
+     * @return void
+     */
     function process() {
-        global $osC_Currencies, $osC_ShoppingCart, $osC_Customer, $osC_Language, $messageStack;
-
-        $currency = $osC_Currencies->getCode();
-
-        if (isset($_POST['cc_owner']) && !empty($_POST['cc_owner']) && isset($_POST['cc_type']) && isset($this->cc_types[$_POST['cc_type']]) && isset($_POST['cc_number_nh-dns']) && !empty($_POST['cc_number_nh-dns'])) {
-            $params = array('USER' => MODULE_PAYMENT_PAYPAL_DIRECT_API_USERNAME,
-                        'PWD' => MODULE_PAYMENT_PAYPAL_DIRECT_API_PASSWORD,
+        $currency = currency_code();
+        
+        $cc_owner = $this->ci->input->post('cc_owner');
+        $cc_type = $this->ci->input->post('cc_type');
+        $cc_number_nh_dns = $this->ci->input->post('cc_number_nh-dns');
+        $cc_starts_month = $this->ci->input->post('cc_starts_month');
+        $cc_starts_year = $this->ci->input->post('cc_starts_year');
+        $cc_expires_month = $this->ci->input->post('cc_expires_month');
+        $cc_expires_year = $this->ci->input->post('cc_expires_year');
+        $cc_cvc_nh_dns = $this->ci->input->post('cc_cvc_nh-dns');
+        $cc_issue_nh_dns = $this->ci->input->post('cc_issue_nh-dns');
+        
+        if (isset($cc_owner) && !empty($cc_owner) && isset($cc_type) && isset($this->cc_types[$cc_type]) && isset($cc_number_nh_dns) && !empty($cc_number_nh_dns)) {
+            $params = array('USER' => $this->config['MODULE_PAYMENT_PAYPAL_DIRECT_API_USERNAME'],
+                        'PWD' => $this->config['MODULE_PAYMENT_PAYPAL_DIRECT_API_PASSWORD'],
                         'VERSION' => '3.2',
-                        'SIGNATURE' => MODULE_PAYMENT_PAYPAL_DIRECT_API_SIGNATURE,
+                        'SIGNATURE' => $this->config['MODULE_PAYMENT_PAYPAL_DIRECT_API_SIGNATURE'],
                         'METHOD' => 'DoDirectPayment',
-                        'PAYMENTACTION' => ((MODULE_PAYMENT_PAYPAL_DIRECT_TRANSACTION_METHOD == 'Sale') ? 'Sale' : 'Authorization'),
-                        'IPADDRESS' => osc_get_ip_address(),
-                        'AMT' => $osC_Currencies->formatRaw($osC_ShoppingCart->getTotal() - $osC_ShoppingCart->getShippingMethod('cost'), $currency),
-                        'CREDITCARDTYPE' => $_POST['cc_type'],
-                        'ACCT' => $_POST['cc_number_nh-dns'],
-                        'STARTDATE' => $_POST['cc_starts_month'] . $_POST['cc_starts_year'],
-                        'EXPDATE' => $_POST['cc_expires_month'] . $_POST['cc_expires_year'],
-                        'CVV2' => $_POST['cc_cvc_nh-dns'],
-                        'FIRSTNAME' => substr($_POST['cc_owner'], 0, strpos($_POST['cc_owner'], ' ')),
-                        'LASTNAME' => substr($_POST['cc_owner'], strpos($_POST['cc_owner'], ' ') + 1),
-                        'STREET' => $osC_ShoppingCart->getBillingAddress('street_address'),
-                        'CITY' => $osC_ShoppingCart->getBillingAddress('city'),
-                        'STATE' => $osC_ShoppingCart->getBillingAddress('state'),
-                        'COUNTRYCODE' => $osC_ShoppingCart->getBillingAddress('country_iso_code_2'),
-                        'ZIP' => $osC_ShoppingCart->getBillingAddress('postcode'),
-                        'EMAIL' => $osC_Customer->getEmailAddress(),
-                        'PHONENUM' => $osC_ShoppingCart->getBillingAddress('telephone_number'),
+                        'PAYMENTACTION' => (($this->config['MODULE_PAYMENT_PAYPAL_DIRECT_METHOD'] == 'Sale') ? 'Sale' : 'Authorization'),
+                        'IPADDRESS' => get_ip_address(),
+                        'AMT' => currencies_format_raw($this->ci->shopping_cart->get_total() - $this->ci->shopping_cart->get_shipping_method('cost'), $currency),
+                        'CREDITCARDTYPE' => $cc_type,
+                        'ACCT' => $cc_number_nh_dns,
+                        'STARTDATE' => $cc_starts_month . $cc_starts_year,
+                        'EXPDATE' => $cc_expires_month . $cc_expires_year,
+                        'CVV2' => $cc_cvc_nh_dns,
+                        'FIRSTNAME' => substr($cc_owner, 0, strpos($cc_owner, ' ')),
+                        'LASTNAME' => substr($cc_owner, strpos($cc_owner, ' ') + 1),
+                        'STREET' => $this->ci->shopping_cart->get_billing_address('street_address'),
+                        'CITY' => $this->ci->shopping_cart->get_billing_address('city'),
+                        'STATE' => $this->ci->shopping_cart->get_billing_address('state'),
+                        'COUNTRYCODE' => $this->ci->shopping_cart->get_billing_address('country_iso_code_2'),
+                        'ZIP' => $this->ci->shopping_cart->get_billing_address('postcode'),
+                        'EMAIL' => $this->ci->customer->get_email_address(),
+                        'PHONENUM' => $this->ci->shopping_cart->get_billing_address('telephone_number'),
                         'CURRENCYCODE' => $currency,
                         'BUTTONSOURCE' => 'tomatcart');
 
-            if ( ($_POST['cc_type'] == 'SWITCH') || ($_POST['cc_type'] == 'SOLO') ) {
-                $params['ISSUENUMBER'] = $_POST['cc_issue_nh-dns'];
+            if ( ($cc_type == 'SWITCH') || ($cc_type == 'SOLO') ) {
+                $params['ISSUENUMBER'] = $cc_issue_nh_dns;
             }
 
-            if ($osC_ShoppingCart->hasShippingAddress()) {
-                $params['SHIPTONAME'] = $osC_ShoppingCart->getShippingAddress('firstname') . ' ' . $osC_ShoppingCart->getShippingAddress('lastname');
-                $params['SHIPTOSTREET'] = $osC_ShoppingCart->getShippingAddress('street_address');
-                $params['SHIPTOCITY'] = $osC_ShoppingCart->getShippingAddress('city');
-                $params['SHIPTOSTATE'] = $osC_ShoppingCart->getShippingAddress('zone_code');
-                $params['SHIPTOCOUNTRYCODE'] = $osC_ShoppingCart->getShippingAddress('country_iso_code_2');
-                $params['SHIPTOZIP'] = $osC_ShoppingCart->getShippingAddress('postcode');
+            if ($this->ci->shopping_cart->has_shipping_address()) {
+                $params['SHIPTONAME'] = $this->ci->shopping_cart->get_shipping_address('firstname') . ' ' . $this->ci->shopping_cart->get_shipping_address('lastname');
+                $params['SHIPTOSTREET'] = $this->ci->shopping_cart->get_shipping_address('street_address');
+                $params['SHIPTOCITY'] = $this->ci->shopping_cart->get_shipping_address('city');
+                $params['SHIPTOSTATE'] = $this->ci->shopping_cart->get_shipping_address('zone_code');
+                $params['SHIPTOCOUNTRYCODE'] = $this->ci->shopping_cart->get_shipping_address('country_iso_code_2');
+                $params['SHIPTOZIP'] = $this->ci->shopping_cart->get_shipping_address('postcode');
             }
 
             $post_string = '';
@@ -300,26 +314,29 @@ class TOC_Payment_paypal_direct extends TOC_Payment_Module
                 $post_string .= $key . '=' . urlencode(trim($value)) . '&';
             }
             $post_string = substr($post_string, 0, -1);
-
-            $response = $this->sendTransactionToGateway($this->api_url, $post_string);
+            $response = $this->send_transaction_to_gateway($this->api_url, $post_string);
 
             $response_array = array();
             parse_str($response, $response_array);
 
             if (($response_array['ACK'] != 'Success') && ($response_array['ACK'] != 'SuccessWithWarning')) {
-                $messageStack->add_session('checkout', stripslashes($response_array['L_LONGMESSAGE0']), 'error');
-
-                osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'checkout&view=orderConfirmationForm', 'SSL'));
+                $this->ci->message_stack->add_session('checkout', stripslashes($response_array['L_LONGMESSAGE0']), 'error');
+                
+                redirect('checkout/index/index/orderConfirmationForm');
+                //osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'checkout&view=orderConfirmationForm', 'SSL'));
             }else {
+                $this->ci->load->library('order');
+                $this->ci->order->create_order();
+                echo 'Success';exit;
                 $orders_id = osC_Order::insert();
 
                 $comments = 'PayPal Website Payments Pro (US) Direct Payments [' . 'ACK: ' . $response_array['ACK'] . '; TransactionID: ' . $response_array['TRANSACTIONID'] . ';' . ']';
                 osC_Order::process($orders_id, ORDERS_STATUS_PAID, $comments);
             }
         }else {
-            $messageStack->add_session('checkout', $osC_Language->get('payment_paypal_direct_error_all_fields_required'), 'error');
+            $this->ci->message_stack->add_session('checkout', lang('payment_paypal_direct_error_all_fields_required'), 'error');
 
-            osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'checkout&view=orderConfirmationForm', 'SSL'));
+            redirect('checkout/index/index/orderConfirmationForm');
         }
     }
 
