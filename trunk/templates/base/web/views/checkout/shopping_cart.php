@@ -84,19 +84,10 @@
                             </div>
                         </td>
                         <td class="quantity">
-    						<input type="text" style="width: 20px" size="4" id="product[<?php echo $product_id; ?>]" value="<?php echo $product['quantity'];?>" name="product[<?php echo $product_id; ?>]" />
+    						<input type="text" style="width: 20px" size="4" id="products[<?php echo $product_id; ?>]" value="<?php echo $product['quantity'];?>" name="products[<?php echo $product_id; ?>]" />
                         </td>
                         <td class="action">
-                            <?php 
-                                if (is_numeric($product['id'])) {
-                                    $url = site_url('cart_delete/' . $product['id']);
-                                } else {
-                                    $variants = get_product_variants_string($product['id']);
-                                    
-                                    $url = site_url('cart_delete/' . get_product_id($product['id']) . '/' . $variants);
-                                }
-                            ?>
-                            <a class="btn btn-mini" href="<?php echo $url; ?>"><i title="<?php echo lang('button_delete');?>" class="icon-trash"></i></a>
+                            <a class="btn btn-mini" href="<?php echo site_url('cart_delete/' . $product['id']); ?>"><i title="<?php echo lang('button_delete');?>" class="icon-trash"></i></a>
                         </td>
                         <td class="price visible-desktop"><?php echo currencies_display_price($product['final_price'], $product['tax_class_id']); ?></td>
                         <td class="total"><?php echo currencies_display_price($product['final_price'], $product['tax_class_id'], $product['quantity']); ?></td>

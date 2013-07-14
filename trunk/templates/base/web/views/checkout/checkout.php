@@ -20,6 +20,8 @@ $step = 1;
 
 <h1><?php echo lang('checkout')?></h1>
 
+<?php echo toc_validation_errors('checkout'); ?>
+
 <div class="accordion" id="checkoutForm"> 
     <div class="accordion-group" id="checkoutMethodForm">
         <div class="accordion-heading">

@@ -59,11 +59,11 @@
         			<?php 
         			    if ($is_specials === TRUE):
         			?>
-        			<span class="price"><s><?php echo currencies_format($price); ?></s>&nbsp;&nbsp;<font class="special"><?php echo currencies_format($specials_price); ?></font></span>
+        			<span class="price"><s><?php echo currencies_display_price($price, $tax_class_id); ?></s>&nbsp;&nbsp;<font class="special"><?php echo currencies_display_price($specials_price); ?></font></span>
         			<?php 
         			    else: 
         			?>
-        			<span class="price"><?php echo currencies_format($price); ?></span>
+        			<span class="price"><?php echo currencies_display_price($price, $tax_class_id); ?></span>
         			<?php 
         			    endif;
         			?>
@@ -365,11 +365,11 @@
                         	<?php 
                         	    if ($product->is_specials()):
                         	?>
-                        		<s><?php echo currencies_format($product->get_specials_price()); ?></s>
+                        		<s><?php echo currencies_display_price($product->get_specials_price()); ?></s>
                         	<?php     
                         	    endif;
                         	?>
-                            <?php echo currencies_format($product->get_price()); ?></span>
+                            <?php echo currencies_display_price($product->get_price(), $product->get_tax_class_id()); ?></span>
                         <span class="buttons">
                             <a class="btn btn-small btn-info" href="<?php echo site_url('cart_add/' . $product->get_id()); ?>">
                             	<i class="icon-shopping-cart icon-white "></i> 
