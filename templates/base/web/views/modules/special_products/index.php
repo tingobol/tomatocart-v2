@@ -41,8 +41,8 @@
             </div>
             <div class="right">
                 <span class="price">
-            		<s><?php echo currencies_format($product['products_price']); ?></s>
-            		<font class="special"><?php echo currencies_format($product['special_price']); ?></font>
+            		<s><?php echo currencies_display_price($product['products_price'], $product['tax_class_id']); ?></s>
+            		<font class="special"><?php echo currencies_display_price($product['special_price'], $product['tax_class_id']); ?></font>
                 </span>
                 <span class="buttons">
                     <a class="btn btn-small btn-info" href="<?php echo site_url('cart_add/' . $product['products_id']); ?>">

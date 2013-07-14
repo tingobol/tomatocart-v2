@@ -128,12 +128,12 @@
                 	<?php 
                 	    if ($product['is_specials'] === TRUE):
                 	?>
-                		<s><?php echo currencies_format($product['product_price']); ?></s>
-                		<font class="special"><?php echo currencies_format($product['specials_price']); ?></font>
+                		<s><?php echo currencies_display_price($product['product_price'], $product['tax_class_id']); ?></s>
+                		<font class="special"><?php echo currencies_display_price($product['specials_price'], $product['tax_class_id']); ?></font>
                 	<?php 
                 	    else:
                 	?>
-                    <?php echo currencies_format($product['product_price']); ?>
+                    <?php echo currencies_display_price($product['product_price'], $product['tax_class_id']); ?>
                 	<?php     
                 	    endif;
                 	?>
