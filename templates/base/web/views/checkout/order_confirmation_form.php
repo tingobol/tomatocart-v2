@@ -150,7 +150,7 @@
     		<h6><?php echo lang('order_payment_information_title'); ?></h6>
         
     		<div class="content">
-    			<p><?php echo $confirmation['title']; ?></p>
+    			<p><?php echo empty($confirmation['title']) ? '' : $confirmation['title']; ?></p>
         
                 <?php
                     if (isset($confirmation['fields'])) :
