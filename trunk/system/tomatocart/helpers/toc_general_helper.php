@@ -107,6 +107,7 @@ if( ! function_exists('output_string_protected'))
     }
 }
 
+
 /**
  * Display Image
  *
@@ -121,6 +122,7 @@ if( ! function_exists('image_url'))
         return base_url() . 'images/' . $image;
     }
 }
+
 
 /**
  * Display Product Image
@@ -138,6 +140,7 @@ if( ! function_exists('product_image_url'))
     }
 }
 
+
 /**
  * Validates the format of an email address
  *
@@ -148,39 +151,80 @@ if( ! function_exists('address_format'))
 {
     function address_format($address, $new_line = "\n")
     {
+        //get instance
+        $ci = &get_instance();
+
+        //load address book model
+        $ci->load->model('address_book_model');
+        $ci->load->model('address_model');
+
+        //get address
+        if (is_numeric($address))
+        {
+            $address = $ci->address_book_model->get_address(NULL, $address);
+        }
+
+        $firstname = $lastname = '';
+
+        if (isset($address['firstname']) && !empty($address['firstname']))
+        {
+            $firstname = $address['firstname'];
+            $lastname = $address['lastname'];
+        }
+        elseif (isset($address['name']) && !empty($address['name']))
+        {
+            $firstname = $address['name'];
+        }
+
+        $state = $address['state'];
+        $state_code = $address['zone_code'];
+
+        if (isset($address['zone_id']) && is_numeric($address['zone_id']) && ($address['zone_id'] > 0))
+        {
+            $state = $ci->address_model->get_zone_name($address['zone_id']);
+            $state_code = $ci->address_model->get_zone_code($address['zone_id']);
+        }
+
+        $country = $address['countries_name'];
+
+        if (empty($country) && isset($address['country_id']) && is_numeric($address['country_id']) && ($address['country_id'] > 0))
+        {
+            $country = $ci->address_model->get_country_name($address['country_id']);
+        }
+
+        if (isset($address['format'])) 
+        {
+            $address_format = $address['format'];
+        } 
+        elseif (isset($address['country_id']) && is_numeric($address['country_id']) && ($address['country_id'] > 0)) 
+        {
+            $address_format = $ci->address_model->get_format($address['country_id']);
+        }
+
         if (empty($address['address_format']))
         {
             $address['address_format'] = ":name\n:street_address\n:postcode :city\n:country";
         }
 
         $find_array = array('/\:name\b/',
-                          '/\:street_address\b/',
-                          '/\:suburb\b/',
-                          '/\:city\b/',
-                          '/\:postcode\b/',
-                          '/\:state\b/',
-                          '/\:zone_code\b/',
-                          '/\:country\b/');
-
-        if (isset($address['name']))
-        {
-            $name = $address['name'];
-        }
-        else if (isset($address['firstname']) && isset($address['lastname']))
-        {
-            $name = $address['firstname'] . ' ' . $address['lastname'];
-        }
+                            '/\:street_address\b/',
+                            '/\:suburb\b/',
+                            '/\:city\b/',
+                            '/\:postcode\b/',
+                            '/\:state\b/',
+                            '/\:state_code\b/',
+                            '/\:country\b/');
 
 
-        $replace_array = array($name,
-        $address['street_address'],
-        $address['suburb'],
-        $address['city'],
-        $address['postcode'],
-        $address['state'],
-        $address['zone_code'],
-        $address['countries_name']);
-
+        $replace_array = array($firstname . ' ' . $lastname,
+                               empty($address['street_address']) ? ' ' : $address['street_address'],
+                               empty($address['suburb']) ? ' ' : $address['suburb'],
+                               empty($address['city']) ? ' ' : $address['city'],
+                               empty($address['postcode']) ? ' ' : $address['postcode'],
+                               $state,
+                               $state_code,
+                               $country);
+                               
         $formated = preg_replace($find_array, $replace_array, $address['address_format']);
 
         if ( (config('ACCOUNT_COMPANY') > -1) && !empty($address['company']) )
@@ -198,6 +242,7 @@ if( ! function_exists('address_format'))
         return $formated;
     }
 }
+
 
 /**
  * Execute service module
@@ -229,8 +274,10 @@ if( ! function_exists('run_service'))
  */
 if( ! function_exists('create_random_string'))
 {
-    function create_random_string($length, $type = 'mixed') {
-        if (!in_array($type, array('mixed', 'chars', 'digits'))) {
+    function create_random_string($length, $type = 'mixed')
+    {
+        if (!in_array($type, array('mixed', 'chars', 'digits')))
+        {
             return false;
         }
 
@@ -239,12 +286,18 @@ if( ! function_exists('create_random_string'))
 
         $rand_value = '';
 
-        while (strlen($rand_value) < $length) {
-            if ($type == 'digits') {
+        while (strlen($rand_value) < $length)
+        {
+            if ($type == 'digits')
+            {
                 $rand_value .= rand(0,9);
-            } elseif ($type == 'chars') {
+            }
+            elseif ($type == 'chars')
+            {
                 $rand_value .= substr($chars_pattern, rand(0, 25), 1);
-            } else {
+            }
+            else
+            {
                 $rand_value .= substr($mixed_pattern, rand(0, 35), 1);
             }
         }
@@ -252,6 +305,7 @@ if( ! function_exists('create_random_string'))
         return $rand_value;
     }
 }
+
 
 /**
  * Short function to load product library and return the object
@@ -274,23 +328,6 @@ if( ! function_exists('load_product_library'))
 
         //return the object
         return $CI->{'product_' . $products_id};
-    }
-}
-
-/**
- * Short function to check whether the customer is logged on
- *
- * @access public
- * @return object
- */
-if( ! function_exists('is_logged_on'))
-{
-    function is_logged_on()
-    {
-        //get ci instance
-        $CI =& get_instance();
-
-        return $CI->customer->is_logged_on();
     }
 }
 
@@ -330,23 +367,6 @@ if( ! function_exists('cart_item_count'))
     }
 }
 
-
-/**
- * Short function to get login status of customer
- *
- * @access public
- * @return boolean
- */
-if( ! function_exists('is_logged_on'))
-{
-    function is_logged_on()
-    {
-        //get ci instance
-        $CI =& get_instance();
-
-        return $CI->customer->is_logged_on();
-    }
-}
 
 /**
  * Return shopping cart object

@@ -154,6 +154,8 @@ class TOC_Payment_paypal_express extends TOC_Payment_Module
 
             if ((int)$this->config['MODULE_PAYMENT_PAYPAL_EXPRESS_ZONE'] > 0)
             {
+                $this->ci->load->model('address_model');
+                
                 $zones = $this->ci->address_model->get_zone_id_via_geo_zone($this->ci->shopping_cart->get_billing_address('country_id'), $this->config['MODULE_PAYMENT_PAYPAL_EXPRESS_ZONE']);
 
                 $check_flag = FALSE;

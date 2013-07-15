@@ -63,17 +63,19 @@ class Index extends TOC_Controller {
                 }
             }
         }
-        
-        if ($this->shopping_cart->has_billing_method()) {
+
+        if ($this->shopping_cart->has_billing_method())
+        {
             // load selected payment module
-            //include('includes/classes/payment.php');
-            //$osC_Payment = new osC_Payment($this->shopping_cart->getBillingMethod('id'));
+            $this->load->library('payment');
+            $payment = $this->payment->load_payment_module($this->shopping_cart->get_billing_method('id'));
 
-            //$payment_error = $osC_Payment->get_error();
+            $payment_error = $payment->get_error();
 
-            //if (is_array($payment_error) && !empty($payment_error)) {
-            //    $messageStack->add('payment_error_msg', '<strong>' . $payment_error['title'] . '</strong> ' . $payment_error['error']);
-            //}
+            if (is_array($payment_error) && !empty($payment_error))
+            {
+                $this->message_stack->add('payment_error_msg', '<strong>' . $payment_error['title'] . '</strong> ' . $payment_error['error']);
+            }
         }
 
         //page title
@@ -82,11 +84,8 @@ class Index extends TOC_Controller {
         //breadcrumb
         $this->template->set_breadcrumb(lang('breadcrumb_checkout'), site_url('checkout'));
 
-        //data
-        $data['logged_on'] = $this->customer->is_logged_on();
-
         //load template
-        $this->template->build('checkout/checkout', $data);
+        $this->template->build('checkout/checkout', NULL);
     }
 }
 

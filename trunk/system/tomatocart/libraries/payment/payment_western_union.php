@@ -132,6 +132,8 @@ class TOC_Payment_western_union extends TOC_Payment_Module
 
             if ((int)$this->config['MODULE_PAYMENT_WESTERN_UNION_ZONE'] > 0)
             {
+                $this->ci->load->model('address_model');
+                
                 $zones = $this->ci->address_model->get_zone_id_via_geo_zone($this->ci->shopping_cart->get_billing_address('country_id'), $this->config['MODULE_PAYMENT_WESTERN_UNION_ZONE']);
 
                 $check_flag = FALSE;

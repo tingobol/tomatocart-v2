@@ -275,6 +275,10 @@ class TOC_Payment_Module {
         return $this->params;
     }
 
+    function get_error() {
+        return NULL;
+    }
+    
     /**
      * Whether the payment module is installed
      *
