@@ -87,11 +87,11 @@
                             if ( (count($quotes) > 1) || (sizeof($quote['methods']) > 1) ) :
                         ?>
                             <td><?php echo currencies_display_price($methods['cost'], $quote['tax_class_id']); ?></td>
-                            <td align="right"><?php echo form_radio('shipping_mod_sel', $quote['id'] . '-' . $methods['id'], ($quote['id'] . '_' . $methods['id'] == $selected_shipping_method_id) ? TRUE : FALSE); ?></td>
+                            <td align="right"><?php echo form_radio('shipping_mod_sel', $quote['id'] . '-' . $methods['id'], ($quote['id'] . '-' . $methods['id'] == $selected_shipping_method_id) ? TRUE : FALSE); ?></td>
                         <?php
                             else :
                         ?>
-                			<td align="right" colspan="2"><?php echo currencies_display_price($methods['cost'], $quote['tax_class_id']) . '<input type="hidden" name="shipping_mod_sel" value="' . $quote['id'] . '_' . $methods['id'] . '">'; ?></td>
+                			<td align="right" colspan="2"><?php echo currencies_display_price($methods['cost'], $quote['tax_class_id']) . '<input type="hidden" name="shipping_mod_sel" value="' . $quote['id'] . '-' . $methods['id'] . '">'; ?></td>
                         <?php
                             endif;
                         ?>
