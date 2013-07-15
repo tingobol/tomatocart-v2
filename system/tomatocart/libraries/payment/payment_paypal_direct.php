@@ -152,6 +152,8 @@ class TOC_Payment_paypal_direct extends TOC_Payment_Module
 
         if ($this->status === TRUE)
         {
+            $this->ci->load->model('address_model');
+            
             $this->order_status = $this->config['MODULE_PAYMENT_PAYPAL_DIRECT_ORDER_STATUS_ID'] > 0 ? (int) $this->config['MODULE_PAYMENT_PAYPAL_DIRECT_ORDER_STATUS_ID'] : (int)config('ORDERS_STATUS_PAID');
 
             if ((int)$this->config['MODULE_PAYMENT_PAYPAL_DIRECT_ZONE'] > 0)

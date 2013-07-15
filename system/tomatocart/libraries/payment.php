@@ -75,6 +75,22 @@ class TOC_Payment
         }
     }
 
+    /**
+     *
+     *
+     * @param string $module
+     */
+    public function load_payment_module($module)
+    {
+        //module class
+        $module_class = strtolower('payment_' . $module);
+
+        //load library
+        $this->ci->load->library('payment/' . $module_class);
+
+        return $this->ci->$module_class;
+    }
+
     // class methods
     public function send_transaction_to_gateway($url, $parameters, $header = '', $method = 'post', $certificate = '') {
         if (empty($header) || !is_array($header)) {

@@ -262,14 +262,17 @@ class TOC_Shopping_Cart
 
         // synchronize content
         $products = $this->ci->shopping_cart_model->get_contents($this->ci->customer->get_id());
-        if ($products != NULL) {
-            foreach ($products as $data) {
+        if ($products != NULL) 
+        {
+            foreach ($products as $data) 
+            {
                 $products_id = $data['products_id'];
                 $variants = parse_variants_from_id_string($products_id);
                 $quantity = $data['customers_basket_quantity'];
 
                 $product = load_product_library($products_id);
-                if ($product->is_valid()) {
+                if ($product->is_valid()) 
+                {
                     $this->contents[$products_id] = array('id' => $products_id,
                                                           'name' => $product->get_title(),
                                                           'type' => $product->get_product_type(),
@@ -283,6 +286,9 @@ class TOC_Shopping_Cart
                                                           'tax_class_id' => $product->get_tax_class_id(),
                                                           'date_added' => get_date_short($data['customers_basket_date_added']),
                                                           'weight_class_id' => $product->get_weight_class());
+
+                    //set in stock status
+                    $this->contents[$products_id]['in_stock'] = $this->is_in_stock($products_id);
 
                     if ($variants !== NULL) {
                         foreach ($variants as $group_id => $value_id) {
@@ -632,7 +638,7 @@ class TOC_Shopping_Cart
      */
     function get_sub_total()
     {
-        return $this->sub_total;
+        return $this->subtotal;
     }
 
     /**
