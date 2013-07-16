@@ -106,10 +106,11 @@ $route['specials/(:any)'] = "products/specials/index/$1";
 
 $route['account'] = "account/index";
 $route['checkout'] = "checkout/index";
+$route['checkout/process'] = "checkout/checkout/process";
 
 $route['search'] = "search/search/index";
 
-$route['contact_us'] = "info/contactus";
+$route['contact_us'] = "info/contact_us";
 $route['sitemap'] = "info/sitemap";
 $route['contact_save'] = "info/contact_us/save";
 
