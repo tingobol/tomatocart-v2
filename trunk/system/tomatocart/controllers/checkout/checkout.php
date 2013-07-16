@@ -905,9 +905,9 @@ class Checkout extends TOC_Controller {
 
             $this->{'payment_' . $payment_method}->process();
         } 
-        else  
+        else 
         {
-
+        
         }
 
         $this->shopping_cart->reset();
