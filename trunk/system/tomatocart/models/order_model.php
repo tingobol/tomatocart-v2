@@ -29,7 +29,7 @@
 
 class Order_Model extends CI_Model
 {
-    
+
     /**
      * Constructor
      *
@@ -43,11 +43,11 @@ class Order_Model extends CI_Model
 
     /**
      * Insert Order
-     * 
+     *
      * @access public
      * @return boolean
      */
-    public function insert_order()
+    public function insert_order($order_status = NULL)
     {
         //order data
         $data = array(
@@ -101,17 +101,17 @@ class Order_Model extends CI_Model
             'payment_module' => $this->shopping_cart->get_billing_method('id'),
             'uses_store_credit' => 0,
             'store_credit_amount' => 0,
-            'orders_status' => config('DEFAULT_ORDERS_STATUS_ID'),
+            'orders_status' => ($order_status === NULL) ? config('DEFAULT_ORDERS_STATUS_ID') : $order_status,
             'currency' => $this->currencies->get_code(),
             'currency_value' => $this->currencies->value($this->currencies->get_code()),
             'gift_wrapping' => '0',
             'wrapping_message' => '');
-        
+
         $this->db->insert('orders', $data);
-        
+
         //get insert id
         $insert_id = $this->db->insert_id();
-        
+
         //insert order totals
         $order_totals = $this->shopping_cart->get_order_totals();
         foreach ($order_totals as $total) {
@@ -149,23 +149,23 @@ class Order_Model extends CI_Model
             //variants
             $order_products_id = $this->db->insert_id();
 
-            if ($this->shopping_cart->has_variants($product['id'])) 
+            if ($this->shopping_cart->has_variants($product['id']))
             {
-                foreach ($this->shopping_cart->get_variants($product['id']) as $variants_id => $variants) 
+                foreach ($this->shopping_cart->get_variants($product['id']) as $variants_id => $variants)
                 {
                     $result = $this->db->select('pvg.products_variants_groups_name, pvv.products_variants_values_name')
-                        ->from('products_variants pv')
-                        ->join('products_variants_entries pve', 'pv.products_variants_id = pve.products_variants_id', 'inner')
-                        ->join('products_variants_groups pvg', 'pve.products_variants_groups_id = pvg.products_variants_groups_id', 'inner')
-                        ->join('products_variants_values pvv', 'pve.products_variants_values_id = pvv.products_variants_values_id', 'inner')
-                        ->where('pv.products_id', $product['id'])
-                        ->where('pve.products_variants_groups_id', $variants['groups_id'])
-                        ->where('pve.products_variants_values_id', $variants['variants_values_id'])
-                        ->where('pvg.language_id', lang_id())
-                        ->where('pvv.language_id', lang_id())
-                        ->get();
+                    ->from('products_variants pv')
+                    ->join('products_variants_entries pve', 'pv.products_variants_id = pve.products_variants_id', 'inner')
+                    ->join('products_variants_groups pvg', 'pve.products_variants_groups_id = pvg.products_variants_groups_id', 'inner')
+                    ->join('products_variants_values pvv', 'pve.products_variants_values_id = pvv.products_variants_values_id', 'inner')
+                    ->where('pv.products_id', $product['id'])
+                    ->where('pve.products_variants_groups_id', $variants['groups_id'])
+                    ->where('pve.products_variants_values_id', $variants['variants_values_id'])
+                    ->where('pvg.language_id', lang_id())
+                    ->where('pvv.language_id', lang_id())
+                    ->get();
 
-                    if ($result->num_rows() > 0) 
+                    if ($result->num_rows() > 0)
                     {
                         $row = $result->row_array();
 
@@ -176,7 +176,7 @@ class Order_Model extends CI_Model
                             'products_variants_groups' => $row['products_variants_groups_name'],
                             'products_variants_values_id' => $variants['variants_values_id'],
                             'products_variants_values' => $row['products_variants_values_name']);
-                        
+
                         $this->db->insert('orders_products_variants', $data);
                     }
                 }
@@ -187,31 +187,27 @@ class Order_Model extends CI_Model
     }
 
     /**
-     * Order process
-     * 
+     * Update order status
+     *
      * @access public
      * @param $orders_id
      * @param $status_id
      * @param $comments
-     * @return boolean
      */
-    public function process($orders_id, $status_id = '', $comments = '') {
-        if (empty($status_id) || (is_numeric($status_id) === false)) {
-            $status_id = config('DEFAULT_ORDERS_STATUS_ID');
-        }
-
+    public function update_order_status($orders_id, $status_id = '', $comments)
+    {
         //insert order history
         $data = array(
         	'orders_id' => $orders_id, 
         	'orders_status_id' => $status_id, 
         	'customer_notified' => (config('SEND_EMAILS') == '1') ? '1' : '0', 
         	'comments' => $comments);
+
         $this->db->insert('orders_status_history', $data);
 
         //update orders status
-        $data = array('orders_status' => $status_id);
         $this->db->where('orders_id', $orders_id);
-        $this->db->update('orders', $data);
+        $this->db->update('orders', array('orders_status' => $status_id));
     }
 
     /**
@@ -241,7 +237,7 @@ class Order_Model extends CI_Model
 
     /**
      * Get number of products
-     * 
+     *
      * @access public
      * @param $orders_id
      * @return int
@@ -257,6 +253,65 @@ class Order_Model extends CI_Model
         }
 
         return 0;
+    }
+
+    /**
+     *
+     * @param $orders_id
+     */
+    public function get_order_status_id($orders_id)
+    {
+        $result = $this->db->select('orders_status')->from('orders')->where('orders_id', $orders_id)->get();
+
+        if ($result->num_rows() > 0)
+        {
+            $row = $result->row_array();
+            return $row['orders_status'];
+        }
+
+        return NULL;
+    }
+    
+    /**
+     * Get order status history
+     * 
+     * @access public
+     */
+    public function get_order_status_history($orders_id) 
+    {
+        $result = $this->db->select('*')->from('orders_status_history')->where('orders_id', $orders_id)->get();
+
+        if ($result->num_rows() > 0)
+        {
+            return $result->result_array();
+        }
+
+        return NULL;
+    }
+
+    /**
+     * Remove order
+     * 
+     * @param $orders_id
+     */
+    public function remove($orders_id)
+    {
+        $status = $this->get_order_status_id($orders_id);
+
+        if ($status === config('ORDERS_STATUS_PREPARING')) 
+        {
+            $this->db->delete('orders_products_variants', array('orders_id' => $orders_id)); 
+            
+            $this->db->delete('orders_products', array('orders_id' => $orders_id)); 
+            
+            $this->db->delete('orders_status_history', array('orders_id' => $orders_id)); 
+
+            $this->db->delete('orders_total', array('orders_id' => $orders_id)); 
+
+            $this->db->delete('orders', array('orders_id' => $orders_id)); 
+        }
+        
+        $this->session->unset_userdata('pre_order_id');
     }
 
     /**
@@ -312,12 +367,12 @@ class Order_Model extends CI_Model
 
             //status history
             $result = $this->db->select('os.orders_status_name, osh.date_added, osh.comments')
-                ->from('orders_status os')
-                ->join('orders_status_history osh', 'osh.orders_status_id = os.orders_status_id', 'inner')
-                ->where('osh.orders_id', $orders_id)
-                ->where('os.language_id', lang_id())
-                ->where('os.public_flag', 1)
-                ->order_by('osh.date_added desc')->get();
+            ->from('orders_status os')
+            ->join('orders_status_history osh', 'osh.orders_status_id = os.orders_status_id', 'inner')
+            ->where('osh.orders_id', $orders_id)
+            ->where('os.language_id', lang_id())
+            ->where('os.public_flag', 1)
+            ->order_by('osh.date_added desc')->get();
 
             if ($result->num_rows() > 0)
             {
@@ -326,7 +381,7 @@ class Order_Model extends CI_Model
 
             //info
             $data['info'] =
-                array('currency' => $data['currency'],
+            array('currency' => $data['currency'],
                       'currency_value' => $data['currency_value'],
                       'payment_method' => $data['payment_method'],
                       'date_purchased' => $data['date_purchased'],
@@ -340,7 +395,7 @@ class Order_Model extends CI_Model
 
             //customer
             $data['customer'] =
-                array('id' => $data['customers_id'],
+            array('id' => $data['customers_id'],
                           'name' => $data['customers_name'],
                           'company' => $data['customers_company'],
                           'street_address' => $data['customers_street_address'],
@@ -358,7 +413,7 @@ class Order_Model extends CI_Model
 
             //delivery
             $data['delivery'] =
-                array('name' => $data['delivery_name'],
+            array('name' => $data['delivery_name'],
                         'company' => $data['delivery_company'],
                         'street_address' => $data['delivery_street_address'],
                         'suburb' => $data['delivery_suburb'],
@@ -418,7 +473,7 @@ class Order_Model extends CI_Model
                     }
 
                     $products[] = $product;
-                    
+
                     $data['info']['tax_groups'][$row['products_tax']] = '1';
                 }
 

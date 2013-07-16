@@ -139,8 +139,6 @@ class TOC_Payment_paypal_direct extends TOC_Payment_Module
      */
     function initialize()
     {
-        $this->ci->load->model('address_model');
-
         if ($this->config['MODULE_PAYMENT_PAYPAL_DIRECT_SERVER'] == 'Production')
         {
             $this->api_url = 'https://api-3t.paypal.com/nvp';
@@ -325,15 +323,13 @@ class TOC_Payment_paypal_direct extends TOC_Payment_Module
                 $this->ci->message_stack->add_session('checkout', stripslashes($response_array['L_LONGMESSAGE0']), 'error');
                 
                 redirect('checkout/index/index/orderConfirmationForm');
-                //osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'checkout&view=orderConfirmationForm', 'SSL'));
             }else {
                 $this->ci->load->library('order');
-                $this->ci->order->create_order();
-                echo 'Success';exit;
-                $orders_id = osC_Order::insert();
-
+                $orders_id = $this->ci->order->create_order();
+                
+                //update order order status
                 $comments = 'PayPal Website Payments Pro (US) Direct Payments [' . 'ACK: ' . $response_array['ACK'] . '; TransactionID: ' . $response_array['TRANSACTIONID'] . ';' . ']';
-                osC_Order::process($orders_id, ORDERS_STATUS_PAID, $comments);
+                $this->ci->order->process($orders_id, ORDERS_STATUS_PAID, $comments);
             }
         }else {
             $this->ci->message_stack->add_session('checkout', lang('payment_paypal_direct_error_all_fields_required'), 'error');

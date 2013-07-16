@@ -122,7 +122,6 @@ class TOC_Payment_western_union extends TOC_Payment_Module
      */
     function initialize()
     {
-        $this->ci->load->model('address_model');
         if ($this->status === TRUE)
         {
             if ((int)$this->config['MODULE_PAYMENT_WESTERN_UNION_ORDER_STATUS_ID'] > 0)

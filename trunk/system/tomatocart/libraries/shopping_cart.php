@@ -694,7 +694,7 @@ class TOC_Shopping_Cart
      */
     function get_cart_id()
     {
-        $this->ci->session->userdata('cart_id');
+        return $this->ci->session->userdata('cart_id');
     }
 
     /**

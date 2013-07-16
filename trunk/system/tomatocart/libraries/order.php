@@ -35,7 +35,7 @@ class TOC_Order
      * @access protected
      * @var object
      */
-    private $ci = null;
+    private $ci = NULL;
 
     /**
      * Constructor
@@ -46,6 +46,8 @@ class TOC_Order
     {
         // Set the super object to a local variable for use later
         $this->ci =& get_instance();
+        
+        $this->ci->load->model('order_model');
     }
 
     /**
@@ -54,8 +56,26 @@ class TOC_Order
      * @access public
      * @return boolean
      */
-    public function create_order()
+    public function create_order($order_status = NULL)
     {
+        $pre_order_id = $this->ci->session->userdata('pre_order_id');
+        if ($pre_order_id !== NULL) 
+        {
+            $prep = explode('-', $pre_order_id);
+
+            if ($prep[0] == $this->ci->shopping_cart->get_cart_id()) 
+            {
+                return $prep[1]; // order_id
+            } 
+            else 
+            {
+                if ($this->ci->order_model->get_order_status_id($prep[1]) === ORDERS_STATUS_PREPARING) 
+                {
+                    $this->ci->order_model->remove($prep[1]);
+                }
+            }
+        }
+        
         //create account
         if (!$this->ci->customer->is_logged_on())
         {
@@ -73,9 +93,20 @@ class TOC_Order
 
             //load model
             $this->ci->load->model('account_model');
+            $this->ci->load->model('address_book_model');
 
             if ($this->ci->account_model->insert($data))
             {
+                $this->ci->address_book_model->save($billing_address, $this->ci->customer->get_id());
+                
+                //insert shipping address
+                if (isset($address['ship_to_this_address']) && $address['ship_to_this_address'] == '0') 
+                {
+                    $shipping_address = $this->ci->shopping_cart->get_shipping_address();
+                  
+                    $this->ci->address_book_model->save($shipping_address, $this->ci->customer->get_id());
+                }
+                
                 //set data to session
                 $this->ci->customer->set_data($data['customers_email_address']);
             }
@@ -83,7 +114,7 @@ class TOC_Order
         else
         {
             //get billing address
-            //$billing_address = $this->ci->shopping_cart->get_billing_address();
+            $billing_address = $this->ci->shopping_cart->get_billing_address();
 
             //if create billing address
             if (isset($billing_address['create_billing_address']) && ($billing_address['create_billing_address'] == 'on'))
@@ -106,10 +137,7 @@ class TOC_Order
                 $this->ci->load->model('address_book_model');
 
                 //save billing address
-                if (!$this->ci->address_book_model->save($data, $this->ci->customer->get_id(), NULL, $primary))
-                {
-                    //log message here
-                }
+                $this->ci->address_book_model->save($data, $this->ci->customer->get_id(), NULL, $primary);
             }
 
             $shipping_address = $this->ci->shopping_cart->get_shipping_address();
@@ -134,16 +162,51 @@ class TOC_Order
                 $this->ci->load->model('address_book_model');
 
                 //save billing address
-                if (!$this->ci->address_book_model->save($data, $this->ci->customer->get_id()))
-                {
-                    //log message here
-                }
+                $this->ci->address_book_model->save($data, $this->ci->customer->get_id());
             }
         }
 
         $this->ci->load->model('order_model');
+        
+        $orders_id = $this->ci->order_model->insert_order($order_status);
+        $pre_order_id = $this->ci->shopping_cart->get_cart_id() . '-' . $orders_id;
 
-        $this->ci->order_model->insert_order();
+        $this->ci->session->set_userdata('pre_order_id', $pre_order_id);
+        
+        return $orders_id;
+    }
+
+    /**
+     * Process order
+     *
+     * @access public
+     * @param $order_id
+     * @param $status_id
+     * @param $comments
+     * @return
+     */
+    public function process($order_id, $status_id = '', $comments = '')
+    {
+        if (empty($status_id) || (is_numeric($status_id) === false)) {
+            $status_id = config('DEFAULT_ORDERS_STATUS_ID');
+        }
+
+        $this->ci->order_model->update_order_status($order_id, $status_id, $comments);
+
+        /*
+        $Qproducts = $osC_Database->query('select orders_products_id, products_id, products_quantity from :table_orders_products where orders_id = :orders_id');
+        $Qproducts->bindTable(':table_orders_products', TABLE_ORDERS_PRODUCTS);
+        $Qproducts->bindInt(':orders_id', $order_id);
+        $Qproducts->execute();
+
+        while ($Qproducts->next()) {
+            osC_Product::updateStock($order_id, $Qproducts->valueInt('orders_products_id'), $Qproducts->valueInt('products_id'), $Qproducts->valueInt('products_quantity'));
+        }
+*/
+        //osC_Order::sendEmail($order_id);
+
+        //unset the pre order id, finish the order process
+        $this->ci->session->unset_userdata('pre_order_id');
     }
 }
 // END Order
