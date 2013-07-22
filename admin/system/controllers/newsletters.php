@@ -299,74 +299,58 @@ class Newsletters extends TOC_Controller
      */
     public function send_emails()
     {
-        $this->load->library('email');
-        
         $customers_ids = json_decode($this->input->post('batch'));
         $newsletters_id = $this->input->post('newsletters_id');
         $email = $this->newsletters_model->get_data($this->input->post('newsletters_id'));
         
-        $audiences = array();
+        //error flag
+        $error = FALSE;
+        $error_msg = '';
         
-        if ($newsletters_id > 0)
+        //get recipients
+        $recipients = array();
+        $customers = $this->newsletters_model->get_audiences($newsletters_id, $customers_ids);
+        if ($customers != NULL)
         {
-            $customers = $this->newsletters_model->get_audiences($newsletters_id, $customers_ids);
-            
-            if ($customers != NULL)
+            foreach($customers as $customer)
             {
-                foreach($customers as $customer)
-                {
-                    if (!isset($audience[$customer['customers_id']]))
-                    {
-                        $audiences[$customer['customers_id']] = array('firstname' => $customer['customers_firstname'], 
-                                                                      'lastname' => $customer['customers_lastname'], 
-                                                                      'email_address' => $customer['customers_email_address']);
-                    }
-                }
+                $recipients[] =  $customer['customers_email_address'];
             }
-            
-            //send the email to the audiences
-            if (count($audiences) > 0)
+        }
+        
+        //send the email to the recipients
+        if (count($recipients) > 0)
+        {
+            if ( ! $this->send($email, $recipients))
             {
-                $this->email->initialize(array('Subject' => $email['title'],
-                                               'Body' => $email['content'], 
-                                               'AltBody' => strip_tags($email['content'])));
-                                               
-                
-                $error = FALSE;
-                foreach($audiences as $customers_id => $customer_info)
-                {
-                    $this->email->ClearAddresses();
-                    $this->email->AddAddress($customer_info['email_address'], $customer_info['lastname'] . ' ' . $customer_info['firstname']);
-                    
-                    if ($this->email->send())
-                    {
-                        $this->newsletters_model->log($newsletters_id, $customer_info['email_address']);
-                    }
-                    else
-                    {
-                        $error = TRUE;
-                    }
-                }
-                
-                $this->newsletters_model->update($newsletters_id);
-                
-                if ($error == FALSE)
-                {
-                    $response = array('success' => TRUE, 'feedback' => lang('ms_success_action_performed'));
-                }
-                else
-                {
-                    $response = array('success' => TRUE, 'feedback' => $this->email->get_errors());
-                }
+                $error = TRUE;
+                $error_msg .= $this->email->print_debugger();
             }
             else
             {
-                $response = array('success' => TRUE, 'feedback' => lang('ms_error_action_not_performed'));
+                //log the reciepients
+                foreach ($recipients as $recipient)
+                {
+                    $this->newsletters_model->log($newsletters_id, $recipient);
+                }
             }
+        }
+        //there is not valid recipient
+        else
+        {
+            $error = TRUE;
+        }
+        
+        if ($error === FALSE)
+        {
+            //update email status
+            $this->newsletters_model->update($newsletters_id);
+            
+            $response = array('success' => TRUE, 'feedback' => lang('ms_success_action_performed'));
         }
         else
         {
-            $response = array('success' => TRUE, 'feedback' => lang('ms_error_action_not_performed'));
+            $response = array('success' => TRUE, 'feedback' => lang('ms_success_action_performed') . '<br />' . $error_msg);
         }
             
         $this->output->set_output(json_encode($response));
@@ -415,8 +399,6 @@ class Newsletters extends TOC_Controller
      */
     public function send_newsletters()
     {
-        $this->load->library('email');
-        
         define('PAGE_PARSE_START_TIME', microtime());
         
         $newsletters_id = $this->input->post('newsletters_id');
@@ -426,39 +408,48 @@ class Newsletters extends TOC_Controller
         
         $email = $this->newsletters_model->get_data($newsletters_id);
         
+        //error flag
         $error = FALSE;
+        $error_msg = '';
         
-        $recipients = $this->newsletters_model->get_recipients($newsletters_id);
+        $customers = $this->newsletters_model->get_recipients($newsletters_id);
         
-        if ($recipients != NULL)
+        $recipients = array();
+        if ($customers != NULL)
         {
-            $this->email->initialize(array('Subject' => $email['title'],
-                                           'Body' => $email['content'], 
-                                           'AltBody' => strip_tags($email['content'])));
-            
-            foreach($recipients as $recipient)
+            foreach($customers as $customer)
             {
-                $this->email->ClearAddresses();
-                $this->email->AddAddress($recipient['customers_email_address'], $recipient['customers_lastname'] . ' ' . $recipient['customers_firstname']);
-                    
-                if (!$this->email->send())
-                {
-                    $error = TRUE;
-                }
-                
-                if ($error === FALSE)
-                {
-                    $this->newsletters_model->log($newsletters_id, $recipient['customers_email_address']);
-                }
-                
-                $time_end = explode(' ', microtime());
-                $time_total = number_format(($time_end[1] + $time_end[0] - ($time_start[1] + $time_start[0])), 3);
-                
-                if ( $time_total > $max_execution_time ) 
-                {
-                    $error === TRUE;
-                }
+               $recipients[] = $customer['customers_email_address'];
             }
+            
+            //send the newsletter
+            if ( ! $this->send($email, $recipients))
+            {
+                $error = TRUE;
+                $error_msg .= $this->email->print_debugger();
+            }
+            else
+            {
+                //log the reciepients
+                foreach ($recipients as $recipient)
+                {
+                    $this->newsletters_model->log($newsletters_id, $recipient);
+                }
+                
+            }
+            
+            $time_end = explode(' ', microtime());
+            $time_total = number_format(($time_end[1] + $time_end[0] - ($time_start[1] + $time_start[0])), 3);
+            
+            if ( $time_total > $max_execution_time )
+            {
+                $error = TRUE;
+            }
+        }
+        //no recipient
+        else
+        {
+            $error =TRUE;
         }
         
         if ($error === FALSE)
@@ -469,10 +460,45 @@ class Newsletters extends TOC_Controller
         }
         else
         {
-            $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed') . '<br />' . $this->email->get_errors());
+            $response = array('success' => FALSE, 'feedback' => lang('ms_error_action_not_performed') . '<br />' . $error_msg);
         }
         
         $this->output->set_output(json_encode($response));
+    }
+    
+// ------------------------------------------------------------------------
+    
+    /**
+     * Send the email
+     *
+     * @access private
+     * @param array $email
+     * @param array $recipients
+     * @return boolean
+     */
+    protected function send($email, $recipients) 
+    {
+        $this->load->library('email');
+        
+        //filter the recipients
+        $filted_addresses = array();
+        foreach ($recipients as $recipient)
+        {
+            if ($this->email->valid_email($recipient))
+            {
+                $filted_addresses[] = $recipient;
+            }
+        }
+        
+        //set the email information
+        $this->email->subject( $email['title']);
+        $this->email->message( $email['content']);
+        $this->email->set_alt_message(strip_tags($email['content']));
+        
+        //set recipients
+        $this->email->to($filted_addresses);
+        
+        return $this->email->send();
     }
 }
 
