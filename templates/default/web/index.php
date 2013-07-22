@@ -64,7 +64,7 @@ require_once 'helpers/general_helper.php';
         	<div class="row-fluid">
         		<div class="span4 logo">
                     <a href="<?php echo base_url(); ?>">
-                    	<img src="<?php echo base_url('images/store_logo.png'); ?>" alt="<?php echo config('STORE_NAME'); ?>" title="<?php echo config('STORE_NAME'); ?>" />
+                    	<img src="<?php echo get_logo(); ?>" alt="<?php echo config('STORE_NAME'); ?>" title="<?php echo config('STORE_NAME'); ?>" />
                     </a>  
         		</div>
         		<div class="span8">
