@@ -45,7 +45,9 @@ class Logo_Upload extends TOC_Controller
     {
         parent::__construct();
         
+        $this->load->helper('directory');
         $this->logo_path = ROOTPATH . 'images/';
+        
     }
     
     // ------------------------------------------------------------------------
@@ -60,11 +62,11 @@ class Logo_Upload extends TOC_Controller
     {
         if ($this->upload('logo_image'))
         {
-            $image = $this->get_template_logo(config('DEFAULT_TEMPLATE'));
+            $image = $this->get_original_logo();
             
             if ($image !== NULL)
             {
-                list($width, $height) = getimagesize(ROOTPATH . 'images/' . $image);
+                list($width, $height) = getimagesize($image);
             
                 $response = array('success' => TRUE, 'image' => IMGHTTPPATH . $image, 'height' => $height, 'width' => $width, 'feedback' => lang('ms_success_action_performed'));
             }
@@ -91,11 +93,11 @@ class Logo_Upload extends TOC_Controller
      */
     public function get_logo()
     {
-        $image = $this->get_template_logo(config('DEFAULT_TEMPLATE'));
+        $image = $this->get_original_logo();
         
         if ($image != NULL)
         {
-            list($width, $height) = getimagesize(ROOTPATH . 'images/' . $image);
+            list($width, $height) = getimagesize($this->logo_path . $image);
             
             $image = '<img src="' . IMGHTTPPATH . $image . '" width="' . $width . '" height="' . $height . '" style="padding: 10px" />';
       
@@ -112,42 +114,6 @@ class Logo_Upload extends TOC_Controller
     // ------------------------------------------------------------------------
     
     /**
-     * Get the template logo
-     *
-     * @access private
-     * @param $template
-     * @return mixed
-     */
-    private function get_template_logo($template)
-    {
-        $this->load->helper('directory');
-    
-        $logo = 'logo_' . $template . '_thumb';
-        
-        $images_map = directory_map($this->logo_path);
-        
-        if (count($images_map) > 0)
-        {
-            foreach($images_map as $image)
-            {
-                if ( ! is_array($image))
-                {
-                    $filename = explode(".", $image);
-                    
-                    if ($filename[0] == $logo)
-                    {
-                        return $logo . '.' . $filename[1];
-                    }
-                }
-            }
-        }
-        
-        return NULL;
-    }
-    
-    // ------------------------------------------------------------------------
-    
-    /**
      * Upload the logo
      *
      * @access private
@@ -156,36 +122,47 @@ class Logo_Upload extends TOC_Controller
      */
     private function upload($field)
     {
-        $this->load->library(array('image_lib', 'upload'));
-        $this->load->helper('directory');
+        $this->load->library('upload');
+        $this->load->helper('core');
         
         //verify whether the resize logo checkbox is checked
         $resize_logo = $this->input->post('resize');
         
         //upload the lgogo
-        $this->upload->initialize(array('upload_path' => $this->logo_path, 'allowed_types' => 'gif|jpg|png'));
+        $this->upload->initialize(array('upload_path' => $this->logo_path, 'allowed_types' => 'gif|jpg|png|jpeg'));
         
         if ($this->upload->do_upload($field))
         {
-            //get the path of the uploaded image
-            $data = $this->upload->data();
-            $logo_uploaded_path = $data['full_path'];
+            //delete the original logo image
+            $this->delete_logo('originals');
             
-            //resize the logo
-            $templates_map = directory_map(ROOTPATH . 'templates', 2);
-            foreach($templates_map as $template => $files)
+            //copy the uploade logo as the original logo
+            $original_image =  $this->logo_path . 'logo_originals' . $this->upload->data('file_ext');
+            copy($this->upload->data('full_path'), $original_image);
+            @unlink($this->upload->data('full_path'));
+            
+            //resize the original logo for each template
+            $templates_map = directory_map(ROOTPATH . 'templates', 1);
+            foreach($templates_map as $template)
             {
+                //ignore the base directory
+                if ($template === 'base')
+                {
+                    continue;
+                }
+                
+                //parse the template configuration file to get the logo width and height
                 if (file_exists(ROOTPATH . 'templates/' . $template . '/template.xml'))
                 {
                     $this->delete_logo($template);
                     
-                    //the resize logo checkbox is checked, resize the logo with the defined width and height
+                    //the resize logo checkbox is checked, get the logo with the defined width and height
                     if ($resize_logo == '1')
                     {
                         $logo_width = $this->input->post('logo_width');
                         $logo_height = $this->input->post('logo_height');
                     }
-                    //resize the logo with the width and height defined in the template
+                    //get the logo with the width and height defined in the template
                     else
                     {
                         $xml_info = simplexml_load_file(ROOTPATH . 'templates/' . $template . '/template.xml');
@@ -196,22 +173,15 @@ class Logo_Upload extends TOC_Controller
                         $logo_width = $logo_info['width'];
                     }
                     
-                    $dest_image = $this->logo_path . 'logo_' . $template . '.' . $data['image_type'];
+                    //resize the logo
+                    $dest_image = $this->logo_path . 'logo_' . $template . $this->upload->data('file_ext');
                     
-                    $this->image_lib->initialize(array('image_library' => 'gd2', 
-                                                       'source_image' => $logo_uploaded_path,
-                                                       'new_image' => $dest_image,
-                                                       'create_thumb' => TRUE, 
-                                                       'width' => $logo_width,
-                                                       'maintain_ratio' => FALSE,
-                                                       'height' => $logo_height));
-                    
-                    $this->image_lib->resize();
+                    if ( ! toc_gd_resize($original_image, $dest_image, (int)$logo_width, (int)$logo_height))
+                    {
+                       return FALSE;
+                    }
                 }
             }
-            
-            //delete the original uploaded image
-            @unlink($data['full_path']);
             
             return TRUE;
         }
@@ -225,14 +195,12 @@ class Logo_Upload extends TOC_Controller
      * Delete the logo
      *
      * @access private
-     * @param $template
+     * @param $code
      * @return boolean
      */
-    private function delete_logo($template)
+    private function delete_logo($code)
     {
-        $this->load->helper('directory');
-        
-        $logo = 'logo_' . $template . '_thumb';
+        $logo = 'logo_' . $code;
         
         $images_map = directory_map($this->logo_path);
         
@@ -256,6 +224,38 @@ class Logo_Upload extends TOC_Controller
         }
         
         return FALSE;
+    }
+    
+    // ------------------------------------------------------------------------
+    
+    /**
+     * get the orginal uploaded logo image
+     *
+     * @access private
+     * @return mixed
+     */
+    private function get_original_logo()
+    {
+        $images_map = directory_map($this->logo_path);
+        
+        if (count($images_map) > 0)
+        {
+            foreach ($images_map as $image) {
+
+                if ( ! is_array($image))
+                {
+                    $filename = explode(".", $image);
+                
+                    //it is the orignal uploaded logo image
+                    if ($filename[0] == 'logo_originals')
+                    {
+                       return $this->logo_path . 'logo_originals.' . $filename[1];
+                    }
+                }
+            }
+        }
+        
+        return NULL;
     }
 }
 
