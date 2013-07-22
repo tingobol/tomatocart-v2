@@ -105,5 +105,41 @@ if( ! function_exists('get_manufacturers'))
         return $manufacturers;
     }
 }
+
+
+
+/**
+ * Get template logo
+ *
+ * @access public
+ * @return html
+ */
+if ( ! function_exists('get_logo'))
+{
+    function get_logo()
+    {
+        //get ci instance
+        $CI =& get_instance();
+        $CI->load->helper('directory');
+        
+        $map = directory_map('images');
+        
+        foreach ($map as $image)
+        {
+            if ( ! is_dir($image))
+            {
+                $parts = explode('.', $image);
+        
+                if ($parts[0] == 'logo_' . config('DEFAULT_TEMPLATE'))
+                {
+                    return base_url('images/' . $image);
+                }
+            }
+        }
+        
+        return base_url('images/store_logo.png');
+    }
+}
+
 /* End of file toc_template_helper.php */
 /* Location: ./system/tomatocart/helpers/toc_template_helper.php */
