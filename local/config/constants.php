@@ -207,7 +207,7 @@ define('INFORMATION_IMPRINT', 5);
 define('EXT', '.php');
 
 //project version
-define('PROJECT_VERSION', 'TomatoCart v2.0');
+define('PROJECT_VERSION', 'TomatoCart v2.0 Alpha5');
 
 //class
 define('__CLASS__', 'TomatoCart v2.0');
