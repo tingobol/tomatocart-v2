@@ -69,19 +69,8 @@ class TOC_Google_Sitemap {
 		// Set the super object to a local variable for use later
 		$this->ci = &get_instance();
 
-// 		$this->_file_name = "sitemaps";
 		$this->_save_path = ROOTPATH;
 		$this->_base_url = rtrim(rtrim(base_url(),'/'),'admin');
-// 		$this->_max_file_size = 10 * 1024 * 1024;
-// 		$this->_max_entries = 50000;
-// 		// 		$this->_sefu = new toC_Sefu();
-
-// 		$this->_products_change_freq = $products_change_freq;
-// 		$this->_products_priority = $products_priority;
-// 		$this->_categories_change_freq = $categories_change_freq;
-// 		$this->_categories_priority = $categories_priority;
-// 		$this->_articles_change_freq = $articles_change_freq;
-// 		$this->_articles_priority = $articles_priority;
 
 		$this->ci->load
 				->library( 'category_tree',

@@ -23,6 +23,7 @@ field_articles = Articles Frequency:
 field_priority = Priority:
 
 field_daily = Daily
+field_weekly = Weekly
 field_month = Monthly
 field_year = Yearly
 
