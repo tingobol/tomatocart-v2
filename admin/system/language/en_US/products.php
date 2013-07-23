@@ -167,6 +167,8 @@ introduction_batch_copy_products = Please select a category the following produc
 
 introduction_batch_delete_products = Please verify the removal of the following products.
 
+introduction_multiple_upload = Please click the Add button several times to upload multiple images.
+
 ms_warning_image_processor_not_available = Warning An image processor is not available. Please install and check the location of ImageMagicks "convert" program in the Configuration -> Configuration -> Program Locations section.
 
 ms_error_image_directory_not_writable = Error The product images directory is not writable %s

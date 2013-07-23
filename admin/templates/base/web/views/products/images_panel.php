@@ -65,6 +65,11 @@ Ext.define('Toc.products.ImagesPanel', {
     var grdImages = this.grdImages;
     var imgIdentity = 0;
     
+    var pnlUploadGuid = Ext.create('Ext.panel.Panel', {
+        border: false,
+        html: '<p style="margin:10px 5px;"><strong><?php echo lang('introduction_multiple_upload'); ?></strong></p>'
+    });
+    
     this.btnUpload = Ext.create('Ext.Button', {
       text: TocLanguage.btnUpload,
       iconCls: 'icon-upload',
@@ -96,15 +101,7 @@ Ext.define('Toc.products.ImagesPanel', {
       bodyPadding: '5',
       border: false,
       items: [
-        {
-          name: 'images_' + imgIdentity,
-          xtype: 'filefield',
-          width: 230,
-          buttonText: '',
-          buttonConfig: {
-            iconCls: 'image-add'
-          }
-        }
+        pnlUploadGuid
       ],
       tbar: [
         { 
@@ -135,6 +132,13 @@ Ext.define('Toc.products.ImagesPanel', {
           iconCls:'remove',
           handler: function() {
             this.pnlImagesUpload.removeAll();
+            
+            var pnlUploadGuid = Ext.create('Ext.panel.Panel', {
+              border: false,
+              html: '<p style="margin:10px 5px;"><strong><?php echo lang('introduction_multiple_upload'); ?></strong></p>'
+            });
+            
+            this.pnlImagesUpload.add(pnlUploadGuid);
             this.btnUpload.disable();
           },
           scope: this

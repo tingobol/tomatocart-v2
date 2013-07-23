@@ -169,6 +169,8 @@ introduction_batch_copy_products = 请选择以下商品应该被复制到的类
 
 introduction_batch_delete_products = 确认删除这些的商品？
 
+introduction_multiple_upload = 如果你希望多图片上传，请多次点击添加按钮
+
 ms_warning_image_processor_not_available = 警告： 图片处理失败。 请安装ImageMagicks并在设置->程序路径页确认"convert"在服务器上的路径。
 
 ms_error_image_directory_not_writable = 错误：图片目录不可写: %s。
