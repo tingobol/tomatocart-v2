@@ -183,7 +183,9 @@ class TOC_Payment_cheque extends TOC_Payment_Module
      * @return void
      */
     function process() {
-        //$this->order_id = osC_Order::insert();
-        //osC_Order::process($this->order_id, $this->order_status);
+        $this->ci->load->library('order');
+        
+        $orders_id = $this->ci->order->create_order();
+        $this->ci->order->process($orders_id, $this->order_status);
     }
 }

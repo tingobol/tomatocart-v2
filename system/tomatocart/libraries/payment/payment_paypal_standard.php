@@ -253,7 +253,7 @@ class TOC_Payment_paypal_standard extends TOC_Payment_Module
     function confirmation()
     {
         $this->ci->load->library('order');
-        
+
         $this->order_id = $this->ci->order->create_order(ORDERS_STATUS_PREPARING);
     }
 
@@ -508,7 +508,7 @@ class TOC_Payment_paypal_standard extends TOC_Payment_Module
                     if (!empty($this->config['MODULE_PAYMENT_PAYPAL_STANDARD_PROCESSING_ORDER_STATUS_ID']))
                     {
                         $invoice = $this->ci->input->post('invoice');
-                        
+
                         $this->ci->order->process($invoice, $this->config['MODULE_PAYMENT_PAYPAL_STANDARD_PROCESSING_ORDER_STATUS_ID'], 'PayPal Processing Transaction');
                     }
                 }
@@ -527,79 +527,91 @@ class TOC_Payment_paypal_standard extends TOC_Payment_Module
 
         $post_string = substr($post_string, 0, -1);
 
-        $this->transaction_response = $this->sendTransactionToGateway($this->form_action_url, $post_string);
+        $this->transaction_response = $this->send_transaction_to_gateway($this->form_action_url, $post_string);
 
-        if (strtoupper(trim($this->transaction_response)) == 'VERIFIED') {
-            if (isset($_POST['invoice']) && is_numeric($_POST['invoice']) && ($_POST['invoice'] > 0)) {
-                $Qcheck = $osC_Database->query('select orders_status, currency, currency_value from :table_orders where orders_id = :orders_id and customers_id = :customers_id');
-                $Qcheck->bindTable(':table_orders', TABLE_ORDERS);
-                $Qcheck->bindInt(':orders_id', $_POST['invoice']);
-                $Qcheck->bindInt(':customers_id', $_POST['custom']);
-                $Qcheck->execute();
+        if (strtoupper(trim($this->transaction_response)) == 'VERIFIED')
+        {
+            $invoice = $this->input->post('invoice');
+            if (isset($invoice) && is_numeric($invoice) && ($invoice > 0))
+            {
+                $this->ci->load->library('order');
+                $this->ci->load->model('order_model');
 
-                if ($Qcheck->numberOfRows() > 0) {
-                    $order = $Qcheck->toArray();
+                $order_total = $this->order_model->get_order_total($invoice);
 
-                    $Qtotal = $osC_Database->query('select value from :table_orders_total where orders_id = :orders_id and class = "total" limit 1');
-                    $Qtotal->bindTable(':table_orders_total', TABLE_ORDERS_TOTAL);
-                    $Qtotal->bindInt(':orders_id', $_POST['invoice']);
-                    $Qtotal->execute();
+                if ($order_total !== NULL)
+                {
+                    $payment_status = $this->input->post('payment_status');
+                    $payer_status = $this->input->post('payer_status');
+                    $mc_gross = $this->input->post('mc_gross');
+                    $currency = $this->input->post('mc_currency');
+                    $pending_reason = $this->input->post('pending_reason');
+                    $reason_code = $this->input->post('reason_code');
+                    $order_info = $this->ci->order_model->query($invoice);
+                    $comment = $payment_status . ' (' . ucfirst($payer_status) . '; ' . currencies_format($mc_gross, FALSE, $currency) . ')';
 
-                    $total = $Qtotal->toArray();
-
-                    $comment = $_POST['payment_status'] . ' (' . ucfirst($_POST['payer_status']) . '; ' . $this->ci->currencies->format($_POST['mc_gross'], FALSE, $_POST['mc_currency']) . ')';
-
-                    if ($_POST['payment_status'] == 'Pending') {
-                        $comment .= '; ' . $_POST['pending_reason'];
-                    } elseif ($_POST['payment_status'] == 'Reversed' || $_POST['payment_status'] == 'Refunded') {
-                        $comment .= '; ' . $_POST['reason_code'];
+                    if ($payment_status == 'Pending')
+                    {
+                        $comment .= '; ' . $pending_reason;
+                    }
+                    elseif ($payment_status == 'Reversed' || $payment_status == 'Refunded')
+                    {
+                        $comment .= '; ' . $reason_code;
                     }
 
-                    if ( $_POST['mc_gross'] != number_format($total['value'] * $order['currency_value'], $this->ci->currencies->getDecimalPlaces($order['currency'])) ) {
-                        $comment .= '; PayPal transaction value (' . osc_output_string_protected($_POST['mc_gross']) . ') does not match order value (' . number_format($total['value'] * $order['currency_value'], $this->ci->currencies->getDecimalPlaces($order['currency'])) . ')';
+                    if ( $mc_gross != number_format($order_total * $order_info['currency_value'], $this->ci->currencies->get_decimal_places($order_info['currency'])) )
+                    {
+                        $comment .= '; PayPal transaction value (' . $mc_gross . ') does not match order value (' . number_format($order_total * $order_info['currency_value'], $this->ci->currencies->get_decimal_places($order_info['currency'])) . ')';
                     }
 
                     $comments = 'PayPal IPN Verified [' . $comment . ']';
 
-                    osC_Order::process($_POST['invoice'], $this->order_status, $comments);
+                    $this->ci->order->process($invoice, $this->order_status, $comments);
                 }
             }
         } else {
-            if (defined('MODULE_PAYMENT_PAYPAL_STANDARD_DEBUG_EMAIL')) {
+            if (isset($this->config['MODULE_PAYMENT_PAYPAL_STANDARD_DEBUG_EMAIL'])) {
                 $email_body = 'PAYPAL_STANDARD_DEBUG_POST_DATA:' . "\n\n";
 
-                reset($_POST);
-                foreach($_POST as $key=>$value) {
+                $posts = $this->input->post();
+                foreach($posts as $key => $value)
+                {
                     $email_body .= $key . '=' . $value . "\n";
                 }
 
                 $email_body .= "\n" . 'PAYPAL_STANDARD_DEBUG_GET_DATA:' . "\n\n";
-                reset($_GET);
-                foreach($_GET as $key=>$value) {
+
+                $gets = $this->input->post();
+                foreach($gets as $key => $value)
+                {
                     $email_body .= $key . '=' . $value . "\n";
                 }
 
-                osc_email('', MODULE_PAYMENT_PAYPAL_STANDARD_DEBUG_EMAIL, 'PayPal IPN Invalid Process', $email_body, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
+                //osc_email('', MODULE_PAYMENT_PAYPAL_STANDARD_DEBUG_EMAIL, 'PayPal IPN Invalid Process', $email_body, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
             }
 
-            if (isset($_POST['invoice']) && is_numeric($_POST['invoice']) && $_POST['invoice'] > 0) {
-                $Qcheck = $osC_Database->query('select orders_id from :table_orders where orders_id=:orders_id and customers_id=:customers_id');
-                $Qcheck->bindTable(':table_orders', TABLE_ORDERS);
-                $Qcheck->bindInt('orders_id', $_POST['invoice']);
-                $Qcheck->bindInt('customers_id', $_POST['custom']);
-                $Qcheck->execute();
+            $payment_status = $this->input->post('payment_status');
+            $payer_status = $this->input->post('payer_status');
+            $mc_gross = $this->input->post('mc_gross');
+            $currency = $this->input->post('mc_currency');
+            $pending_reason = $this->input->post('pending_reason');
+            $reason_code = $this->input->post('reason_code');
+            $order_info = $this->ci->order_model->query($invoice);
 
-                if ($Qcheck->numberOfRows() > 0) {
-                    $comment = $_POST['payment_status'];
+            if (isset($invoice) && is_numeric($invoice) && $invoice > 0) 
+            {
+                if ($order_info !== NULL) 
+                {
+                    $comment = $payment_status;
 
-                    if ($_POST['payment_status'] == 'Pending') {
-                        $comment .= '; ' . $_POST['pending_reason'];
-                    }elseif ( ($_POST['payment_status'] == 'Reversed') || ($_POST['payment_status'] == 'Refunded') ) {
-                        $comment .= '; ' . $_POST['reason_code'];
+                    if ($payment_status == 'Pending') {
+                        $comment .= '; ' . $pending_reason;
+                    }elseif ( ($payment_status == 'Reversed') || ($payment_status == 'Refunded') ) {
+                        $comment .= '; ' . $reason_code;
                     }
                     $comments = 'PayPal IPN Invalid [' . $comment . ']';
 
-                    osC_Order::insertOrderStatusHistory($_POST['invoice'], $this->order_status, $comments);
+                    $this->ci->order->insert_order_status_history($invoice, $this->order_status, $comments);
                 }
             }
         }
