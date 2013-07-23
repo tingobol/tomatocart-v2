@@ -137,7 +137,7 @@ class Checkout extends TOC_Controller {
     {
         $data = array();
         $errors = array();
-
+        
         $this->load->model('account_model');
 
         //checkout method: 'register' or 'guest'
@@ -428,22 +428,6 @@ class Checkout extends TOC_Controller {
                     $this->shopping_cart->set_raw_shipping_address($data);
                 }
             }
-             
-             
-            /*
-             if (isset($ship_to_this_address) && ($ship_to_this_address == '1')) {
-
-             $form = self::_getShippingMethodForm();
-
-             $response = array('success' => TRUE, 'form' => $form);
-
-             } else {
-
-             $form = self::_getShippingInformationForm();
-
-             $response = array('success' => TRUE, 'form' => $form);
-
-             }*/
         }
 
         $this->output->set_output(json_encode($response));
@@ -849,8 +833,6 @@ class Checkout extends TOC_Controller {
             }
         }
 
-        //if($osC_ShoppingCart->isTotalZero() == false) {
-
         $payment_method = $this->input->post('payment_method');
 
         //load payment library
@@ -862,25 +844,23 @@ class Checkout extends TOC_Controller {
             $this->shopping_cart->set_billing_method(array('id' => $payment_method, 'title' => $this->$module_class->get_title()));
         }
 
-        //if ( $this->payment->has_active() && ((isset($GLOBALS['osC_Payment_' . $osC_ShoppingCart->getBillingMethod('id')]) === false) || (isset($GLOBALS['osC_Payment_' . $osC_ShoppingCart->getBillingMethod('id')]) && is_object($GLOBALS['osC_Payment_' . $osC_ShoppingCart->getBillingMethod('id')]) && ($GLOBALS['osC_Payment_' . $osC_ShoppingCart->getBillingMethod('id')]->isEnabled() === false))) ) {
-        //  $errors[] = lang('error_no_payment_module_selected');
-        //}
+        if ( $this->payment->has_active() && ((isset($this->$module_class) === FALSE) || (isset($this->$module_class) && is_object($this->$module_class) && ($this->$module_class->is_enabled() === FALSE))) ) 
+        {
+            $errors[] = lang('error_no_payment_module_selected');
+        }
 
         if ($this->payment->has_active()) {
             $this->payment->pre_confirmation_check();
         }
 
-        //if ($messageStack->size('checkout_payment') > 0) {
-        //  $errors =  array_merge($errors, $messageStack->getMessages('checkout_payment'));
-        //}
-        //} else {
-        //  $osC_ShoppingCart->resetBillingMethod();
-        //}
+        if ($this->message_stack->size('checkout_payment') > 0) {
+            $errors =  array_merge($errors, $messageStack->getMessages('checkout_payment'));
+        }
 
         if (sizeof($errors) > 0) {
-            $response = array('success' => false, 'errors' => $errors);
+            $response = array('success' => FALSE, 'errors' => $errors);
         } else {
-            $response = array('success' => true);
+            $response = array('success' => TRUE);
         }
 
         $this->output->set_output(json_encode($response));
@@ -907,7 +887,10 @@ class Checkout extends TOC_Controller {
         } 
         else 
         {
-        
+            $this->load->library('order');
+            
+            $orders_id = $this->order->create_order();
+            $this->order->process($orders_id, ORDERS_STATUS_PAID);
         }
 
         $this->shopping_cart->reset();
