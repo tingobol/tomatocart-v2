@@ -12,7 +12,7 @@
 # @since		Version 2.0
 # @filesource
 
-page_title_welcome = 欢迎进入TomatoCart 2.0 Alpha 5安装界面!
+page_title_welcome = 欢迎进入TomatoCart v2.0 Alpha 5安装界面!
 page_title_pre_installation_check = 安装前检查
 page_title_database_server_setup = 数据库服务器配置
 page_title_web_server = Web 服务器
