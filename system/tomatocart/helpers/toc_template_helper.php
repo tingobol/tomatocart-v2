@@ -44,7 +44,7 @@ if( ! function_exists('get_sub_categories'))
 
         //get cpath
         $categories_id = $ci->registry->get('cpath');
-        
+
         //get categories
         $data = array();
         $ci->category_tree->get_children($categories_id, $data);
@@ -53,7 +53,7 @@ if( ! function_exists('get_sub_categories'))
         foreach ($data as $category) {
             $cpath = explode('_', $category['id']);
             $id = end($cpath);
-            
+
             $categories[] = array(
                 'id' => $id,
                 'cpath' => $category['id'],
@@ -84,24 +84,24 @@ if( ! function_exists('get_manufacturers'))
 
         //get cpath
         $sub_categories = get_sub_categories();
-        
+
         //get categories id array
         $categories = array($ci->registry->get('cpath'));
         foreach ($sub_categories as $category) {
             $categories[] = $category['id'];
         }
-        
+
         //load manufacturers_model
         $ci->load->model('manufacturers_model');
-        
+
         //get manufacturers
         $manufacturers = $ci->manufacturers_model->get_manufacturers($categories);
-        
+
         //fomat the data
         for($i = 0; $i < count($manufacturers); $i++) {
             $manufacturers[$i]['url'] = site_url('manufacturer/' . $manufacturers[$i]['id']);
         }
-        
+
         return $manufacturers;
     }
 }
@@ -121,22 +121,28 @@ if ( ! function_exists('get_logo'))
         //get ci instance
         $CI =& get_instance();
         $CI->load->helper('directory');
-        
+
         $map = directory_map('images');
         
-        foreach ($map as $image)
-        {
-            if ( ! is_dir($image))
+        if (is_array($map) && count($map) > 0) {
+            foreach ($map as $image)
             {
-                $parts = explode('.', $image);
-        
-                if ($parts[0] == 'logo_' . config('DEFAULT_TEMPLATE'))
+                if (is_string($image) && ! is_dir($image))
                 {
-                    return base_url('images/' . $image);
+                    if (strpos($image, '.') !== FALSE) 
+                    {
+                        $parts = explode('.', $image);
+
+                        if ($parts[0] == 'logo_' . config('DEFAULT_TEMPLATE'))
+                        {
+                            return base_url('images/' . $image);
+                        }
+                    }
+
                 }
             }
         }
-        
+
         return base_url('images/store_logo.png');
     }
 }
