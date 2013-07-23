@@ -53,25 +53,45 @@ class Address_Book_Model extends CI_Model
     {
         $result = FALSE;
         
+        $gender = isset($data['gender']) ? $data['gender'] : $data['entry_gender'];
+        $company = isset($data['company']) ? $data['company'] : $data['entry_company'];
+        $firstname = isset($data['firstname']) ? $data['firstname'] : $data['entry_firstname'];
+        $lastname = isset($data['lastname']) ? $data['lastname'] : $data['entry_lastname'];
+        $street_address = isset($data['street_address']) ? $data['street_address'] : $data['entry_street_address'];
+        $suburb = isset($data['suburb']) ? $data['suburb'] : $data['entry_suburb'];
+        $postcode = isset($data['postcode']) ? $data['postcode'] : $data['entry_postcode'];
+        $city = isset($data['city']) ? $data['city'] : $data['entry_city'];
+        $state = isset($data['state']) ? $data['state'] : $data['entry_state'];
+        $country = isset($data['country_id']) ? $data['country_id'] : $data['entry_country_id'];
+        $zone_id = isset($data['zone_id']) ? $data['zone_id'] : $data['entry_zone_id'];
+        $telephone = isset($data['telephone_number']) ? $data['telephone_number'] : $data['entry_telephone'];
+        $fax = isset($data['fax']) ? $data['fax'] : $data['entry_fax'];
+        
         //process data
-        $data['entry_gender'] = ((config('ACCOUNT_GENDER') > -1) && isset($data['entry_gender']) && (($data['entry_gender'] == 'm') || ($data['entry_gender'] == 'f'))) ? $data['entry_gender'] : '';
-        $data['entry_company'] = (config('ACCOUNT_COMPANY') > -1) ? $data['entry_company'] : '';
-        $data['entry_suburb'] = (config('ACCOUNT_SUBURB') > -1) ? $data['entry_suburb'] : '';
-        $data['entry_suburb'] = (config('ACCOUNT_POST_CODE') > -1) ? $data['entry_suburb'] : '';
-        $data['entry_state'] = (config('ACCOUNT_STATE') > -1) ? ((isset($data['entry_zone_id']) && ($data['entry_zone_id'] > 0)) ? '' : $data['entry_state']) : '';
-        $data['entry_zone_id'] = (config('ACCOUNT_STATE') > -1) ? ((isset($data['entry_zone_id']) && ($data['entry_zone_id'] > 0)) ? $data['entry_zone_id'] : 0) : '';
-        $data['entry_telephone'] = (config('ACCOUNT_TELEPHONE') > -1) ? $data['entry_telephone'] : '';
-        $data['entry_fax'] = (config('ACCOUNT_FAX') > -1) ? $data['entry_fax'] : '';
+        $address['customers_id'] = $this->customer->get_id();
+        $address['entry_gender'] = ((config('ACCOUNT_GENDER') > -1) && isset($gender) && (($gender == 'm') || ($gender == 'f'))) ? $gender : '';
+        $address['entry_company'] = (config('ACCOUNT_COMPANY') > -1) ? $company : '';
+        $address['entry_firstname'] = $firstname;
+        $address['entry_lastname'] = $lastname;
+        $address['entry_street_address'] = $street_address;
+        $address['entry_suburb'] = (config('ACCOUNT_SUBURB') > -1) ? $suburb : '';
+        $address['entry_postcode'] = (config('ACCOUNT_POST_CODE') > -1) ? $postcode : '';
+        $address['entry_city'] = $city;
+        $address['entry_state'] = (config('ACCOUNT_STATE') > -1) ? ((isset($zone_id) && ($zone_id > 0)) ? '' : $state) : '';
+        $address['entry_country_id'] = $country;
+        $address['entry_zone_id'] = (config('ACCOUNT_STATE') > -1) ? ((isset($zone_id) && ($zone_id > 0)) ? $zone_id : 0) : '';
+        $address['entry_telephone'] = (config('ACCOUNT_TELEPHONE') > -1) ? $telephone : '';
+        $address['entry_fax'] = (config('ACCOUNT_FAX') > -1) ? $fax : '';
         
         //update or insert the address book
         if (is_numeric($id))
         {
-            $result = $this->db->update('address_book', $data, array('address_book_id' => $id, 'customers_id' => (int) $customers_id));
+            $result = $this->db->update('address_book', $address, array('address_book_id' => $id, 'customers_id' => (int) $customers_id));
         }
         else
         {
-            $data['customers_id'] = (int) $customers_id;
-            $result = $this->db->insert('address_book', $data);
+            $address['customers_id'] = (int) $customers_id;
+            $result = $this->db->insert('address_book', $address);
         }
         
         //set the primary address

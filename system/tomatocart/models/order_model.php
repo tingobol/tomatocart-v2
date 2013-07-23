@@ -271,13 +271,13 @@ class Order_Model extends CI_Model
 
         return NULL;
     }
-    
+
     /**
      * Get order status history
-     * 
+     *
      * @access public
      */
-    public function get_order_status_history($orders_id) 
+    public function get_order_status_history($orders_id)
     {
         $result = $this->db->select('*')->from('orders_status_history')->where('orders_id', $orders_id)->get();
 
@@ -291,26 +291,26 @@ class Order_Model extends CI_Model
 
     /**
      * Remove order
-     * 
+     *
      * @param $orders_id
      */
     public function remove($orders_id)
     {
         $status = $this->get_order_status_id($orders_id);
 
-        if ($status === config('ORDERS_STATUS_PREPARING')) 
+        if ($status === config('ORDERS_STATUS_PREPARING'))
         {
-            $this->db->delete('orders_products_variants', array('orders_id' => $orders_id)); 
-            
-            $this->db->delete('orders_products', array('orders_id' => $orders_id)); 
-            
-            $this->db->delete('orders_status_history', array('orders_id' => $orders_id)); 
+            $this->db->delete('orders_products_variants', array('orders_id' => $orders_id));
 
-            $this->db->delete('orders_total', array('orders_id' => $orders_id)); 
+            $this->db->delete('orders_products', array('orders_id' => $orders_id));
 
-            $this->db->delete('orders', array('orders_id' => $orders_id)); 
+            $this->db->delete('orders_status_history', array('orders_id' => $orders_id));
+
+            $this->db->delete('orders_total', array('orders_id' => $orders_id));
+
+            $this->db->delete('orders', array('orders_id' => $orders_id));
         }
-        
+
         $this->session->unset_userdata('pre_order_id');
     }
 
@@ -482,6 +482,27 @@ class Order_Model extends CI_Model
         }
 
         return $data;
+    }
+
+    /**
+     * Get order total
+     *
+     * @access public
+     * @return
+     */
+    public function get_order_total ($orders_id)
+    {
+        //status history
+        $result = $this->db->select('value')->from('orders_total')->where('orders_id', $orders_id)->where('class', 'total')->limit(1)->get();
+
+        if ($result->num_rows() > 0)
+        {
+            $row = $this->db->row_array();
+
+            return $row['value'];
+        }
+
+        return NULL;
     }
 }
 
