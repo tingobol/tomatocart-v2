@@ -469,65 +469,88 @@ class Products extends TOC_Controller
      */
     public function upload_image()
     {
-        $this->load->helper('directory');
-        
         $products_id = $this->input->get_post('products_id');
         
+        //error check flag
+        $error = FALSE;
+        $error_msg = '';
+        
+        //get the uploaded product images
         if (is_array($_FILES))
         {
             $images = array_keys($_FILES);
         }
-        
-        if (!empty($images))
+        //there is not any uploaded images
+        else
         {
-            if (empty($products_id))
+            $error = TRUE;
+        }
+        
+        if ($error === FALSE)
+        {
+            if ( ! empty($images))
             {
-                $image_path = ROOTPATH . 'images/products/_upload/' . $this->session->userdata('session_id') . '/';
+                //load the ci upload
+                $this->load->library('upload');
+                $config['allowed_types'] = 'gif|jpg|png|jpeg';
                 
-                if (directory_make($image_path)) 
+                //editing the product
+                if ((int)$products_id > 0)
                 {
-                    $config['upload_path'] = $image_path;
-                    $config['allowed_types'] = 'gif|jpg|png';
+                    //init upload
+                    $config['upload_path'] = ROOTPATH . 'images/products/originals/';
+                    $this->upload->initialize($config);
                     
-                    $this->load->library('upload', $config);
-                    
+                    //upload images
                     foreach($images as $image)
                     {
-                        if ( !$this->upload->do_upload($image))
+                        if ($this->upload->do_upload($image))
                         {
-                            $error = array('error' => $this->upload->display_errors());
+                            $this->products_model->do_edit_upload($products_id, $this->upload->data('file_name'));
+                        }
+                        else
+                        {
+                            $error = TRUE;
+                            $error_msg .= $this->upload->display_errors();
                         }
                     }
                 }
-            }
-            else
-            {
-                $image_path = ROOTPATH . 'images/products/originals/';
-                
-                $config['upload_path'] = $image_path;
-                $config['allowed_types'] = 'gif|jpg|png';
-                
-                $this->load->library('upload', $config);
-                
-                foreach($images as $image)
+                //adding new product
+                else
                 {
-                    if ($this->upload->do_upload($image))
+                    $image_path = ROOTPATH . 'images/products/_upload/' . $this->session->userdata('session_id') . '/';
+                    
+                    if (directory_make($image_path))
                     {
-                        $data = $this->upload->data();
-                        
-                        $this->products_model->do_edit_upload($products_id, $data['file_name']);
+                        //init upload
+                        $config['upload_path'] = $image_path;
+                        $this->upload->initialize($config);
+                    
+                        //upload images
+                        foreach($images as $image)
+                        {
+                            if ( ! $this->upload->do_upload($image))
+                            {
+                                $error = TRUE;
+                                $error_msg .= $this->upload->display_errors();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        $error = TRUE;
                     }
                 }
             }
         }
         
-        if (empty($error))
+        if ($error === FALSE)
         {
             $response = array('success' => TRUE, 'feedback' => lang('ms_success_action_performed'));
         }
         else
         {
-            $response = array('success' => FALSE, 'feedback' => lang('ms_success_action_not_performed') . $error);
+            $response = array('success' => FALSE, 'feedback' => lang('ms_success_action_not_performed') . $error_msg);
         }
         
         $this->output->set_header("Content-Type: text/html")->set_output(json_encode($response));
