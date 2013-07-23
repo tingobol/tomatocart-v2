@@ -97,18 +97,18 @@ class TOC_Order
 
             if ($this->ci->account_model->insert($data))
             {
-                $this->ci->address_book_model->save($billing_address, $this->ci->customer->get_id());
+                //set data to session
+                $this->ci->customer->set_data($data['customers_email_address']);
+                
+                $this->ci->address_book_model->save($billing_address, $this->ci->customer->get_id(), NULL, TRUE);
                 
                 //insert shipping address
-                if (isset($address['ship_to_this_address']) && $address['ship_to_this_address'] == '0') 
+                if (isset($address['ship_to_this_address']) && $address['ship_to_this_address'] == 'on') 
                 {
                     $shipping_address = $this->ci->shopping_cart->get_shipping_address();
                   
                     $this->ci->address_book_model->save($shipping_address, $this->ci->customer->get_id());
                 }
-                
-                //set data to session
-                $this->ci->customer->set_data($data['customers_email_address']);
             }
         }
         else
