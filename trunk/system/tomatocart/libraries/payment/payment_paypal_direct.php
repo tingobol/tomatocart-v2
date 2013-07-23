@@ -339,6 +339,6 @@ class TOC_Payment_paypal_direct extends TOC_Payment_Module
     }
 
     function callback() {
-        return false;
+        return FALSE;
     }
 }
