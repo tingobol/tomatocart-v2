@@ -12,7 +12,7 @@
 # @since		Version 2.0
 # @filesource
 
-page_title_welcome = Welcome to TomatoCart v2.0 alpha5!
+page_title_welcome = Welcome to TomatoCart v2.0 alpha4!
 page_title_pre_installation_check = Pre-installation Check
 page_title_database_server_setup = Database Server Setup
 page_title_web_server = Web Server
