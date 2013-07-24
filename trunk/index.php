@@ -274,6 +274,26 @@ if (defined('ENVIRONMENT'))
 	}
 
 	define('VIEWPATH', $view_folder);
+	
+/*
+ * --------------------------------------------------------------------
+ * Check installation. You could delete the code after installation.
+ * --------------------------------------------------------------------
+ *
+ */
+if (file_exists('install/index.php') && file_exists(LOCALAPPPATH . 'config/database.php'))
+{
+    include(LOCALAPPPATH . 'config/database.php');
+    
+    if ( ! isset($db[$active_group]['hostname']) || empty($db[$active_group]['hostname']))
+    {
+        // Otherwise go to installer
+        header('Location: '.rtrim($_SERVER['REQUEST_URI'], '/').'/install/');
+        
+        exit;
+    }
+}
+	
 
 /*
  * --------------------------------------------------------------------
